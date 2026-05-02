@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>co·bee — Page Title</title>
+
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║        CO·BEE  LIVE TEMPLATE SHELL  v1.0                    ║
+  ║        Repository: geraldpang/co-bee                        ║
+  ║                                                             ║
+  ║  HOW TO USE                                                 ║
+  ║  1. Copy this file, rename it  (e.g. hosted-events.html)    ║
+  ║  2. Update <title> and .page-title                          ║
+  ║  3. Mark the correct .sidebar-item as active                ║
+  ║  4. Replace the sample content inside .main-inner           ║
+  ║  5. Remove modal templates you don't need on that page      ║
+  ╚══════════════════════════════════════════════════════════════╝
+
+  TOKEN QUICK REFERENCE
+  ─────────────────────────────────────────────────────────────────
+  COLORS
+  --teal          #009A97   Primary brand, buttons, links, active
+  --teal-dark     #007A77   Hover / pressed
+  --teal-light    #E0F5F5   Subtle teal fills, sidebar active bg
+  --teal-mid      #80CCCB   Teal borders
+  --amber         #E8971A   Accent, highlights, buy counts (warm)
+  --amber-light   #FEF2DC   Amber subtle fills
+  --amber-dark    #BA7517   Amber text on light bg
+  --red           #E24B4A   Danger actions
+  --red-light     #FCEBEB   Danger fill backgrounds
+  --red-dark      #A32D2D   Danger text
+  --warn          #F5A34A   Warning states
+  --warn-light    #FEF5E7   Warning fill backgrounds
+  --warn-dark     #854F0B   Warning text
+  --ink           #1a1a18   Primary text
+  --mid           #888780   Secondary / muted text
+  --faint         #B4B2A9   Placeholder / disabled text
+  --border        #D3D1C7   Default border
+  --border-light  #E0DFD8   Subtle border
+  --sand          #F1EFE8   Page background (all admin pages)
+  --sand-mid      #FAFAF8   Table header bg, subtle surface
+  --white         #FFFFFF   Card / panel backgrounds
+
+  SIZING
+  Topbar height:  52px
+  Sidebar width:  220px (desktop only)
+  Footer nav:     52px (mobile only)
+  Input height:   36px
+  Btn height sm:  30px
+
+  BORDER RADIUS
+  --radius-sm     6px   badges, pills, small inputs
+  --radius-md     8px   buttons, inputs, table wrap
+  --radius-lg     12px  cards, modals, panels
+
+  COMPONENT CLASSES
+  ─────────────────────────────────────────────────────────────────
+  BUTTONS
+    .btn                  Base
+    .btn.primary          Teal filled — main CTA
+    .btn.secondary        White outlined — secondary
+    .btn.danger           Red outlined — destructive (show modal first)
+    .btn.danger.filled    Red filled — final confirmation only
+    .btn.warning          Amber outlined — cautionary
+    .btn.sm               30px height variant
+    .btn.icon-only        Square, no text
+
+  BADGES
+    .badge.teal           Active / open
+    .badge.amber          Closing soon / pending
+    .badge.red            Expired / error
+    .badge.gray           Draft / inactive
+    .badge.buy            Buy count — teal filled
+    .badge.buy.zero       Zero buys — gray
+    .badge.buy.hot        High buys — amber filled
+
+  FORMS
+    .form-group           Label + input wrapper
+    .form-label           Field label
+    .form-hint            Helper text below field
+    .form-error           Validation error text
+    .input                Text input
+    .input.error          Error state
+    .select               Dropdown select
+    .textarea             Multi-line input
+    .search-wrap          Search input with icon
+    .checkbox-wrap        Custom checkbox row
+
+  TABLE
+    .table-wrap           Rounded border container
+    .table-toolbar        Search + actions above table
+    .table-footer         Count + pagination below table
+    thead th.sortable     Clickable sort header
+    td.muted              De-emphasised cell text
+    .col-check            40px checkbox column
+    .col-action           40px action/dot-menu column
+    .dot-menu             Three-dot row action button
+
+  LAYOUT
+    .stat-grid            Responsive stat card grid
+    .stat-card            Single stat card
+    .card-grid            Responsive card grid
+    .card                 White border card
+    .card.highlighted     Teal-bordered card
+    .tag-row              Filter pill row
+    .tag / .tag.active    Filter pill
+    .toolbar              Search + action bar
+    .toolbar-right        Right-aligned toolbar group
+    .view-toggle          Grid / list toggle buttons
+    .section-label        Uppercase section heading
+    .divider              Horizontal rule
+    .empty-state          Empty content placeholder
+
+  MODALS  (use openModal(id) / closeModal(id))
+    .modal.sm             380px — confirm / delete
+    .modal.md             480px — standard (default)
+    .modal.lg             620px — forms / detail
+    .modal-header         Title + close btn
+    .modal-body           Scrollable content
+    .modal-footer         Right-aligned actions
+
+  ALERTS (inline)
+    .alert.info           Teal info banner
+    .alert.warning        Amber warning banner
+    .alert.danger         Red danger banner
+
+  TOAST  (use showToast(message, type))
+    type = 'success' | 'warning' | 'danger'
+
+  MISC
+    .avatar.sm/md/lg      Initials circle
+    .avatar.amber         Orange avatar
+    .invite-banner        Invite link strip (toggleInviteBanner())
+-->
+
+<style>
+/* ─────────────────────────────────────────────
+   RESET + BASE
+───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --teal:         #009A97;
+  --teal-dark:    #007A77;
+  --teal-light:   #E0F5F5;
+  --teal-mid:     #80CCCB;
+  --amber:        #E8971A;
+  --amber-light:  #FEF2DC;
+  --amber-dark:   #BA7517;
+  --red:          #E24B4A;
+  --red-light:    #FCEBEB;
+  --red-dark:     #A32D2D;
+  --warn:         #F5A34A;
+  --warn-light:   #FEF5E7;
+  --warn-dark:    #854F0B;
+  --ink:          #1a1a18;
+  --mid:          #888780;
+  --faint:        #B4B2A9;
+  --border:       #D3D1C7;
+  --border-light: #E0DFD8;
+  --sand:         #F1EFE8;
+  --sand-mid:     #FAFAF8;
+  --white:        #FFFFFF;
+  --topbar-h:     52px;
+  --sidebar-w:    220px;
+  --footer-h:     52px;
+  --radius-sm:    6px;
+  --radius-md:    8px;
+  --radius-lg:    12px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--sand);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ─────────────────────────────────────────────
+   APP SHELL
+───────────────────────────────────────────── */
+.app-shell { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* TOPBAR */
+.topbar {
+  height: var(--topbar-h);
+  background: var(--teal);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.25rem;
+  position: sticky; top: 0; z-index: 200;
+  flex-shrink: 0;
+}
+.topbar-brand { display: flex; flex-direction: column; gap: 1px; }
+.topbar-logo { font-size: 15px; font-weight: 700; color: var(--white); letter-spacing: -0.02em; line-height: 1; }
+.topbar-logo .dot { color: #F5A623; }
+.topbar-tagline { font-size: 9px; color: rgba(255,255,255,0.5); letter-spacing: 0.03em; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.topbar-notif { position: relative; cursor: pointer; display: flex; align-items: center; }
+.topbar-notif-dot {
+  position: absolute; top: -2px; right: -2px;
+  width: 7px; height: 7px;
+  background: #F5A623; border-radius: 50%;
+  border: 1.5px solid var(--teal);
+}
+
+/* APP BODY */
+.app-body { display: flex; flex: 1; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--white);
+  border-right: 0.5px solid var(--border-light);
+  display: flex; flex-direction: column; flex-shrink: 0;
+  height: calc(100vh - var(--topbar-h));
+  position: sticky; top: var(--topbar-h);
+  overflow-y: auto;
+}
+.sidebar-group {
+  margin: 14px 12px 0;
+  background: var(--teal-light);
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer; transition: background 0.15s;
+}
+.sidebar-group:hover { background: #c8eeee; }
+.sidebar-group-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--teal); color: var(--white);
+  font-size: 10px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.sidebar-group-info { flex: 1; min-width: 0; }
+.sidebar-group-name { font-size: 12px; font-weight: 600; color: #005f5d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-group-sub { font-size: 10px; color: var(--teal); }
+.sidebar-chevron { color: var(--teal); flex-shrink: 0; }
+
+.sidebar-nav { padding: 10px 8px; flex: 1; }
+.sidebar-section-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--faint);
+  padding: 8px 10px 4px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px;
+  font-size: 12px; color: var(--mid);
+  border-radius: var(--radius-md);
+  cursor: pointer; margin-bottom: 1px;
+  transition: all 0.12s;
+  text-decoration: none;
+}
+.sidebar-item:hover { background: #f0fafa; color: var(--teal-dark); text-decoration: none; }
+.sidebar-item.active { background: var(--teal-light); color: var(--teal-dark); font-weight: 600; }
+.sidebar-item svg { flex-shrink: 0; }
+.sidebar-item .badge-count {
+  margin-left: auto;
+  background: var(--sand); color: var(--mid);
+  font-size: 10px; font-weight: 600;
+  padding: 1px 6px; border-radius: 99px;
+  border: 0.5px solid var(--border);
+}
+.sidebar-item.active .badge-count { background: var(--teal); color: var(--white); border-color: var(--teal); }
+
+.sidebar-footer {
+  padding: 12px; border-top: 0.5px solid var(--border-light);
+  display: flex; align-items: center; gap: 9px; flex-shrink: 0;
+}
+.sidebar-footer-name { font-size: 12px; font-weight: 600; color: var(--ink); }
+.sidebar-footer-role { font-size: 10px; color: var(--teal); }
+
+/* MAIN */
+.main { flex: 1; overflow-y: auto; padding: 2rem 1.5rem; min-width: 0; }
+.main-inner { max-width: 1100px; margin: 0 auto; }
+
+.page-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px; margin-bottom: 1.75rem; flex-wrap: wrap;
+}
+.page-title { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); line-height: 1.2; }
+.page-subtitle { font-size: 13px; color: var(--mid); margin-top: 3px; }
+.page-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* MOBILE FOOTER NAV */
+.footer-nav {
+  display: none; height: var(--footer-h);
+  background: var(--white); border-top: 0.5px solid var(--border-light);
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+}
+.footer-nav-inner { display: flex; height: 100%; }
+.footer-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; font-size: 10px; color: var(--mid);
+  cursor: pointer; border: none; background: none; font-family: inherit; transition: color 0.12s;
+}
+.footer-btn.active { color: var(--teal); }
+.footer-btn:hover { color: var(--teal); }
+.footer-spacer { height: var(--footer-h); display: none; }
+
+/* ─────────────────────────────────────────────
+   BUTTONS
+───────────────────────────────────────────── */
+.btn {
+  height: 36px; padding: 0 14px; border-radius: var(--radius-md);
+  border: 0.5px solid var(--border); background: var(--white); color: var(--ink);
+  font-size: 13px; font-family: inherit; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  white-space: nowrap; transition: background 0.12s, border-color 0.12s, color 0.12s;
+  text-decoration: none; font-weight: 500; flex-shrink: 0;
+}
+.btn:hover { background: var(--sand); }
+.btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+.btn.primary { background: var(--teal); border-color: var(--teal); color: var(--white); }
+.btn.primary:hover { background: var(--teal-dark); border-color: var(--teal-dark); }
+.btn.secondary { background: var(--white); border-color: var(--border); color: var(--ink); }
+.btn.secondary:hover { background: var(--sand); }
+.btn.danger { background: var(--white); border-color: #F09595; color: var(--red-dark); }
+.btn.danger:hover { background: var(--red-light); }
+.btn.danger.filled { background: var(--red); border-color: var(--red); color: var(--white); }
+.btn.danger.filled:hover { background: var(--red-dark); border-color: var(--red-dark); }
+.btn.warning { background: var(--white); border-color: #FAC775; color: var(--warn-dark); }
+.btn.warning:hover { background: var(--warn-light); }
+.btn.sm { height: 30px; padding: 0 10px; font-size: 12px; }
+.btn.sm svg { width: 12px; height: 12px; }
+.btn.icon-only { width: 36px; padding: 0; }
+.btn.icon-only.sm { width: 30px; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+
+/* ─────────────────────────────────────────────
+   BADGES
+───────────────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; padding: 3px 9px;
+  border-radius: 99px; white-space: nowrap; flex-shrink: 0;
+}
+.badge.teal   { background: var(--teal-light); color: #005f5d; }
+.badge.amber  { background: var(--amber-light); color: var(--amber-dark); }
+.badge.red    { background: var(--red-light); color: var(--red-dark); }
+.badge.gray   { background: var(--sand); color: var(--mid); border: 0.5px solid var(--border-light); }
+.badge.buy    { background: var(--teal); color: var(--white); }
+.badge.buy.zero { background: var(--sand); color: var(--mid); border: 0.5px solid var(--border-light); }
+.badge.buy.hot  { background: var(--amber); color: var(--white); }
+
+/* ─────────────────────────────────────────────
+   AVATAR
+───────────────────────────────────────────── */
+.avatar {
+  border-radius: 50%; background: var(--teal); color: var(--white);
+  font-weight: 600; display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.avatar.sm  { width: 24px; height: 24px; font-size: 9px; }
+.avatar.md  { width: 32px; height: 32px; font-size: 11px; }
+.avatar.lg  { width: 38px; height: 38px; font-size: 13px; }
+.avatar.amber { background: var(--amber); }
+.avatar.teal-light { background: var(--teal-light); color: #005f5d; }
+
+/* ─────────────────────────────────────────────
+   FORMS
+───────────────────────────────────────────── */
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--ink); }
+.form-hint  { font-size: 11px; color: var(--mid); margin-top: 3px; }
+.form-error { font-size: 11px; color: var(--red-dark); margin-top: 3px; }
+.input, .select, .textarea {
+  font-family: inherit; font-size: 13px; color: var(--ink);
+  background: var(--white); border: 0.5px solid var(--border);
+  border-radius: var(--radius-md); outline: none; transition: border-color 0.15s; width: 100%;
+}
+.input, .select { height: 36px; padding: 0 12px; }
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
+}
+.textarea { padding: 10px 12px; resize: vertical; min-height: 80px; line-height: 1.5; }
+.input:focus, .select:focus, .textarea:focus { border-color: var(--teal); }
+.input::placeholder, .textarea::placeholder { color: var(--faint); }
+.input.error, .select.error, .textarea.error { border-color: var(--red); }
+.search-wrap { position: relative; }
+.search-wrap .search-icon {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  pointer-events: none; color: var(--faint); width: 14px; height: 14px;
+}
+.search-wrap .input { padding-left: 32px; }
+.checkbox-wrap {
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer; font-size: 13px; color: var(--ink);
+}
+.checkbox-wrap input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--teal); cursor: pointer; flex-shrink: 0; }
+
+/* ─────────────────────────────────────────────
+   TOOLBAR
+───────────────────────────────────────────── */
+.toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.toolbar .search-wrap { flex: 1; min-width: 180px; max-width: 320px; }
+.toolbar-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.view-toggle { display: flex; border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.view-toggle .btn { width: 36px; height: 36px; padding: 0; border: none; border-radius: 0; }
+.view-toggle .btn.active { background: var(--sand); }
+.view-toggle .btn:first-child { border-right: 0.5px solid var(--border); }
+
+/* ─────────────────────────────────────────────
+   CARDS
+───────────────────────────────────────────── */
+.card { background: var(--white); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 1.1rem 1.25rem; }
+.card.highlighted { border-color: var(--teal-mid); }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+
+/* ─────────────────────────────────────────────
+   STAT CARDS
+───────────────────────────────────────────── */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+.stat-card { background: var(--white); border: 0.5px solid var(--border-light); border-radius: var(--radius-md); padding: 14px 16px; }
+.stat-label { font-size: 11px; color: var(--mid); margin-bottom: 6px; }
+.stat-val { font-size: 24px; font-weight: 600; color: var(--ink); line-height: 1; letter-spacing: -0.02em; }
+.stat-sub { font-size: 11px; color: var(--teal); margin-top: 4px; }
+.stat-sub.muted { color: var(--mid); }
+
+/* ─────────────────────────────────────────────
+   TABLE
+───────────────────────────────────────────── */
+.table-wrap { background: var(--white); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead { background: var(--sand-mid); border-bottom: 0.5px solid var(--border-light); }
+thead th {
+  padding: 10px 14px; text-align: left;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--mid); white-space: nowrap; user-select: none;
+}
+thead th.col-check, thead th.col-action { width: 40px; }
+thead th.col-check { padding-left: 16px; }
+thead th.col-action { padding-right: 16px; }
+thead th.center { text-align: center; }
+thead th.sortable { cursor: pointer; }
+thead th.sortable:hover { color: var(--ink); }
+tbody tr { border-bottom: 0.5px solid var(--border-light); transition: background 0.1s; cursor: pointer; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #f5fafa; }
+tbody td { padding: 11px 14px; vertical-align: middle; color: var(--ink); }
+tbody td.col-check { padding-left: 16px; width: 40px; }
+tbody td.col-action { padding-right: 16px; width: 40px; text-align: right; }
+tbody td.muted { color: var(--mid); }
+.table-toolbar {
+  padding: 10px 14px; border-bottom: 0.5px solid var(--border-light);
+  display: flex; align-items: center; gap: 8px;
+}
+.table-toolbar .search-wrap { flex: 1; max-width: 280px; }
+.table-footer {
+  padding: 10px 16px; border-top: 0.5px solid var(--border-light);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.table-count { font-size: 12px; color: var(--mid); }
+.pagination { display: flex; align-items: center; gap: 6px; }
+.page-btn {
+  height: 28px; padding: 0 10px; border-radius: var(--radius-md);
+  border: 0.5px solid var(--border); background: var(--white);
+  font-size: 12px; font-family: inherit; color: var(--ink); cursor: pointer; transition: background 0.1s;
+}
+.page-btn:hover { background: var(--sand); }
+.page-num {
+  width: 28px; height: 28px; background: var(--teal); border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--white);
+}
+.dot-menu {
+  width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm); cursor: pointer; transition: background 0.1s; color: var(--mid);
+}
+.dot-menu:hover { background: var(--sand); color: var(--ink); }
+
+/* ─────────────────────────────────────────────
+   MISC
+───────────────────────────────────────────── */
+.section-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--mid); margin-bottom: 12px;
+}
+.divider { border: none; border-top: 0.5px solid var(--border-light); margin: 1.5rem 0; }
+.tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.tag {
+  height: 30px; padding: 0 12px; border-radius: 99px;
+  border: 0.5px solid var(--border); background: var(--white);
+  font-size: 12px; color: var(--mid); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+  transition: all 0.12s; font-family: inherit;
+}
+.tag:hover { border-color: var(--teal-mid); color: var(--teal); }
+.tag.active { background: var(--teal); border-color: var(--teal); color: var(--white); font-weight: 600; }
+
+/* ─────────────────────────────────────────────
+   ALERTS
+───────────────────────────────────────────── */
+.alert {
+  border-radius: var(--radius-md); padding: 10px 14px; font-size: 13px;
+  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 1rem; line-height: 1.5;
+}
+.alert svg { flex-shrink: 0; margin-top: 1px; width: 15px; height: 15px; }
+.alert.info    { background: var(--teal-light); color: #005f5d; border: 0.5px solid var(--teal-mid); }
+.alert.warning { background: var(--warn-light); color: var(--warn-dark); border: 0.5px solid #FAC775; }
+.alert.danger  { background: var(--red-light); color: var(--red-dark); border: 0.5px solid #F09595; }
+
+/* ─────────────────────────────────────────────
+   MODALS
+───────────────────────────────────────────── */
+.modal-backdrop {
+  display: none; position: fixed; inset: 0;
+  background: rgba(26,26,24,0.5);
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  z-index: 500; align-items: center; justify-content: center; padding: 1rem;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: var(--white); border-radius: var(--radius-lg);
+  border: 0.5px solid var(--border-light);
+  width: 100%; max-height: calc(100vh - 2rem);
+  display: flex; flex-direction: column;
+  animation: modalIn 0.18s ease;
+}
+.modal.sm { max-width: 380px; }
+.modal.md { max-width: 480px; }
+.modal.lg { max-width: 620px; }
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-header {
+  padding: 16px 20px 14px; border-bottom: 0.5px solid var(--border-light);
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.modal-title { font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+.modal-close {
+  width: 28px; height: 28px; border-radius: var(--radius-sm); border: none;
+  background: transparent; color: var(--mid); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background 0.1s; font-family: inherit;
+}
+.modal-close:hover { background: var(--sand); color: var(--ink); }
+.modal-body { padding: 18px 20px; overflow-y: auto; flex: 1; line-height: 1.6; color: var(--mid); font-size: 13px; }
+.modal-footer {
+  padding: 14px 20px; border-top: 0.5px solid var(--border-light);
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────
+   TOAST
+───────────────────────────────────────────── */
+.toast-wrap { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 600; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast {
+  background: var(--ink); color: var(--white);
+  font-size: 13px; padding: 10px 16px; border-radius: var(--radius-md);
+  display: flex; align-items: center; gap: 10px;
+  min-width: 220px; max-width: 340px; pointer-events: all;
+  animation: toastIn 0.2s ease;
+}
+.toast.success { background: var(--teal-dark); }
+.toast.warning { background: var(--amber-dark); }
+.toast.danger  { background: var(--red-dark); }
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ─────────────────────────────────────────────
+   EMPTY STATE
+───────────────────────────────────────────── */
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 2rem; text-align: center; color: var(--mid); }
+.empty-state-icon { width: 48px; height: 48px; background: var(--sand); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; color: var(--faint); }
+.empty-state-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.empty-state-desc { font-size: 13px; color: var(--mid); max-width: 280px; line-height: 1.6; margin-bottom: 1.25rem; }
+
+/* ─────────────────────────────────────────────
+   INVITE BANNER
+───────────────────────────────────────────── */
+.invite-banner {
+  background: var(--teal-light); border-bottom: 0.5px solid var(--teal-mid);
+  padding: 10px 1.5rem; display: none; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.invite-banner.open { display: flex; }
+.invite-link-box {
+  flex: 1; min-width: 160px; max-width: 360px;
+  background: var(--white); border: 0.5px solid var(--teal-mid); border-radius: var(--radius-md);
+  padding: 5px 10px; font-size: 12px; color: #005f5d;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.invite-close { background: none; border: none; font-size: 16px; line-height: 1; color: var(--teal); cursor: pointer; padding: 0 4px; }
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .footer-nav { display: flex; }
+  .footer-spacer { display: block; }
+  .main { padding: 1rem; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .page-header { flex-direction: column; }
+  .toolbar .search-wrap { max-width: 100%; }
+  .toolbar-right { margin-left: 0; }
+  .table-wrap { overflow-x: auto; }
+  .modal.sm, .modal.md, .modal.lg { max-width: 100%; }
+  .toast-wrap { bottom: calc(var(--footer-h) + 0.75rem); }
+}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ══════════ TOPBAR ══════════ -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">co<span class="dot">·</span>bee</div>
+      <div class="topbar-tagline">Good things must share!</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-notif">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="topbar-notif-dot"></div>
+      </div>
+      <div class="avatar md amber">MC</div>
+    </div>
+  </header>
+
+  <!-- ══════════ INVITE BANNER (optional) ══════════ -->
+  <div class="invite-banner" id="invite-banner">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007A77" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    <span style="font-size:12px;font-weight:600;color:#005f5d;">Invite link</span>
+    <div class="invite-link-box" id="invite-link-text">https://co-bee.app/join/m6group?ref=abc123</div>
+    <button class="btn primary sm" id="copy-btn" onclick="copyInviteLink()">Copy link</button>
+    <button class="invite-close" onclick="closeInviteBanner()">&#x2715;</button>
+  </div>
+
+  <div class="app-body">
+
+    <!-- ══════════ SIDEBAR ══════════ -->
+    <aside class="sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-group-avatar">M6</div>
+        <div class="sidebar-group-info">
+          <div class="sidebar-group-name">M6 Group</div>
+          <div class="sidebar-group-sub">2 members</div>
+        </div>
+        <svg class="sidebar-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+
+        <!-- Set class="sidebar-item active" on the current page's item -->
+        <a href="hosted-events.html" class="sidebar-item active">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Hosted Events
+          <span class="badge-count">5</span>
+        </a>
+
+        <a href="order-management.html" class="sidebar-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          Order Management
+        </a>
+
+        <a href="products-items.html" class="sidebar-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Products / Items
+        </a>
+
+        <a href="delivery.html" class="sidebar-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg>
+          Delivery
+        </a>
+
+        <a href="packing-list.html" class="sidebar-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Packing List
+        </a>
+
+        <div class="sidebar-section-label" style="margin-top:14px;">Administration</div>
+
+        <a href="members.html" class="sidebar-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Members
+        </a>
+
+        <a href="settings.html" class="sidebar-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          Settings
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="avatar lg amber">MC</div>
+        <div>
+          <div class="sidebar-footer-name">Minh Cong</div>
+          <div class="sidebar-footer-role">Admin</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ══════════ MAIN CONTENT ══════════
+         Replace everything inside .main-inner
+         with your page-specific content.
+    ════════════════════════════════════ -->
+    <main class="main">
+      <div class="main-inner">
+
+        <!-- Page header -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Page Title</h1>
+            <p class="page-subtitle">Page description goes here</p>
+          </div>
+          <div class="page-actions">
+            <button class="btn secondary">Secondary</button>
+            <button class="btn primary" onclick="openModal('form-modal')">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+              Primary action
+            </button>
+          </div>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total events</div>
+            <div class="stat-val">18</div>
+            <div class="stat-sub">This month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total purchases</div>
+            <div class="stat-val">71</div>
+            <div class="stat-sub muted">All time</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Active members</div>
+            <div class="stat-val">2</div>
+            <div class="stat-sub">In this group</div>
+          </div>
+        </div>
+
+        <!-- Filter pills -->
+        <div class="tag-row">
+          <button class="tag active">All</button>
+          <button class="tag">Active</button>
+          <button class="tag">Closing soon</button>
+          <button class="tag">Expired</button>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="input" type="text" placeholder="Search&hellip;" />
+          </div>
+          <button class="btn secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+            Filter
+          </button>
+          <div class="toolbar-right">
+            <button class="btn secondary" onclick="toggleInviteBanner()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              Invite
+            </button>
+            <div class="view-toggle">
+              <button class="btn active" title="Grid view">
+                <svg viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
+              </button>
+              <button class="btn" title="List view">
+                <svg viewBox="0 0 14 14" fill="currentColor"><rect y="1" width="14" height="2" rx="1"/><rect y="6" width="14" height="2" rx="1"/><rect y="11" width="14" height="2" rx="1"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── REPLACE THIS WITH PAGE CONTENT ── -->
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <div class="search-wrap">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input class="input" type="text" placeholder="Search by name&hellip;" />
+            </div>
+            <button class="btn secondary sm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+              Export
+            </button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th class="col-check"><input type="checkbox" /></th>
+                <th class="sortable">Name</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Purchases</th>
+                <th class="col-action"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-check"><input type="checkbox" /></td>
+                <td><span style="font-weight:500;">Sample Event</span></td>
+                <td><span class="badge teal">Active</span></td>
+                <td class="muted">01 May 2026</td>
+                <td><span class="badge buy">6 buy</span></td>
+                <td class="col-action"><div class="dot-menu" onclick="openModal('confirm-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></td>
+              </tr>
+              <tr>
+                <td class="col-check"><input type="checkbox" /></td>
+                <td><span style="font-weight:500;">Another Event</span></td>
+                <td><span class="badge amber">Closing soon</span></td>
+                <td class="muted">28 Apr 2026</td>
+                <td><span class="badge buy zero">0 buy</span></td>
+                <td class="col-action"><div class="dot-menu" onclick="openModal('delete-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></td>
+              </tr>
+              <tr>
+                <td class="col-check"><input type="checkbox" /></td>
+                <td><span style="font-weight:500;">Expired Event</span></td>
+                <td><span class="badge red">Expired</span></td>
+                <td class="muted">01 Apr 2026</td>
+                <td><span class="badge buy hot">12 buy</span></td>
+                <td class="col-action"><div class="dot-menu" onclick="openModal('warning-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-footer">
+            <span class="table-count">Showing 3 of 3 results</span>
+            <div class="pagination">
+              <button class="page-btn">Previous</button>
+              <div class="page-num">1</div>
+              <button class="page-btn">Next</button>
+            </div>
+          </div>
+        </div>
+        <!-- ── END PAGE CONTENT ── -->
+
+        <div class="footer-spacer"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ══════════ MOBILE FOOTER NAV ══════════ -->
+  <nav class="footer-nav">
+    <div class="footer-nav-inner">
+      <button class="footer-btn active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Events
+      </button>
+      <button class="footer-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Orders
+      </button>
+      <button class="footer-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Members
+      </button>
+      <button class="footer-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Settings
+      </button>
+    </div>
+  </nav>
+
+</div>
+
+<!-- ══════════ MODAL: Confirm (md) ══════════
+     openModal('confirm-modal')
+═══════════════════════════════════════════ -->
+<div class="modal-backdrop" id="confirm-modal">
+  <div class="modal md">
+    <div class="modal-header">
+      <span class="modal-title">Confirm action</span>
+      <button class="modal-close" onclick="closeModal('confirm-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">Are you sure you want to proceed? This will apply the changes immediately.</div>
+    <div class="modal-footer">
+      <button class="btn secondary" onclick="closeModal('confirm-modal')">Cancel</button>
+      <button class="btn primary" onclick="closeModal('confirm-modal');showToast('Changes saved','success')">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: Delete / Danger (sm) ══════════
+     openModal('delete-modal')
+═══════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="delete-modal">
+  <div class="modal sm">
+    <div class="modal-header">
+      <span class="modal-title" style="color:var(--red-dark);">Delete event</span>
+      <button class="modal-close" onclick="closeModal('delete-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="alert danger" style="margin-bottom:0.75rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        This action cannot be undone.
+      </div>
+      This will permanently delete the event and all associated order data.
+    </div>
+    <div class="modal-footer">
+      <button class="btn secondary" onclick="closeModal('delete-modal')">Cancel</button>
+      <button class="btn danger filled" onclick="closeModal('delete-modal');showToast('Event deleted','danger')">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: Warning (sm) ══════════
+     openModal('warning-modal')
+════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="warning-modal">
+  <div class="modal sm">
+    <div class="modal-header">
+      <span class="modal-title" style="color:var(--warn-dark);">Archive event</span>
+      <button class="modal-close" onclick="closeModal('warning-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="alert warning" style="margin-bottom:0.75rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Members will no longer see this event.
+      </div>
+      Archiving will hide this event from the feed. You can restore it later from settings.
+    </div>
+    <div class="modal-footer">
+      <button class="btn secondary" onclick="closeModal('warning-modal')">Cancel</button>
+      <button class="btn warning" onclick="closeModal('warning-modal');showToast('Event archived','warning')">Archive</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: Form / Large (lg) ══════════
+     openModal('form-modal')
+═══════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="form-modal">
+  <div class="modal lg">
+    <div class="modal-header">
+      <span class="modal-title">Add new event</span>
+      <button class="modal-close" onclick="closeModal('form-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px;">
+      <div class="form-group">
+        <label class="form-label">Event name</label>
+        <input class="input" type="text" placeholder="e.g. Fresh produce — May round" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="textarea" placeholder="Describe the event&hellip;"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label class="form-label">Closing date</label>
+          <input class="input" type="date" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Group</label>
+          <select class="select">
+            <option>M6 Group</option>
+            <option>Another Group</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-wrap">
+          <input type="checkbox" /> Allow order without login
+        </label>
+        <span class="form-hint">Members can place orders without a co&#xB7;bee account.</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn secondary" onclick="closeModal('form-modal')">Cancel</button>
+      <button class="btn primary" onclick="closeModal('form-modal');showToast('Event created','success')">Create event</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOAST CONTAINER ══════════ -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+/* MODAL */
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-backdrop').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-backdrop.open').forEach(el => el.classList.remove('open'));
+});
+
+/* INVITE BANNER */
+function toggleInviteBanner() { document.getElementById('invite-banner').classList.toggle('open'); }
+function closeInviteBanner() { document.getElementById('invite-banner').classList.remove('open'); }
+function copyInviteLink() {
+  navigator.clipboard.writeText(document.getElementById('invite-link-text').textContent).catch(() => {});
+  const btn = document.getElementById('copy-btn');
+  const orig = btn.textContent;
+  btn.textContent = 'Copied!';
+  btn.style.background = 'var(--teal-dark)';
+  setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2000);
+}
+
+/* TOAST */
+function showToast(message, type) {
+  const icons = {
+    success: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    warning: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>',
+    danger:  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+  };
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type || 'success');
+  t.innerHTML = (icons[type] || icons.success) + '<span>' + message + '</span>';
+  document.getElementById('toast-wrap').appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+/* FILTER TAGS */
+document.querySelectorAll('.tag-row').forEach(row => {
+  row.querySelectorAll('.tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      row.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+      tag.classList.add('active');
+    });
+  });
+});
+
+/* VIEW TOGGLE */
+document.querySelectorAll('.view-toggle').forEach(toggle => {
+  toggle.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      toggle.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+});
+</script>
+</body>
+</html>

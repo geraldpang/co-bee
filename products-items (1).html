@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products / Items</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #ffffff;
+      color: #1a1a18;
+      min-height: 100vh;
+    }
+
+    /* Nav */
+    .nav {
+      background: #fff;
+      border-bottom: 0.5px solid #e0dfd8;
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .nav-logo { font-size: 16px; font-weight: 600; color: #009A97; letter-spacing: -0.02em; }
+    .nav-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #009A97; color: #fff;
+      font-size: 11px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    /* Header */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #1a1a18;
+    }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    /* Buttons */
+    .btn {
+      height: 36px; padding: 0 14px;
+      border-radius: 8px;
+      border: 0.5px solid #d3d1c7;
+      background: #fff;
+      color: #1a1a18;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      white-space: nowrap;
+      transition: background 0.12s;
+      font-family: inherit;
+    }
+    .btn:hover { background: #f1efe8; }
+    .btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .btn.primary {
+      background: #009A97; border-color: #009A97; color: #fff;
+    }
+    .btn.primary:hover { background: #007A77; border-color: #007A77; }
+
+    /* Search */
+    .search-wrap { position: relative; width: 260px; }
+    .search-wrap svg {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      color: #b4b2a9; width: 14px; height: 14px; pointer-events: none;
+    }
+    .search-wrap input {
+      width: 100%; height: 36px; padding: 0 12px 0 34px;
+      font-size: 13px; border: 0.5px solid #d3d1c7; border-radius: 8px;
+      background: #fff; color: #1a1a18; outline: none;
+      transition: border-color 0.15s; font-family: inherit;
+    }
+    .search-wrap input:focus { border-color: #009A97; }
+    .search-wrap input::placeholder { color: #b4b2a9; }
+
+    /* Toolbar row */
+    .toolbar {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      gap: 12px; flex-wrap: wrap;
+    }
+
+    /* Table */
+    .table-wrap {
+      border: 0.5px solid #e0dfd8;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead {
+      background: #faf9f7;
+      border-bottom: 0.5px solid #e0dfd8;
+    }
+    thead th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #888780;
+      white-space: nowrap;
+    }
+    thead th.center { text-align: center; }
+    thead th:first-child { width: 40px; padding-left: 16px; }
+
+    tbody tr {
+      border-bottom: 0.5px solid #e0dfd8;
+      transition: background 0.1s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #faf9f7; }
+
+    tbody td {
+      padding: 12px 14px;
+      vertical-align: middle;
+      color: #1a1a18;
+    }
+    tbody td:first-child { padding-left: 16px; width: 40px; }
+
+    /* Checkbox */
+    input[type="checkbox"] {
+      width: 15px; height: 15px;
+      accent-color: #009A97;
+      cursor: pointer;
+    }
+
+    /* Product image */
+    .product-img {
+      width: 48px; height: 48px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 0.5px solid #e0dfd8;
+      background: #f1efe8;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: #b4b2a9;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .product-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    .product-name { font-weight: 500; color: #1a1a18; }
+    .product-desc { font-size: 12px; color: #888780; margin-top: 2px; }
+
+    /* Price */
+    .price { font-weight: 500; font-variant-numeric: tabular-nums; }
+
+    /* Stock / Purchase number */
+    .num { color: #1a1a18; font-variant-numeric: tabular-nums; }
+    .num.zero { color: #b4b2a9; }
+
+    /* Event link */
+    .event-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      color: #009A97; text-decoration: none; font-size: 13px;
+      transition: color 0.12s;
+    }
+    .event-link:hover { color: #007A77; text-decoration: underline; }
+    .event-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #009A97; flex-shrink: 0;
+    }
+    .event-dot.inactive { background: #d3d1c7; }
+
+    /* Settings cell */
+    .settings-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+    }
+    .settings-icons { display: flex; gap: 6px; align-items: center; }
+    .icon-btn {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      border: 0.5px solid #e0dfd8;
+      background: transparent;
+      color: #888780;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+    .icon-btn:hover { background: #f1efe8; color: #1a1a18; border-color: #d3d1c7; }
+    .icon-btn.danger:hover { background: #fef2f2; color: #dc2626; border-color: #fca5a5; }
+    .icon-btn svg { width: 13px; height: 13px; }
+
+    .sub-link {
+      font-size: 11px; color: #009A97; text-decoration: none;
+      cursor: pointer; background: none; border: none;
+      padding: 0; font-family: inherit;
+      transition: color 0.12s;
+    }
+    .sub-link:hover { color: #007A77; text-decoration: underline; }
+    .sub-link.config { color: #888780; }
+    .sub-link.config:hover { color: #1a1a18; }
+
+    /* Empty state placeholder image */
+    .img-placeholder {
+      width: 48px; height: 48px;
+      border-radius: 8px;
+      background: #f1efe8;
+      border: 0.5px solid #e0dfd8;
+      display: flex; align-items: center; justify-content: center;
+      color: #d3d1c7; font-size: 10px; font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <span class="nav-logo">GroupBuy</span>
+    <div class="nav-avatar">ME</div>
+  </nav>
+
+  <main class="main">
+    <div class="page-header">
+      <h1>Products / Items</h1>
+      <div class="header-actions">
+        <div class="search-wrap">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="6.5" cy="6.5" r="4.5"/><path d="M10.5 10.5 14 14"/>
+          </svg>
+          <input type="text" placeholder="Search name / event of product" />
+        </div>
+        <button class="btn">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 10v2h10v-2M7 2v7M4 6l3 3 3-3"/>
+          </svg>
+          Export
+        </button>
+        <button class="btn">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="1" y="2" width="12" height="11" rx="1.5"/>
+            <path d="M5 2V1M9 2V1M1 6h12"/>
+          </svg>
+          Create event
+        </button>
+        <button class="btn primary">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 1v10M1 6h10"/>
+          </svg>
+          Add
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th><input type="checkbox" /></th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Last price</th>
+            <th>Total purchase</th>
+            <th>In stock</th>
+            <th>Last event</th>
+            <th>Setting</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>
+              <div class="product-img">
+                <img src="https://via.placeholder.com/48x48/e0dfd8/888780?text=S" alt="Spec" onerror="this.parentNode.innerHTML='<span style=\'font-size:10px;color:#b4b2a9\'>IMG</span>'" />
+              </div>
+            </td>
+            <td><div class="product-name">Spec</div></td>
+            <td><span class="product-desc">Good Spec from Vietnam</span></td>
+            <td><span class="price">$20.00</span></td>
+            <td><span class="num zero">0</span></td>
+            <td><span class="num">1000</span></td>
+            <td>
+              <a class="event-link" href="#">
+                <span class="event-dot"></span>
+                Groupbuy Event test
+              </a>
+            </td>
+            <td>
+              <div class="settings-cell">
+                <div class="settings-icons">
+                  <button class="icon-btn" title="Settings">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
+                  </button>
+                  <button class="icon-btn danger" title="Delete">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
+                  </button>
+                </div>
+                <button class="sub-link">+ Add sub-items</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td><div class="img-placeholder">IMG</div></td>
+            <td><div class="product-name">Toothpaste</div></td>
+            <td><span class="product-desc">Clean teeth</span></td>
+            <td><span class="price">$2.00</span></td>
+            <td><span class="num zero">0</span></td>
+            <td><span class="num">1000</span></td>
+            <td>
+              <a class="event-link" href="#">
+                <span class="event-dot"></span>
+                Groupbuy Event test
+              </a>
+            </td>
+            <td>
+              <div class="settings-cell">
+                <div class="settings-icons">
+                  <button class="icon-btn" title="Settings">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
+                  </button>
+                  <button class="icon-btn danger" title="Delete">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
+                  </button>
+                </div>
+                <button class="sub-link">+ Add sub-items</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>
+              <div class="product-img">
+                <img src="https://via.placeholder.com/48x48/1a1a18/fff?text=D" alt="Dev cùi" onerror="this.parentNode.innerHTML='<span style=\'font-size:10px;color:#b4b2a9\'>IMG</span>'" />
+              </div>
+            </td>
+            <td><div class="product-name">Dev cùi</div></td>
+            <td><span class="product-desc">12</span></td>
+            <td><span class="price">$10.00</span></td>
+            <td><span class="num zero">0</span></td>
+            <td><span class="num">50</span></td>
+            <td>
+              <a class="event-link" href="#">
+                <span class="event-dot"></span>
+                new event
+              </a>
+            </td>
+            <td>
+              <div class="settings-cell">
+                <div class="settings-icons">
+                  <button class="icon-btn" title="Settings">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
+                  </button>
+                  <button class="icon-btn danger" title="Delete">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
+                  </button>
+                </div>
+                <button class="sub-link">+ Add sub-items</button>
+                <button class="sub-link config">⊙ Order config</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td><div class="img-placeholder">IMG</div></td>
+            <td><div class="product-name">Item 1</div></td>
+            <td><span class="product-desc">—</span></td>
+            <td><span class="price">$10.00</span></td>
+            <td><span class="num zero">0</span></td>
+            <td><span class="num">1000</span></td>
+            <td>
+              <a class="event-link" href="#">
+                <span class="event-dot"></span>
+                new event
+              </a>
+            </td>
+            <td>
+              <div class="settings-cell">
+                <div class="settings-icons">
+                  <button class="icon-btn" title="Settings">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
+                  </button>
+                  <button class="icon-btn danger" title="Delete">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
+                  </button>
+                </div>
+                <button class="sub-link">+ Add sub-items</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>
+              <div class="product-img">
+                <img src="https://via.placeholder.com/48x48/444441/fff?text=I" alt="Item 1" onerror="this.parentNode.innerHTML='<span style=\'font-size:10px;color:#b4b2a9\'>IMG</span>'" />
+              </div>
+            </td>
+            <td><div class="product-name">Item 1</div></td>
+            <td><span class="product-desc">—</span></td>
+            <td><span class="price">$10.00</span></td>
+            <td><span class="num">4</span></td>
+            <td><span class="num">996</span></td>
+            <td>
+              <a class="event-link" href="#">
+                <span class="event-dot"></span>
+                This is a test event for Purchase with no login
+              </a>
+            </td>
+            <td>
+              <div class="settings-cell">
+                <div class="settings-icons">
+                  <button class="icon-btn" title="Settings">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
+                  </button>
+                  <button class="icon-btn danger" title="Delete">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
+                  </button>
+                </div>
+                <button class="sub-link">+ Add sub-items</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>
+              <div class="product-img">
+                <img src="https://via.placeholder.com/48x48/888780/fff?text=I" alt="item 2" onerror="this.parentNode.innerHTML='<span style=\'font-size:10px;color:#b4b2a9\'>IMG</span>'" />
+              </div>
+            </td>
+            <td><div class="product-name">item 2</div></td>
+            <td><span class="product-desc">—</span></td>
+            <td><span class="price">$49.00</span></td>
+            <td><span class="num">2</span></td>
+            <td><span class="num">998</span></td>
+            <td>
+              <a class="event-link" href="#">
+                <span class="event-dot"></span>
+                This is a test event for Purchase with no login
+              </a>
+            </td>
+            <td>
+              <div class="settings-cell">
+                <div class="settings-icons">
+                  <button class="icon-btn" title="Settings">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
+                  </button>
+                  <button class="icon-btn danger" title="Delete">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
+                  </button>
+                </div>
+                <button class="sub-link">+ Add sub-items</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td><div class="img-placeholder">IMG</div></td>
+            <td><div class="product-name">pro 1</div></td>
+            <td><span class="product-desc">—</span></td>
+            <td><span class="price">$1.00</span></td>
+            <td><span class="num">2</span></td>
+            <td><span class="num">998</span></td>
+            <td>
+              <a class="event-link" style="color:#b4b2a9;" href="#">
+                <span class="event-dot inactive"></span>
+                order without login
+              </a>
+            </td>
+            <td>
+              <div class="settings-cell">
+                <div class="settings-icons">
+                  <button class="icon-btn" title="Settings">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
+                  </button>
+                  <button class="icon-btn danger" title="Delete">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
+                  </button>
+                </div>
+                <button class="sub-link">+ Add sub-items</button>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+</body>
+</html>
