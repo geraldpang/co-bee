@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>co·bee — Design Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --teal:        #009A97;
+  --teal-dark:   #007A77;
+  --teal-light:  #E0F5F5;
+  --honey:       #F5A623;
+  --ink:         #1A1A2E;
+  --mid:         #4A4A6A;
+  --sand:        #FFFBF4;
+  --border:      #E8E6DE;
+  --white:       #FFFFFF;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--sand);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 2.5rem 2rem 0;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.logo {
+  font-family: 'Fraunces', serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--teal);
+  letter-spacing: -1.5px;
+  line-height: 1;
+}
+.logo .dot { color: var(--honey); }
+
+.tagline {
+  font-size: 12px;
+  color: var(--mid);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.header-divider {
+  border: none;
+  border-top: 0.5px solid var(--border);
+  margin-top: 2rem;
+}
+
+/* ── MAIN ── */
+main {
+  flex: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 2.5rem 2rem 4rem;
+}
+
+.intro {
+  margin-bottom: 2.5rem;
+}
+.intro h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.intro h1 em { color: var(--teal); font-style: italic; }
+.intro p {
+  font-size: 14px;
+  color: var(--mid);
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+/* ── CARDS ── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.page-card {
+  background: var(--white);
+  border: 0.5px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  cursor: pointer;
+}
+.page-card:hover {
+  border-color: var(--teal);
+  box-shadow: 0 4px 20px rgba(0,154,151,0.1);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.card-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.card-icon.teal    { background: var(--teal-light); }
+.card-icon.honey   { background: #FEF2DC; }
+.card-icon.purple  { background: #EEEDFE; }
+
+.card-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 2px;
+}
+.card-tag .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex-shrink: 0;
+}
+.card-tag .dot.honey  { background: var(--honey); }
+.card-tag .dot.purple { background: #7F77DD; }
+
+.card-name {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.card-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+.card-filename {
+  font-size: 11px;
+  color: var(--teal);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  background: var(--teal-light);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.arrow-icon {
+  width: 28px; height: 28px;
+  background: var(--teal-light);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.page-card:hover .arrow-icon { background: var(--teal); }
+.page-card:hover .arrow-icon svg { stroke: white; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 0.5px solid var(--border);
+  padding: 1.25rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.footer-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--teal);
+  letter-spacing: -0.5px;
+}
+.footer-logo .dot { color: var(--honey); }
+.footer-note {
+  font-size: 11px;
+  color: var(--mid);
+}
+.footer-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--teal);
+  background: var(--teal-light);
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+@media (max-width: 600px) {
+  header, main { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .cards { grid-template-columns: 1fr; }
+  .intro h1 { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">co<span class="dot">·</span>bee</div>
+  <div class="tagline">Good things must share!</div>
+  <hr class="header-divider" />
+</header>
+
+<main>
+  <div class="intro">
+    <h1>Design <em>Preview</em></h1>
+    <p>Select a page below to preview the design. Share this URL with your developer as the single reference point for the co·bee interface.</p>
+  </div>
+
+  <div class="cards">
+
+    <!-- Landing Page -->
+    <a href="cobee-redesign__5_.html" class="page-card">
+      <div class="card-icon honey">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div>
+        <div class="card-tag"><span class="dot honey"></span>Public</div>
+        <div class="card-name">Landing Page</div>
+      </div>
+      <p class="card-desc">The public-facing marketing site. What visitors see before signing up — hero, how it works, stats, story, and partner section.</p>
+      <div class="card-arrow">
+        <span class="card-filename">cobee-redesign__5_.html</span>
+        <div class="arrow-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Member View -->
+    <a href="cobee.html" class="page-card">
+      <div class="card-icon teal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      </div>
+      <div>
+        <div class="card-tag"><span class="dot"></span>Member</div>
+        <div class="card-name">Member View</div>
+      </div>
+      <p class="card-desc">What a regular member sees — the group buy event feed, event detail, and bottom navigation. Mobile-first layout.</p>
+      <div class="card-arrow">
+        <span class="card-filename">cobee.html</span>
+        <div class="arrow-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Admin View -->
+    <a href="cobee.html#admin" class="page-card">
+      <div class="card-icon purple">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7F77DD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </div>
+      <div>
+        <div class="card-tag"><span class="dot purple"></span>Admin / Host</div>
+        <div class="card-name">Admin View</div>
+      </div>
+      <p class="card-desc">What a group host sees — desktop dashboard with sidebar, members table, stats, and hosted event management.</p>
+      <div class="card-arrow">
+        <span class="card-filename">cobee.html → Switch View</span>
+        <div class="arrow-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-logo">co<span class="dot">·</span>bee</div>
+  <div class="footer-note">Design preview — for developer reference only</div>
+  <div class="footer-badge">geraldpang/co-bee</div>
+</footer>
+
+</body>
+</html>
