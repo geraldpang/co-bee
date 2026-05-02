@@ -154,6 +154,68 @@
   .page-num { width: 28px; height: 28px; background: #009A97; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: white; font-weight: 500; }
   .dot-menu { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; transition: background 0.12s; }
   .dot-menu:hover { background: #E6F7F7; }
+
+  /* ── PURCHASE CARDS ── */
+  .purchase-feed { padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+  .pcard { background: white; border: 0.5px solid #e0dfd8; border-radius: 12px; overflow: hidden; }
+  .pcard-head { padding: 10px 14px 8px; display: flex; align-items: center; justify-content: space-between; }
+  .pcard-host { display: flex; align-items: center; gap: 9px; }
+  .pcard-hname { font-size: 13px; font-weight: 500; color: #1a1a18; }
+  .pcard-hgrp  { font-size: 11px; color: #888; }
+  .pcard-meta  { font-size: 11px; color: #888; text-align: right; line-height: 1.5; }
+  .pcard-summary { padding: 0 14px 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+  .pcard-title { font-size: 14px; font-weight: 500; color: #009A97; }
+  .pcard-summary-right { display: flex; align-items: center; gap: 8px; }
+  .pcard-total { font-size: 13px; font-weight: 700; color: #1a1a18; }
+  .pcard-icount { font-size: 11px; color: #888; }
+  .pcard-chevron { color: #B4B2A9; transition: transform 0.2s; }
+  .pcard-chevron.open { transform: rotate(180deg); }
+  .pcard-items { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; border-top: 0.5px solid #f0f0f0; }
+  .pcard-items.open { max-height: 400px; }
+  .pcard-item-row { display: flex; align-items: center; padding: 7px 14px; font-size: 12px; border-bottom: 0.5px solid #f8f8f8; }
+  .pcard-item-name { flex: 1; color: #1a1a18; }
+  .pcard-item-qty  { color: #888; margin-right: 12px; }
+  .pcard-item-price { font-weight: 600; color: #1a1a18; }
+  .pcard-total-row { display: flex; justify-content: space-between; padding: 8px 14px; background: #FAFAF8; }
+  .pcard-total-lbl { font-size: 12px; color: #888; }
+  .pcard-total-amt { font-size: 13px; font-weight: 700; color: #1a1a18; }
+
+  /* Action zone — status + CTA as one unit */
+  .pcard-action { border-top: 0.5px solid #e0dfd8; }
+  .pcard-status { padding: 8px 14px; display: flex; align-items: center; gap: 8px; }
+  .pcard-sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .pcard-stxt { font-size: 12px; font-weight: 500; flex: 1; line-height: 1.4; }
+  .pcard-cta { width: 100%; padding: 11px 14px; font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 0.5px solid rgba(0,0,0,0.06); font-family: inherit; }
+
+  /* Status colour variants */
+  .ps-unpaid   .pcard-status { background: #FEF5E7; }
+  .ps-unpaid   .pcard-sdot   { background: #E8971A; }
+  .ps-unpaid   .pcard-stxt   { color: #854F0B; }
+  .ps-unpaid   .pcard-cta    { background: #009A97; color: white; }
+  .ps-unpaid   .pcard-cta:hover { background: #007A77; }
+
+  .ps-pending  .pcard-status { background: #E0F5F5; }
+  .ps-pending  .pcard-sdot   { background: #009A97; }
+  .ps-pending  .pcard-stxt   { color: #005f5d; }
+
+  .ps-fulfill  .pcard-status { background: #E6F1FB; }
+  .ps-fulfill  .pcard-sdot   { background: #378ADD; }
+  .ps-fulfill  .pcard-stxt   { color: #0C447C; }
+
+  .ps-ready    .pcard-status { background: #EAF3DE; }
+  .ps-ready    .pcard-sdot   { background: #639922; }
+  .ps-ready    .pcard-stxt   { color: #27500A; }
+  .ps-ready    .pcard-cta    { background: #EAF3DE; color: #27500A; border-top-color: #C0DD97; }
+  .ps-ready    .pcard-cta:hover { background: #d4ecc0; }
+
+  .ps-collected .pcard-status { background: #E0F5F5; }
+  .ps-collected .pcard-sdot   { background: #80CCCB; }
+  .ps-collected .pcard-stxt   { color: #005f5d; }
+
+  .ps-closed   .pcard-status { background: #F1EFE8; }
+  .ps-closed   .pcard-sdot   { background: #B4B2A9; }
+  .ps-closed   .pcard-stxt   { color: #5F5E5A; }
+  .ps-closed   { opacity: 0.65; }
 </style>
 </head>
 <body>
@@ -181,88 +243,233 @@
   </div>
 
   <div class="nav-tabs">
-    <div class="nav-tab active">All (3)</div>
-    <div class="nav-tab">My Purchase</div>
-    <div class="nav-tab">My Group</div>
+    <div class="nav-tab active" onclick="switchTab('all')">All (3)</div>
+    <div class="nav-tab" onclick="switchTab('purchase')">My Purchase</div>
+    <div class="nav-tab" onclick="switchTab('group')">My Group</div>
   </div>
 
-  <div class="feed-header">
-    <span class="feed-header-count">3 events</span>
-    <div class="feed-chips">
-      <div class="chip active">All</div>
-      <div class="chip">Closing soon</div>
+  <!-- ALL EVENTS VIEW -->
+  <div id="view-all">
+    <div class="feed-header">
+      <span class="feed-header-count">3 events</span>
+      <div class="feed-chips">
+        <div class="chip active">All</div>
+        <div class="chip">Closing soon</div>
+      </div>
+    </div>
+    <div class="feed">
+      <div class="event-card" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
+        <div class="card-header">
+          <div class="card-host">
+            <div class="avatar lg">MC</div>
+            <div><div class="host-name">Minh Cong</div><div class="host-sub">M6 group</div></div>
+          </div>
+          <div class="card-badges">
+            <span class="closing-text">Closing in 15 days</span>
+            <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+          </div>
+        </div>
+        <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="card-body"><div class="card-title">Groupbuy Event test</div><div class="card-desc">This is how it looks like in an actual group buy</div></div>
+      </div>
+      <div class="event-card" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
+        <div class="card-header">
+          <div class="card-host">
+            <div class="avatar lg">MC</div>
+            <div><div class="host-name">Minh Cong</div><div class="host-sub">M6 group</div></div>
+          </div>
+          <div class="card-badges">
+            <span class="closing-text">Closing in 15 days</span>
+            <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+          </div>
+        </div>
+        <div class="card-body"><div class="card-title">New event</div><div class="card-desc">test</div></div>
+      </div>
+      <div class="event-card" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
+        <div class="card-header">
+          <div class="card-host">
+            <div class="avatar lg">MC</div>
+            <div><div class="host-name">Minh Cong</div><div class="host-sub">M6 group</div></div>
+          </div>
+          <div class="card-badges">
+            <span class="closing-text">Closing in 14 days</span>
+            <span class="buy-badge" style="background:#009A97;">6 BUY</span>
+          </div>
+        </div>
+        <div class="card-body"><div class="card-title">This is a test event for Purchase with no login</div><div class="card-desc">test</div></div>
+      </div>
     </div>
   </div>
 
-  <div class="feed">
-
-    <!-- Card 1 -->
-    <div class="event-card" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
-      <div class="card-header">
-        <div class="card-host">
-          <div class="avatar lg">MC</div>
-          <div>
-            <div class="host-name">Minh Cong</div>
-            <div class="host-sub">M6 group</div>
-          </div>
-        </div>
-        <div class="card-badges">
-          <span class="closing-text">Closing in 15 days</span>
-          <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
-        </div>
-      </div>
-      <div class="card-img">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-      <div class="card-body">
-        <div class="card-title">Groupbuy Event test</div>
-        <div class="card-desc">This is how it looks like in an actual group buy</div>
+  <!-- MY PURCHASE VIEW -->
+  <div id="view-purchase" style="display:none;">
+    <div class="feed-header">
+      <span class="feed-header-count">3 orders</span>
+      <div class="feed-chips">
+        <div class="chip active">All</div>
+        <div class="chip">Unpaid</div>
+        <div class="chip">Active</div>
       </div>
     </div>
+    <div class="purchase-feed">
 
-    <!-- Card 2 -->
-    <div class="event-card" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
-      <div class="card-header">
-        <div class="card-host">
-          <div class="avatar lg">MC</div>
-          <div>
-            <div class="host-name">Minh Cong</div>
-            <div class="host-sub">M6 group</div>
+      <!-- 1. Awaiting payment -->
+      <div class="pcard ps-unpaid">
+        <div class="pcard-head">
+          <div class="pcard-host"><div class="avatar lg">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M6 group</div></div></div>
+          <div class="pcard-meta">01-12-2025<br/>1PM – 8PM</div>
+        </div>
+        <div class="pcard-summary" onclick="togglePcard('p1')">
+          <div class="pcard-title">Moi nua</div>
+          <div class="pcard-summary-right">
+            <span class="pcard-total">$24.00</span>
+            <span class="pcard-icount">2 items</span>
+            <svg class="pcard-chevron" id="chev-p1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="card-badges">
-          <span class="closing-text">Closing in 15 days</span>
-          <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+        <div class="pcard-items" id="p1">
+          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×2</span><span class="pcard-item-price">$24.00</span></div>
+          <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$24.00</span></div>
+        </div>
+        <div class="pcard-action">
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Awaiting payment</span></div>
+          <button class="pcard-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Make payment</button>
         </div>
       </div>
-      <div class="card-body">
-        <div class="card-title">New event</div>
-        <div class="card-desc">test</div>
-      </div>
-    </div>
 
-    <!-- Card 3 -->
-    <div class="event-card" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
-      <div class="card-header">
-        <div class="card-host">
-          <div class="avatar lg">MC</div>
-          <div>
-            <div class="host-name">Minh Cong</div>
-            <div class="host-sub">M6 group</div>
+      <!-- 2. Pending confirmation -->
+      <div class="pcard ps-pending">
+        <div class="pcard-head">
+          <div class="pcard-host"><div class="avatar lg">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M6 group</div></div></div>
+          <div class="pcard-meta">20-02-2026<br/>9AM – 4PM</div>
+        </div>
+        <div class="pcard-summary" onclick="togglePcard('p2')">
+          <div class="pcard-title">Bubble Tea</div>
+          <div class="pcard-summary-right">
+            <span class="pcard-total">$12.00</span>
+            <span class="pcard-icount">1 item</span>
+            <svg class="pcard-chevron" id="chev-p2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="card-badges">
-          <span class="closing-text">Closing in 14 days</span>
-          <span class="buy-badge" style="background:#009A97;">6 BUY</span>
+        <div class="pcard-items" id="p2">
+          <div class="pcard-item-row"><span class="pcard-item-name">Bundle pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$12.00</span></div>
+          <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$12.00</span></div>
+        </div>
+        <div class="pcard-action">
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Pending confirmation</span></div>
         </div>
       </div>
-      <div class="card-body">
-        <div class="card-title">This is a test event for Purchase with no login</div>
-        <div class="card-desc">test</div>
+
+      <!-- 3. To be fulfilled -->
+      <div class="pcard ps-fulfill">
+        <div class="pcard-head">
+          <div class="pcard-host"><div class="avatar lg">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M5</div></div></div>
+          <div class="pcard-meta">27-02-2026<br/>1PM – 8PM</div>
+        </div>
+        <div class="pcard-summary" onclick="togglePcard('p3')">
+          <div class="pcard-title">M5 first event 2026</div>
+          <div class="pcard-summary-right">
+            <span class="pcard-total">$66.00</span>
+            <span class="pcard-icount">4 items</span>
+            <svg class="pcard-chevron" id="chev-p3" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="pcard-items" id="p3">
+          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×3</span><span class="pcard-item-price">$36.00</span></div>
+          <div class="pcard-item-row"><span class="pcard-item-name">Bundle pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$30.00</span></div>
+          <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$66.00</span></div>
+        </div>
+        <div class="pcard-action">
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">To be fulfilled on 27 Feb · 1PM – 8PM</span></div>
+        </div>
+      </div>
+
+      <!-- 4. Collection day -->
+      <div class="pcard ps-ready">
+        <div class="pcard-head">
+          <div class="pcard-host"><div class="avatar lg">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M5</div></div></div>
+          <div class="pcard-meta">27-02-2026<br/>1PM – 8PM</div>
+        </div>
+        <div class="pcard-summary" onclick="togglePcard('p4')">
+          <div class="pcard-title">M5 March round</div>
+          <div class="pcard-summary-right">
+            <span class="pcard-total">$18.00</span>
+            <span class="pcard-icount">1 item</span>
+            <svg class="pcard-chevron" id="chev-p4" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="pcard-items" id="p4">
+          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$18.00</span></div>
+          <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$18.00</span></div>
+        </div>
+        <div class="pcard-action">
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Collection today · 27 Feb · 1PM – 8PM</span></div>
+          <button class="pcard-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Acknowledge collection</button>
+        </div>
+      </div>
+
+      <!-- 5. Collected awaiting host -->
+      <div class="pcard ps-collected">
+        <div class="pcard-head">
+          <div class="pcard-host"><div class="avatar lg">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M6 group</div></div></div>
+          <div class="pcard-meta">20-02-2026<br/>9AM – 4PM</div>
+        </div>
+        <div class="pcard-summary" onclick="togglePcard('p5')">
+          <div class="pcard-title">Bubble Tea Feb</div>
+          <div class="pcard-summary-right">
+            <span class="pcard-total">$8.00</span>
+            <span class="pcard-icount">1 item</span>
+            <svg class="pcard-chevron" id="chev-p5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="pcard-items" id="p5">
+          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$8.00</span></div>
+          <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$8.00</span></div>
+        </div>
+        <div class="pcard-action">
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Collected — awaiting host confirmation</span></div>
+        </div>
+      </div>
+
+      <!-- 6. Event closed -->
+      <div class="pcard ps-closed">
+        <div class="pcard-head">
+          <div class="pcard-host"><div class="avatar lg" style="background:#B4B2A9;">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M6 group</div></div></div>
+          <div class="pcard-meta">01-12-2025<br/>1PM – 8PM</div>
+        </div>
+        <div class="pcard-summary" onclick="togglePcard('p6')">
+          <div class="pcard-title" style="color:#888780;">Moi nua (Dec round)</div>
+          <div class="pcard-summary-right">
+            <span class="pcard-total" style="color:#888780;">$12.00</span>
+            <span class="pcard-icount">1 item</span>
+            <svg class="pcard-chevron" id="chev-p6" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="pcard-items" id="p6">
+          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$12.00</span></div>
+          <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$12.00</span></div>
+        </div>
+        <div class="pcard-action">
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Event closed</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MY GROUP VIEW -->
+  <div id="view-group" style="display:none;">
+    <div class="feed-header">
+      <span class="feed-header-count">My groups</span>
+    </div>
+    <div class="feed">
+      <div style="text-align:center;padding:3rem 1rem;color:#888;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D3D1C7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <div style="font-size:14px;font-weight:500;color:#1a1a18;margin-bottom:6px;">No groups yet</div>
+        <div style="font-size:13px;color:#888;">Search for a group to join</div>
       </div>
     </div>
-
-  </div><!-- end feed -->
+  </div>
   <div class="feed-spacer"></div>
 
   <div class="bottom-bar">
@@ -355,6 +562,23 @@
 
 
 <script>
+function switchTab(tab) {
+  const tabs = document.querySelectorAll('.nav-tab');
+  const views = { all: 'view-all', purchase: 'view-purchase', group: 'view-group' };
+  const order = ['all', 'purchase', 'group'];
+  order.forEach((t, i) => {
+    tabs[i].classList.toggle('active', t === tab);
+    document.getElementById(views[t]).style.display = t === tab ? 'block' : 'none';
+  });
+}
+
+function togglePcard(id) {
+  const body = document.getElementById(id);
+  const chev = document.getElementById('chev-' + id);
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
 function showDetail(title, desc, host, group, days, buys, hasImg) {
   document.getElementById('d-topbar-title').textContent = title;
   document.getElementById('d-title').textContent = title;
