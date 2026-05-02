@@ -21,16 +21,17 @@
   .avatar.lg { width: 36px; height: 36px; font-size: 12px; }
   .avatar.xl { width: 38px; height: 38px; font-size: 13px; }
 
-  /* ── NAV TABS ── */
-  .nav-tabs { background: white; border-bottom: 0.5px solid #e0e0e0; display: flex; position: sticky; top: 52px; z-index: 90; }
-  .nav-tab { flex: 1; text-align: center; padding: 11px 0; font-size: 13px; color: #666; cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.15s; }
+  /* ── COMBINED NAV BAR ── */
+  .nav-tabs { background: white; border-bottom: 0.5px solid #e0e0e0; display: flex; justify-content: center; position: sticky; top: 52px; z-index: 90; }
+  .nav-tab { padding: 11px 18px; font-size: 13px; color: #666; cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.15s; white-space: nowrap; }
   .nav-tab.active { color: #009A97; border-bottom-color: #009A97; font-weight: 500; }
 
-  /* ── FILTER PILLS ── */
-  .filter-bar { display: flex; gap: 7px; overflow-x: auto; padding: 10px 12px; background: white; border-bottom: 0.5px solid #e0e0e0; }
-  .filter-bar::-webkit-scrollbar { display: none; }
-  .pill { padding: 5px 14px; border-radius: 20px; font-size: 12px; white-space: nowrap; cursor: pointer; border: 0.5px solid #ddd; color: #666; background: white; transition: all 0.15s; }
-  .pill.active { background: #009A97; color: white; border-color: #009A97; font-weight: 500; }
+  /* ── FEED HEADER WITH INLINE FILTER CHIPS ── */
+  .feed-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px 4px; }
+  .feed-header-count { font-size: 12px; font-weight: 600; color: #1a1a18; }
+  .feed-chips { display: flex; gap: 6px; }
+  .chip { padding: 4px 11px; border-radius: 99px; font-size: 11px; border: 0.5px solid #d3d1c7; color: #888780; background: white; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .chip.active { background: #009A97; color: white; border-color: #009A97; font-weight: 600; }
 
   /* ── FEED ── */
   .feed { padding: 12px; display: flex; flex-direction: column; gap: 12px; }
@@ -57,8 +58,8 @@
 
   /* Desktop: center + constrain feed width */
   @media (min-width: 640px) {
-    #feed-view .filter-bar { max-width: 600px; margin: 0 auto; }
     #feed-view .feed { max-width: 600px; margin: 0 auto; width: 100%; padding: 16px 0; }
+    #feed-view .feed-header { max-width: 600px; margin: 0 auto; }
     #detail-view .detail-content { max-width: 600px; margin: 0 auto; width: 100%; }
     #detail-view .buy-bar { max-width: 600px; margin: 0 auto; }
   }
@@ -185,9 +186,12 @@
     <div class="nav-tab">My Group</div>
   </div>
 
-  <div class="filter-bar">
-    <div class="pill active">All events</div>
-    <div class="pill">Closing soon</div>
+  <div class="feed-header">
+    <span class="feed-header-count">3 events</span>
+    <div class="feed-chips">
+      <div class="chip active">All</div>
+      <div class="chip">Closing soon</div>
+    </div>
   </div>
 
   <div class="feed">
@@ -270,7 +274,7 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       Switch View
     </button>
-    <button class="bottom-btn active">
+    <button class="bottom-btn">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       Hosted Event
     </button>
