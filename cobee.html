@@ -22,7 +22,7 @@
   .avatar.xl { width: 38px; height: 38px; font-size: 13px; }
 
   /* ── NAV TABS ── */
-  .nav-tabs { background: white; border-bottom: 0.5px solid #e0e0e0; display: flex; }
+  .nav-tabs { background: white; border-bottom: 0.5px solid #e0e0e0; display: flex; position: sticky; top: 52px; z-index: 90; }
   .nav-tab { flex: 1; text-align: center; padding: 11px 0; font-size: 13px; color: #666; cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.15s; }
   .nav-tab.active { color: #009A97; border-bottom-color: #009A97; font-weight: 500; }
 
@@ -57,7 +57,6 @@
 
   /* Desktop: center + constrain feed width */
   @media (min-width: 640px) {
-    #feed-view .nav-tabs,
     #feed-view .filter-bar { max-width: 600px; margin: 0 auto; }
     #feed-view .feed { max-width: 600px; margin: 0 auto; width: 100%; padding: 16px 0; }
     #detail-view .detail-content { max-width: 600px; margin: 0 auto; width: 100%; }
@@ -164,7 +163,7 @@
 <div id="feed-view">
   <div class="topbar">
     <div class="topbar-brand">
-      <p>co-bee</p>
+      <p>co<span style="color:#F5A623;">·</span>bee</p>
       <p>Good things must share!</p>
     </div>
     <div class="topbar-right">
@@ -205,7 +204,7 @@
         </div>
         <div class="card-badges">
           <span class="closing-text">Closing in 15 days</span>
-          <span class="buy-badge" style="background:#009A97;">0 BUY</span>
+          <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
         </div>
       </div>
       <div class="card-img">
@@ -229,7 +228,7 @@
         </div>
         <div class="card-badges">
           <span class="closing-text">Closing in 15 days</span>
-          <span class="buy-badge" style="background:#009A97;">0 BUY</span>
+          <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
         </div>
       </div>
       <div class="card-body">
@@ -250,7 +249,7 @@
         </div>
         <div class="card-badges">
           <span class="closing-text">Closing in 14 days</span>
-          <span class="buy-badge" style="background:#E87722;">6 BUY</span>
+          <span class="buy-badge" style="background:#009A97;">6 BUY</span>
         </div>
       </div>
       <div class="card-body">
@@ -264,38 +263,19 @@
 
   <div class="bottom-bar">
     <button class="bottom-btn">
-      <!-- Megaphone / Hosting icon -->
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 11l19-9-9 19-2-8-8-2z"/>
-      </svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
       Hosting
     </button>
     <button class="bottom-btn" onclick="switchToDesktop()">
-      <!-- Monitor / desktop switch icon -->
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2"/>
-        <line x1="8" y1="21" x2="16" y2="21"/>
-        <line x1="12" y1="17" x2="12" y2="21"/>
-      </svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       Switch View
     </button>
     <button class="bottom-btn active">
-      <!-- Calendar / hosted event icon -->
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="4" width="18" height="18" rx="2"/>
-        <line x1="16" y1="2" x2="16" y2="6"/>
-        <line x1="8" y1="2" x2="8" y2="6"/>
-        <line x1="3" y1="10" x2="21" y2="10"/>
-      </svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       Hosted Event
     </button>
     <button class="bottom-btn">
-      <!-- Package/box icon -->
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-        <line x1="12" y1="22.08" x2="12" y2="12"/>
-      </svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
       Packages (3)
     </button>
   </div>
@@ -369,216 +349,6 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     DESKTOP DASHBOARD VIEW
-══════════════════════════════════════════════ -->
-<div id="desktop-view" class="desktop-view">
-  <div class="topbar">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div style="width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      </div>
-      <div class="topbar-brand"><p>M6 Group</p><p>Powered by co-bee</p></div>
-    </div>
-    <div class="topbar-right">
-      <div class="notif-wrap">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <div class="notif-dot"></div>
-      </div>
-      <div class="avatar">MC</div>
-    </div>
-  </div>
-    </div>
-  </div>
-
-  <div class="dash-body">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="sidebar-group-pill">
-        <div class="sidebar-group-avatar">MC</div>
-        <div>
-          <div class="sidebar-group-name">M6 group</div>
-          <div class="sidebar-group-sub">2 members</div>
-        </div>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-
-      <div class="sidebar-nav">
-        <div class="sidebar-label">Main</div>
-        <div class="sidebar-item">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Hosted Event
-        </div>
-        <div class="sidebar-item">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          Order Management
-        </div>
-        <div class="sidebar-item">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-          Products / Items
-        </div>
-        <div class="sidebar-item">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg>
-          Delivery
-        </div>
-        <div class="sidebar-item">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          Packing List
-        </div>
-
-        <div class="sidebar-label" style="margin-top:14px;">Administration</div>
-        <div class="sidebar-item active">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Members
-        </div>
-        <div class="sidebar-item">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-          Settings
-        </div>
-      </div>
-
-      <div class="sidebar-footer">
-        <div class="avatar xl" style="background:#E87722;">MC</div>
-        <div>
-          <div style="font-size:13px;font-weight:500;color:#1a1a1a;">Minh Cong</div>
-          <div style="font-size:11px;color:#009A97;">Admin</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main content -->
-    <div class="dash-main">
-      <div class="dash-page-header">
-        <div class="dash-tabs">
-          <div class="dash-tab active">Members</div>
-          <div class="dash-tab">Groups</div>
-        </div>
-        <div class="dash-actions">
-          <button class="btn-outline" onclick="toggleInvite()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            Invite others
-          </button>
-          <button class="btn-outline">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-            Add group
-          </button>
-        </div>
-      </div>
-
-      <div class="invite-banner" id="invite-banner">
-        <div class="invite-inner">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007A77" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-          <p style="font-size:12px;color:#006F6D;font-weight:500;">Invite link</p>
-          <div class="invite-link-box">https://co-bee.app/join/m6group?ref=abc123</div>
-          <button class="btn-primary" id="copy-invite-btn" onclick="copyInvite()">Copy link</button>
-          <span onclick="document.getElementById('invite-banner').classList.remove('visible')" style="cursor:pointer;color:#009A97;font-size:18px;line-height:1;margin-left:4px;">✕</span>
-        </div>
-      </div>
-
-      <div class="dash-content">
-        <div class="stat-grid">
-          <div class="stat-card"><div class="stat-label">Total members</div><div class="stat-val">2</div><div class="stat-sub">Active group</div></div>
-          <div class="stat-card"><div class="stat-label">Total purchases</div><div class="stat-val">71</div><div style="font-size:11px;color:#888;margin-top:3px;">Across all members</div></div>
-          <div class="stat-card"><div class="stat-label">Total events</div><div class="stat-val">18</div><div style="font-size:11px;color:#888;margin-top:3px;">Events participated</div></div>
-        </div>
-
-        <div class="table-card">
-          <div class="table-toolbar">
-            <div class="search-box">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input placeholder="Search by name…" />
-            </div>
-            <button class="btn-outline">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
-              Filter
-            </button>
-            <button class="btn-outline">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-              Export
-            </button>
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th><div class="cb"></div></th>
-                <th>Member</th>
-                <th style="width:110px;">Join date</th>
-                <th style="width:80px;">Events</th>
-                <th style="width:90px;">Purchase</th>
-                <th style="width:100px;">Permission</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><div class="cb"></div></td>
-                <td>
-                  <div class="member-cell">
-                    <div class="member-initials">JN</div>
-                    <div><div class="member-name">Janet Neo</div><div class="member-email">janet@email.com</div></div>
-                  </div>
-                </td>
-                <td style="color:#888;font-size:12px;">30 Apr 2026</td>
-                <td style="font-size:13px;">0</td>
-                <td style="font-size:13px;">2 BUY</td>
-                <td><span class="badge badge-pending">Pending</span></td>
-                <td><div class="dot-menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="cb checked">
-                    <svg width="9" height="7" viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </div>
-                </td>
-                <td>
-                  <div class="member-cell">
-                    <div style="width:32px;height:32px;border-radius:50%;background:#E87722;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:white;flex-shrink:0;">MC</div>
-                    <div><div class="member-name">Minh Cong</div><div class="member-email">minh@email.com</div></div>
-                  </div>
-                </td>
-                <td style="color:#888;font-size:12px;">01 Nov 2025</td>
-                <td style="font-size:13px;">18</td>
-                <td style="font-size:13px;">69 BUY</td>
-                <td><span class="badge badge-admin">Admin</span></td>
-                <td><div class="dot-menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="table-footer">
-            <div class="page-info">Showing 2 of 2 members</div>
-            <div class="page-btns">
-              <button class="page-btn">Previous</button>
-              <div class="page-num">1</div>
-              <button class="page-btn">Next</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div><!-- end dash-body -->
-
-  <div class="bottom-bar">
-    <button class="bottom-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
-      Hosting
-    </button>
-    <button class="bottom-btn active" onclick="switchToMobile()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-      Switch View
-    </button>
-    <button class="bottom-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Hosted Event
-    </button>
-    <button class="bottom-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-      Packages (3)
-    </button>
-  </div>
-
-</div><!-- end desktop-view -->
 
 <script>
 function showDetail(title, desc, host, group, days, buys, hasImg) {
@@ -591,7 +361,8 @@ function showDetail(title, desc, host, group, days, buys, hasImg) {
   document.getElementById('d-close-label').textContent = 'in ' + days + ' days';
   const b = document.getElementById('d-buy');
   b.textContent = buys + ' BUY';
-  b.style.background = parseInt(buys) > 0 ? '#E87722' : '#009A97';
+  b.style.background = parseInt(buys) > 0 ? '#009A97' : '#D3D1C7';
+  b.style.color = parseInt(buys) > 0 ? 'white' : '#5F5E5A';
   document.getElementById('d-img').style.display = hasImg === 'true' ? 'flex' : 'none';
   document.getElementById('feed-view').style.display = 'none';
   document.getElementById('detail-view').classList.add('visible');
@@ -605,17 +376,10 @@ function goBack() {
 }
 
 function switchToDesktop() {
-  document.getElementById('feed-view').style.display = 'none';
-  document.getElementById('detail-view').classList.remove('visible');
-  document.getElementById('desktop-view').classList.add('visible');
-  window.scrollTo(0, 0);
+  alert('Host dashboard coming soon!');
 }
 
-function switchToMobile() {
-  document.getElementById('desktop-view').classList.remove('visible');
-  document.getElementById('feed-view').style.display = 'block';
-  window.scrollTo(0, 0);
-}
+
 
 function toggleInvite() {
   document.getElementById('invite-banner').classList.toggle('visible');
