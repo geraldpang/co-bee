@@ -75,12 +75,11 @@
   }
 
   /* ── DETAIL VIEW ── */
-  .detail-view { display: none; flex-direction: column; height: 100%; overflow: hidden; }
-  .detail-view.visible { display: flex; }
+  .detail-view { display: none; }
   .detail-back-bar { background: white; padding: 8px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 0.5px solid #e0dfd8; flex-shrink: 0; }
   .back-btn { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #009A97; cursor: pointer; flex-shrink: 0; }
   .detail-back-title { font-size: 13px; font-weight: 600; color: #009A97; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .detail-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; max-width: 600px; margin: 0 auto; width: 100%; }
+  .detail-content { max-width: 600px; margin: 0 auto; width: 100%; }
   .detail-host-row { background: white; padding: 10px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 0.5px solid #f0f0f0; }
   .detail-host-info { flex: 1; min-width: 0; }
   .detail-badges { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
@@ -129,9 +128,22 @@
   .detail-nth-lbl { font-size: 12px; font-weight: 600; color: #1a1a18; margin-bottom: 6px; }
   .detail-notes textarea { width: 100%; border: 0.5px solid #d3d1c7; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-family: inherit; resize: none; height: 52px; outline: none; color: #1a1a18; background: white; }
   .detail-notes textarea::placeholder { color: #B4B2A9; }
-  .detail-action-bar { background: white; border-top: 0.5px solid #e0dfd8; padding: 12px 14px; display: flex; gap: 8px; flex-shrink: 0; }
+  .detail-order-actions { display: flex; gap: 8px; margin-top: 14px; max-width: 600px; margin-left: auto; margin-right: auto; border: 0.5px solid #e0dfd8; border-radius: var(--radius-lg, 12px); padding: 12px 14px; background: white; }
   .detail-btn-cancel { flex: 1; height: 38px; border: 0.5px solid #d3d1c7; border-radius: 8px; background: white; font-size: 13px; font-weight: 600; color: #888780; cursor: pointer; font-family: inherit; }
   .detail-btn-place  { flex: 2; height: 38px; background: #009A97; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
+  /* REQUEST 3: progress bar */
+  .fulfil-wrap { margin-top: 5px; }
+  .fulfil-bar-bg { height: 4px; background: #e0dfd8; border-radius: 99px; overflow: hidden; margin-bottom: 3px; }
+  .fulfil-bar-fill { height: 100%; background: #E24B4A; border-radius: 99px; width: 0%; }
+  .fulfil-label { font-size: 11px; color: #E24B4A; }
+  /* REQUEST 4: add-ons less prominent, inside product boundary */
+  .addon-group { margin-top: 8px; padding-top: 8px; border-top: 0.5px solid #f0f0f0; }
+  .addon-group-lbl { font-size: 10px; color: #B4B2A9; margin-bottom: 5px; display: flex; justify-content: space-between; }
+  .addon-group-lbl .addon-price-hint { color: #009A97; }
+  .addon-pills-sm { display: flex; gap: 4px; flex-wrap: wrap; }
+  .addon-pill-sm { padding: 3px 9px; border-radius: 99px; font-size: 11px; border: 0.5px solid #e0dfd8; color: #B4B2A9; background: white; cursor: pointer; transition: all 0.12s; }
+  .addon-pill-sm.sel { border-color: #80CCCB; color: #005f5d; background: #E0F5F5; font-weight: 500; }
+  .addon-select { width: 100%; height: 28px; border: 0.5px solid #e0dfd8; border-radius: 6px; padding: 0 8px; font-size: 11px; font-family: inherit; color: #888780; background: white; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23B4B2A9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; padding-right: 24px; }
 
   /* ── DESKTOP DASHBOARD ── */
   .desktop-view { display: none; flex-direction: column; min-height: 100vh; }
@@ -788,36 +800,14 @@
       </div>
     </div>
   </div>
-  </div><!-- end scroll-area -->
-
-  <div class="bottom-bar">
-    <button class="bottom-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
-      Hosting
-    </button>
-    <button class="bottom-btn" onclick="switchToDesktop()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      Switch View
-    </button>
-    <button class="bottom-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Hosted Event
-    </button>
-    <button class="bottom-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-      Packages (3)
-    </button>
-  </div>
-</div>
-
 <!-- ══════════════════════════════════════════════
      DETAIL VIEW — expanded card format
 ══════════════════════════════════════════════ -->
-<div id="detail-view" class="detail-view">
+<div id="detail-view" style="display:none;">
 
   <!-- Slim back bar -->
   <div class="detail-back-bar">
-    <div class="back-btn" onclick="goBack('detail')">
+    <div class="back-btn" onclick="goBack()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       Back
     </div>
@@ -879,22 +869,22 @@
         </div>
         <div class="prod-stepper"><div class="psbtn">−</div><span class="psval">1</span><div class="psbtn">+</div></div>
       </div>
-      <!-- Add-on 1: Frame Color -->
-      <div class="addons-section">
-        <div class="addons-hd">Frame Color <span style="color:#B4B2A9;font-weight:400;letter-spacing:0;">+$10</span></div>
-        <div class="addon-pills">
-          <div class="addon-pill sel">Blue</div>
-          <div class="addon-pill">Red</div>
-          <div class="addon-pill">Green</div>
+      <!-- Add-on 1: Frame Color — 3 options → pills -->
+      <div class="addon-group">
+        <div class="addon-group-lbl">Frame Color <span class="addon-price-hint">+$10</span></div>
+        <div class="addon-pills-sm">
+          <div class="addon-pill-sm sel">Blue</div>
+          <div class="addon-pill-sm">Red</div>
+          <div class="addon-pill-sm">Green</div>
         </div>
       </div>
-      <!-- Add-on 2: Lens Color -->
-      <div class="addons-section" style="margin-top:8px;">
-        <div class="addons-hd">Lens Color <span style="color:#B4B2A9;font-weight:400;letter-spacing:0;">+$5</span></div>
-        <div class="addon-pills">
-          <div class="addon-pill">Blue</div>
-          <div class="addon-pill sel">Red</div>
-          <div class="addon-pill">Green</div>
+      <!-- Add-on 2: Lens Color — 3 options → pills -->
+      <div class="addon-group">
+        <div class="addon-group-lbl">Lens Color <span class="addon-price-hint">+$5</span></div>
+        <div class="addon-pills-sm">
+          <div class="addon-pill-sm">Blue</div>
+          <div class="addon-pill-sm sel">Red</div>
+          <div class="addon-pill-sm">Green</div>
         </div>
       </div>
     </div>
@@ -922,7 +912,10 @@
           <div class="prod-desc2">Individual pieces (split case)</div>
           <div class="prod-price2">$3.00</div>
           <div class="prod-orders">0 order(s) made</div>
-          <div class="prod-need">Need 6 more to fulfil orders</div>
+          <div class="fulfil-wrap">
+            <div class="fulfil-bar-bg"><div class="fulfil-bar-fill" style="width:0%;"></div></div>
+            <div class="fulfil-label">0 / 6 &nbsp;· Need 6 more to fulfil</div>
+          </div>
         </div>
         <div class="prod-stepper"><div class="psbtn">−</div><span class="psval">0</span><div class="psbtn">+</div></div>
       </div>
@@ -947,13 +940,35 @@
 
   </div>
 
-  <!-- Action bar -->
-  <div class="detail-action-bar">
-    <button class="detail-btn-cancel" onclick="goBack('detail')">Cancel</button>
-    <button class="detail-btn-place">Place Order</button>
-  </div>
+      <div class="detail-order-actions">
+        <button class="detail-btn-cancel" onclick="goBack()">Cancel</button>
+        <button class="detail-btn-place">Place Order</button>
+      </div>
 
 </div>
+  </div><!-- end scroll-area -->
+
+  <div class="bottom-bar">
+    <button class="bottom-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+      Hosting
+    </button>
+    <button class="bottom-btn" onclick="switchToDesktop()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Switch View
+    </button>
+    <button class="bottom-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Hosted Event
+    </button>
+    <button class="bottom-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      Packages (3)
+    </button>
+  </div>
+</div>
+
+
 
 
 <script>
@@ -1062,16 +1077,18 @@ function showDetail(title, desc, host, group, days, buys, hasImg) {
 }
 
 function goBack() {
-  document.getElementById('detail-view').classList.remove('visible');
-  document.getElementById('feed-view').style.display = 'block';
+  document.getElementById('detail-view').style.display = 'none';
+  document.getElementById('view-all').style.display = 'block';
+  // reset tabs
+  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', i===0));
 }
 
 // Addon pill selection — clicking a pill selects it within its group
 document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('addon-pill')) {
-    const group = e.target.closest('.addon-pills');
+  if (e.target.classList.contains('addon-pill') || e.target.classList.contains('addon-pill-sm')) {
+    const group = e.target.closest('.addon-pills') || e.target.closest('.addon-pills-sm');
     if (group) {
-      group.querySelectorAll('.addon-pill').forEach(p => p.classList.remove('sel'));
+      group.querySelectorAll('.addon-pill, .addon-pill-sm').forEach(p => p.classList.remove('sel'));
       e.target.classList.add('sel');
     }
   }
