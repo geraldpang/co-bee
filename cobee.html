@@ -193,6 +193,38 @@
     text-decoration: underline; cursor: pointer;
   }
 
+  /* ── GROUP SEARCH BAR ── */
+  .group-search-top { padding: 10px 12px; background: white; border-bottom: 0.5px solid #e0dfd8; position: relative; }
+  .group-search-top .s-wrap { position: relative; }
+  .group-search-top .s-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #B4B2A9; }
+  .group-search-top .s-input {
+    width: 100%; height: 34px; border: 0.5px solid #D3D1C7;
+    border-radius: 8px; padding: 0 12px 0 32px;
+    font-size: 13px; font-family: inherit; color: #1a1a18;
+    outline: none; background: #FAFAF8; transition: border-color 0.15s;
+  }
+  .group-search-top .s-input:focus { border-color: #009A97; background: white; }
+  .group-search-top .s-input::placeholder { color: #B4B2A9; }
+
+  /* Dropdown */
+  .group-dropdown {
+    display: none; position: absolute; left: 12px; right: 12px; top: calc(100% + 4px);
+    background: white; border: 0.5px solid #D3D1C7; border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1); z-index: 50; overflow: hidden;
+  }
+  .group-dropdown.open { display: block; }
+  .group-dropdown-lbl { padding: 7px 12px 5px; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #888; border-bottom: 0.5px solid #f0f0f0; }
+  .group-drop-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 0.5px solid #f0f0f0; cursor: pointer; transition: background 0.1s; }
+  .group-drop-item:last-child { border-bottom: none; }
+  .group-drop-item:hover { background: #f5fafa; }
+  .group-drop-av { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white; flex-shrink: 0; }
+  .group-drop-info { flex: 1; min-width: 0; }
+  .group-drop-name { font-size: 12px; font-weight: 600; color: #1a1a18; }
+  .group-drop-meta { font-size: 11px; color: #888; }
+  .group-drop-join { padding: 4px 10px; border-radius: 99px; background: #E0F5F5; color: #005f5d; font-size: 11px; font-weight: 600; border: 0.5px solid #80CCCB; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+  .group-drop-req  { padding: 4px 10px; border-radius: 99px; background: #FEF2DC; color: #BA7517; font-size: 11px; font-weight: 600; border: 0.5px solid #FAC775; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+  .group-drop-none { padding: 20px 12px; text-align: center; font-size: 13px; color: #888; }
+
   /* Group detail */
   .group-detail { padding: 20px 16px; }
   .group-detail-header { text-align: center; margin-bottom: 20px; }
@@ -574,11 +606,23 @@
   <!-- MY GROUP VIEW -->
   <!-- MY GROUP VIEW — Screen 1: Group List -->
   <div id="view-group" style="display:none;">
-    <div class="feed-header">
-      <span class="feed-header-count">MY GROUP (2)</span>
-    </div>
-    <div class="group-list">
 
+    <!-- Search bar pinned at top -->
+    <div class="group-search-top" style="position:relative;">
+      <div class="s-wrap">
+        <svg class="s-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="s-input" id="group-search-input" placeholder="Search for a group to join…" oninput="searchGroups(this.value)" autocomplete="off" />
+      </div>
+      <!-- Dropdown results -->
+      <div class="group-dropdown" id="group-dropdown">
+        <div class="group-dropdown-lbl" id="group-dropdown-lbl">Results</div>
+        <div id="group-dropdown-results"></div>
+      </div>
+    </div>
+
+    <!-- My groups list -->
+    <div class="grp-header" style="padding:8px 14px 2px;font-size:11px;font-weight:600;color:#888;letter-spacing:0.06em;text-transform:uppercase;">MY GROUP (2)</div>
+    <div class="group-list">
       <div class="group-list-item" onclick="showGroupDetail()">
         <div class="group-avatar-wrap">
           <div class="group-avatar">M6</div>
@@ -589,7 +633,6 @@
         </div>
         <div class="group-role">Admin</div>
       </div>
-
       <div class="group-list-item" onclick="showGroupDetail()">
         <div class="group-avatar-wrap">
           <div class="group-avatar" style="background:#009A97;">M5</div>
@@ -600,9 +643,7 @@
         </div>
         <div class="group-role">Admin</div>
       </div>
-
     </div>
-    <div class="group-search-link">Search for a group to Join</div>
   </div>
 
   <!-- MY GROUP VIEW — Screen 2: Group Detail -->
@@ -803,7 +844,66 @@
 function showGroupDetail() {
   document.getElementById('view-group').style.display = 'none';
   document.getElementById('view-group-detail').style.display = 'block';
+  // clear search
+  document.getElementById('group-search-input').value = '';
+  document.getElementById('group-dropdown').classList.remove('open');
 }
+
+// Mock group data for search demo
+const allGroups = [
+  { id: 'bt', name: 'Bubble Tea Lovers', meta: '12 members · 8 events', color: '#7F77DD', initials: 'BT', type: 'public' },
+  { id: 'sg', name: 'SG Foodies', meta: '45 members · 22 events', color: '#639922', initials: 'SG', type: 'public' },
+  { id: 'kc', name: 'KC Group Buy', meta: '7 members · Private', color: '#E8971A', initials: 'KC', type: 'private' },
+  { id: 'jb', name: 'JB Shoppers', meta: '22 members · 14 events', color: '#378ADD', initials: 'JB', type: 'public' },
+  { id: 'pg', name: 'PG Community', meta: '5 members · 3 events', color: '#009A97', initials: 'PG', type: 'private' },
+];
+
+function searchGroups(q) {
+  const dd = document.getElementById('group-dropdown');
+  const results = document.getElementById('group-dropdown-results');
+  const lbl = document.getElementById('group-dropdown-lbl');
+  if (!q.trim()) { dd.classList.remove('open'); return; }
+  const matches = allGroups.filter(g => g.name.toLowerCase().includes(q.toLowerCase()));
+  dd.classList.add('open');
+  if (matches.length === 0) {
+    lbl.textContent = 'No results';
+    results.innerHTML = '<div class="group-drop-none">No groups found for "' + q + '"</div>';
+    return;
+  }
+  lbl.textContent = matches.length + ' result' + (matches.length > 1 ? 's' : '');
+  results.innerHTML = matches.map(g => `
+    <div class="group-drop-item">
+      <div class="group-drop-av" style="background:${g.color};">${g.initials}</div>
+      <div class="group-drop-info">
+        <div class="group-drop-name">${g.name}</div>
+        <div class="group-drop-meta">${g.meta}</div>
+      </div>
+      ${g.type === 'public'
+        ? `<button class="group-drop-join" onclick="joinGroup('${g.name}')">Join</button>`
+        : `<button class="group-drop-req" onclick="requestGroup('${g.name}')">Request</button>`}
+    </div>`).join('');
+}
+
+function joinGroup(name) {
+  document.getElementById('group-search-input').value = '';
+  document.getElementById('group-dropdown').classList.remove('open');
+  showToast('Joined ' + name, 'success');
+}
+
+function requestGroup(name) {
+  document.getElementById('group-search-input').value = '';
+  document.getElementById('group-dropdown').classList.remove('open');
+  showToast('Request sent to ' + name, 'success');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('view-group');
+  if (wrap && !wrap.contains(e.target)) {
+    const dd = document.getElementById('group-dropdown');
+    if (dd) dd.classList.remove('open');
+  }
+});
 
 function hideGroupDetail() {
   document.getElementById('view-group-detail').style.display = 'none';
