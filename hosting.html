@@ -170,15 +170,24 @@ select:focus { border-color: #009A97; }
 .preview-section-lbl { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; margin: 12px 0 8px; }
 
 /* Action bar */
-.action-bar { max-width: 600px; margin: 0 auto; display: flex; gap: 8px; padding: 8px 10px 12px; }
-.btn-back { flex: 1; height: 40px; border: 0.5px solid #D3D1C7; border-radius: 8px; background: white; font-size: 13px; font-weight: 600; color: #888780; cursor: pointer; font-family: inherit; }
-.btn-next { flex: 2; height: 40px; background: #009A97; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
+.action-bar { max-width: 600px; margin: 0 auto; display: flex; gap: 8px; padding: 12px 10px 16px; }
+.btn-back { flex: 1; height: 48px; border: 0.5px solid #D3D1C7; border-radius: 8px; background: white; font-size: 15px; font-weight: 600; color: #888780; cursor: pointer; font-family: inherit; }
+.btn-next { flex: 2; height: 48px; background: #009A97; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
 .btn-next:hover { background: #007A77; }
-.btn-publish { width: 100%; height: 42px; background: #009A97; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
+.btn-publish { width: 100%; height: 48px; background: #009A97; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
 .btn-publish:hover { background: #007A77; }
 
-/* Section divider */
-.section-label { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; }
+/* Section collapse */
+.section-collapse-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; cursor: pointer; border-radius: 12px;
+  transition: background 0.12s;
+}
+.section-collapse-hd:hover { background: #FAFAF8; }
+.collapse-chevron { transition: transform 0.2s; flex-shrink: 0; }
+.collapse-chevron.open { transform: rotate(180deg); }
+.section-collapse-body { display: none; border-top: 0.5px solid #f0f0f0; }
+.section-collapse-body.open { display: block; }
 </style>
 </head>
 <body>
@@ -226,9 +235,20 @@ select:focus { border-color: #009A97; }
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B4B2A9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         <div style="flex:1;min-width:0;">
           <div style="font-size:10px;font-weight:600;color:#B4B2A9;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Event template</div>
-          <div style="font-size:12px;color:#888780;">No template selected</div>
+          <div style="font-size:12px;color:#888780;">Pre-fill this form using a saved template</div>
         </div>
-        <div class="template-btn">Use template</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
+          <div style="font-size:11px;font-weight:600;color:#009A97;cursor:pointer;display:flex;align-items:center;gap:3px;" onclick="alert('Downloading template…')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download template
+          </div>
+          <label style="font-size:11px;font-weight:600;color:#009A97;cursor:pointer;display:flex;align-items:center;gap:3px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload
+            <input type="file" accept=".xls,.xlsx,.csv" style="display:none;" onchange="handleTemplateUpload(this)" />
+          </label>
+        </div>
+        <div id="template-filename" style="font-size:11px;color:#009A97;display:none;margin-top:4px;"></div>
       </div>
 
       <!-- Event details -->
@@ -282,84 +302,100 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-      <!-- Payment options -->
-      <div class="form-card">
-        <div class="form-card-title">Payment options</div>
-
-        <div class="check-option" onclick="toggleCheck(this)">
-          <div class="check-top">
-            <div class="check-box"></div>
-            <span class="check-lbl">Payment after closing date</span>
-          </div>
-          <div class="check-desc">Host distributes delivery cost and consolidates discount at event close. Set amounts in Host Dashboard.</div>
+      <!-- Payment options — collapsable -->
+      <div class="form-card" style="padding:0;gap:0;">
+        <div class="section-collapse-hd" onclick="toggleSection(this)">
+          <span class="form-card-title" style="margin:0;">Payment options</span>
+          <svg class="collapse-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
+        <div class="section-collapse-body">
+          <div style="padding:0 14px 12px;display:flex;flex-direction:column;gap:10px;">
 
-        <div class="check-option on" onclick="toggleCheck(this)">
-          <div class="check-top">
-            <div class="check-box on">
-              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            <div class="check-option" onclick="toggleCheck(this)">
+              <div class="check-top">
+                <div class="check-box"></div>
+                <span class="check-lbl">Payment after closing date</span>
+              </div>
+              <div class="check-desc">Host distributes delivery cost and consolidates discount at event close. Set amounts in Host Dashboard.</div>
             </div>
-            <span class="check-lbl">Pay together</span>
-          </div>
-          <div class="check-desc">Members can pay for multiple events at once via Pay Together.</div>
-        </div>
 
-        <div class="form-group">
-          <label class="form-label">Admin fee per order</label>
-          <div class="fee-row">
-            <span class="fee-prefix">$</span>
-            <input type="number" value="0.00" step="0.50" min="0" style="width:90px;text-align:right;" />
-            <span style="font-size:13px;color:#888780;">per order</span>
-          </div>
-        </div>
-      </div>
+            <div class="check-option on" onclick="toggleCheck(this)">
+              <div class="check-top">
+                <div class="check-box on">
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+                </div>
+                <span class="check-lbl">Pay together</span>
+              </div>
+              <div class="check-desc">Members can pay for multiple events at once via Pay Together.</div>
+            </div>
 
-      <!-- Optional toggles -->
-      <div class="form-card">
-        <div class="form-card-title">Optional</div>
+            <div class="form-group">
+              <label class="form-label">Admin fee per order</label>
+              <div class="fee-row">
+                <span class="fee-prefix">$</span>
+                <input type="number" value="0.00" step="0.50" min="0" style="width:90px;text-align:right;" />
+                <span style="font-size:13px;color:#888780;">per order</span>
+              </div>
+            </div>
 
-        <div class="toggle-item">
-          <div class="toggle-row" onclick="toggleSwitch(this)">
-            <span class="toggle-lbl">Important notes to buyers</span>
-            <div class="toggle-sw"></div>
-          </div>
-          <div class="toggle-body">
-            <textarea style="margin-top:4px;" placeholder="Notes buyers will see before ordering…"></textarea>
-          </div>
-        </div>
-
-        <div class="toggle-item">
-          <div class="toggle-row" onclick="toggleSwitch(this)">
-            <span class="toggle-lbl">External URL</span>
-            <div class="toggle-sw"></div>
-          </div>
-          <div class="toggle-body">
-            <input type="url" style="margin-top:4px;" placeholder="https://…" />
-          </div>
-        </div>
-
-        <div class="toggle-item">
-          <div class="toggle-row" onclick="toggleSwitch(this)">
-            <span class="toggle-lbl">Delivery options</span>
-            <div class="toggle-sw"></div>
-          </div>
-          <div class="toggle-body">
-            <input type="text" style="margin-top:4px;" placeholder="Describe delivery options…" />
-          </div>
-        </div>
-
-        <div class="toggle-item">
-          <div class="toggle-row" onclick="toggleSwitch(this)">
-            <span class="toggle-lbl">Request delivery details from buyers</span>
-            <div class="toggle-sw"></div>
-          </div>
-          <div class="toggle-body">
-            <p style="font-size:12px;color:#888780;line-height:1.5;margin-top:4px;">Buyers will be asked to provide their delivery address when ordering.</p>
           </div>
         </div>
       </div>
 
-      <div class="action-bar" style="padding:4px 0 16px;">
+      <!-- Additional options — collapsable -->
+      <div class="form-card" style="padding:0;gap:0;">
+        <div class="section-collapse-hd" onclick="toggleSection(this)">
+          <span class="form-card-title" style="margin:0;">Additional options</span>
+          <svg class="collapse-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="section-collapse-body">
+          <div style="padding:0 14px 12px;display:flex;flex-direction:column;gap:8px;">
+
+            <div class="toggle-item">
+              <div class="toggle-row" onclick="toggleSwitch(this)">
+                <span class="toggle-lbl">Important notes to buyers</span>
+                <div class="toggle-sw"></div>
+              </div>
+              <div class="toggle-body">
+                <textarea style="margin-top:4px;" placeholder="Notes buyers will see before ordering…"></textarea>
+              </div>
+            </div>
+
+            <div class="toggle-item">
+              <div class="toggle-row" onclick="toggleSwitch(this)">
+                <span class="toggle-lbl">External URL</span>
+                <div class="toggle-sw"></div>
+              </div>
+              <div class="toggle-body">
+                <input type="url" style="margin-top:4px;" placeholder="https://…" />
+              </div>
+            </div>
+
+            <div class="toggle-item">
+              <div class="toggle-row" onclick="toggleSwitch(this)">
+                <span class="toggle-lbl">Delivery options</span>
+                <div class="toggle-sw"></div>
+              </div>
+              <div class="toggle-body">
+                <input type="text" style="margin-top:4px;" placeholder="Describe delivery options…" />
+              </div>
+            </div>
+
+            <div class="toggle-item">
+              <div class="toggle-row" onclick="toggleSwitch(this)">
+                <span class="toggle-lbl">Request delivery details from buyers</span>
+                <div class="toggle-sw"></div>
+              </div>
+              <div class="toggle-body">
+                <p style="font-size:12px;color:#888780;line-height:1.5;margin-top:4px;">Buyers will be asked to provide their delivery address when ordering.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="action-bar">
         <button class="btn-back" onclick="window.location.href='cobee.html'">Cancel</button>
         <button class="btn-next" onclick="goToStep(2)">Next →</button>
       </div>
@@ -457,7 +493,7 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-      <div class="action-bar" style="padding:4px 0 16px;">
+      <div class="action-bar">
         <button class="btn-back" onclick="goToStep(1)">← Back</button>
         <button class="btn-next" onclick="goToStep(3)">Next →</button>
       </div>
@@ -527,7 +563,7 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-      <div class="action-bar" style="padding:4px 0 4px;">
+      <div class="action-bar">
         <button class="btn-back" onclick="goToStep(2)">← Back</button>
         <button class="btn-next" onclick="publishEvent()">Publish →</button>
       </div>
@@ -561,6 +597,22 @@ select:focus { border-color: #009A97; }
 </nav>
 
 <script>
+function handleTemplateUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const el = document.getElementById('template-filename');
+  el.textContent = '✓ ' + file.name + ' uploaded';
+  el.style.display = 'block';
+}
+
+/* ── TOGGLE SECTION (collapsable card) ── */
+function toggleSection(hd) {
+  const body = hd.nextElementSibling;
+  const chev = hd.querySelector('.collapse-chevron');
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
 /* ── STEP NAVIGATION ── */
 function goToStep(n) {
   document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
