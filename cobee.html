@@ -162,6 +162,84 @@
   .page-num { width: 28px; height: 28px; background: #009A97; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: white; font-weight: 500; }
   .dot-menu { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; transition: background 0.12s; }
   .dot-menu:hover { background: #E6F7F7; }
+
+  /* ── MY GROUP ── */
+  .group-list { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 1px; }
+  .group-list-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 4px; cursor: pointer;
+    border-bottom: 0.5px solid #f0f0f0;
+    transition: background 0.12s;
+  }
+  .group-list-item:last-of-type { border-bottom: none; }
+  .group-list-item:hover { background: #f5fafa; border-radius: 10px; }
+  .group-avatar-wrap { position: relative; flex-shrink: 0; }
+  .group-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: #E8971A; display: flex; align-items: center;
+    justify-content: center; font-size: 14px; font-weight: 700; color: white;
+    overflow: hidden;
+  }
+  .group-info { flex: 1; min-width: 0; }
+  .group-name { font-size: 14px; font-weight: 600; color: #1a1a18; margin-bottom: 3px; }
+  .group-meta { display: flex; gap: 10px; font-size: 12px; color: #888; }
+  .group-meta span { color: #009A97; font-weight: 500; }
+  .group-role { font-size: 12px; color: #888; flex-shrink: 0; }
+  .group-search-link {
+    display: block; text-align: center; padding: 16px;
+    font-size: 13px; font-weight: 600; color: #009A97;
+    text-decoration: underline; cursor: pointer;
+  }
+
+  /* Group detail */
+  .group-detail { padding: 20px 16px; }
+  .group-detail-header { text-align: center; margin-bottom: 20px; }
+  .group-detail-share {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; color: #009A97; text-decoration: underline;
+    cursor: pointer; margin-bottom: 12px;
+  }
+  .group-detail-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: #E8971A; margin: 0 auto 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700; color: white;
+    position: relative;
+  }
+  .group-detail-avatar-edit {
+    position: absolute; bottom: 0; right: 0;
+    width: 22px; height: 22px; background: #888;
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; border: 2px solid white;
+  }
+  .group-detail-name { font-size: 18px; font-weight: 600; color: #1a1a18; margin-bottom: 4px; }
+  .group-detail-desc { font-size: 13px; color: #888; }
+  .group-stats { display: flex; align-items: center; margin: 16px 0; border: 0.5px solid #e0dfd8; border-radius: 12px; overflow: hidden; background: white; }
+  .group-stat { flex: 1; text-align: center; padding: 14px 10px; }
+  .group-stat + .group-stat { border-left: 0.5px solid #e0dfd8; }
+  .group-stat-val { font-size: 22px; font-weight: 700; color: #1a1a18; letter-spacing: -0.5px; }
+  .group-stat-lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #888; margin-top: 2px; }
+  .group-events-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .group-events-title { font-size: 13px; font-weight: 600; color: #1a1a18; }
+  .host-event-link { font-size: 13px; font-weight: 600; color: #009A97; cursor: pointer; }
+  .group-events-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .group-event-card {
+    background: white; border: 0.5px solid #e0dfd8;
+    border-radius: 10px; padding: 10px 12px;
+    cursor: pointer; transition: border-color 0.15s;
+  }
+  .group-event-card:hover { border-color: #009A97; }
+  .group-event-card.expired { background: #f0f0f0; border-color: #e0dfd8; }
+  .group-event-card.expired .gec-title { color: #888; }
+  .gec-title { font-size: 12px; font-weight: 600; color: #009A97; margin-bottom: 4px; line-height: 1.35; }
+  .gec-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
+  .gec-days { font-size: 11px; color: #009A97; }
+  .gec-days.expired { color: #888; }
+  .gec-buy { font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 99px; }
+  .gec-buy.has { background: #009A97; color: white; }
+  .gec-buy.zero { background: #D3D1C7; color: #5F5E5A; }
+  .gec-host { font-size: 11px; color: #888; margin-top: 4px; }
+  .gec-edit { font-size: 11px; color: #009A97; font-weight: 600; margin-top: 4px; display: inline-block; }
   /* ── VIEW ORDER LINK ── */
   .view-order-btn { display: block; width: 100%; padding: 9px 14px; font-size: 12px; font-weight: 600; color: #009A97; background: none; border: none; border-top: 0.5px solid #e0dfd8; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: space-between; }
   .view-order-btn:hover { background: #f5fafa; }
@@ -490,15 +568,141 @@
   </div>
 
   <!-- MY GROUP VIEW -->
+  <!-- MY GROUP VIEW — Screen 1: Group List -->
   <div id="view-group" style="display:none;">
     <div class="feed-header">
-      <span class="feed-header-count">My groups</span>
+      <span class="feed-header-count">MY GROUP (2)</span>
     </div>
-    <div class="feed">
-      <div style="text-align:center;padding:3rem 1rem;color:#888;">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D3D1C7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <div style="font-size:14px;font-weight:500;color:#1a1a18;margin-bottom:6px;">No groups yet</div>
-        <div style="font-size:13px;color:#888;">Search for a group to join</div>
+    <div class="group-list">
+
+      <div class="group-list-item" onclick="showGroupDetail()">
+        <div class="group-avatar-wrap">
+          <div class="group-avatar">M6</div>
+        </div>
+        <div class="group-info">
+          <div class="group-name">M6 group</div>
+          <div class="group-meta">2 Members &nbsp;<span>19 Organized Events</span></div>
+        </div>
+        <div class="group-role">Admin</div>
+      </div>
+
+      <div class="group-list-item" onclick="showGroupDetail()">
+        <div class="group-avatar-wrap">
+          <div class="group-avatar" style="background:#009A97;">M5</div>
+        </div>
+        <div class="group-info">
+          <div class="group-name">M5</div>
+          <div class="group-meta">1 Members &nbsp;<span>50 Organized Events</span></div>
+        </div>
+        <div class="group-role">Admin</div>
+      </div>
+
+    </div>
+    <div class="group-search-link">Search for a group to Join</div>
+  </div>
+
+  <!-- MY GROUP VIEW — Screen 2: Group Detail -->
+  <div id="view-group-detail" style="display:none;">
+    <div style="background:#009A97;height:44px;display:flex;align-items:center;padding:0 14px;flex-shrink:0;">
+      <div onclick="hideGroupDetail()" style="cursor:pointer;display:flex;align-items:center;gap:6px;color:white;font-size:13px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        My Group
+      </div>
+    </div>
+    <div class="group-detail">
+      <div class="group-detail-header">
+        <div class="group-detail-share">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          SHARE
+        </div>
+        <div class="group-detail-avatar">
+          M6
+          <div class="group-detail-avatar-edit">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          </div>
+        </div>
+        <div class="group-detail-name">M6 group</div>
+        <div class="group-detail-desc">test</div>
+      </div>
+
+      <div class="group-stats">
+        <div class="group-stat">
+          <div class="group-stat-val">19</div>
+          <div class="group-stat-lbl">Event Hosted</div>
+        </div>
+        <div class="group-stat">
+          <div class="group-stat-val">2</div>
+          <div class="group-stat-lbl">Members</div>
+        </div>
+      </div>
+
+      <div class="group-events-header">
+        <span class="group-events-title">Events</span>
+        <span class="host-event-link">Host an Event</span>
+      </div>
+
+      <div class="group-events-grid">
+
+        <div class="group-event-card">
+          <div class="gec-row">
+            <span class="gec-days">12 days left</span>
+            <span class="gec-buy zero">0 BUY</span>
+          </div>
+          <div class="gec-title">Groupbuy Event test</div>
+          <div class="gec-host">Minh Cong</div>
+          <div class="gec-edit">EDIT</div>
+        </div>
+
+        <div class="group-event-card">
+          <div class="gec-row">
+            <span class="gec-days">12 days left</span>
+            <span class="gec-buy zero">0 BUY</span>
+          </div>
+          <div class="gec-title">new event</div>
+          <div class="gec-host">Minh Cong</div>
+          <div class="gec-edit">EDIT</div>
+        </div>
+
+        <div class="group-event-card">
+          <div class="gec-row">
+            <span class="gec-days">11 days left</span>
+            <span class="gec-buy has">6 BUY</span>
+          </div>
+          <div class="gec-title">This is a test event for Purchase with no login</div>
+          <div class="gec-host">Minh Cong</div>
+          <div class="gec-edit">EDIT</div>
+        </div>
+
+        <div class="group-event-card expired">
+          <div class="gec-row">
+            <span class="gec-days expired">0 day left</span>
+            <span class="gec-buy zero">0 BUY</span>
+          </div>
+          <div class="gec-title">test</div>
+          <div class="gec-host">Minh Cong</div>
+          <div class="gec-edit">EDIT</div>
+        </div>
+
+        <div class="group-event-card expired">
+          <div class="gec-row">
+            <span class="gec-days expired">0 day left</span>
+            <span class="gec-buy has">2 BUY</span>
+          </div>
+          <div class="gec-title">order without login</div>
+          <div class="gec-host">Minh Cong</div>
+          <div class="gec-edit">EDIT</div>
+        </div>
+
+        <div class="group-event-card expired">
+          <div class="gec-row">
+            <span class="gec-days expired">0 day left</span>
+            <span class="gec-buy has">5 BUY</span>
+          </div>
+          <div class="gec-title">atea 1</div>
+          <div class="gec-host">Minh Cong</div>
+          <div class="gec-edit">EDIT</div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -594,10 +798,22 @@
 
 
 <script>
+function showGroupDetail() {
+  document.getElementById('view-group').style.display = 'none';
+  document.getElementById('view-group-detail').style.display = 'block';
+}
+
+function hideGroupDetail() {
+  document.getElementById('view-group-detail').style.display = 'none';
+  document.getElementById('view-group').style.display = 'block';
+}
+
 function switchTab(tab) {
   const tabs = document.querySelectorAll('.nav-tab');
   const views = { all: 'view-all', purchase: 'view-purchase', group: 'view-group' };
   const order = ['all', 'purchase', 'group'];
+  // Always hide group detail when switching tabs
+  document.getElementById('view-group-detail').style.display = 'none';
   order.forEach((t, i) => {
     tabs[i].classList.toggle('active', t === tab);
     document.getElementById(views[t]).style.display = t === tab ? 'block' : 'none';
