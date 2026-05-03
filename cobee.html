@@ -75,29 +75,63 @@
   }
 
   /* ── DETAIL VIEW ── */
-  .detail-view { display: none; flex-direction: column; min-height: 100vh; }
+  .detail-view { display: none; flex-direction: column; height: 100%; overflow: hidden; }
   .detail-view.visible { display: flex; }
-  .detail-topbar { background: #009A97; height: 52px; display: flex; align-items: center; padding: 0 1.25rem; gap: 12px; position: sticky; top: 0; z-index: 100; flex-shrink: 0; }
-  .back-btn { cursor: pointer; display: flex; align-items: center; }
-  .detail-topbar-title { font-size: 14px; font-weight: 500; color: white; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .detail-content { flex: 1; overflow-y: auto; padding-bottom: 80px; }
-  .detail-img { background: #D4ECEC; height: 220px; display: flex; align-items: center; justify-content: center; }
-  .detail-host-section { background: white; padding: 14px 16px; border-bottom: 0.5px solid #e0e0e0; }
-  .detail-host-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .detail-title { font-size: 17px; font-weight: 500; color: #009A97; margin-bottom: 6px; }
-  .detail-desc-text { font-size: 13px; color: #666; line-height: 1.6; }
-  .detail-section { background: white; margin-top: 8px; padding: 14px 16px; border-bottom: 0.5px solid #e0e0e0; }
-  .section-label { font-size: 11px; font-weight: 500; color: #999; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
-  .detail-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #1a1a1a; }
-  .detail-row:last-child { margin-bottom: 0; }
-  .pkg-card { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border: 0.5px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; }
-  .pkg-card:last-child { margin-bottom: 0; }
-  .pkg-name { font-size: 13px; font-weight: 500; color: #1a1a1a; }
-  .pkg-min { font-size: 11px; color: #888; }
-  .pkg-price { font-size: 14px; font-weight: 500; color: #009A97; }
-  .buy-bar { padding: 12px 16px; background: white; border-top: 0.5px solid #e0e0e0; position: sticky; bottom: 0; }
-  .buy-btn { width: 100%; padding: 13px; background: #009A97; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; }
-  .buy-btn:hover { background: #007A77; }
+  .detail-back-bar { background: white; padding: 8px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 0.5px solid #e0dfd8; flex-shrink: 0; }
+  .back-btn { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #009A97; cursor: pointer; flex-shrink: 0; }
+  .detail-back-title { font-size: 13px; font-weight: 600; color: #009A97; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .detail-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; max-width: 600px; margin: 0 auto; width: 100%; }
+  .detail-host-row { background: white; padding: 10px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 0.5px solid #f0f0f0; }
+  .detail-host-info { flex: 1; min-width: 0; }
+  .detail-badges { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .detail-img { background: #E0F5F5; height: 200px; display: flex; align-items: center; justify-content: center; position: relative; }
+  .detail-img-dots { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; }
+  .detail-img-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(0,154,151,0.25); }
+  .detail-img-dot.a { background: #009A97; width: 14px; border-radius: 3px; }
+  .detail-body { background: white; padding: 12px 14px; border-bottom: 0.5px solid #f0f0f0; }
+  .detail-title { font-size: 15px; font-weight: 600; color: #009A97; margin-bottom: 4px; }
+  .detail-desc  { font-size: 12px; color: #888780; line-height: 1.55; margin-bottom: 10px; }
+  .detail-info-row { display: flex; gap: 8px; font-size: 12px; margin-bottom: 4px; }
+  .detail-info-row:last-child { margin-bottom: 0; }
+  .detail-info-lbl { color: #888780; width: 70px; flex-shrink: 0; }
+  .detail-info-val { color: #888780; }
+  .detail-prod-hd { padding: 8px 14px 6px; display: flex; align-items: center; justify-content: space-between; background: #F4F6F8; }
+  .detail-prod-lbl { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; }
+  .detail-prod-search { position: relative; width: 120px; }
+  .detail-prod-search input { width: 100%; height: 26px; border: 0.5px solid #d3d1c7; border-radius: 7px; padding: 0 8px 0 24px; font-size: 11px; background: white; outline: none; font-family: inherit; color: #1a1a18; }
+  .detail-prod-search svg { position: absolute; left: 7px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+  .prod-row { background: white; border-bottom: 0.5px solid #f0f0f0; padding: 10px 14px; }
+  .prod-row-main { display: flex; gap: 10px; align-items: flex-start; }
+  .prod-thumb { width: 48px; height: 48px; border-radius: 8px; background: #E0F5F5; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .prod-info { flex: 1; min-width: 0; }
+  .prod-name  { font-size: 13px; font-weight: 600; color: #1a1a18; }
+  .prod-desc2 { font-size: 11px; color: #888780; margin-top: 1px; }
+  .prod-price2 { font-size: 13px; font-weight: 700; color: #1a1a18; margin-top: 3px; }
+  .prod-orders { font-size: 11px; color: #888780; margin-top: 2px; }
+  .prod-need  { font-size: 11px; color: #E24B4A; margin-top: 3px; }
+  .prod-stepper { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+  .psbtn { width: 24px; height: 24px; border-radius: 50%; border: 0.5px solid #d3d1c7; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #009A97; font-size: 15px; line-height: 1; }
+  .psval { font-size: 13px; font-weight: 600; color: #1a1a18; min-width: 14px; text-align: center; }
+  .addons-section { margin-top: 8px; border-top: 0.5px solid #f0f0f0; padding-top: 8px; }
+  .addons-hd { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #888780; margin-bottom: 6px; }
+  .addon-pills { display: flex; gap: 5px; flex-wrap: wrap; }
+  .addon-pill { padding: 4px 11px; border-radius: 99px; font-size: 11px; border: 0.5px solid #d3d1c7; color: #888780; background: white; cursor: pointer; transition: all 0.12s; }
+  .addon-pill.sel { background: #009A97; color: white; border-color: #009A97; font-weight: 600; }
+  .detail-notes { background: white; margin-top: 8px; padding: 12px 14px; }
+  .detail-notes-title { font-size: 12px; font-weight: 600; color: #1a1a18; margin-bottom: 7px; }
+  .detail-bullet { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: #888780; line-height: 1.5; margin-bottom: 5px; }
+  .detail-bullet-dot { width: 5px; height: 5px; border-radius: 50%; background: #888780; flex-shrink: 0; margin-top: 5px; }
+  .detail-total-box { background: #E0F5F5; border-radius: 8px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: flex-start; margin: 12px 0 8px; }
+  .detail-total-lbl { font-size: 12px; color: #005f5d; }
+  .detail-total-amt { font-size: 15px; font-weight: 700; color: #005f5d; text-align: right; }
+  .detail-total-fee { font-size: 11px; color: #007A77; margin-top: 2px; }
+  .detail-pob { font-size: 12px; color: #009A97; text-decoration: underline; display: block; text-align: center; margin-bottom: 10px; cursor: pointer; }
+  .detail-nth-lbl { font-size: 12px; font-weight: 600; color: #1a1a18; margin-bottom: 6px; }
+  .detail-notes textarea { width: 100%; border: 0.5px solid #d3d1c7; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-family: inherit; resize: none; height: 52px; outline: none; color: #1a1a18; background: white; }
+  .detail-notes textarea::placeholder { color: #B4B2A9; }
+  .detail-action-bar { background: white; border-top: 0.5px solid #e0dfd8; padding: 12px 14px; display: flex; gap: 8px; flex-shrink: 0; }
+  .detail-btn-cancel { flex: 1; height: 38px; border: 0.5px solid #d3d1c7; border-radius: 8px; background: white; font-size: 13px; font-weight: 600; color: #888780; cursor: pointer; font-family: inherit; }
+  .detail-btn-place  { flex: 2; height: 38px; background: #009A97; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
 
   /* ── DESKTOP DASHBOARD ── */
   .desktop-view { display: none; flex-direction: column; min-height: 100vh; }
@@ -777,71 +811,148 @@
 </div>
 
 <!-- ══════════════════════════════════════════════
-     DETAIL VIEW
+     DETAIL VIEW — expanded card format
 ══════════════════════════════════════════════ -->
 <div id="detail-view" class="detail-view">
-  <div class="detail-topbar">
+
+  <!-- Slim back bar -->
+  <div class="detail-back-bar">
     <div class="back-btn" onclick="goBack('detail')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
     </div>
-    <div class="detail-topbar-title" id="d-topbar-title"></div>
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;flex-shrink:0;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    <div class="detail-back-title" id="d-topbar-title"></div>
   </div>
 
   <div class="detail-content">
+
+    <!-- Host row — same format as feed card -->
+    <div class="detail-host-row">
+      <div class="avatar lg">MC</div>
+      <div class="detail-host-info">
+        <div class="host-name" id="d-host"></div>
+        <div class="host-sub" id="d-group"></div>
+      </div>
+      <div class="detail-badges">
+        <span class="closing-text" id="d-closing"></span>
+        <span class="buy-badge" id="d-buy"></span>
+      </div>
+    </div>
+
+    <!-- Hero image — light teal like feed cards -->
     <div class="detail-img" id="d-img">
-      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.35;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-    </div>
-    <div class="detail-host-section">
-      <div class="detail-host-row">
-        <div class="card-host">
-          <div class="avatar xl">MC</div>
-          <div>
-            <div class="host-name" id="d-host"></div>
-            <div class="host-sub" id="d-group"></div>
-          </div>
-        </div>
-        <div class="card-badges">
-          <span class="closing-text" id="d-closing"></span>
-          <span class="buy-badge" id="d-buy"></span>
-        </div>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <div class="detail-img-dots">
+        <div class="detail-img-dot a"></div>
+        <div class="detail-img-dot"></div>
+        <div class="detail-img-dot"></div>
       </div>
+    </div>
+
+    <!-- Title + desc + dates — same as feed card expansion -->
+    <div class="detail-body">
       <div class="detail-title" id="d-title"></div>
-      <div class="detail-desc-text" id="d-desc"></div>
+      <div class="detail-desc" id="d-desc"></div>
+      <div class="detail-info-row"><span class="detail-info-lbl">Closing</span><span class="detail-info-val" id="d-close-date">15-05-2026</span></div>
+      <div class="detail-info-row"><span class="detail-info-lbl">Collection</span><span class="detail-info-val">22-05-2026 (10AM – 5PM)</span></div>
+      <div class="detail-info-row"><span class="detail-info-lbl">Address</span><span class="detail-info-val">Simei Street 1</span></div>
     </div>
 
-    <div class="detail-section">
-      <div class="section-label">Event details</div>
-      <div class="detail-row">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Closing <span id="d-close-label" style="color:#E87722;font-weight:500;margin-left:4px;"></span>
-      </div>
-      <div class="detail-row">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg>
-        Delivery in <span style="font-weight:500;margin-left:4px;">4 hours</span>
-      </div>
-      <div class="detail-row">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        M6 group · <span style="color:#009A97;font-weight:500;margin-left:4px;">2 members</span>
+    <!-- Products -->
+    <div class="detail-prod-hd">
+      <span class="detail-prod-lbl">Products</span>
+      <div class="detail-prod-search">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#B4B2A9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input placeholder="Search…" />
       </div>
     </div>
 
-    <div class="detail-section">
-      <div class="section-label">Packages</div>
-      <div class="pkg-card">
-        <div><div class="pkg-name">Standard pack</div><div class="pkg-min">Min. 1 unit</div></div>
-        <div class="pkg-price">$12.00</div>
+    <!-- Product 1: Spec — base + 2 add-on option groups -->
+    <div class="prod-row">
+      <div class="prod-row-main">
+        <div class="prod-thumb"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="prod-info">
+          <div class="prod-name">Spec</div>
+          <div class="prod-desc2">Good Spec from Vietnam</div>
+          <div class="prod-price2">$20.00</div>
+          <div class="prod-orders">0 order(s) made</div>
+        </div>
+        <div class="prod-stepper"><div class="psbtn">−</div><span class="psval">1</span><div class="psbtn">+</div></div>
       </div>
-      <div class="pkg-card">
-        <div><div class="pkg-name">Bundle pack</div><div class="pkg-min">Min. 3 units</div></div>
-        <div class="pkg-price">$30.00</div>
+      <!-- Add-on 1: Frame Color -->
+      <div class="addons-section">
+        <div class="addons-hd">Frame Color <span style="color:#B4B2A9;font-weight:400;letter-spacing:0;">+$10</span></div>
+        <div class="addon-pills">
+          <div class="addon-pill sel">Blue</div>
+          <div class="addon-pill">Red</div>
+          <div class="addon-pill">Green</div>
+        </div>
+      </div>
+      <!-- Add-on 2: Lens Color -->
+      <div class="addons-section" style="margin-top:8px;">
+        <div class="addons-hd">Lens Color <span style="color:#B4B2A9;font-weight:400;letter-spacing:0;">+$5</span></div>
+        <div class="addon-pills">
+          <div class="addon-pill">Blue</div>
+          <div class="addon-pill sel">Red</div>
+          <div class="addon-pill">Green</div>
+        </div>
       </div>
     </div>
+
+    <!-- Product 2: Toothpaste — simple -->
+    <div class="prod-row">
+      <div class="prod-row-main">
+        <div class="prod-thumb"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="prod-info">
+          <div class="prod-name">Toothpaste</div>
+          <div class="prod-desc2">Clean teeth</div>
+          <div class="prod-price2">$2.00</div>
+          <div class="prod-orders">0 order(s) made</div>
+        </div>
+        <div class="prod-stepper"><div class="psbtn">−</div><span class="psval">0</span><div class="psbtn">+</div></div>
+      </div>
+    </div>
+
+    <!-- Product 3: Chestnut — needs more -->
+    <div class="prod-row">
+      <div class="prod-row-main">
+        <div class="prod-thumb"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="prod-info">
+          <div class="prod-name">Chestnut</div>
+          <div class="prod-desc2">Individual pieces (split case)</div>
+          <div class="prod-price2">$3.00</div>
+          <div class="prod-orders">0 order(s) made</div>
+          <div class="prod-need">Need 6 more to fulfil orders</div>
+        </div>
+        <div class="prod-stepper"><div class="psbtn">−</div><span class="psval">0</span><div class="psbtn">+</div></div>
+      </div>
+    </div>
+
+    <!-- Notes + Total -->
+    <div class="detail-notes">
+      <div class="detail-notes-title">Please note</div>
+      <div class="detail-bullet"><div class="detail-bullet-dot"></div><span>Additional note is added here</span></div>
+      <div class="detail-bullet"><div class="detail-bullet-dot"></div><span>Another note can appear here</span></div>
+      <div class="detail-bullet"><div class="detail-bullet-dot"></div><span>Find out more: <a href="#" style="color:#009A97;text-decoration:underline;">sss.com</a></span></div>
+
+      <div class="detail-total-box">
+        <div class="detail-total-lbl">Order total</div>
+        <div><div class="detail-total-amt">$25.00 SGD</div><div class="detail-total-fee">$0.00 admin fee included</div></div>
+      </div>
+
+      <div class="detail-pob">Purchase-on-Behalf</div>
+      <div class="detail-nth-lbl">Notes to host</div>
+      <textarea placeholder="Leave a note for the host…"></textarea>
+    </div>
+
   </div>
 
-  <div class="buy-bar">
-    <button class="buy-btn">Buy now</button>
+  <!-- Action bar -->
+  <div class="detail-action-bar">
+    <button class="detail-btn-cancel" onclick="goBack('detail')">Cancel</button>
+    <button class="detail-btn-place">Place Order</button>
   </div>
+
 </div>
 
 
@@ -955,8 +1066,18 @@ function showDetail(title, desc, host, group, days, buys, hasImg) {
 function goBack() {
   document.getElementById('detail-view').classList.remove('visible');
   document.getElementById('feed-view').style.display = 'block';
-  window.scrollTo(0, 0);
 }
+
+// Addon pill selection — clicking a pill selects it within its group
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('addon-pill')) {
+    const group = e.target.closest('.addon-pills');
+    if (group) {
+      group.querySelectorAll('.addon-pill').forEach(p => p.classList.remove('sel'));
+      e.target.classList.add('sel');
+    }
+  }
+});
 
 function switchToDesktop() {
   alert('Host dashboard coming soon!');
