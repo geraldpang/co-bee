@@ -170,9 +170,9 @@ select:focus { border-color: #009A97; }
 .preview-section-lbl { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; margin: 12px 0 8px; }
 
 /* Action bar */
-.action-bar { max-width: 600px; margin: 0 auto; display: flex; gap: 8px; padding: 12px 10px 16px; }
-.btn-back { flex: 1; height: 48px; border: 0.5px solid #D3D1C7; border-radius: 8px; background: white; font-size: 15px; font-weight: 600; color: #888780; cursor: pointer; font-family: inherit; }
-.btn-next { flex: 2; height: 48px; background: #009A97; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
+.action-bar { max-width: 600px; margin: 0 auto; display: flex; gap: 10px; padding: 16px 10px 20px; width: 100%; }
+.btn-back { flex: 1; height: 48px; border: 0.5px solid #D3D1C7; border-radius: 10px; background: white; font-size: 14px; font-weight: 600; color: #888780; cursor: pointer; font-family: inherit; padding: 0 8px; }
+.btn-next { flex: 2; height: 48px; background: #009A97; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; padding: 0 8px; }
 .btn-next:hover { background: #007A77; }
 .btn-publish { width: 100%; height: 48px; background: #009A97; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
 .btn-publish:hover { background: #007A77; }
@@ -223,7 +223,7 @@ select:focus { border-color: #009A97; }
 .option-radio input[type="radio"] { accent-color: #009A97; width: 14px; height: 14px; }
 .option-ack { display: flex; align-items: flex-start; gap: 7px; font-size: 11px; color: #888780; line-height: 1.5; }
 .option-ack input[type="checkbox"] { accent-color: #009A97; width: 14px; height: 14px; margin-top: 1px; flex-shrink: 0; }
-.option-ok-btn { height: 32px; background: #009A97; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
+
 .subitem-group { background: #FAFAF8; border: 0.5px solid #e0dfd8; border-radius: 8px; padding: 8px 10px; margin-top: 6px; }
 .subitem-group-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
 .subitem-group-name { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.04em; text-transform: uppercase; }
@@ -641,7 +641,7 @@ function addItem() {
       </div>
       <div class="options-wrap">
         <div class="options-hd">
-          <span class="options-lbl">Options</span>
+          
           <div class="add-option-trigger" onclick="toggleOptDropdown(${id})">
             <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
             Add option
@@ -715,20 +715,13 @@ document.addEventListener('click', function(e) {
 function addOrderSettings(id) {
   document.getElementById('opt-dd-' + id).style.display = 'none';
   const panels = document.getElementById('opt-panels-' + id);
-  const panelId = 'os-' + id + '-' + Date.now();
   const div = document.createElement('div');
   div.className = 'option-panel';
-  div.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;">
-      <div class="option-panel-title">Order Settings</div>
-      <div class="icon-btn danger" onclick="this.closest('.option-panel').remove()">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </div>
-    </div>
-    <div class="option-field"><span>Available stock</span><input type="number" value="1000" /></div>
-    <div class="option-field"><span>Limit per order</span><input type="number" value="1000" /></div>
-    <div class="option-field"><span>Minimum per order</span><input type="number" value="1" /></div>
-    <button class="option-ok-btn" onclick="this.closest('.option-panel').style.opacity='0.6';this.textContent='Saved ✓'">OK</button>`;
+  const html = '<div style="display:flex;align-items:center;justify-content:space-between;"><div class="option-panel-title">Order Settings</div><div class="icon-btn danger" onclick="this.closest(\'.option-panel\').remove()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>'
+    + '<div class="option-field"><span>Available stock</span><input type="number" value="1000" /></div>'
+    + '<div class="option-field"><span>Limit per order</span><input type="number" value="1000" /></div>'
+    + '<div class="option-field"><span>Minimum per order</span><input type="number" value="1" /></div>';
+  div.innerHTML = html;
   panels.appendChild(div);
 }
 
@@ -737,75 +730,158 @@ function addSplitCase(id) {
   const panels = document.getElementById('opt-panels-' + id);
   const div = document.createElement('div');
   div.className = 'option-panel';
-  div.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;">
-      <div class="option-panel-title">Split Case Purchase</div>
-      <div class="icon-btn danger" onclick="this.closest('.option-panel').remove()">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </div>
-    </div>
-    <div class="option-field"><span>Items per case/carton</span><input type="number" placeholder="" /></div>
-    <div class="option-field"><span>Cost per item</span><input type="number" placeholder="0.00" /></div>
-    <div class="option-field"><span>Minimum item order</span><input type="number" value="1" /></div>
-    <label class="option-radio"><input type="radio" name="sc-${id}" checked /> Fulfil only when a full case is ordered</label>
-    <label class="option-radio"><input type="radio" name="sc-${id}" /> Fulfil even if the case is incomplete</label>
-    <label class="option-ack"><input type="checkbox" /> I acknowledge that enabling the split case option—fulfilled only when a full case is ordered—will automatically activate the 'Pay Later' option.</label>
-    <button class="option-ok-btn" onclick="this.closest('.option-panel').style.opacity='0.6';this.textContent='Saved ✓'">OK</button>`;
+  const n = 'sc-' + id;
+  div.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;"><div class="option-panel-title">Split Case Purchase</div><div class="icon-btn danger" onclick="this.closest(\'.option-panel\').remove()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>'
+    + '<div class="option-field"><span>Items per case/carton</span><input type="number" placeholder="" /></div>'
+    + '<div class="option-field"><span>Cost per item</span><input type="number" placeholder="0.00" /></div>'
+    + '<div class="option-field"><span>Minimum item order</span><input type="number" value="1" /></div>'
+    + '<label class="option-radio"><input type="radio" name="' + n + '" checked /> Fulfil only when a full case is ordered</label>'
+    + '<label class="option-radio"><input type="radio" name="' + n + '" /> Fulfil even if the case is incomplete</label>'
+    + '<label class="option-ack"><input type="checkbox" /> I acknowledge that enabling the split case option will automatically activate the Pay Later option.</label>';
   panels.appendChild(div);
 }
+
+function toggleOptionPanel(el) {
+  const panel = el.closest('.option-panel');
+  const fields = panel.querySelectorAll('.option-field, .option-radio, .option-ack');
+  const isHidden = fields[0] && fields[0].style.display === 'none';
+  fields.forEach(f => f.style.display = isHidden ? '' : 'none');
+  el.textContent = isHidden ? 'Hide' : 'Show';
+}
+
 
 let subitemGroupCount = 0;
 function addSubitemGroup(id) {
   document.getElementById('opt-dd-' + id).style.display = 'none';
   const panels = document.getElementById('opt-panels-' + id);
-  subitemGroupCount++;
-  const gid = 'sg-' + id + '-' + subitemGroupCount;
-  const div = document.createElement('div');
-  div.className = 'subitem-group';
-  div.id = gid;
-  div.innerHTML = `
-    <div class="subitem-group-hd">
-      <input type="text" placeholder="Category name (e.g. Frame Color)" style="flex:1;height:28px;border:0.5px solid #D3D1C7;border-radius:6px;padding:0 8px;font-size:12px;font-family:inherit;outline:none;background:white;margin-right:8px;" />
-      <div style="display:flex;gap:5px;">
-        <div class="icon-btn danger" onclick="document.getElementById('${gid}').remove()">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-        </div>
-      </div>
-    </div>
-    <div id="${gid}-rows">
-      <div class="subitem-row">
-        <input class="subitem-name" type="text" placeholder="Name…" />
-        <span style="font-size:12px;color:#888780;">$</span>
-        <input class="subitem-price" type="number" placeholder="0" step="0.5" min="0" />
-        <div class="subitem-del" onclick="this.closest('.subitem-row').remove()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </div>
-      </div>
-    </div>
-    <div class="add-subitem-btn" onclick="addSubitemRow('${gid}')">
-      <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-      Add option
-    </div>
-    <div class="subitem-required-row">
-      <span>Required</span>
-      <div class="toggle-sw" onclick="this.classList.toggle('on')" style="pointer-events:auto;cursor:pointer;"></div>
-    </div>`;
-  panels.appendChild(div);
+  let subContainer = document.getElementById('sub-container-' + id);
+  if (!subContainer) {
+    subContainer = document.createElement('div');
+    subContainer.id = 'sub-container-' + id;
+    subContainer.style.cssText = 'border:0.5px solid #e0dfd8;border-radius:8px;overflow:visible;margin-top:6px;';
+
+    const hd = document.createElement('div');
+    hd.style.cssText = 'background:#F4F6F8;padding:7px 10px;border-radius:8px 8px 0 0;border-bottom:0.5px solid #e0dfd8;display:flex;align-items:center;justify-content:space-between;';
+
+    const hdTitle = document.createElement('span');
+    hdTitle.style.cssText = 'font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;';
+    hdTitle.textContent = 'Sub-Items';
+
+    const hdBtn = document.createElement('div');
+    hdBtn.style.cssText = 'font-size:11px;font-weight:600;color:#009A97;cursor:pointer;display:flex;align-items:center;gap:3px;';
+    hdBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg> Add sub-item title';
+    hdBtn.addEventListener('click', function() { addSubitemTitle(id); });
+
+    hd.appendChild(hdTitle);
+    hd.appendChild(hdBtn);
+
+    const gw = document.createElement('div');
+    gw.id = 'sub-groups-' + id;
+    gw.style.cssText = 'padding:8px 10px;display:flex;flex-direction:column;gap:10px;';
+
+    subContainer.appendChild(hd);
+    subContainer.appendChild(gw);
+    panels.appendChild(subContainer);
+  }
+  addSubitemTitle(id);
 }
 
-function addSubitemRow(gid) {
+function addSubitemTitle(id) {
+  subitemGroupCount++;
+  const gid = 'sg-' + id + '-' + subitemGroupCount;
+  const gw = document.getElementById('sub-groups-' + id);
+
+  const div = document.createElement('div');
+  div.id = gid;
+  div.style.cssText = 'background:#FAFAF8;border:0.5px solid #e0dfd8;border-radius:8px;padding:8px 10px;overflow:visible;';
+
+  // Title input row
+  const titleRow = document.createElement('div');
+  titleRow.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:8px;';
+
+  const titleInput = document.createElement('input');
+  titleInput.type = 'text';
+  titleInput.placeholder = 'Sub-item title (e.g. Frame Color)';
+  titleInput.style.cssText = 'flex:1;height:30px;border:0.5px solid #D3D1C7;border-radius:6px;padding:0 8px;font-size:12px;font-family:inherit;outline:none;background:white;';
+
+  const delBtn = document.createElement('div');
+  delBtn.className = 'icon-btn danger';
+  delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
+  delBtn.addEventListener('click', function() { div.remove(); });
+
+  titleRow.appendChild(titleInput);
+  titleRow.appendChild(delBtn);
+
+  // Column headers
+  const colHd = document.createElement('div');
+  colHd.style.cssText = 'display:flex;gap:4px;margin-bottom:4px;';
+  colHd.innerHTML = '<span style="font-size:10px;color:#B4B2A9;flex:1;padding-left:2px;">Choice name</span>'
+    + '<span style="font-size:10px;color:#B4B2A9;width:68px;text-align:right;padding-right:24px;">Add-on cost</span>';
+
+  // Rows container
+  const rowsWrap = document.createElement('div');
+  rowsWrap.id = gid + '-rows';
+
+  // Add choices button
+  const addChoicesBtn = document.createElement('div');
+  addChoicesBtn.style.cssText = 'font-size:11px;font-weight:600;color:#009A97;cursor:pointer;display:inline-flex;align-items:center;gap:3px;margin-top:6px;';
+  addChoicesBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg> Add choices';
+  addChoicesBtn.addEventListener('click', function() { addChoiceRow(gid); });
+
+  // Required row
+  const reqRow = document.createElement('div');
+  reqRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:6px;border-top:0.5px solid #e0dfd8;font-size:12px;color:#888780;';
+  const reqLabel = document.createElement('span');
+  reqLabel.textContent = 'Required';
+  const reqToggle = document.createElement('div');
+  reqToggle.className = 'toggle-sw';
+  reqToggle.style.cssText = 'pointer-events:auto;cursor:pointer;';
+  reqToggle.addEventListener('click', function() { this.classList.toggle('on'); });
+  reqRow.appendChild(reqLabel);
+  reqRow.appendChild(reqToggle);
+
+  div.appendChild(titleRow);
+  div.appendChild(colHd);
+  div.appendChild(rowsWrap);
+  div.appendChild(addChoicesBtn);
+  div.appendChild(reqRow);
+  gw.appendChild(div);
+  addChoiceRow(gid);
+}
+
+function addChoiceRow(gid) {
   const rows = document.getElementById(gid + '-rows');
   const row = document.createElement('div');
   row.className = 'subitem-row';
-  row.innerHTML = `
-    <input class="subitem-name" type="text" placeholder="Name…" />
-    <span style="font-size:12px;color:#888780;">$</span>
-    <input class="subitem-price" type="number" placeholder="0" step="0.5" min="0" />
-    <div class="subitem-del" onclick="this.closest('.subitem-row').remove()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </div>`;
+
+  const nameInput = document.createElement('input');
+  nameInput.className = 'subitem-name';
+  nameInput.type = 'text';
+  nameInput.placeholder = 'e.g. Blue';
+
+  const dollarSign = document.createElement('span');
+  dollarSign.style.cssText = 'font-size:12px;color:#888780;';
+  dollarSign.textContent = '+$';
+
+  const priceInput = document.createElement('input');
+  priceInput.className = 'subitem-price';
+  priceInput.type = 'number';
+  priceInput.placeholder = '0';
+  priceInput.step = '0.5';
+  priceInput.min = '0';
+
+  const delDiv = document.createElement('div');
+  delDiv.className = 'subitem-del';
+  delDiv.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  delDiv.addEventListener('click', function() { row.remove(); });
+
+  row.appendChild(nameInput);
+  row.appendChild(dollarSign);
+  row.appendChild(priceInput);
+  row.appendChild(delDiv);
   rows.appendChild(row);
 }
+
 
 // Auto-add first item on step 2
 function initStep2() {
