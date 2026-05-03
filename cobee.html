@@ -80,7 +80,7 @@
   .back-btn { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #009A97; cursor: pointer; flex-shrink: 0; }
   .detail-back-title { font-size: 13px; font-weight: 600; color: #009A97; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .detail-content { max-width: 600px; margin: 0 auto; width: 100%; }
-  .detail-host-row { background: white; padding: 10px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 0.5px solid #f0f0f0; }
+  .detail-host-row { background: white; padding: 10px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 0.5px solid #f0f0f0; border-radius: 12px 12px 0 0; }
   .detail-host-info { flex: 1; min-width: 0; }
   .detail-badges { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
   .detail-img { background: #E0F5F5; height: 200px; display: flex; align-items: center; justify-content: center; position: relative; }
@@ -94,12 +94,13 @@
   .detail-info-row:last-child { margin-bottom: 0; }
   .detail-info-lbl { color: #888780; width: 70px; flex-shrink: 0; }
   .detail-info-val { color: #888780; }
-  .detail-prod-hd { padding: 8px 14px 6px; display: flex; align-items: center; justify-content: space-between; background: #F4F6F8; }
+  .detail-prod-hd { padding: 8px 14px 6px; display: flex; align-items: center; justify-content: space-between; background: #F4F6F8; border-radius: 8px 8px 0 0; margin-top: 8px; }
   .detail-prod-lbl { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; }
   .detail-prod-search { position: relative; width: 120px; }
   .detail-prod-search input { width: 100%; height: 26px; border: 0.5px solid #d3d1c7; border-radius: 7px; padding: 0 8px 0 24px; font-size: 11px; background: white; outline: none; font-family: inherit; color: #1a1a18; }
   .detail-prod-search svg { position: absolute; left: 7px; top: 50%; transform: translateY(-50%); pointer-events: none; }
   .prod-row { background: white; border-bottom: 0.5px solid #f0f0f0; padding: 10px 14px; }
+  .prod-row:last-of-type { border-bottom: none; border-radius: 0 0 12px 12px; }
   .prod-row-main { display: flex; gap: 10px; align-items: flex-start; }
   .prod-thumb { width: 48px; height: 48px; border-radius: 8px; background: #E0F5F5; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
   .prod-info { flex: 1; min-width: 0; }
@@ -116,7 +117,7 @@
   .addon-pills { display: flex; gap: 5px; flex-wrap: wrap; }
   .addon-pill { padding: 4px 11px; border-radius: 99px; font-size: 11px; border: 0.5px solid #d3d1c7; color: #888780; background: white; cursor: pointer; transition: all 0.12s; }
   .addon-pill.sel { background: #009A97; color: white; border-color: #009A97; font-weight: 600; }
-  .detail-notes { background: white; margin-top: 8px; padding: 12px 14px; }
+  .detail-notes { background: white; margin-top: 8px; padding: 12px 14px; border-radius: 12px; }
   .detail-notes-title { font-size: 12px; font-weight: 600; color: #1a1a18; margin-bottom: 7px; }
   .detail-bullet { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: #888780; line-height: 1.5; margin-bottom: 5px; }
   .detail-bullet-dot { width: 5px; height: 5px; border-radius: 50%; background: #888780; flex-shrink: 0; margin-top: 5px; }
@@ -128,7 +129,7 @@
   .detail-nth-lbl { font-size: 12px; font-weight: 600; color: #1a1a18; margin-bottom: 6px; }
   .detail-notes textarea { width: 100%; border: 0.5px solid #d3d1c7; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-family: inherit; resize: none; height: 52px; outline: none; color: #1a1a18; background: white; }
   .detail-notes textarea::placeholder { color: #B4B2A9; }
-  .detail-order-actions { display: flex; gap: 8px; margin-top: 14px; max-width: 600px; margin-left: auto; margin-right: auto; border: 0.5px solid #e0dfd8; border-radius: var(--radius-lg, 12px); padding: 12px 14px; background: white; }
+  .detail-order-actions { display: flex; gap: 8px; margin-top: 14px; }
   .detail-btn-cancel { flex: 1; height: 38px; border: 0.5px solid #d3d1c7; border-radius: 8px; background: white; font-size: 13px; font-weight: 600; color: #888780; cursor: pointer; font-family: inherit; }
   .detail-btn-place  { flex: 2; height: 38px; background: #009A97; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
   /* REQUEST 3: progress bar */
@@ -137,8 +138,8 @@
   .fulfil-bar-fill { height: 100%; background: #E24B4A; border-radius: 99px; width: 0%; }
   .fulfil-label { font-size: 11px; color: #E24B4A; }
   /* REQUEST 4: add-ons less prominent, inside product boundary */
-  .addon-group { margin-top: 8px; padding-top: 8px; border-top: 0.5px solid #f0f0f0; }
-  .addon-group-lbl { font-size: 10px; color: #B4B2A9; margin-bottom: 5px; display: flex; justify-content: space-between; }
+  .addon-group { margin-top: 10px; padding-left: 58px; }
+  .addon-group-lbl { font-size: 10px; color: #B4B2A9; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
   .addon-group-lbl .addon-price-hint { color: #009A97; }
   .addon-pills-sm { display: flex; gap: 4px; flex-wrap: wrap; }
   .addon-pill-sm { padding: 3px 9px; border-radius: 99px; font-size: 11px; border: 0.5px solid #e0dfd8; color: #B4B2A9; background: white; cursor: pointer; transition: all 0.12s; }
@@ -805,16 +806,15 @@
 ══════════════════════════════════════════════ -->
 <div id="detail-view" style="display:none;">
 
-  <!-- Slim back bar -->
-  <div class="detail-back-bar">
-    <div class="back-btn" onclick="goBack()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back
-    </div>
-    <div class="detail-back-title" id="d-topbar-title"></div>
-  </div>
-
   <div class="detail-content">
+
+    <!-- Back link inside centre frame, above host row -->
+    <div style="max-width:600px;margin:0 auto;padding:10px 14px 6px;">
+      <div class="back-btn" onclick="goBack()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </div>
+    </div>
 
     <!-- Host row — same format as feed card -->
     <div class="detail-host-row">
@@ -873,7 +873,7 @@
       <div class="addon-group">
         <div class="addon-group-lbl">Frame Color <span class="addon-price-hint">+$10</span></div>
         <div class="addon-pills-sm">
-          <div class="addon-pill-sm sel">Blue</div>
+          <div class="addon-pill-sm">Blue</div>
           <div class="addon-pill-sm">Red</div>
           <div class="addon-pill-sm">Green</div>
         </div>
@@ -883,7 +883,7 @@
         <div class="addon-group-lbl">Lens Color <span class="addon-price-hint">+$5</span></div>
         <div class="addon-pills-sm">
           <div class="addon-pill-sm">Blue</div>
-          <div class="addon-pill-sm sel">Red</div>
+          <div class="addon-pill-sm">Red</div>
           <div class="addon-pill-sm">Green</div>
         </div>
       </div>
@@ -936,14 +936,15 @@
       <div class="detail-pob">Purchase-on-Behalf</div>
       <div class="detail-nth-lbl">Notes to host</div>
       <textarea placeholder="Leave a note for the host…"></textarea>
-    </div>
-
-  </div>
 
       <div class="detail-order-actions">
         <button class="detail-btn-cancel" onclick="goBack()">Cancel</button>
         <button class="detail-btn-place">Place Order</button>
       </div>
+      <div style="height:1.5rem;"></div>
+    </div>
+
+  </div>
 
 </div>
   </div><!-- end scroll-area -->
@@ -1061,7 +1062,6 @@ function togglePcard(id) {
 }
 
 function showDetail(title, desc, host, group, days, buys, hasImg) {
-  document.getElementById('d-topbar-title').textContent = title;
   document.getElementById('d-title').textContent = title;
   document.getElementById('d-desc').textContent = desc;
   document.getElementById('d-host').textContent = host;
@@ -1086,13 +1086,14 @@ function goBack() {
   document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', i===0));
 }
 
-// Addon pill selection — clicking a pill selects it within its group
+// Addon pill selection — tap to select, tap again to deselect (optional)
 document.addEventListener('click', function(e) {
   if (e.target.classList.contains('addon-pill') || e.target.classList.contains('addon-pill-sm')) {
     const group = e.target.closest('.addon-pills') || e.target.closest('.addon-pills-sm');
     if (group) {
+      const isSelected = e.target.classList.contains('sel');
       group.querySelectorAll('.addon-pill, .addon-pill-sm').forEach(p => p.classList.remove('sel'));
-      e.target.classList.add('sel');
+      if (!isSelected) e.target.classList.add('sel');
     }
   }
 });
