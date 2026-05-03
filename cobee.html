@@ -194,10 +194,10 @@
   }
 
   /* ── GROUP SEARCH BAR ── */
-  .group-search-top { padding: 10px 0; background: #F4F6F8; border-bottom: 2px solid #e0dfd8; position: relative; display: flex; justify-content: center; }
-  .group-search-top .inner { width: 100%; max-width: 600px; padding: 0 14px; display: flex; align-items: center; gap: 12px; }
-  .group-search-top .grp-lbl { font-size: 11px; font-weight: 600; color: #888; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
-  .group-search-top .s-wrap { position: relative; flex: 1; }
+  .group-search-top { padding: 10px 0; background: #F4F6F8; position: relative; display: flex; justify-content: center; border-bottom: none; }
+  .group-search-top .inner { width: 100%; max-width: 600px; padding: 0 14px; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #e0dfd8; padding-bottom: 10px; }
+  .group-search-top .grp-lbl { font-size: 11px; font-weight: 600; color: #888; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
+  .group-search-top .s-wrap { position: relative; width: 200px; flex-shrink: 0; margin-left: auto; }
   .group-search-top .s-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #B4B2A9; }
   .group-search-top .s-input {
     width: 100%; height: 32px; border: 0.5px solid #D3D1C7;
