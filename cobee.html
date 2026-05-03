@@ -1052,12 +1052,10 @@ function showDetail(title, desc, host, group, days, buys, hasImg) {
   document.getElementById('d-host').textContent = host;
   document.getElementById('d-group').textContent = group;
   document.getElementById('d-closing').textContent = 'Closing in ' + days + ' days';
-  document.getElementById('d-close-label').textContent = 'in ' + days + ' days';
   const b = document.getElementById('d-buy');
   b.textContent = buys + ' BUY';
   b.style.background = parseInt(buys) > 0 ? '#009A97' : '#D3D1C7';
   b.style.color = parseInt(buys) > 0 ? 'white' : '#5F5E5A';
-  document.getElementById('d-img').style.display = hasImg === 'true' ? 'flex' : 'none';
   document.getElementById('feed-view').style.display = 'none';
   document.getElementById('detail-view').classList.add('visible');
   window.scrollTo(0, 0);
