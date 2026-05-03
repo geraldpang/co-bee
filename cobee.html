@@ -132,7 +132,18 @@
   .detail-order-actions { display: flex; gap: 8px; margin-top: 14px; }
   .detail-btn-cancel { flex: 1; height: 38px; border: 0.5px solid #d3d1c7; border-radius: 8px; background: white; font-size: 13px; font-weight: 600; color: #888780; cursor: pointer; font-family: inherit; }
   .detail-btn-place  { flex: 2; height: 38px; background: #009A97; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
-  /* REQUEST 3: progress bar */
+  /* ── ORDER VIEW ── */
+  .ord-card { background: white; border-radius: 12px; overflow: hidden; margin-bottom: 0; }
+  .ord-host-row { padding: 10px 14px; display: flex; align-items: center; gap: 9px; border-bottom: 0.5px solid #f0f0f0; }
+  .ord-body { padding: 10px 14px; border-bottom: 0.5px solid #f0f0f0; }
+  .ord-info-row { display: flex; gap: 8px; font-size: 12px; margin-bottom: 3px; }
+  .ord-info-lbl { color: #888780; width: 68px; flex-shrink: 0; }
+  .ord-info-val { color: #888780; }
+  .ord-sec-hd { padding: 8px 14px 6px; font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; background: #F4F6F8; border-radius: 12px 12px 0 0; }
+  .ord-item-row { display: flex; align-items: center; padding: 9px 14px; border-bottom: 0.5px solid #f0f0f0; gap: 8px; }
+  .ord-total-row { display: flex; justify-content: space-between; font-size: 12px; color: #888780; margin-bottom: 4px; }
+  .ord-final { font-size: 14px; font-weight: 700; color: #1a1a18; margin-top: 8px; padding-top: 8px; border-top: 0.5px solid #f0f0f0; margin-bottom: 0; }
+  .ord-final span:last-child { color: #009A97; }
   .fulfil-wrap { margin-top: 5px; }
   .fulfil-bar-bg { height: 4px; background: #e0dfd8; border-radius: 99px; overflow: hidden; margin-bottom: 3px; }
   .fulfil-bar-fill { height: 100%; background: #E24B4A; border-radius: 99px; width: 0%; }
@@ -939,12 +950,131 @@
 
       <div class="detail-order-actions">
         <button class="detail-btn-cancel" onclick="goBack()">Cancel</button>
-        <button class="detail-btn-place">Place Order</button>
+        <button class="detail-btn-place" onclick="showOrderView()">Place Order</button>
       </div>
       <div style="height:1.5rem;"></div>
     </div>
 
   </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     ORDER / PAYMENT VIEW
+══════════════════════════════════════════════ -->
+<div id="order-view" style="display:none;">
+  <div style="max-width:600px;margin:0 auto;padding:10px 14px 6px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div class="back-btn" onclick="hideOrderView()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </div>
+      <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.04em;text-transform:uppercase;">Order No. 1</div>
+    </div>
+  </div>
+
+  <!-- Event summary card -->
+  <div style="max-width:600px;margin:0 auto;padding:0 10px 8px;">
+    <div class="ord-card">
+      <div class="ord-host-row">
+        <div class="avatar lg">MC</div>
+        <div style="flex:1;min-width:0;">
+          <div class="host-name">Minh Cong</div>
+          <div class="host-sub">M6 group</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+          <div style="font-size:11px;color:#888780;text-align:right;line-height:1.4;">29-05-2026<br/>10AM–5PM</div>
+          <span class="buy-badge" style="background:#009A97;color:white;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600;">1 BUY</span>
+        </div>
+      </div>
+      <div class="ord-body">
+        <div style="font-size:14px;font-weight:600;color:#009A97;margin-bottom:3px;" id="ord-title">new event</div>
+        <div style="font-size:12px;color:#888780;margin-bottom:8px;" id="ord-desc">test</div>
+        <div class="ord-info-row"><span class="ord-info-lbl">Closing</span><span class="ord-info-val">15-05-2026</span></div>
+        <div class="ord-info-row"><span class="ord-info-lbl">Collection</span><span class="ord-info-val">29-05-2026 (10AM–5PM)</span></div>
+        <div class="ord-info-row"><span class="ord-info-lbl">Address</span><span class="ord-info-val">Simei Street 1</span></div>
+      </div>
+      <div style="padding:8px 14px;display:flex;gap:14px;border-top:0.5px solid #f0f0f0;">
+        <span style="font-size:12px;font-weight:600;color:#009A97;cursor:pointer;">Edit order</span>
+        <span style="font-size:12px;font-weight:600;color:#E24B4A;cursor:pointer;">Cancel order</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order items + totals -->
+  <div style="max-width:600px;margin:0 auto;padding:0 10px 8px;">
+    <div class="ord-card">
+      <div class="ord-sec-hd">Your order</div>
+      <div class="ord-item-row">
+        <div style="flex:1;">
+          <div style="font-size:13px;color:#1a1a18;font-weight:500;">Spec</div>
+          <div style="font-size:11px;color:#888780;margin-top:1px;">Frame: Blue · Lens: Red</div>
+        </div>
+        <div style="font-size:12px;color:#888780;width:32px;text-align:center;">×1</div>
+        <div style="font-size:13px;font-weight:600;color:#1a1a18;">$20.00</div>
+      </div>
+      <div style="padding:10px 14px;border-top:0.5px solid #f0f0f0;">
+        <div class="ord-total-row"><span>Subtotal</span><span>$20.00</span></div>
+        <div class="ord-total-row"><span>Discount</span><span>$0.00 (TBC)</span></div>
+        <div class="ord-total-row"><span>Delivery</span><span>$0.00 (TBC)</span></div>
+        <div class="ord-total-row"><span>Admin fee</span><span>$0.00</span></div>
+        <div class="ord-total-row ord-final"><span>Final</span><span>$20.00 SGD</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes to host -->
+  <div style="max-width:600px;margin:0 auto;padding:0 10px 8px;">
+    <div class="ord-card" style="padding:10px 14px;">
+      <div class="ord-sec-hd" style="padding:0;background:none;border-radius:0;margin-bottom:7px;">Notes to host</div>
+      <textarea placeholder="Leave a note for the host…" style="width:100%;border:0.5px solid #d3d1c7;border-radius:8px;padding:8px 10px;font-size:12px;font-family:inherit;resize:none;height:56px;outline:none;color:#1a1a18;background:white;"></textarea>
+    </div>
+  </div>
+
+  <!-- Step 1: QR Payment -->
+  <div style="max-width:600px;margin:0 auto;padding:0 10px 8px;">
+    <div class="ord-card">
+      <div style="padding:10px 14px 8px;border-bottom:0.5px solid #f0f0f0;">
+        <div class="ord-sec-hd" style="padding:0;background:none;border-radius:0;margin-bottom:5px;">Step 1 — Scan to pay</div>
+        <div style="font-size:12px;color:#1a1a18;line-height:1.5;">Scan the QR code to pay <strong>$20.00</strong> to <strong>83062355</strong></div>
+        <div style="display:inline-block;margin-top:6px;font-size:12px;font-weight:700;color:#009A97;background:#E0F5F5;padding:3px 10px;border-radius:6px;letter-spacing:0.04em;">Ref: akft-no1</div>
+      </div>
+      <div style="padding:14px;display:flex;flex-direction:column;align-items:center;gap:10px;border-bottom:0.5px solid #f0f0f0;">
+        <div style="width:120px;height:120px;background:#F4F6F8;border-radius:8px;border:0.5px solid #e0dfd8;display:flex;align-items:center;justify-content:center;">
+          <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="0.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="5" y="5" width="3" height="3" fill="#80CCCB"/><rect x="16" y="5" width="3" height="3" fill="#80CCCB"/><rect x="5" y="16" width="3" height="3" fill="#80CCCB"/><line x1="14" y1="14" x2="17" y2="14"/><line x1="14" y1="17" x2="14" y2="20"/><line x1="17" y1="17" x2="20" y2="17"/><line x1="20" y1="14" x2="20" y2="20"/><line x1="17" y1="20" x2="20" y2="20"/></svg>
+        </div>
+        <div style="display:flex;justify-content:space-between;width:100%;">
+          <div style="font-size:11px;color:#009A97;cursor:pointer;display:flex;align-items:center;gap:4px;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download QR
+          </div>
+          <div style="font-size:11px;color:#009A97;cursor:pointer;display:flex;align-items:center;gap:4px;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Reload QR
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Upload -->
+      <div style="padding:10px 14px 6px;">
+        <div class="ord-sec-hd" style="padding:0;background:none;border-radius:0;margin-bottom:4px;">Step 2 — Attach payment proof</div>
+        <div style="font-size:11px;color:#888780;margin-bottom:10px;">Attach your PayNow screenshot (not SMS) as confirmation.</div>
+        <div style="border:0.5px dashed #80CCCB;border-radius:10px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;background:#FAFAF8;margin-bottom:12px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:#E0F5F5;display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div style="font-size:12px;font-weight:600;color:#009A97;">Tap to upload screenshot</div>
+          <div style="font-size:11px;color:#888780;">PNG, JPG up to 5MB</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Payment button -->
+  <div style="max-width:600px;margin:0 auto;padding:0 10px;">
+    <button onclick="showToast('Payment confirmed!','success')" style="width:100%;height:42px;background:#009A97;border:none;border-radius:8px;font-size:14px;font-weight:600;color:white;cursor:pointer;font-family:inherit;">Confirm Payment</button>
+  </div>
+  <div style="height:1.5rem;"></div>
 
 </div>
   </div><!-- end scroll-area -->
@@ -1076,6 +1206,16 @@ function showDetail(title, desc, host, group, days, buys, hasImg) {
   document.getElementById('view-purchase').style.display = 'none';
   document.getElementById('view-group').style.display = 'none';
   document.getElementById('view-group-detail').style.display = 'none';
+  document.getElementById('detail-view').style.display = 'block';
+}
+
+function showOrderView() {
+  document.getElementById('detail-view').style.display = 'none';
+  document.getElementById('order-view').style.display = 'block';
+}
+
+function hideOrderView() {
+  document.getElementById('order-view').style.display = 'none';
   document.getElementById('detail-view').style.display = 'block';
 }
 
