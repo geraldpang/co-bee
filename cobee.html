@@ -166,7 +166,7 @@
   .dot-menu:hover { background: #E6F7F7; }
 
   /* ── MY GROUP ── */
-  .group-list { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 1px; }
+  .group-list { display: flex; flex-direction: column; gap: 1px; max-width: 600px; margin: 0 auto; padding: 0 14px; }
   .group-list-item {
     display: flex; align-items: center; gap: 12px;
     padding: 14px 4px; cursor: pointer;
@@ -194,23 +194,26 @@
   }
 
   /* ── GROUP SEARCH BAR ── */
-  .group-search-top { padding: 10px 12px; background: white; border-bottom: 0.5px solid #e0dfd8; position: relative; }
-  .group-search-top .s-wrap { position: relative; }
+  .group-search-top { padding: 10px 0; background: #F4F6F8; border-bottom: 2px solid #e0dfd8; position: relative; display: flex; justify-content: center; }
+  .group-search-top .inner { width: 100%; max-width: 600px; padding: 0 14px; display: flex; align-items: center; gap: 12px; }
+  .group-search-top .grp-lbl { font-size: 11px; font-weight: 600; color: #888; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+  .group-search-top .s-wrap { position: relative; flex: 1; }
   .group-search-top .s-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #B4B2A9; }
   .group-search-top .s-input {
-    width: 100%; height: 34px; border: 0.5px solid #D3D1C7;
-    border-radius: 8px; padding: 0 12px 0 32px;
+    width: 100%; height: 32px; border: 0.5px solid #D3D1C7;
+    border-radius: 8px; padding: 0 12px 0 30px;
     font-size: 13px; font-family: inherit; color: #1a1a18;
-    outline: none; background: #FAFAF8; transition: border-color 0.15s;
+    outline: none; background: white; transition: border-color 0.15s;
   }
-  .group-search-top .s-input:focus { border-color: #009A97; background: white; }
+  .group-search-top .s-input:focus { border-color: #009A97; }
   .group-search-top .s-input::placeholder { color: #B4B2A9; }
 
   /* Dropdown */
   .group-dropdown {
-    display: none; position: absolute; left: 12px; right: 12px; top: calc(100% + 4px);
+    display: none; position: absolute; left: 14px; right: 14px; top: calc(100% + 4px);
     background: white; border: 0.5px solid #D3D1C7; border-radius: 10px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.1); z-index: 50; overflow: hidden;
+    max-width: 600px; margin: 0 auto;
   }
   .group-dropdown.open { display: block; }
   .group-dropdown-lbl { padding: 7px 12px 5px; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #888; border-bottom: 0.5px solid #f0f0f0; }
@@ -609,9 +612,12 @@
 
     <!-- Search bar pinned at top -->
     <div class="group-search-top" style="position:relative;">
-      <div class="s-wrap">
-        <svg class="s-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="s-input" id="group-search-input" placeholder="Search for a group to join…" oninput="searchGroups(this.value)" autocomplete="off" />
+      <div class="inner">
+        <span class="grp-lbl">MY GROUP (2)</span>
+        <div class="s-wrap">
+          <svg class="s-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="s-input" id="group-search-input" placeholder="Search for a group to join…" oninput="searchGroups(this.value)" autocomplete="off" />
+        </div>
       </div>
       <!-- Dropdown results -->
       <div class="group-dropdown" id="group-dropdown">
@@ -621,7 +627,6 @@
     </div>
 
     <!-- My groups list -->
-    <div class="grp-header" style="padding:8px 14px 2px;font-size:11px;font-weight:600;color:#888;letter-spacing:0.06em;text-transform:uppercase;">MY GROUP (2)</div>
     <div class="group-list">
       <div class="group-list-item" onclick="showGroupDetail()">
         <div class="group-avatar-wrap">
