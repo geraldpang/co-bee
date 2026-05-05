@@ -1,512 +1,527 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Products / Items</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>co·bee — Products & Items</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body { min-height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; color: #1a1a18; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #ffffff;
-      color: #1a1a18;
-      min-height: 100vh;
-    }
+.page { padding: 20px 20px 40px; max-width: 1200px; margin: 0 auto; }
 
-    /* Nav */
-    .nav {
-      background: #fff;
-      border-bottom: 0.5px solid #e0dfd8;
-      padding: 0 2rem;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .nav-logo { font-size: 16px; font-weight: 600; color: #009A97; letter-spacing: -0.02em; }
-    .nav-avatar {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: #009A97; color: #fff;
-      font-size: 11px; font-weight: 600;
-      display: flex; align-items: center; justify-content: center;
-    }
+/* PAGE HEADER */
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.page-title { font-size: 22px; font-weight: 700; color: #009A97; }
+.page-subtitle { font-size: 12px; color: #888780; margin-top: 3px; }
+.header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-outline { height: 34px; padding: 0 14px; border: 1px solid #009A97; border-radius: 8px; background: white; font-size: 12px; font-weight: 600; color: #009A97; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; transition: background 0.12s; white-space: nowrap; }
+.btn-outline:hover { background: #E0F5F5; }
+.btn-primary { height: 34px; padding: 0 14px; border: none; border-radius: 8px; background: #009A97; font-size: 12px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; transition: background 0.12s; white-space: nowrap; }
+.btn-primary:hover { background: #007A77; }
 
-    .main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+/* SEARCH + STATS ROW */
+.search-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 12px; }
+.search-wrap { width: 300px; flex-shrink: 0; position: relative; }
+.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #888780; }
+.search-input { width: 100%; height: 36px; border: 0.5px solid #D3D1C7; border-radius: 20px; padding: 0 12px 0 34px; font-size: 12px; font-family: inherit; color: #1a1a18; background: white; outline: none; }
+.search-input:focus { border-color: #009A97; }
+.search-input::placeholder { color: #B4B2A9; }
+.stats-row { display: flex; align-items: center; gap: 16px; }
+.stat-pill { font-size: 11px; color: #888780; }
+.stat-pill span { color: #009A97; font-weight: 600; }
 
-    /* Header */
-    .page-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.75rem;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .page-header h1 {
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: #1a1a18;
-    }
-    .header-actions { display: flex; gap: 8px; align-items: center; }
+/* FILTERS */
+.filters-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.filter-select { height: 34px; border: 0.5px solid #D3D1C7; border-radius: 8px; background: white; padding: 0 28px 0 10px; font-size: 12px; font-family: inherit; color: #1a1a18; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; min-width: 130px; }
+.btn-clear { height: 34px; padding: 0 12px; border: 0.5px solid #D3D1C7; border-radius: 8px; background: white; font-size: 12px; color: #888780; cursor: pointer; font-family: inherit; }
+.btn-clear:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
 
-    /* Buttons */
-    .btn {
-      height: 36px; padding: 0 14px;
-      border-radius: 8px;
-      border: 0.5px solid #d3d1c7;
-      background: #fff;
-      color: #1a1a18;
-      font-size: 13px;
-      cursor: pointer;
-      display: inline-flex; align-items: center; gap: 6px;
-      white-space: nowrap;
-      transition: background 0.12s;
-      font-family: inherit;
-    }
-    .btn:hover { background: #f1efe8; }
-    .btn svg { width: 13px; height: 13px; flex-shrink: 0; }
-    .btn.primary {
-      background: #009A97; border-color: #009A97; color: #fff;
-    }
-    .btn.primary:hover { background: #007A77; border-color: #007A77; }
+/* TABLE */
+.table-wrap { background: white; border-radius: 10px; border: 0.5px solid #e0dfd8; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead { background: #FAFAF8; }
+th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.04em; text-transform: uppercase; border-bottom: 0.5px solid #e0dfd8; white-space: nowrap; cursor: pointer; user-select: none; }
+th:hover { color: #009A97; }
+.sort-icon { opacity: 0.3; margin-left: 3px; }
+td { padding: 10px 14px; border-bottom: 0.5px solid #f0f0f0; vertical-align: middle; font-size: 12px; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #FAFAF8; }
 
-    /* Search */
-    .search-wrap { position: relative; width: 260px; }
-    .search-wrap svg {
-      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
-      color: #b4b2a9; width: 14px; height: 14px; pointer-events: none;
-    }
-    .search-wrap input {
-      width: 100%; height: 36px; padding: 0 12px 0 34px;
-      font-size: 13px; border: 0.5px solid #d3d1c7; border-radius: 8px;
-      background: #fff; color: #1a1a18; outline: none;
-      transition: border-color 0.15s; font-family: inherit;
-    }
-    .search-wrap input:focus { border-color: #009A97; }
-    .search-wrap input::placeholder { color: #b4b2a9; }
+/* PRODUCT IMAGE */
+.product-img { width: 40px; height: 40px; border-radius: 8px; background: #E0F5F5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; border: 0.5px solid #D3D1C7; }
+.product-img svg { color: #80CCCB; }
+.product-name { font-weight: 500; color: #1a1a18; }
+.product-desc { font-size: 11px; color: #888780; margin-top: 2px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.name-link { color: #1a1a18; cursor: pointer; font-weight: 500; }
 
-    /* Toolbar row */
-    .toolbar {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-      gap: 12px; flex-wrap: wrap;
-    }
+/* BADGES */
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; border-radius: 99px; padding: 2px 8px; white-space: nowrap; }
+.badge.active   { background: #E0F5F5; color: #007A77; }
+.badge.inactive { background: #f0f0f0; color: #888780; }
+.badge.low      { background: #FCEBEB; color: #A32D2D; }
 
-    /* Table */
-    .table-wrap {
-      border: 0.5px solid #e0dfd8;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    thead {
-      background: #faf9f7;
-      border-bottom: 0.5px solid #e0dfd8;
-    }
-    thead th {
-      padding: 10px 14px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #888780;
-      white-space: nowrap;
-    }
-    thead th.center { text-align: center; }
-    thead th:first-child { width: 40px; padding-left: 16px; }
+/* PRICE */
+.price-cell { font-weight: 600; color: #1a1a18; white-space: nowrap; }
+.price-sub { font-size: 10px; color: #888780; font-weight: 400; margin-top: 1px; }
 
-    tbody tr {
-      border-bottom: 0.5px solid #e0dfd8;
-      transition: background 0.1s;
-    }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: #faf9f7; }
+/* STOCK */
+.stock-bar-wrap { width: 80px; }
+.stock-bar { height: 4px; background: #e0dfd8; border-radius: 2px; margin-top: 4px; overflow: hidden; }
+.stock-bar-fill { height: 100%; border-radius: 2px; background: #009A97; }
+.stock-bar-fill.low { background: #E24B4A; }
 
-    tbody td {
-      padding: 12px 14px;
-      vertical-align: middle;
-      color: #1a1a18;
-    }
-    tbody td:first-child { padding-left: 16px; width: 40px; }
+/* SUB-ITEMS TOGGLE */
+.sub-toggle { font-size: 11px; color: #009A97; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; background: none; border: none; padding: 0; font-family: inherit; margin-top: 3px; }
+.sub-items-wrap { margin-top: 6px; padding: 6px 10px; background: #FAFAF8; border-radius: 6px; border: 0.5px solid #e0dfd8; display: none; }
+.sub-item-row { display: flex; justify-content: space-between; font-size: 11px; color: #1a1a18; padding: 2px 0; border-bottom: 0.5px solid #f0f0f0; }
+.sub-item-row:last-child { border-bottom: none; }
 
-    /* Checkbox */
-    input[type="checkbox"] {
-      width: 15px; height: 15px;
-      accent-color: #009A97;
-      cursor: pointer;
-    }
+/* ACTION BUTTONS */
+.action-btns { display: flex; gap: 6px; opacity: 0; transition: opacity 0.15s; }
+tr:hover .action-btns { opacity: 1; }
+.action-btn { background: none; border: 0.5px solid #D3D1C7; border-radius: 6px; padding: 4px 8px; font-size: 11px; cursor: pointer; font-family: inherit; color: #888780; display: flex; align-items: center; gap: 4px; transition: all 0.12s; }
+.action-btn:hover { border-color: #009A97; color: #009A97; background: #E0F5F5; }
+.action-btn.del:hover { border-color: #E24B4A; color: #E24B4A; background: #FCEBEB; }
 
-    /* Product image */
-    .product-img {
-      width: 48px; height: 48px;
-      border-radius: 8px;
-      object-fit: cover;
-      border: 0.5px solid #e0dfd8;
-      background: #f1efe8;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px; color: #b4b2a9;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .product-img img { width: 100%; height: 100%; object-fit: cover; }
+/* PAGINATION */
+.pagination { display: flex; align-items: center; justify-content: space-between; padding: 14px 4px 4px; margin-top: 4px; }
+.pagination-info { font-size: 12px; color: #888780; }
+.pagination-btns { display: flex; align-items: center; gap: 4px; }
+.page-btn { height: 30px; min-width: 30px; padding: 0 6px; border: 0.5px solid #D3D1C7; border-radius: 6px; background: white; font-size: 12px; color: #1a1a18; cursor: pointer; font-family: inherit; }
+.page-btn:hover { border-color: #009A97; color: #009A97; }
+.page-btn.active { background: #009A97; color: white; border-color: #009A97; font-weight: 600; }
+.rows-select { height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px; font-size: 12px; font-family: inherit; padding: 0 24px 0 8px; color: #1a1a18; background: white; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; }
 
-    .product-name { font-weight: 500; color: #1a1a18; }
-    .product-desc { font-size: 12px; color: #888780; margin-top: 2px; }
+.settings-wrap { position: relative; display: inline-block; }
+.settings-btn { background: none; border: 0.5px solid #D3D1C7; border-radius: 6px; padding: 4px 8px; font-size: 11px; cursor: pointer; font-family: inherit; color: #888780; display: flex; align-items: center; gap: 4px; transition: all 0.12s; opacity: 0; }
+tr:hover .settings-btn { opacity: 1; }
+.settings-btn:hover { border-color: #009A97; color: #009A97; background: #E0F5F5; }
+.settings-dropdown { display: none; position: absolute; right: 0; top: calc(100% + 4px); background: white; border: 0.5px solid #D3D1C7; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 200; min-width: 170px; overflow: hidden; }
+.settings-dropdown.open { display: block; }
+.settings-dd-item { padding: 9px 14px; font-size: 12px; color: #1a1a18; cursor: pointer; display: flex; align-items: center; gap: 8px; border-bottom: 0.5px solid #f0f0f0; transition: background 0.1s; }
+.settings-dd-item:last-child { border-bottom: none; }
+.settings-dd-item:hover { background: #f5fafa; color: #009A97; }
+.settings-dd-item.danger:hover { background: #FCEBEB; color: #E24B4A; }
 
-    /* Price */
-    .price { font-weight: 500; font-variant-numeric: tabular-nums; }
-
-    /* Stock / Purchase number */
-    .num { color: #1a1a18; font-variant-numeric: tabular-nums; }
-    .num.zero { color: #b4b2a9; }
-
-    /* Event link */
-    .event-link {
-      display: inline-flex; align-items: center; gap: 5px;
-      color: #009A97; text-decoration: none; font-size: 13px;
-      transition: color 0.12s;
-    }
-    .event-link:hover { color: #007A77; text-decoration: underline; }
-    .event-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #009A97; flex-shrink: 0;
-    }
-    .event-dot.inactive { background: #d3d1c7; }
-
-    /* Settings cell */
-    .settings-cell {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      align-items: flex-start;
-    }
-    .settings-icons { display: flex; gap: 6px; align-items: center; }
-    .icon-btn {
-      width: 28px; height: 28px;
-      border-radius: 6px;
-      border: 0.5px solid #e0dfd8;
-      background: transparent;
-      color: #888780;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.12s, color 0.12s, border-color 0.12s;
-    }
-    .icon-btn:hover { background: #f1efe8; color: #1a1a18; border-color: #d3d1c7; }
-    .icon-btn.danger:hover { background: #fef2f2; color: #dc2626; border-color: #fca5a5; }
-    .icon-btn svg { width: 13px; height: 13px; }
-
-    .sub-link {
-      font-size: 11px; color: #009A97; text-decoration: none;
-      cursor: pointer; background: none; border: none;
-      padding: 0; font-family: inherit;
-      transition: color 0.12s;
-    }
-    .sub-link:hover { color: #007A77; text-decoration: underline; }
-    .sub-link.config { color: #888780; }
-    .sub-link.config:hover { color: #1a1a18; }
-
-    /* Empty state placeholder image */
-    .img-placeholder {
-      width: 48px; height: 48px;
-      border-radius: 8px;
-      background: #f1efe8;
-      border: 0.5px solid #e0dfd8;
-      display: flex; align-items: center; justify-content: center;
-      color: #d3d1c7; font-size: 10px; font-weight: 500;
-    }
-  </style>
+.prod-modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1000; align-items:center; justify-content:center; }
+.prod-modal-backdrop.open { display:flex; }
+.prod-modal { background:white; border-radius:14px; width:420px; max-height:85vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,0.15); }
+.prod-modal-hd { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:0.5px solid #e0dfd8; }
+.prod-modal-title { font-size:15px; font-weight:600; color:#009A97; }
+.prod-modal-close { background:none; border:none; cursor:pointer; color:#888780; font-size:20px; line-height:1; padding:0; }
+.prod-modal-body { padding:16px 20px; display:flex; flex-direction:column; gap:12px; }
+.modal-field { display:flex; align-items:center; justify-content:space-between; font-size:13px; color:#1a1a18; }
+.modal-field input[type="number"] { width:90px; height:32px; border:0.5px solid #D3D1C7; border-radius:6px; padding:0 8px; font-size:12px; font-family:inherit; text-align:right; outline:none; }
+.modal-field input[type="number"]:focus { border-color:#009A97; }
+.modal-radio { display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; }
+.modal-radio input { accent-color:#009A97; }
+.modal-ack { display:flex; align-items:flex-start; gap:8px; font-size:12px; color:#888780; line-height:1.5; }
+.modal-ack input { accent-color:#009A97; margin-top:2px; flex-shrink:0; }
+.modal-footer { padding:12px 20px 16px; display:flex; gap:8px; justify-content:flex-end; border-top:0.5px solid #e0dfd8; }
+.modal-btn-save { height:36px; padding:0 20px; background:#009A97; color:white; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; }
+.modal-btn-cancel { height:36px; padding:0 16px; background:white; color:#888780; border:0.5px solid #D3D1C7; border-radius:8px; font-size:13px; cursor:pointer; font-family:inherit; }
+.sub-add-btn { font-size:12px; font-weight:600; color:#009A97; cursor:pointer; display:flex; align-items:center; gap:4px; background:none; border:none; font-family:inherit; padding:0; margin-top:4px; }
+.sub-entry { display:flex; gap:8px; align-items:center; }
+.sub-entry input[type="text"] { flex:1; height:32px; border:0.5px solid #D3D1C7; border-radius:6px; padding:0 8px; font-size:12px; font-family:inherit; outline:none; }
+.sub-entry input[type="text"]:focus { border-color:#009A97; }
+.sub-entry input[type="number"] { width:70px; }
+.sub-del { color:#B4B2A9; cursor:pointer; background:none; border:none; font-size:16px; line-height:1; }
+.sub-del:hover { color:#E24B4A; }
+</style>
 </head>
 <body>
+<div class="page">
 
-  <nav class="nav">
-    <span class="nav-logo">GroupBuy</span>
-    <div class="nav-avatar">ME</div>
-  </nav>
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">Products & Items</div>
+      <div class="page-subtitle">Manage your product catalogue across all events</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-outline" onclick="exportSelected()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export
+      </button>
+      <button class="btn-outline" onclick="alert('Create event with selected products')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="16" x2="14" y2="16"/></svg>
+        Create Event
+      </button>
+      <button class="btn-primary" onclick="alert('Add product')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Product
+      </button>
+    </div>
+  </div>
 
-  <main class="main">
-    <div class="page-header">
-      <h1>Products / Items</h1>
-      <div class="header-actions">
-        <div class="search-wrap">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="6.5" cy="6.5" r="4.5"/><path d="M10.5 10.5 14 14"/>
-          </svg>
-          <input type="text" placeholder="Search name / event of product" />
+  <!-- SEARCH + STATS -->
+  <div class="search-row">
+    <div class="search-wrap">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" type="text" placeholder="Search products..." oninput="filterProducts()" id="prod-search" />
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">Total: <span id="total-products">8</span> products</div>
+      <div class="stat-pill">Active: <span>6</span></div>
+      <div class="stat-pill">Low stock: <span style="color:#E24B4A;">2</span></div>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-row">
+    <select class="filter-select" onchange="filterProducts()" id="filter-event-prod">
+      <option value="">All Events</option>
+      <option>atea 1</option>
+      <option>order without login</option>
+      <option>This is a test event for Purchase with no login</option>
+      <option>new event</option>
+    </select>
+    <select class="filter-select" onchange="filterProducts()" id="filter-status-prod">
+      <option value="">All Status</option>
+      <option>Active</option>
+      <option>Inactive</option>
+    </select>
+    <select class="filter-select" onchange="filterProducts()" id="filter-stock">
+      <option value="">All Stock</option>
+      <option>In Stock</option>
+      <option>Low Stock</option>
+      <option>Out of Stock</option>
+    </select>
+    <button class="btn-clear" onclick="clearProdFilters()">Clear Filter</button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table id="products-table">
+      <thead>
+        <tr>
+          <th style="width:32px;padding:0 8px;"><input type="checkbox" id="select-all" onchange="toggleSelectAll(this)" style="accent-color:#009A97;cursor:pointer;"></th>
+          <th style="width:44px;"></th>
+          <th onclick="sortProd(1)">Product Name <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortProd(2)">Event <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortProd(3)">Price <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortProd(4)">Stock <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortProd(5)">Orders <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th>Added Options</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="products-body">
+        <tr data-event="atea 1" data-stock="In Stock"><td style="padding:0 8px;text-align:center;"><input type="checkbox" class="row-cb" style="accent-color:#009A97;cursor:pointer;"></td><td><div class="product-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></td><td><div class="product-name" style="color:#1a1a18;">Dev cùi</div><div class="product-desc">Premium Vietnamese coffee blend</div></td><td style="font-size:12px;"><div style="color:#888780;">atea 1</div><div style="margin-top:3px;display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#666;background:#f0f0f0;border-radius:99px;padding:1px 7px;">● Closed</div></td><td><div class="price-cell" style="font-weight:600;color:#1a1a18;">$10.00</div><div class="price-sub">Min order: 1</div></td><td><div style="font-size:12px;color:#1a1a18;font-weight:400;">850 / 1000</div><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-bar-fill" style="width:85%"></div></div></div></td><td style="font-weight:600;color:#009A97;">8</td><td><span style="font-size:11px;color:#B4B2A9;">—</span></td><td><div class="settings-wrap"><button class="settings-btn" onclick="toggleSettings('r1',this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button><div class="settings-dropdown" id="sd-r1"><div class="settings-dd-item" onclick="openProductModal('edit')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Product</div><div class="settings-dd-item" onclick="openProductModal('order')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg> Order Settings</div><div class="settings-dd-item" onclick="openProductModal('split')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Split Case Purchase</div><div class="settings-dd-item" onclick="openProductModal('subitems')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Add Sub-items</div><div class="settings-dd-item danger" onclick="closeAllSettings()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</div></div></div></td></tr>
+
+        <tr data-event="order without login" data-stock="In Stock"><td style="padding:0 8px;text-align:center;"><input type="checkbox" class="row-cb" style="accent-color:#009A97;cursor:pointer;"></td><td><div class="product-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></td><td><div class="product-name" style="color:#1a1a18;">pro 1</div><div class="product-desc">Standard professional kit</div></td><td style="font-size:12px;"><div style="color:#888780;">order without login</div><div style="margin-top:3px;display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#666;background:#f0f0f0;border-radius:99px;padding:1px 7px;">● Closed</div></td><td><div class="price-cell" style="font-weight:600;color:#1a1a18;">$1.00</div><div class="price-sub">Min order: 1</div></td><td><div style="font-size:12px;color:#1a1a18;font-weight:400;">1000 / 1000</div><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-bar-fill" style="width:100%"></div></div></div></td><td style="font-weight:600;color:#009A97;">1</td><td><span style="font-size:11px;color:#B4B2A9;">—</span></td><td><div class="settings-wrap"><button class="settings-btn" onclick="toggleSettings('r2',this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button><div class="settings-dropdown" id="sd-r2"><div class="settings-dd-item" onclick="openProductModal('edit')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Product</div><div class="settings-dd-item" onclick="openProductModal('order')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg> Order Settings</div><div class="settings-dd-item" onclick="openProductModal('split')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Split Case Purchase</div><div class="settings-dd-item" onclick="openProductModal('subitems')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Add Sub-items</div><div class="settings-dd-item danger" onclick="closeAllSettings()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</div></div></div></td></tr>
+
+        <tr data-event="test_event" data-stock="Low Stock"><td style="padding:0 8px;text-align:center;"><input type="checkbox" class="row-cb" style="accent-color:#009A97;cursor:pointer;"></td><td><div class="product-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></td><td><div class="product-name" style="color:#1a1a18;">Item 1</div><div class="product-desc">Artisan keycap — resin cast</div></td><td style="font-size:12px;"><div style="color:#888780;">Test event...</div><div style="margin-top:3px;display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#007A77;background:#E0F5F5;border-radius:99px;padding:1px 7px;">● Open</div></td><td><div class="price-cell" style="font-weight:600;color:#1a1a18;">$59.00</div><div class="price-sub">Min order: 1</div></td><td><div style="font-size:12px;color:#E24B4A;font-weight:500;">8 / 100</div><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-bar-fill low" style="width:8%"></div></div></div></td><td style="font-weight:600;color:#009A97;">6</td><td><button class="sub-toggle" onclick="toggleSubItems('sub1',this)">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              2 sub-items
+            </button>
+            <div class="sub-items-wrap" id="sub1">
+              <div class="sub-item-row"><span>Frame Color — Blue</span><span style="color:#009A97;">+$10</span></div>
+              <div class="sub-item-row"><span>Frame Color — Red</span><span style="color:#009A97;">+$10</span></div>
+              <div class="sub-item-row"><span>Lens Color — Clear</span><span style="color:#009A97;">+$5</span></div>
+              <div class="sub-item-row"><span>Lens Color — Tinted</span><span style="color:#009A97;">+$5</span></div>
+            </div></td><td><div class="settings-wrap"><button class="settings-btn" onclick="toggleSettings('r3',this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button><div class="settings-dropdown" id="sd-r3"><div class="settings-dd-item" onclick="openProductModal('edit')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Product</div><div class="settings-dd-item" onclick="openProductModal('order')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg> Order Settings</div><div class="settings-dd-item" onclick="openProductModal('split')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Split Case Purchase</div><div class="settings-dd-item" onclick="openProductModal('subitems')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Add Sub-items</div><div class="settings-dd-item danger" onclick="closeAllSettings()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</div></div></div></td></tr>
+
+        <tr data-event="test_event" data-stock="In Stock"><td style="padding:0 8px;text-align:center;"><input type="checkbox" class="row-cb" style="accent-color:#009A97;cursor:pointer;"></td><td><div class="product-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></td><td><div class="product-name" style="color:#1a1a18;">Item 2</div><div class="product-desc">Artisan keycap — sculpted</div></td><td style="font-size:12px;"><div style="color:#888780;">Test event...</div><div style="margin-top:3px;display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#007A77;background:#E0F5F5;border-radius:99px;padding:1px 7px;">● Open</div></td><td><div class="price-cell" style="font-weight:600;color:#1a1a18;">$59.00</div><div class="price-sub">Min order: 1</div></td><td><div style="font-size:12px;color:#1a1a18;font-weight:400;">92 / 100</div><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-bar-fill" style="width:92%"></div></div></div></td><td style="font-weight:600;color:#009A97;">1</td><td><span style="font-size:11px;color:#B4B2A9;">—</span></td><td><div class="settings-wrap"><button class="settings-btn" onclick="toggleSettings('r4',this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button><div class="settings-dropdown" id="sd-r4"><div class="settings-dd-item" onclick="openProductModal('edit')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Product</div><div class="settings-dd-item" onclick="openProductModal('order')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg> Order Settings</div><div class="settings-dd-item" onclick="openProductModal('split')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Split Case Purchase</div><div class="settings-dd-item" onclick="openProductModal('subitems')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Add Sub-items</div><div class="settings-dd-item danger" onclick="closeAllSettings()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</div></div></div></td></tr>
+
+        <tr data-event="new event" data-stock="In Stock"><td style="padding:0 8px;text-align:center;"><input type="checkbox" class="row-cb" style="accent-color:#009A97;cursor:pointer;"></td><td><div class="product-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></td><td><div class="product-name" style="color:#1a1a18;">Item 1</div><div class="product-desc">Standard group buy item</div></td><td style="font-size:12px;"><div style="color:#888780;">new event</div><div style="margin-top:3px;display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#007A77;background:#E0F5F5;border-radius:99px;padding:1px 7px;">● Open</div></td><td><div class="price-cell" style="font-weight:600;color:#1a1a18;">$10.00</div><div class="price-sub">Min order: 1</div></td><td><div style="font-size:12px;color:#B4B2A9;">N/A</div></td><td style="font-weight:600;color:#009A97;">2</td><td><span style="font-size:11px;color:#B4B2A9;">—</span></td><td><div class="settings-wrap"><button class="settings-btn" onclick="toggleSettings('r5',this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button><div class="settings-dropdown" id="sd-r5"><div class="settings-dd-item" onclick="openProductModal('edit')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Product</div><div class="settings-dd-item" onclick="openProductModal('order')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg> Order Settings</div><div class="settings-dd-item" onclick="openProductModal('split')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Split Case Purchase</div><div class="settings-dd-item" onclick="openProductModal('subitems')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Add Sub-items</div><div class="settings-dd-item danger" onclick="closeAllSettings()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</div></div></div></td></tr>
+
+        <tr data-event="atea 1" data-stock="In Stock"><td style="padding:0 8px;text-align:center;"><input type="checkbox" class="row-cb" style="accent-color:#009A97;cursor:pointer;"></td><td><div class="product-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></td><td><div class="product-name" style="color:#1a1a18;">Premium Coffee Beans</div><div class="product-desc">Single origin — Ethiopia Yirgacheffe</div></td><td style="font-size:12px;"><div style="color:#888780;">atea 1</div><div style="margin-top:3px;display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#666;background:#f0f0f0;border-radius:99px;padding:1px 7px;">● Closed</div></td><td><div class="price-cell" style="font-weight:600;color:#1a1a18;">$18.00</div><div class="price-sub">Min order: 1</div></td><td><div style="font-size:12px;color:#1a1a18;font-weight:400;">480 / 600</div><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-bar-fill" style="width:80%"></div></div></div></td><td style="font-weight:600;color:#009A97;">4</td><td><button class="sub-toggle" style="cursor:default;color:#888780;" disabled>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              Buy by unit · 6/case
+            </button></td><td><div class="settings-wrap"><button class="settings-btn" onclick="toggleSettings('r_split',this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button><div class="settings-dropdown" id="sd-r_split"><div class="settings-dd-item" onclick="openProductModal('edit')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Product</div><div class="settings-dd-item" onclick="openProductModal('order')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg> Order Settings</div><div class="settings-dd-item" onclick="openProductModal('split')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Split Case Purchase</div><div class="settings-dd-item" onclick="openProductModal('subitems')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Add Sub-items</div><div class="settings-dd-item danger" onclick="closeAllSettings()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</div></div></div></td></tr>
+
+        <tr data-event="new event" data-stock="Low Stock"><td style="padding:0 8px;text-align:center;"><input type="checkbox" class="row-cb" style="accent-color:#009A97;cursor:pointer;"></td><td><div class="product-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></td><td><div class="product-name" style="color:#1a1a18;">Bundle Pack A</div><div class="product-desc">3-item bundle — limited qty</div></td><td style="font-size:12px;"><div style="color:#888780;">new event</div><div style="margin-top:3px;display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#007A77;background:#E0F5F5;border-radius:99px;padding:1px 7px;">● Open</div></td><td><div class="price-cell" style="font-weight:600;color:#1a1a18;">$25.00</div><div class="price-sub">Min order: 1</div></td><td><div style="font-size:12px;color:#E24B4A;font-weight:500;">12 / 200</div><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-bar-fill low" style="width:6%"></div></div></div></td><td style="font-weight:600;color:#009A97;">3</td><td><button class="sub-toggle" onclick="toggleSubItems('sub2',this)">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              3 sub-items
+            </button>
+            <div class="sub-items-wrap" id="sub2">
+              <div class="sub-item-row"><span>Size — Small</span><span style="color:#009A97;">+$0</span></div>
+              <div class="sub-item-row"><span>Size — Medium</span><span style="color:#009A97;">+$0</span></div>
+              <div class="sub-item-row"><span>Size — Large</span><span style="color:#009A97;">+$5</span></div>
+            </div></td><td><div class="settings-wrap"><button class="settings-btn" onclick="toggleSettings('r7',this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button><div class="settings-dropdown" id="sd-r7"><div class="settings-dd-item" onclick="openProductModal('edit')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Product</div><div class="settings-dd-item" onclick="openProductModal('order')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg> Order Settings</div><div class="settings-dd-item" onclick="openProductModal('split')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Split Case Purchase</div><div class="settings-dd-item" onclick="openProductModal('subitems')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Add Sub-items</div><div class="settings-dd-item danger" onclick="closeAllSettings()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</div></div></div></td></tr>
+
+        <tr data-event="atea 1" data-stock="In Stock"><td style="padding:0 8px;text-align:center;"><input type="checkbox" class="row-cb" style="accent-color:#009A97;cursor:pointer;"></td><td><div class="product-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></td><td><div class="product-name" style="color:#B4B2A9;">Dev cùi (Round 2)</div><div class="product-desc">Discontinued — previous round</div></td><td style="font-size:12px;"><div style="color:#888780;">atea 1</div><div style="margin-top:3px;display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#666;background:#f0f0f0;border-radius:99px;padding:1px 7px;">● Closed</div></td><td><div class="price-cell" style="font-weight:600;color:#B4B2A9;">$10.00</div><div class="price-sub">Min order: 1</div></td><td><div style="font-size:12px;color:#B4B2A9;">N/A</div></td><td style="font-weight:600;color:#B4B2A9;">0</td><td><span style="font-size:11px;color:#B4B2A9;">—</span></td><td><div class="settings-wrap"><button class="settings-btn" onclick="toggleSettings('r6',this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button><div class="settings-dropdown" id="sd-r6"><div class="settings-dd-item" onclick="openProductModal('edit')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Product</div><div class="settings-dd-item" onclick="openProductModal('order')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg> Order Settings</div><div class="settings-dd-item" onclick="openProductModal('split')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Split Case Purchase</div><div class="settings-dd-item" onclick="openProductModal('subitems')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Add Sub-items</div><div class="settings-dd-item danger" onclick="closeAllSettings()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</div></div></div></td></tr>
+
+        <tr data-event="order without login" data-stock="In Stock"><td style="padding:0 8px;text-align:center;"><input type="checkbox" class="row-cb" style="accent-color:#009A97;cursor:pointer;"></td><td><div class="product-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></td><td><div class="product-name" style="color:#B4B2A9;">pro 2</div><div class="product-desc">Archived — replaced by pro 1</div></td><td style="font-size:12px;"><div style="color:#888780;">order without login</div><div style="margin-top:3px;display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#666;background:#f0f0f0;border-radius:99px;padding:1px 7px;">● Closed</div></td><td><div class="price-cell" style="font-weight:600;color:#B4B2A9;">$2.00</div><div class="price-sub">Min order: 1</div></td><td><div style="font-size:12px;color:#1a1a18;font-weight:400;">200 / 200</div><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-bar-fill" style="width:100%"></div></div></div></td><td style="font-weight:600;color:#B4B2A9;">0</td><td><span style="font-size:11px;color:#B4B2A9;">—</span></td><td><div class="settings-wrap"><button class="settings-btn" onclick="toggleSettings('r8',this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button><div class="settings-dropdown" id="sd-r8"><div class="settings-dd-item" onclick="openProductModal('edit')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Product</div><div class="settings-dd-item" onclick="openProductModal('order')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg> Order Settings</div><div class="settings-dd-item" onclick="openProductModal('split')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Split Case Purchase</div><div class="settings-dd-item" onclick="openProductModal('subitems')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Add Sub-items</div><div class="settings-dd-item danger" onclick="closeAllSettings()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</div></div></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="pagination">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="pagination-info">Rows per page:</span>
+      <select class="rows-select">
+        <option value="10" selected>10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+      </select>
+      <span class="pagination-info" id="prod-page-info">1–8 of 8</span>
+    </div>
+    <div class="pagination-btns">
+      <button class="page-btn" disabled>‹</button>
+      <button class="page-btn active">1</button>
+      <button class="page-btn" disabled>›</button>
+    </div>
+  </div>
+
+</div>
+<script>
+function addSubChoice(btn) {
+  const group = btn.closest('.sub-group');
+  const entry = document.createElement('div');
+  entry.className = 'sub-entry';
+  const nameInput = document.createElement('input');
+  nameInput.type = 'text'; nameInput.placeholder = 'e.g. Red';
+  nameInput.style.cssText = 'flex:1;height:32px;border:0.5px solid #D3D1C7;border-radius:6px;padding:0 8px;font-size:12px;font-family:inherit;outline:none;';
+  const dollar = document.createElement('span');
+  dollar.textContent = '+$'; dollar.style.cssText = 'font-size:12px;color:#888780;';
+  const priceInput = document.createElement('input');
+  priceInput.type = 'number'; priceInput.placeholder = '0';
+  priceInput.style.cssText = 'width:70px;height:32px;border:0.5px solid #D3D1C7;border-radius:6px;padding:0 6px;font-size:12px;font-family:inherit;outline:none;text-align:right;';
+  const delBtn = document.createElement('button');
+  delBtn.className = 'sub-del'; delBtn.textContent = 'x';
+  delBtn.onclick = function() { entry.remove(); };
+  entry.appendChild(nameInput); entry.appendChild(dollar); entry.appendChild(priceInput); entry.appendChild(delBtn);
+  group.insertBefore(entry, btn);
+}
+
+function addSubGroup() {
+  const body = document.getElementById('subitems-modal-body');
+  const div = document.createElement('div');
+  div.className = 'sub-group';
+  div.style.cssText = 'display:flex;flex-direction:column;gap:8px;border-top:0.5px solid #e0dfd8;padding-top:12px;margin-top:4px;';
+  const titleRow = document.createElement('div');
+  titleRow.style.cssText = 'display:flex;align-items:center;gap:8px;';
+  const titleInput = document.createElement('input');
+  titleInput.type = 'text'; titleInput.placeholder = 'Sub-item title (e.g. Lens Color)';
+  titleInput.style.cssText = 'flex:1;height:32px;border:0.5px solid #D3D1C7;border-radius:6px;padding:0 8px;font-size:12px;font-family:inherit;outline:none;';
+  const delGroup = document.createElement('button');
+  delGroup.className = 'sub-del'; delGroup.textContent = 'x';
+  delGroup.onclick = function() { div.remove(); };
+  titleRow.appendChild(titleInput); titleRow.appendChild(delGroup);
+  const addBtn = document.createElement('button');
+  addBtn.className = 'sub-add-btn';
+  addBtn.innerHTML = 'Add choices';
+  addBtn.onclick = function() { addSubChoice(addBtn); };
+  div.appendChild(titleRow);
+  div.appendChild(addBtn);
+  body.appendChild(div);
+  addSubChoice(addBtn);
+}
+
+
+function toggleSelectAll(cb) {
+  document.querySelectorAll('.row-cb').forEach(r => r.checked = cb.checked);
+}
+function updateBulkActions() {
+  // No-op — buttons are always visible
+}
+function exportSelected() {
+  const checked = document.querySelectorAll('.row-cb:checked');
+  alert('Exporting ' + checked.length + ' product' + (checked.length !== 1 ? 's' : ''));
+}
+document.addEventListener('change', function(e) { if (e.target.classList.contains('row-cb')) { /* selection tracking */ } });
+
+// ── SETTINGS MODALS ──
+function openProductModal(type) {
+  closeAllSettings();
+  document.getElementById('prod-modal-' + type).classList.add('open');
+}
+function closeProductModal(type) {
+  document.getElementById('prod-modal-' + type).classList.remove('open');
+}
+
+function toggleSettings(id, btn) {
+  const dd = document.getElementById('sd-' + id);
+  const isOpen = dd.classList.contains('open');
+  closeAllSettings();
+  if (!isOpen) dd.classList.add('open');
+}
+function closeAllSettings() {
+  document.querySelectorAll('.settings-dropdown').forEach(d => d.classList.remove('open'));
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.settings-wrap')) closeAllSettings();
+});
+
+function toggleSubItems(id, btn) {
+  const wrap = document.getElementById(id);
+  const isHidden = wrap.style.display === 'none' || wrap.style.display === '';
+  wrap.style.display = isHidden ? 'block' : 'none';
+  const count = btn.textContent.trim().match(/\d+/)?.[0] || '';
+  btn.innerHTML = isHidden
+    ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg> ' + count + ' sub-items'
+    : '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> ' + count + ' sub-items';
+}
+
+function filterProducts() {
+  const q = document.getElementById('prod-search').value.toLowerCase();
+  const evF = document.getElementById('filter-event-prod').value;
+  const stF = '';
+  const skF = document.getElementById('filter-stock').value;
+  let count = 0;
+  document.querySelectorAll('#products-body tr').forEach(row => {
+    const name = row.cells[1]?.textContent.toLowerCase() || '';
+    const ev = row.dataset.event || '';
+    const st = row.dataset.status || '';
+    const sk = row.dataset.stock || '';
+    const show = (!q || name.includes(q))
+      && (!evF || ev === evF)
+      && (!stF || st === stF)
+      && (!skF || sk === skF);
+    row.style.display = show ? '' : 'none';
+    if (show) count++;
+  });
+  document.getElementById('prod-page-info').textContent = '1–' + count + ' of ' + count;
+  document.getElementById('total-products').textContent = count;
+}
+
+function clearProdFilters() {
+  document.getElementById('prod-search').value = '';
+  document.getElementById('filter-event-prod').value = '';
+  document.getElementById('filter-status-prod').value = '';
+  document.getElementById('filter-stock').value = '';
+  filterProducts();
+}
+
+let sortCol = -1, sortAsc = true;
+function sortProd(col) {
+  if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
+  const tbody = document.getElementById('products-body');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  rows.sort((a, b) => {
+    const at = a.cells[col]?.textContent.trim() || '';
+    const bt = b.cells[col]?.textContent.trim() || '';
+    return sortAsc ? at.localeCompare(bt) : bt.localeCompare(at);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+</script>
+
+<!-- Edit Product Modal -->
+<div class="prod-modal-backdrop" id="prod-modal-edit">
+  <div class="prod-modal">
+    <div class="prod-modal-hd">
+      <span class="prod-modal-title">Edit Product</span>
+      <button class="prod-modal-close" onclick="closeProductModal('edit')">×</button>
+    </div>
+    <div class="prod-modal-body">
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <label style="font-size:11px;font-weight:600;color:#888780;">Product Name</label>
+        <input type="text" value="Item 1" style="height:36px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <label style="font-size:11px;font-weight:600;color:#888780;">Description</label>
+        <textarea style="height:60px;border:0.5px solid #D3D1C7;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;resize:none;">Artisan keycap — resin cast</textarea>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px;">
+          <label style="font-size:11px;font-weight:600;color:#888780;">Price ($)</label>
+          <input type="number" value="59.00" step="0.50" style="height:36px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;width:100%;">
         </div>
-        <button class="btn">
-          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M2 10v2h10v-2M7 2v7M4 6l3 3 3-3"/>
-          </svg>
-          Export
-        </button>
-        <button class="btn">
-          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="1" y="2" width="12" height="11" rx="1.5"/>
-            <path d="M5 2V1M9 2V1M1 6h12"/>
-          </svg>
-          Create event
-        </button>
-        <button class="btn primary">
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M6 1v10M1 6h10"/>
-          </svg>
-          Add
-        </button>
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px;">
+          <label style="font-size:11px;font-weight:600;color:#888780;">Min Order Qty</label>
+          <input type="number" value="1" min="1" style="height:36px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;width:100%;">
+        </div>
       </div>
     </div>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th><input type="checkbox" /></th>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Last price</th>
-            <th>Total purchase</th>
-            <th>In stock</th>
-            <th>Last event</th>
-            <th>Setting</th>
-          </tr>
-        </thead>
-        <tbody>
-
-          <tr>
-            <td><input type="checkbox" /></td>
-            <td>
-              <div class="product-img">
-                <img src="https://via.placeholder.com/48x48/e0dfd8/888780?text=S" alt="Spec" onerror="this.parentNode.innerHTML='<span style=\'font-size:10px;color:#b4b2a9\'>IMG</span>'" />
-              </div>
-            </td>
-            <td><div class="product-name">Spec</div></td>
-            <td><span class="product-desc">Good Spec from Vietnam</span></td>
-            <td><span class="price">$20.00</span></td>
-            <td><span class="num zero">0</span></td>
-            <td><span class="num">1000</span></td>
-            <td>
-              <a class="event-link" href="#">
-                <span class="event-dot"></span>
-                Groupbuy Event test
-              </a>
-            </td>
-            <td>
-              <div class="settings-cell">
-                <div class="settings-icons">
-                  <button class="icon-btn" title="Settings">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
-                  </button>
-                  <button class="icon-btn danger" title="Delete">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
-                  </button>
-                </div>
-                <button class="sub-link">+ Add sub-items</button>
-              </div>
-            </td>
-          </tr>
-
-          <tr>
-            <td><input type="checkbox" /></td>
-            <td><div class="img-placeholder">IMG</div></td>
-            <td><div class="product-name">Toothpaste</div></td>
-            <td><span class="product-desc">Clean teeth</span></td>
-            <td><span class="price">$2.00</span></td>
-            <td><span class="num zero">0</span></td>
-            <td><span class="num">1000</span></td>
-            <td>
-              <a class="event-link" href="#">
-                <span class="event-dot"></span>
-                Groupbuy Event test
-              </a>
-            </td>
-            <td>
-              <div class="settings-cell">
-                <div class="settings-icons">
-                  <button class="icon-btn" title="Settings">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
-                  </button>
-                  <button class="icon-btn danger" title="Delete">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
-                  </button>
-                </div>
-                <button class="sub-link">+ Add sub-items</button>
-              </div>
-            </td>
-          </tr>
-
-          <tr>
-            <td><input type="checkbox" /></td>
-            <td>
-              <div class="product-img">
-                <img src="https://via.placeholder.com/48x48/1a1a18/fff?text=D" alt="Dev cùi" onerror="this.parentNode.innerHTML='<span style=\'font-size:10px;color:#b4b2a9\'>IMG</span>'" />
-              </div>
-            </td>
-            <td><div class="product-name">Dev cùi</div></td>
-            <td><span class="product-desc">12</span></td>
-            <td><span class="price">$10.00</span></td>
-            <td><span class="num zero">0</span></td>
-            <td><span class="num">50</span></td>
-            <td>
-              <a class="event-link" href="#">
-                <span class="event-dot"></span>
-                new event
-              </a>
-            </td>
-            <td>
-              <div class="settings-cell">
-                <div class="settings-icons">
-                  <button class="icon-btn" title="Settings">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
-                  </button>
-                  <button class="icon-btn danger" title="Delete">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
-                  </button>
-                </div>
-                <button class="sub-link">+ Add sub-items</button>
-                <button class="sub-link config">⊙ Order config</button>
-              </div>
-            </td>
-          </tr>
-
-          <tr>
-            <td><input type="checkbox" /></td>
-            <td><div class="img-placeholder">IMG</div></td>
-            <td><div class="product-name">Item 1</div></td>
-            <td><span class="product-desc">—</span></td>
-            <td><span class="price">$10.00</span></td>
-            <td><span class="num zero">0</span></td>
-            <td><span class="num">1000</span></td>
-            <td>
-              <a class="event-link" href="#">
-                <span class="event-dot"></span>
-                new event
-              </a>
-            </td>
-            <td>
-              <div class="settings-cell">
-                <div class="settings-icons">
-                  <button class="icon-btn" title="Settings">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
-                  </button>
-                  <button class="icon-btn danger" title="Delete">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
-                  </button>
-                </div>
-                <button class="sub-link">+ Add sub-items</button>
-              </div>
-            </td>
-          </tr>
-
-          <tr>
-            <td><input type="checkbox" /></td>
-            <td>
-              <div class="product-img">
-                <img src="https://via.placeholder.com/48x48/444441/fff?text=I" alt="Item 1" onerror="this.parentNode.innerHTML='<span style=\'font-size:10px;color:#b4b2a9\'>IMG</span>'" />
-              </div>
-            </td>
-            <td><div class="product-name">Item 1</div></td>
-            <td><span class="product-desc">—</span></td>
-            <td><span class="price">$10.00</span></td>
-            <td><span class="num">4</span></td>
-            <td><span class="num">996</span></td>
-            <td>
-              <a class="event-link" href="#">
-                <span class="event-dot"></span>
-                This is a test event for Purchase with no login
-              </a>
-            </td>
-            <td>
-              <div class="settings-cell">
-                <div class="settings-icons">
-                  <button class="icon-btn" title="Settings">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
-                  </button>
-                  <button class="icon-btn danger" title="Delete">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
-                  </button>
-                </div>
-                <button class="sub-link">+ Add sub-items</button>
-              </div>
-            </td>
-          </tr>
-
-          <tr>
-            <td><input type="checkbox" /></td>
-            <td>
-              <div class="product-img">
-                <img src="https://via.placeholder.com/48x48/888780/fff?text=I" alt="item 2" onerror="this.parentNode.innerHTML='<span style=\'font-size:10px;color:#b4b2a9\'>IMG</span>'" />
-              </div>
-            </td>
-            <td><div class="product-name">item 2</div></td>
-            <td><span class="product-desc">—</span></td>
-            <td><span class="price">$49.00</span></td>
-            <td><span class="num">2</span></td>
-            <td><span class="num">998</span></td>
-            <td>
-              <a class="event-link" href="#">
-                <span class="event-dot"></span>
-                This is a test event for Purchase with no login
-              </a>
-            </td>
-            <td>
-              <div class="settings-cell">
-                <div class="settings-icons">
-                  <button class="icon-btn" title="Settings">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
-                  </button>
-                  <button class="icon-btn danger" title="Delete">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
-                  </button>
-                </div>
-                <button class="sub-link">+ Add sub-items</button>
-              </div>
-            </td>
-          </tr>
-
-          <tr>
-            <td><input type="checkbox" /></td>
-            <td><div class="img-placeholder">IMG</div></td>
-            <td><div class="product-name">pro 1</div></td>
-            <td><span class="product-desc">—</span></td>
-            <td><span class="price">$1.00</span></td>
-            <td><span class="num">2</span></td>
-            <td><span class="num">998</span></td>
-            <td>
-              <a class="event-link" style="color:#b4b2a9;" href="#">
-                <span class="event-dot inactive"></span>
-                order without login
-              </a>
-            </td>
-            <td>
-              <div class="settings-cell">
-                <div class="settings-icons">
-                  <button class="icon-btn" title="Settings">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06"/></svg>
-                  </button>
-                  <button class="icon-btn danger" title="Delete">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2M11 4l-.8 8H3.8L3 4"/></svg>
-                  </button>
-                </div>
-                <button class="sub-link">+ Add sub-items</button>
-              </div>
-            </td>
-          </tr>
-
-        </tbody>
-      </table>
+    <div class="modal-footer">
+      <button class="modal-btn-cancel" onclick="closeProductModal('edit')">Cancel</button>
+      <button class="modal-btn-save" onclick="closeProductModal('edit')">Save</button>
     </div>
-  </main>
+  </div>
+</div>
+
+<!-- Order Settings Modal -->
+<div class="prod-modal-backdrop" id="prod-modal-order">
+  <div class="prod-modal">
+    <div class="prod-modal-hd">
+      <span class="prod-modal-title">Order Settings</span>
+      <button class="prod-modal-close" onclick="closeProductModal('order')">×</button>
+    </div>
+    <div class="prod-modal-body">
+      <div class="modal-field"><span>Available stock</span><input type="number" value="1000" /></div>
+      <div class="modal-field"><span>Limit per order</span><input type="number" value="1000" /></div>
+      <div class="modal-field"><span>Minimum per order</span><input type="number" value="1" /></div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-cancel" onclick="closeProductModal('order')">Cancel</button>
+      <button class="modal-btn-save" onclick="closeProductModal('order')">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Split Case Purchase Modal -->
+<div class="prod-modal-backdrop" id="prod-modal-split">
+  <div class="prod-modal">
+    <div class="prod-modal-hd">
+      <span class="prod-modal-title">Split Case Purchase</span>
+      <button class="prod-modal-close" onclick="closeProductModal('split')">×</button>
+    </div>
+    <div class="prod-modal-body">
+      <div class="modal-field"><span>Items per case/carton</span><input type="number" placeholder="6" /></div>
+      <div class="modal-field"><span>Cost per item</span><input type="number" placeholder="0.00" step="0.50" /></div>
+      <div class="modal-field"><span>Minimum item order</span><input type="number" value="1" /></div>
+      <label class="modal-radio"><input type="radio" name="split-fulfil" checked /> Fulfil only when a full case is ordered</label>
+      <label class="modal-radio"><input type="radio" name="split-fulfil" /> Fulfil even if the case is incomplete</label>
+      <label class="modal-ack"><input type="checkbox" /> I acknowledge that enabling split case will automatically activate the Pay Later option.</label>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-cancel" onclick="closeProductModal('split')">Cancel</button>
+      <button class="modal-btn-save" onclick="closeProductModal('split')">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Sub-items Modal -->
+<div class="prod-modal-backdrop" id="prod-modal-subitems">
+  <div class="prod-modal">
+    <div class="prod-modal-hd">
+      <span class="prod-modal-title">Add Sub-items</span>
+      <button class="prod-modal-close" onclick="closeProductModal('subitems')">×</button>
+    </div>
+    <div class="prod-modal-body" id="subitems-modal-body">
+      <div style="display:flex;flex-direction:column;gap:8px;" class="sub-group">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="text" placeholder="Sub-item title (e.g. Frame Color)" style="flex:1;height:32px;border:0.5px solid #D3D1C7;border-radius:6px;padding:0 8px;font-size:12px;font-family:inherit;outline:none;">
+          <button class="sub-del" onclick="this.closest('.sub-group').remove()">×</button>
+        </div>
+        <div style="display:flex;gap:4px;margin-bottom:2px;">
+          <span style="font-size:10px;color:#B4B2A9;flex:1;padding-left:2px;">Choice name</span>
+          <span style="font-size:10px;color:#B4B2A9;width:78px;text-align:right;padding-right:24px;">Add-on cost</span>
+        </div>
+        <div class="sub-entry">
+          <input type="text" placeholder="e.g. Blue" />
+          <span style="font-size:12px;color:#888780;">+$</span>
+          <input type="number" placeholder="0" class="sub-entry" style="width:70px;height:32px;border:0.5px solid #D3D1C7;border-radius:6px;padding:0 6px;font-size:12px;font-family:inherit;outline:none;text-align:right;" />
+          <button class="sub-del" onclick="this.closest('.sub-entry').remove()">×</button>
+        </div>
+        <button class="sub-add-btn" onclick="addSubChoice(this)">
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+          Add choices
+        </button>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:6px;border-top:0.5px solid #f0f0f0;font-size:12px;color:#888780;">
+          Required
+          <div style="width:36px;height:20px;border-radius:10px;background:#D3D1C7;cursor:pointer;position:relative;" onclick="this.style.background=this.style.background==='#009A97'?'#D3D1C7':'#009A97'"></div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:8px 20px;">
+      <button class="sub-add-btn" onclick="addSubGroup()">
+        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+        Add sub-item title
+      </button>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-cancel" onclick="closeProductModal('subitems')">Cancel</button>
+      <button class="modal-btn-save" onclick="closeProductModal('subitems')">Save</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
