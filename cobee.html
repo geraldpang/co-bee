@@ -32,7 +32,7 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
 /* ── DRAWER ── */
 .drawer-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: transparent; z-index: 500; }
 .drawer-overlay.open { display: block; }
-.drawer { position: fixed; top: 52px; left: 0; bottom: 52px; width: 260px; background: white; z-index: 501; display: flex; flex-direction: column; transform: translateX(-100%); transition: transform 0.28s ease; box-shadow: 4px 0 24px rgba(0,0,0,0.1); }
+.drawer { position: fixed; top: 52px; left: 0; bottom: 0; width: 260px; background: white; z-index: 501; display: flex; flex-direction: column; transform: translateX(-100%); transition: transform 0.28s ease; box-shadow: 4px 0 24px rgba(0,0,0,0.1); }
 .drawer.open { transform: translateX(0); }
 .drawer-group { display: flex; align-items: center; gap: 10px; padding: 0 14px; background: #E0F5F5; border-bottom: 0.5px solid #b2e4e3; cursor: pointer; height: 44px; flex-shrink: 0; }
 .drawer-group-av { width: 30px; height: 30px; border-radius: 50%; background: #E8971A; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; flex-shrink: 0; }
