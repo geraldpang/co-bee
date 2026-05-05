@@ -94,6 +94,16 @@ tr:hover td { background: #FAFAF8; }
 
 .date-row { font-size: 11px; color: #888780; margin-top: 1px; }
 .pay-icon { vertical-align: middle; margin-right: 2px; }
+
+/* Pagination */
+.pagination { display: flex; align-items: center; justify-content: space-between; padding: 12px 4px 0; }
+.pagination-info { font-size: 12px; color: #888780; }
+.pagination-btns { display: flex; align-items: center; gap: 4px; }
+.page-btn { height: 30px; min-width: 30px; padding: 0 6px; border: 0.5px solid #D3D1C7; border-radius: 6px; background: white; font-size: 12px; color: #1a1a18; cursor: pointer; font-family: inherit; transition: all 0.12s; }
+.page-btn:hover { border-color: #009A97; color: #009A97; }
+.page-btn.active { background: #009A97; color: white; border-color: #009A97; font-weight: 600; }
+.page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.rows-select { height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px; font-size: 12px; font-family: inherit; padding: 0 24px 0 8px; color: #1a1a18; background: white; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; }
 </style>
 </head>
 <body>
@@ -210,13 +220,10 @@ tr:hover td { background: #FAFAF8; }
           <td class="col-event"><span class="event-text" title="atea 1">atea 1</span></td>
           <td>20/04/2026</td>
           <td>09/04/2026</td>
-          <td>Dev cùi (qty:1)</td>
+          <td class="purchase-cell"><div style="display:flex;align-items:flex-start;gap:3px;"><button onclick="alert('Edit order')" title="Edit" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:2px 3px;border-radius:4px;vertical-align:middle;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><div><div class="purchase-inline">Dev cùi (qty:1)</div></div></div></td>
           <td>$10.00</td>
           <td><span class="badge closed">Closed</span></td>
-          <td><span class="badge pay-verified">
-            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-            Verified
-          </span></td>
+          <td><span class="badge pay-verified"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>Verified</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option>Unpaid</option>
@@ -233,13 +240,10 @@ tr:hover td { background: #FAFAF8; }
           <td class="col-event"><span class="event-text" title="order without login">order without login</span></td>
           <td>26/04/2026</td>
           <td>24/04/2026</td>
-          <td>pro 1 (qty:1)</td>
+          <td class="purchase-cell"><div style="display:flex;align-items:flex-start;gap:3px;"><button onclick="alert('Edit order')" title="Edit" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:2px 3px;border-radius:4px;vertical-align:middle;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><div><div class="purchase-inline">pro 1 (qty:1)</div></div></div></td>
           <td>$1.00</td>
           <td><span class="badge closed">Closed</span></td>
-          <td><span class="badge not-paid">
-            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            Not Paid
-          </span></td>
+          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Not Paid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option selected>Unpaid</option>
@@ -250,23 +254,18 @@ tr:hover td { background: #FAFAF8; }
               <option>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Open" data-payment="Verified" data-fulfilment="Submitted &amp; Paid" data-cancelled="false">
+        <tr data-event-status="Open" data-payment="Verified" data-fulfilment="Submitted & Paid" data-cancelled="false">
           <td><span class="name-link">Gerald test3</span></td>
           <td>0469787098</td>
           <td class="col-event"><span class="event-text" title="This is a test event for Purchase with no login">This is a test event for Purchase with no login</span></td>
           <td>14/05/2026</td>
           <td>29/04/2026</td>
-          <td class="purchase-cell">
-            <div class="purchase-inline">Item 1 (qty:1)</div>
-            <div class="purchase-extra" id="ex_gerald3" style="display:none;">item 2 (qty:1)</div>
-            <button class="purchase-more" onclick="toggleExtra('ex_gerald3',this)">+1 more</button>
-          </td>
+          <td class="purchase-cell"><div style="display:flex;align-items:flex-start;gap:3px;"><button onclick="alert('Edit order')" title="Edit" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:2px 3px;border-radius:4px;vertical-align:middle;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><div><div class="purchase-inline">Item 1 (qty:1)</div>
+            <div class="purchase-extra" id="ex_gerald_test3" style="display:none;">item 2 (qty:1)</div>
+            <button class="purchase-more" onclick="toggleExtra('ex_gerald_test3',this)">+1 more</button></div></div></td>
           <td>$59.00</td>
           <td><span class="badge open">Open</span></td>
-          <td><span class="badge pay-verified">
-            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-            Verified
-          </span></td>
+          <td><span class="badge pay-verified"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>Verified</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option>Unpaid</option>
@@ -283,13 +282,10 @@ tr:hover td { background: #FAFAF8; }
           <td class="col-event"><span class="event-text" title="new event">new event</span></td>
           <td>15/05/2026</td>
           <td>30/04/2026</td>
-          <td class="purchase-cell"><span class="purchase-inline">Item 1 (qty:1)</span></td>
-          <td>$10.00</td>
+          <td class="purchase-cell"><div class="purchase-inline">Item 1 (qty:1)</div></td>
+          <td style="white-space:nowrap;">$10.00</td>
           <td><span class="badge open">Open</span></td>
-          <td><span class="badge not-paid">
-            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            Not Paid
-          </span></td>
+          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Not Paid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option selected>Unpaid</option>
@@ -306,8 +302,8 @@ tr:hover td { background: #FAFAF8; }
           <td class="col-event"><span class="event-text" title="This is a test event for Purchase with no login">This is a test event for Purchase with no login</span></td>
           <td>14/05/2026</td>
           <td>01/05/2026</td>
-          <td>Item 1 (qty:2)</td>
-          <td>$118.00</td>
+          <td class="purchase-cell"><div class="purchase-inline">Item 1 (qty:2)</div></td>
+          <td style="white-space:nowrap;">$118.00</td>
           <td><span class="badge open">Open</span></td>
           <td><span class="badge refunded">Refunded</span></td>
           <td><select class="ful-select">
@@ -320,19 +316,16 @@ tr:hover td { background: #FAFAF8; }
               <option>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Open" data-payment="Not Paid" data-fulfilment="Submitted &amp; Unpaid" data-cancelled="false">
+        <tr data-event-status="Open" data-payment="Not Paid" data-fulfilment="Submitted & Unpaid" data-cancelled="false">
           <td><span class="name-link">David Tan</span></td>
           <td>0498765432</td>
           <td class="col-event"><span class="event-text" title="new event">new event</span></td>
           <td>15/05/2026</td>
           <td>02/05/2026</td>
-          <td>Item 1 (qty:1)</td>
-          <td>$10.00</td>
+          <td class="purchase-cell"><div class="purchase-inline">Item 1 (qty:1)</div></td>
+          <td style="white-space:nowrap;">$10.00</td>
           <td><span class="badge open">Open</span></td>
-          <td><span class="badge not-paid">
-            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            Not Paid
-          </span></td>
+          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Not Paid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option>Unpaid</option>
@@ -349,8 +342,8 @@ tr:hover td { background: #FAFAF8; }
           <td class="col-event"><span class="event-text" title="atea 1">atea 1</span></td>
           <td>20/04/2026</td>
           <td>10/04/2026</td>
-          <td>Dev cùi (qty:2)</td>
-          <td>$20.00</td>
+          <td class="purchase-cell"><div class="purchase-inline">Dev cùi (qty:2)</div></td>
+          <td style="white-space:nowrap;">$20.00</td>
           <td><span class="badge closed">Closed</span></td>
           <td><span class="badge collected">Collected</span></td>
           <td><select class="ful-select">
@@ -363,19 +356,16 @@ tr:hover td { background: #FAFAF8; }
               <option selected>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Open" data-payment="Not Paid" data-fulfilment="Submitted &amp; Collected" data-cancelled="false">
+        <tr data-event-status="Open" data-payment="Not Paid" data-fulfilment="Submitted & Collected" data-cancelled="false">
           <td><span class="name-link">Tom Nguyen</span></td>
           <td>0455678901</td>
           <td class="col-event"><span class="event-text" title="This is a test event for Purchase with no login">This is a test event for Purchase with no login</span></td>
           <td>14/05/2026</td>
           <td>03/05/2026</td>
-          <td>Item 2 (qty:1)</td>
-          <td>$59.00</td>
+          <td class="purchase-cell"><div class="purchase-inline">Item 2 (qty:1)</div></td>
+          <td style="white-space:nowrap;">$59.00</td>
           <td><span class="badge open">Open</span></td>
-          <td><span class="badge not-paid">
-            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            Not Paid
-          </span></td>
+          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Not Paid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option>Unpaid</option>
@@ -388,7 +378,28 @@ tr:hover td { background: #FAFAF8; }
         </tr>
       </tbody>
     </table>
+  
+  <!-- Pagination -->
+  <div class="pagination">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="pagination-info">Rows per page:</span>
+      <select class="rows-select" onchange="setRowsPerPage(this.value)">
+        <option value="10" selected>10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+      </select>
+      <span class="pagination-info" id="page-info">1–8 of 8</span>
+    </div>
+    <div class="pagination-btns">
+      <button class="page-btn" id="btn-prev" onclick="changePage(-1)" disabled>‹</button>
+      <button class="page-btn active" id="btn-p1" onclick="goToPage(1)">1</button>
+      <button class="page-btn" id="btn-p2" onclick="goToPage(2)" style="display:none;">2</button>
+      <button class="page-btn" id="btn-p3" onclick="goToPage(3)" style="display:none;">3</button>
+      <button class="page-btn" id="btn-next" onclick="changePage(1)" disabled>›</button>
+    </div>
   </div>
+
+</div>
 
 </div>
 <script>
@@ -450,6 +461,7 @@ let hiddenCols = new Set();
 
 function buildColMenu() {
   const menu = document.getElementById('col-menu');
+  const hiddenByDefault = [4]; // Creation Date index
   COL_NAMES.forEach((name, i) => {
     const item = document.createElement('label');
     item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#1a1a18;cursor:pointer;';
@@ -457,12 +469,13 @@ function buildColMenu() {
     item.onmouseout = () => item.style.background = '';
     const cb = document.createElement('input');
     cb.type = 'checkbox';
-    cb.checked = true;
+    cb.checked = !hiddenByDefault.includes(i);
     cb.style.accentColor = '#009A97';
     cb.onchange = () => toggleCol(i, cb.checked);
     item.appendChild(cb);
     item.appendChild(document.createTextNode(name));
     menu.appendChild(item);
+    if (hiddenByDefault.includes(i)) toggleCol(i, false);
   });
 }
 
@@ -501,6 +514,46 @@ function toggleExtra(id, btn) {
   btn.textContent = isHidden ? '▴ less' : '+' + count + ' more';
   // Move btn after the extra div when expanded, before when collapsed
 }
+
+
+// ── PAGINATION ──
+let currentPage = 1;
+let rowsPerPage = 10;
+
+function updatePagination() {
+  const rows = Array.from(document.querySelectorAll('#orders-body tr')).filter(r => r.style.display !== 'none');
+  const total = rows.length;
+  const totalPages = Math.ceil(total / rowsPerPage);
+
+  rows.forEach((r, i) => {
+    r.style.display = (i >= (currentPage-1)*rowsPerPage && i < currentPage*rowsPerPage) ? '' : 'none';
+  });
+
+  const start = Math.min((currentPage-1)*rowsPerPage + 1, total);
+  const end = Math.min(currentPage*rowsPerPage, total);
+  document.getElementById('page-info').textContent = total ? start+'–'+end+' of '+total : '0 of 0';
+
+  document.getElementById('btn-prev').disabled = currentPage <= 1;
+  document.getElementById('btn-next').disabled = currentPage >= totalPages;
+
+  [1,2,3].forEach(n => {
+    const btn = document.getElementById('btn-p'+n);
+    if (btn) {
+      btn.style.display = n <= totalPages ? '' : 'none';
+      btn.classList.toggle('active', n === currentPage);
+    }
+  });
+}
+
+function changePage(dir) { currentPage += dir; updatePagination(); }
+function goToPage(n) { currentPage = n; updatePagination(); }
+function setRowsPerPage(val) { rowsPerPage = parseInt(val); currentPage = 1; updatePagination(); }
+
+// Hook into filterTable to reset pagination
+const _origFilterTable = filterTable;
+filterTable = function() { _origFilterTable(); currentPage = 1; updatePagination(); };
+
+document.addEventListener('DOMContentLoaded', updatePagination);
 
 function togglePurchase(id, btn) {
   const el = document.getElementById(id);
