@@ -232,9 +232,9 @@ tr:hover td { background: #FAFAF8; }
   </div>
 
   <!-- TABS -->
-  <div class="tabs-row">
-    <div class="tab active" onclick="setTab('all', this)">All</div>
-    <div class="tab" onclick="setTab('unpaid', this)">Unpaid Orders</div>
+  <div class="tabs-row" id="tabs-row">
+    <div class="tab active" onclick="setTab('all', this)" id="tab-all">All</div>
+    <div class="tab" onclick="setTab('unpaid', this)" id="tab-unpaid">Unpaid Orders</div>
     <label class="tab-check">
       <input type="checkbox" checked onchange="filterTable()" id="excl-cancelled" />
       Exclude cancelled orders
@@ -423,6 +423,9 @@ tr:hover td { background: #FAFAF8; }
       </tbody>
     </table>
   
+  <!-- Consolidated Table Views -->
+  <div id="consol-tables-wrap"></div>
+
   <!-- Pagination -->
   <div class="pagination">
     <div style="display:flex;align-items:center;gap:8px;">
@@ -443,15 +446,6 @@ tr:hover td { background: #FAFAF8; }
     </div>
   </div>
 
-  <!-- Consolidated Lists -->
-  <div class="consolidate-section" id="consol-section" style="display:none;">
-    <div class="consolidate-section-title">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M9 11l3 3L22 4"/></svg>
-      Consolidated Lists
-    </div>
-    <div id="consol-lists"></div>
-  </div>
-
 </div>
 
 </div>
@@ -461,9 +455,8 @@ let sortCol = -1;
 let sortAsc = true;
 
 function setTab(tab, el) {
+  setTabMain(el);
   currentTab = tab;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
   filterTable();
 }
 
@@ -534,10 +527,9 @@ function buildColMenu() {
 
 function toggleCol(idx, visible) {
   const table = document.getElementById('orders-table');
-  table.querySelectorAll(`th[data-col="${idx}"], td:nth-child(${idx + 1})`).forEach(el => {
+  table.querySelectorAll('th[data-col="' + idx + '"]').forEach(el => {
     el.style.display = visible ? '' : 'none';
   });
-  // Also handle via col index for td
   table.querySelectorAll('tr').forEach(row => {
     const td = row.cells[idx];
     if (td) td.style.display = visible ? '' : 'none';
@@ -617,11 +609,16 @@ function renderCal() {
     if (isFrom) cls += ' selected range-start';
     else if (isTo) cls += ' selected range-end';
     else if (inRange) cls += ' in-range';
-    html += '<div class="' + cls + '" onclick="pickDay(' + d + ',' + m + ',' + y + ')">' + d + '</div>';
+    html += '<div class="' + cls + '" data-d="' + d + '" data-m="' + m + '" data-y="' + y + '">' + d + '</div>';
   }
   let rem = 42 - first - total;
   for (let d = 1; d <= rem; d++) html += '<div class="cal-day other">' + d + '</div>';
   grid.innerHTML = html;
+  grid.querySelectorAll('.cal-day:not(.other)').forEach(el => {
+    el.addEventListener('click', function() {
+      pickDay(+this.dataset.d, +this.dataset.m, +this.dataset.y);
+    });
+  });
 }
 
 function pickDay(d, m, y) {
@@ -644,71 +641,106 @@ function applyDateRange() {
 }
 
 // ── CONSOLIDATE ──
-let consolLists = [];
 let consolCount = 0;
 
 function consolidate() {
   consolCount++;
+  const listName = 'Consolidated List ' + consolCount;
+  const listId = 'consol-' + consolCount;
+
+  // Group visible rows by name
   const rows = Array.from(document.querySelectorAll('#orders-body tr'));
   const groups = {};
+  const order = [];
   rows.forEach(row => {
     if (row.style.display === 'none') return;
-    const name = row.cells[0]?.textContent.trim();
-    const event = row.cells[2]?.textContent.trim();
-    const purchase = row.cells[5]?.textContent.trim();
-    const priceText = row.cells[6]?.textContent.trim().replace(/[^\d.]/g,'');
+    const cells = row.cells;
+    const name = cells[0]?.textContent.trim();
+    const event = cells[2]?.textContent.trim();
+    const purchase = cells[5]?.textContent.trim();
+    const priceText = (cells[6]?.textContent || '').replace(/[^\d.]/g,'');
     const price = parseFloat(priceText) || 0;
     if (!name) return;
-    if (!groups[name]) groups[name] = { events: [], total: 0 };
+    if (!groups[name]) { groups[name] = { events:[], total:0 }; order.push(name); }
     groups[name].events.push({ event, purchase, price });
     groups[name].total += price;
   });
 
-  const listId = 'list-' + consolCount;
-  consolLists.push({ id: listId, name: 'List ' + consolCount, groups });
+  // Add tab
+  const tabsRow = document.getElementById('tabs-row');
+  const label = tabsRow.querySelector('.tab-check');
+  const tab = document.createElement('div');
+  tab.className = 'tab';
+  tab.id = 'tab-' + listId;
+  tab.style.cssText = 'display:flex;align-items:center;gap:5px;';
+  tab.textContent = listName;
+  const closeSpan = document.createElement('span');
+  closeSpan.textContent = ' ×';
+  closeSpan.style.cssText = 'font-size:14px;color:#B4B2A9;line-height:1;margin-left:2px;cursor:pointer;';
+  closeSpan.onmouseover = function() { this.style.color = '#E24B4A'; };
+  closeSpan.onmouseout = function() { this.style.color = '#B4B2A9'; };
+  closeSpan.onclick = function(e) { e.stopPropagation(); removeConsolTab(listId); };
+  tab.appendChild(closeSpan);
+  tab.onclick = function() { switchToConsolTab(listId, tab); };
+  tabsRow.insertBefore(tab, label);
 
-  // Show section
-  document.getElementById('consol-section').style.display = 'block';
-  renderConsolLists();
-}
+  // Build consolidated table
+  const wrap = document.getElementById('consol-tables-wrap');
+  const div = document.createElement('div');
+  div.id = 'consol-table-' + listId;
+  div.style.display = 'none';
 
-function renderConsolLists() {
-  const wrap = document.getElementById('consol-lists');
-  wrap.innerHTML = '';
-  consolLists.forEach((list, idx) => {
-    const item = document.createElement('div');
-    item.className = 'list-item';
-    item.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>'
-      + '<span class="list-item-name">' + list.name + '</span>'
-      + '<div class="list-item-actions">'
-      + '<button class="list-action-btn" title="View" onclick="viewConsolList(' + idx + ')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>'
-      + '<button class="list-action-btn del" title="Delete" onclick="deleteConsolList(' + idx + ')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>'
-      + '</div>';
-    item.querySelector('.list-item-name').onclick = () => viewConsolList(idx);
-    wrap.appendChild(item);
+  let tableHTML = '<div class="table-wrap" style="margin-top:8px;">'
+    + '<table><thead><tr>'
+    + '<th>Name</th><th>Events</th><th>Items</th><th>Total Price</th>'
+    + '</tr></thead><tbody>';
+
+  order.forEach(name => {
+    const data = groups[name];
+    const eventsHtml = data.events.map(e => '<div>' + e.event + '</div>').join('');
+    const itemsHtml = data.events.map(e => '<div>' + (e.purchase || '—') + '</div>').join('');
+    tableHTML += '<tr>'
+      + '<td><span class="name-link">' + name + '</span></td>'
+      + '<td style="font-size:12px;">' + eventsHtml + '</td>'
+      + '<td style="font-size:12px;">' + itemsHtml + '</td>'
+      + '<td style="font-weight:600;color:#009A97;">$' + data.total.toFixed(2) + '</td>'
+      + '</tr>';
   });
+
+  tableHTML += '</tbody></table></div>';
+  div.innerHTML = tableHTML;
+  wrap.appendChild(div);
+
+  // Switch to the new tab
+  switchToConsolTab(listId, tab);
 }
 
-function viewConsolList(idx) {
-  const list = consolLists[idx];
-  document.getElementById('consol-modal-title').textContent = list.name;
-  let body = '';
-  Object.entries(list.groups).forEach(([name, data]) => {
-    const eventLines = data.events.map(e => e.event + (e.purchase ? ' — ' + e.purchase : '')).join('<br/>');
-    body += '<div class="consol-row">'
-      + '<div class="consol-name">' + name + '</div>'
-      + '<div class="consol-events">' + eventLines + '</div>'
-      + '<div class="consol-total">Total: $' + data.total.toFixed(2) + '</div>'
-      + '</div>';
-  });
-  document.getElementById('consol-modal-body').innerHTML = body;
-  document.getElementById('consol-view-modal').classList.add('open');
+function switchToConsolTab(listId, tabEl) {
+  // Hide main table + pagination, show consol table
+  document.getElementById('orders-table').closest('.table-wrap').style.display = 'none';
+  document.querySelector('.pagination').style.display = 'none';
+  document.querySelectorAll('[id^="consol-table-"]').forEach(t => t.style.display = 'none');
+  document.getElementById('consol-table-' + listId).style.display = 'block';
+
+  // Update active tab
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tabEl.classList.add('active');
 }
 
-function deleteConsolList(idx) {
-  consolLists.splice(idx, 1);
-  if (consolLists.length === 0) document.getElementById('consol-section').style.display = 'none';
-  else renderConsolLists();
+function setTabMain(tabEl) {
+  // Show main table + pagination
+  document.getElementById('orders-table').closest('.table-wrap').style.display = '';
+  document.querySelector('.pagination').style.display = '';
+  document.querySelectorAll('[id^="consol-table-"]').forEach(t => t.style.display = 'none');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tabEl.classList.add('active');
+}
+
+function removeConsolTab(listId) {
+  document.getElementById('tab-' + listId)?.remove();
+  document.getElementById('consol-table-' + listId)?.remove();
+  // Switch back to All
+  setTabMain(document.getElementById('tab-all'));
 }
 
 // ── PAGINATION ──
