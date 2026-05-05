@@ -171,8 +171,6 @@ function navigate(src, btn) {
   document.querySelectorAll('.bottom-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   document.querySelectorAll('.drawer-item').forEach(a => a.classList.remove('active'));
-  // Show nav tabs only for member view
-  document.getElementById('nav-tabs-wrap').style.display = src === 'member.html' ? 'flex' : 'none';
   closeDrawer();
 }
 
