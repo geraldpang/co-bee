@@ -2931,6 +2931,17 @@ window.addEventListener('message', function(e) {
     switchTab(e.data.tab);
   }
 });
+
+function switchTab(tab) {
+  const views = { all: 'view-all', purchase: 'view-purchase', group: 'view-group' };
+  const order = ['all', 'purchase', 'group'];
+  // Always hide group detail when switching tabs
+  document.getElementById('view-group-detail').style.display = 'none';
+  order.forEach(t => {
+    const el = document.getElementById(views[t]);
+    if (el) el.style.display = t === tab ? 'block' : 'none';
+  });
+}
 </script>
 </body>
 </html>
