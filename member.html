@@ -7,6 +7,8 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; background: #F4F6F8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; display: flex; flex-direction: column; }
+  .scroll-area > * { max-width: 600px; margin-left: auto; margin-right: auto; width: 100%; }
+  .scroll-area { background: #F4F6F8; }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; overflow: hidden; }
@@ -1191,8 +1193,7 @@ select:focus { border-color: #009A97; }
 </style>
 </head>
 <body>
-<div class="nav-tabs">
-    <div class="nav-tab active" onclick="switchTab('all')">Events (3)</div>
+
     <div class="nav-tab" onclick="switchTab('purchase')">My Purchase</div>
     <div class="nav-tab" onclick="switchTab('group')">My Group</div>
   </div>
@@ -4017,6 +4018,14 @@ function copyInvite() {
   btn.style.background = '#007A77';
   setTimeout(() => { btn.textContent = 'Copy link'; btn.style.background = '#009A97'; }, 2000);
 }
+
+
+// Listen for tab switch messages from parent shell
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'switchTab') {
+    switchTab(e.data.tab);
+  }
+});
 
 </script>
 </body>
