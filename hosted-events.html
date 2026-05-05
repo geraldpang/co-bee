@@ -6,6 +6,9 @@
 <title>co·bee — Hosted Events</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1a1a18; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
   --teal:         #009A97;
@@ -429,84 +432,15 @@ tbody td.muted { color: var(--mid); font-size: 12px; }
   .modal.sm, .modal.md, .modal.lg { max-width: 100%; }
   .toast-wrap { bottom: calc(var(--footer-h) + 0.75rem); }
 }
+
+/* Override body background to match shell */
+body { background: #F4F6F8; }
+.main-inner { max-width: 900px; margin: 0 auto; padding: 20px 16px; }
 </style>
 </head>
 <body>
+<div class="main-inner">
 
-<div class="app-shell">
-
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <div class="topbar-brand">
-      <div class="topbar-logo">co<span class="dot">·</span>bee</div>
-      <div class="topbar-tagline">Good things must share!</div>
-    </div>
-    <div class="topbar-right">
-      <div class="topbar-notif">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <div class="topbar-notif-dot"></div>
-      </div>
-      <div class="avatar md amber">MC</div>
-    </div>
-  </header>
-
-  <div class="app-body">
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="sidebar-group">
-        <div class="sidebar-group-avatar">M6</div>
-        <div style="flex:1;min-width:0;">
-          <div class="sidebar-group-name">M6 Group</div>
-          <div class="sidebar-group-sub">2 members</div>
-        </div>
-        <svg class="sidebar-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-      <nav class="sidebar-nav">
-        <div class="sidebar-section-label">Main</div>
-        <a href="#" class="sidebar-item active">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Hosted Events
-          <span class="badge-count">5</span>
-        </a>
-        <a href="#" class="sidebar-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          Order Management
-        </a>
-        <a href="#" class="sidebar-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-          Products / Items
-        </a>
-        <a href="#" class="sidebar-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg>
-          Delivery
-        </a>
-        <a href="#" class="sidebar-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          Packing List
-        </a>
-        <div class="sidebar-section-label" style="margin-top:14px;">Administration</div>
-        <a href="#" class="sidebar-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Members
-        </a>
-        <a href="#" class="sidebar-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-          Settings
-        </a>
-      </nav>
-      <div class="sidebar-footer">
-        <div class="avatar lg amber">MC</div>
-        <div>
-          <div class="sidebar-footer-name">Minh Cong</div>
-          <div class="sidebar-footer-role">Admin</div>
-        </div>
-      </div>
-    </aside>
-
-    <!-- MAIN -->
-    <main class="main">
-      <div class="main-inner">
 
         <!-- Page header -->
         <div class="page-header">
@@ -780,34 +714,8 @@ tbody td.muted { color: var(--mid); font-size: 12px; }
         </div><!-- end list-view -->
 
         <div class="footer-spacer"></div>
-      </div>
-    </main>
-  </div>
-
-  <!-- MOBILE FOOTER NAV -->
-  <nav class="footer-nav">
-    <div class="footer-nav-inner">
-      <button class="footer-btn active">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Events
-      </button>
-      <button class="footer-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        Orders
-      </button>
-      <button class="footer-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        Members
-      </button>
-      <button class="footer-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-        Settings
-      </button>
-    </div>
-  </nav>
-
+      
 </div>
-
 <!-- MODAL: New Event -->
 <div class="modal-backdrop" id="new-event-modal">
   <div class="modal lg">
@@ -904,9 +812,9 @@ tbody td.muted { color: var(--mid); font-size: 12px; }
   </div>
 </div>
 
-<div class="toast-wrap" id="toast-wrap"></div>
-
+<div class="toast-wrap" id="toast-wrap">
 <script>
+
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-backdrop').forEach(el => {
@@ -950,6 +858,7 @@ function showToast(message, type) {
   document.getElementById('toast-wrap').appendChild(t);
   setTimeout(() => t.remove(), 3000);
 }
+
 </script>
 </body>
 </html>
