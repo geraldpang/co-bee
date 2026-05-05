@@ -51,6 +51,11 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
 .drawer-footer-name { font-size: 13px; font-weight: 600; color: #1a1a18; }
 .drawer-footer-role { font-size: 11px; color: #009A97; }
 .drawer-switch-btn { margin-left: auto; font-size: 11px; font-weight: 600; color: #009A97; background: #E0F5F5; border: 0.5px solid #80CCCB; border-radius: 6px; padding: 5px 10px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+
+  /* ── NAV TABS (member view only) ── */
+  .nav-tabs { background: white; border-bottom: 0.5px solid #e0e0e0; display: flex; justify-content: center; flex-shrink: 0; z-index: 90; }
+  .nav-tab { padding: 11px 18px; font-size: 13px; color: #666; cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.15s; white-space: nowrap; }
+  .nav-tab.active { color: #009A97; border-bottom-color: #009A97; font-weight: 500; }
 </style>
 </head>
 <body>
@@ -73,6 +78,13 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
     </div>
     <div class="avatar">MC</div>
   </div>
+</div>
+
+
+<!-- NAV TABS — member view only -->
+<div id="nav-tabs-wrap" style="display:flex;">
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="iframeTab('all')">Events (3)</div>
 </div>
 
 <!-- CONTENT AREA with iframe -->
@@ -154,15 +166,23 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
 let drawerOpen = false;
 
 function navigate(src, btn) {
-  // Update iframe
   document.getElementById('main-frame').src = src;
-  // Update active bottom button
   document.querySelectorAll('.bottom-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  // Update drawer items
   document.querySelectorAll('.drawer-item').forEach(a => a.classList.remove('active'));
-  // Close drawer
+  // Show nav tabs only for member view
+  document.getElementById('nav-tabs-wrap').style.display = src === 'member.html' ? 'flex' : 'none';
   closeDrawer();
+}
+
+function iframeTab(tab) {
+  // Update active nav tab
+  document.querySelectorAll('.nav-tab').forEach((t, i) => {
+    t.classList.toggle('active', ['all','purchase','group'][i] === tab);
+  });
+  // Tell iframe to switch tab
+  const frame = document.getElementById('main-frame');
+  frame.contentWindow.postMessage({type:'switchTab', tab: tab}, '*');
 }
 
 function toggleDrawer() {
