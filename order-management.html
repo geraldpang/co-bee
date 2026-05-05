@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>co·bee — Order Management</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body { min-height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; color: #1a1a18; }
+
+.page { padding: 20px 20px 40px; max-width: 1200px; margin: 0 auto; }
+
+/* ── PAGE HEADER ── */
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.page-title { font-size: 22px; font-weight: 700; color: #009A97; }
+.page-subtitle { font-size: 12px; color: #888780; margin-top: 3px; }
+.header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-outline { height: 34px; padding: 0 14px; border: 1px solid #009A97; border-radius: 8px; background: white; font-size: 12px; font-weight: 600; color: #009A97; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; transition: background 0.12s; white-space: nowrap; }
+.btn-outline:hover { background: #E0F5F5; }
+
+/* ── SEARCH ── */
+.search-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 12px; flex-wrap: wrap; }
+.search-wrap { flex: 1; min-width: 200px; position: relative; }
+.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #888780; }
+.search-input { width: 100%; height: 36px; border: 0.5px solid #D3D1C7; border-radius: 20px; padding: 0 12px 0 34px; font-size: 12px; font-family: inherit; color: #1a1a18; background: white; outline: none; }
+.search-input:focus { border-color: #009A97; }
+.search-input::placeholder { color: #B4B2A9; }
+.loading-info { font-size: 11px; color: #888780; white-space: nowrap; }
+.loading-info span { color: #009A97; font-weight: 600; }
+
+/* ── FILTERS ── */
+.filters-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.filter-select { height: 34px; border: 0.5px solid #D3D1C7; border-radius: 8px; background: white; padding: 0 28px 0 10px; font-size: 12px; font-family: inherit; color: #1a1a18; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; min-width: 140px; }
+.filter-select.wide { flex: 1; min-width: 200px; }
+.btn-clear { height: 34px; padding: 0 12px; border: 0.5px solid #D3D1C7; border-radius: 8px; background: white; font-size: 12px; color: #888780; cursor: pointer; font-family: inherit; white-space: nowrap; }
+.btn-clear:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
+
+/* ── INFO BAR ── */
+.info-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.info-hint { font-size: 11px; color: #888780; }
+.info-hint svg { vertical-align: middle; }
+.total-orders { font-size: 12px; font-weight: 600; color: #009A97; }
+
+/* ── TABS ── */
+.tabs-row { display: flex; align-items: center; gap: 20px; border-bottom: 0.5px solid #e0dfd8; margin-bottom: 14px; }
+.tab { padding: 8px 0; font-size: 12px; color: #888780; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tab.active { color: #009A97; border-bottom-color: #009A97; font-weight: 600; }
+.tab-check { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #888780; cursor: pointer; margin-left: auto; }
+.tab-check input { accent-color: #009A97; }
+
+/* ── TABLE ── */
+.table-wrap { background: white; border-radius: 10px; border: 0.5px solid #e0dfd8; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead { background: #FAFAF8; }
+thead tr:first-child th:first-child { border-radius: 10px 0 0 0; }
+thead tr:first-child th:last-child { border-radius: 0 10px 0 0; }
+th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.04em; text-transform: uppercase; border-bottom: 0.5px solid #e0dfd8; white-space: nowrap; cursor: pointer; user-select: none; }
+.col-event { max-width: 140px; }
+.event-text { max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+th:hover { color: #009A97; }
+th .sort-icon { opacity: 0.3; margin-left: 3px; }
+td { padding: 10px 14px; border-bottom: 0.5px solid #f0f0f0; vertical-align: top; font-size: 12px; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #FAFAF8; }
+
+/* ── BADGES ── */
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; border-radius: 99px; padding: 2px 8px; white-space: nowrap; }
+/* Event status */
+.badge.open    { background: #E0F5F5; color: #007A77; }
+.badge.closed  { background: #f0f0f0; color: #888780; }
+.badge.draft   { background: #f0f0f0; color: #888780; }
+/* Payment status */
+.badge.not-paid   { background: #FCEBEB; color: #A32D2D; }
+.badge.refunded   { background: #FEF2DC; color: #BA7517; }
+.badge.pay-verified { background: #E0F5F5; color: #007A77; }
+.badge.collected  { background: #e8f5e9; color: #2e7d32; }
+/* Fulfilment */
+/* Fulfilment select */
+.ful-select { height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px; font-size: 11px; font-family: inherit; color: #1a1a18; background: white; padding: 0 22px 0 8px; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; width: 170px; }
+.ful-select:focus { border-color: #009A97; }
+.ful-select option { font-size: 12px; }
+
+.name-link { color: #009A97; cursor: pointer; font-weight: 500; text-decoration: underline; }
+
+.purchase-cell { max-width: 200px; }
+
+.purchase-inline { font-size: 12px; color: #1a1a18; line-height: 1.5; }
+.purchase-more { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 500; color: #888780; background: #f0f0f0; border: none; border-radius: 99px; padding: 1px 7px; cursor: pointer; font-family: inherit; margin-top: 2px; align-self: flex-start; }
+.purchase-more:hover { background: #e0e0e0; color: #1a1a18; }
+.purchase-extra { display: none; font-size: 12px; color: #1a1a18; margin-top: 2px; padding-top: 2px; }
+
+
+
+.date-row { font-size: 11px; color: #888780; margin-top: 1px; }
+.pay-icon { vertical-align: middle; margin-right: 2px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">Order Management</div>
+      <div class="page-subtitle">Manage your group buy orders and payments</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-outline">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export List
+      </button>
+      <button class="btn-outline">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Matrix
+      </button>
+      <button class="btn-outline">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Date
+      </button>
+      <button class="btn-outline">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Consolidate
+      </button>
+      <div style="position:relative;">
+        <button class="btn-outline" onclick="toggleColMenu()" id="col-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Columns
+        </button>
+        <div id="col-menu" style="display:none;position:absolute;top:calc(100% + 4px);right:0;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:100;min-width:180px;padding:8px 0;">
+          <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;padding:4px 14px 8px;">Show / Hide Columns</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-row">
+    <div class="search-wrap">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" type="text" placeholder="Search Name / Mobile Number / Order Reference" oninput="filterTable()" id="search-input" />
+    </div>
+    <div class="loading-info">Loading events created from <span>05/04/2026</span> to <span>05/05/2026</span></div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-row">
+    <select class="filter-select" onchange="filterTable()" id="filter-event">
+      <option value="">Event</option>
+      <option>atea 1</option>
+      <option>order without login</option>
+      <option>This is a test event for Purchase with no login</option>
+      <option>new event</option>
+    </select>
+    <select class="filter-select" onchange="filterTable()" id="filter-event-status">
+      <option value="">Event Status</option>
+      <option>Open</option>
+      <option>Closed</option>
+      <option>Draft</option>
+    </select>
+    <select class="filter-select wide" onchange="filterTable()" id="filter-payment">
+      <option value="">Payment Status</option>
+      <option>Not Paid</option>
+      <option>Refunded</option>
+      <option>Verified</option>
+      <option>Collected</option>
+    </select>
+    <button class="btn-clear" onclick="clearFilters()">Clear Filter</button>
+  </div>
+
+  <!-- INFO BAR -->
+  <div class="info-bar">
+    <div class="info-hint">Click on Names for Order Details and on
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+      for Payment Details.
+    </div>
+    <div class="total-orders">Total orders: <span id="total-count">12</span></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-row">
+    <div class="tab active" onclick="setTab('all', this)">All</div>
+    <div class="tab" onclick="setTab('unpaid', this)">Unpaid Orders</div>
+    <label class="tab-check">
+      <input type="checkbox" checked onchange="filterTable()" id="excl-cancelled" />
+      Exclude cancelled orders
+    </label>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table id="orders-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)" data-col="0">Name <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(1)" data-col="1">Mobile <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(2)" data-col="2">Event <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(3)" data-col="3">Closing Date <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th><th onclick="sortTable(4)" data-col="4">Creation Date <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(5)" data-col="5">Purchase <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(6)" data-col="6">Price <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(7)" data-col="7">Event Status <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(8)" data-col="8">Payment Status <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(9)" data-col="9">Fulfilment <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+        </tr>
+      </thead>
+      <tbody id="orders-body">
+        <tr data-event-status="Closed" data-payment="Verified" data-fulfilment="Verified" data-cancelled="false">
+          <td><span class="name-link">Gerald Pang</span></td>
+          <td>0469787098</td>
+          <td class="col-event"><span class="event-text" title="atea 1">atea 1</span></td>
+          <td>20/04/2026</td>
+          <td>09/04/2026</td>
+          <td>Dev cùi (qty:1)</td>
+          <td>$10.00</td>
+          <td><span class="badge closed">Closed</span></td>
+          <td><span class="badge pay-verified">
+            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            Verified
+          </span></td>
+          <td><select class="ful-select">
+              <option>Cancelled</option>
+              <option>Unpaid</option>
+              <option>Submitted & Unpaid</option>
+              <option>Submitted & Paid</option>
+              <option>Submitted & Collected</option>
+              <option selected>Verified</option>
+              <option>Collected</option>
+              </select></td>
+        </tr>
+        <tr data-event-status="Closed" data-payment="Not Paid" data-fulfilment="Unpaid" data-cancelled="false">
+          <td><span class="name-link">Minh Test</span></td>
+          <td>0973117345</td>
+          <td class="col-event"><span class="event-text" title="order without login">order without login</span></td>
+          <td>26/04/2026</td>
+          <td>24/04/2026</td>
+          <td>pro 1 (qty:1)</td>
+          <td>$1.00</td>
+          <td><span class="badge closed">Closed</span></td>
+          <td><span class="badge not-paid">
+            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Not Paid
+          </span></td>
+          <td><select class="ful-select">
+              <option>Cancelled</option>
+              <option selected>Unpaid</option>
+              <option>Submitted & Unpaid</option>
+              <option>Submitted & Paid</option>
+              <option>Submitted & Collected</option>
+              <option>Verified</option>
+              <option>Collected</option>
+              </select></td>
+        </tr>
+        <tr data-event-status="Open" data-payment="Verified" data-fulfilment="Submitted &amp; Paid" data-cancelled="false">
+          <td><span class="name-link">Gerald test3</span></td>
+          <td>0469787098</td>
+          <td class="col-event"><span class="event-text" title="This is a test event for Purchase with no login">This is a test event for Purchase with no login</span></td>
+          <td>14/05/2026</td>
+          <td>29/04/2026</td>
+          <td class="purchase-cell">
+            <div class="purchase-inline">Item 1 (qty:1)</div>
+            <div class="purchase-extra" id="ex_gerald3" style="display:none;">item 2 (qty:1)</div>
+            <button class="purchase-more" onclick="toggleExtra('ex_gerald3',this)">+1 more</button>
+          </td>
+          <td>$59.00</td>
+          <td><span class="badge open">Open</span></td>
+          <td><span class="badge pay-verified">
+            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            Verified
+          </span></td>
+          <td><select class="ful-select">
+              <option>Cancelled</option>
+              <option>Unpaid</option>
+              <option>Submitted & Unpaid</option>
+              <option selected>Submitted & Paid</option>
+              <option>Submitted & Collected</option>
+              <option>Verified</option>
+              <option>Collected</option>
+              </select></td>
+        </tr>
+        <tr data-event-status="Open" data-payment="Not Paid" data-fulfilment="Unpaid" data-cancelled="false">
+          <td><span class="name-link">Minh Cong</span></td>
+          <td>83062355</td>
+          <td class="col-event"><span class="event-text" title="new event">new event</span></td>
+          <td>15/05/2026</td>
+          <td>30/04/2026</td>
+          <td class="purchase-cell"><span class="purchase-inline">Item 1 (qty:1)</span></td>
+          <td>$10.00</td>
+          <td><span class="badge open">Open</span></td>
+          <td><span class="badge not-paid">
+            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Not Paid
+          </span></td>
+          <td><select class="ful-select">
+              <option>Cancelled</option>
+              <option selected>Unpaid</option>
+              <option>Submitted & Unpaid</option>
+              <option>Submitted & Paid</option>
+              <option>Submitted & Collected</option>
+              <option>Verified</option>
+              <option>Collected</option>
+              </select></td>
+        </tr>
+        <tr data-event-status="Open" data-payment="Refunded" data-fulfilment="Cancelled" data-cancelled="true">
+          <td><span class="name-link">Janet Lee</span></td>
+          <td>0412345678</td>
+          <td class="col-event"><span class="event-text" title="This is a test event for Purchase with no login">This is a test event for Purchase with no login</span></td>
+          <td>14/05/2026</td>
+          <td>01/05/2026</td>
+          <td>Item 1 (qty:2)</td>
+          <td>$118.00</td>
+          <td><span class="badge open">Open</span></td>
+          <td><span class="badge refunded">Refunded</span></td>
+          <td><select class="ful-select">
+              <option selected>Cancelled</option>
+              <option>Unpaid</option>
+              <option>Submitted & Unpaid</option>
+              <option>Submitted & Paid</option>
+              <option>Submitted & Collected</option>
+              <option>Verified</option>
+              <option>Collected</option>
+              </select></td>
+        </tr>
+        <tr data-event-status="Open" data-payment="Not Paid" data-fulfilment="Submitted &amp; Unpaid" data-cancelled="false">
+          <td><span class="name-link">David Tan</span></td>
+          <td>0498765432</td>
+          <td class="col-event"><span class="event-text" title="new event">new event</span></td>
+          <td>15/05/2026</td>
+          <td>02/05/2026</td>
+          <td>Item 1 (qty:1)</td>
+          <td>$10.00</td>
+          <td><span class="badge open">Open</span></td>
+          <td><span class="badge not-paid">
+            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Not Paid
+          </span></td>
+          <td><select class="ful-select">
+              <option>Cancelled</option>
+              <option>Unpaid</option>
+              <option selected>Submitted & Unpaid</option>
+              <option>Submitted & Paid</option>
+              <option>Submitted & Collected</option>
+              <option>Verified</option>
+              <option>Collected</option>
+              </select></td>
+        </tr>
+        <tr data-event-status="Closed" data-payment="Collected" data-fulfilment="Collected" data-cancelled="false">
+          <td><span class="name-link">Sarah Wong</span></td>
+          <td>0423456789</td>
+          <td class="col-event"><span class="event-text" title="atea 1">atea 1</span></td>
+          <td>20/04/2026</td>
+          <td>10/04/2026</td>
+          <td>Dev cùi (qty:2)</td>
+          <td>$20.00</td>
+          <td><span class="badge closed">Closed</span></td>
+          <td><span class="badge collected">Collected</span></td>
+          <td><select class="ful-select">
+              <option>Cancelled</option>
+              <option>Unpaid</option>
+              <option>Submitted & Unpaid</option>
+              <option>Submitted & Paid</option>
+              <option>Submitted & Collected</option>
+              <option>Verified</option>
+              <option selected>Collected</option>
+              </select></td>
+        </tr>
+        <tr data-event-status="Open" data-payment="Not Paid" data-fulfilment="Submitted &amp; Collected" data-cancelled="false">
+          <td><span class="name-link">Tom Nguyen</span></td>
+          <td>0455678901</td>
+          <td class="col-event"><span class="event-text" title="This is a test event for Purchase with no login">This is a test event for Purchase with no login</span></td>
+          <td>14/05/2026</td>
+          <td>03/05/2026</td>
+          <td>Item 2 (qty:1)</td>
+          <td>$59.00</td>
+          <td><span class="badge open">Open</span></td>
+          <td><span class="badge not-paid">
+            <svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Not Paid
+          </span></td>
+          <td><select class="ful-select">
+              <option>Cancelled</option>
+              <option>Unpaid</option>
+              <option>Submitted & Unpaid</option>
+              <option>Submitted & Paid</option>
+              <option selected>Submitted & Collected</option>
+              <option>Verified</option>
+              <option>Collected</option>
+              </select></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+<script>
+let currentTab = 'all';
+let sortCol = -1;
+let sortAsc = true;
+
+function setTab(tab, el) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  filterTable();
+}
+
+function filterTable() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const evFilter = document.getElementById('filter-event').value;
+  const evStatus = document.getElementById('filter-event-status').value;
+  const payFilter = document.getElementById('filter-payment').value;
+  const exclCancelled = document.getElementById('excl-cancelled').checked;
+  const rows = document.querySelectorAll('#orders-body tr');
+  let count = 0;
+
+  rows.forEach(row => {
+    const name = row.cells[0].textContent.toLowerCase();
+    const mobile = row.cells[1].textContent.toLowerCase();
+    const event = row.cells[2].textContent.toLowerCase();
+    const payment = row.dataset.payment || '';
+    const eventStatus = row.dataset.eventStatus || '';
+    const fulfilment = row.dataset.fulfilment || '';
+    const cancelled = row.dataset.cancelled === 'true';
+
+    const matchQ = !q || name.includes(q) || mobile.includes(q) || event.includes(q);
+    const matchEv = !evFilter || event.toLowerCase().includes(evFilter.toLowerCase());
+    const matchEvStatus = !evStatus || eventStatus === evStatus;
+    const matchPay = !payFilter || payment === payFilter;
+    const matchTab = currentTab === 'all' || (currentTab === 'unpaid' && payment === 'Not Paid');
+    const matchCancelled = !exclCancelled || !cancelled;
+
+    const show = matchQ && matchEv && matchEvStatus && matchPay && matchTab && matchCancelled;
+    row.style.display = show ? '' : 'none';
+    if (show) count++;
+  });
+
+  document.getElementById('total-count').textContent = count;
+}
+
+function clearFilters() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('filter-event').value = '';
+  document.getElementById('filter-event-status').value = '';
+  document.getElementById('filter-payment').value = '';
+  filterTable();
+}
+
+// ── COLUMN VISIBILITY ──
+const COL_NAMES = ['Name','Mobile','Event','Closing Date','Creation Date','Purchase','Price','Event Status','Payment Status','Fulfilment'];
+let hiddenCols = new Set();
+
+function buildColMenu() {
+  const menu = document.getElementById('col-menu');
+  COL_NAMES.forEach((name, i) => {
+    const item = document.createElement('label');
+    item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#1a1a18;cursor:pointer;';
+    item.onmouseover = () => item.style.background = '#f5fafa';
+    item.onmouseout = () => item.style.background = '';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = true;
+    cb.style.accentColor = '#009A97';
+    cb.onchange = () => toggleCol(i, cb.checked);
+    item.appendChild(cb);
+    item.appendChild(document.createTextNode(name));
+    menu.appendChild(item);
+  });
+}
+
+function toggleCol(idx, visible) {
+  const table = document.getElementById('orders-table');
+  table.querySelectorAll(`th[data-col="${idx}"], td:nth-child(${idx + 1})`).forEach(el => {
+    el.style.display = visible ? '' : 'none';
+  });
+  // Also handle via col index for td
+  table.querySelectorAll('tr').forEach(row => {
+    const td = row.cells[idx];
+    if (td) td.style.display = visible ? '' : 'none';
+  });
+}
+
+function toggleColMenu() {
+  const menu = document.getElementById('col-menu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#col-btn') && !e.target.closest('#col-menu')) {
+    const m = document.getElementById('col-menu');
+    if (m) m.style.display = 'none';
+  }
+});
+
+document.addEventListener('DOMContentLoaded', buildColMenu);
+
+function toggleExtra(id, btn) {
+  const el = document.getElementById(id);
+  const isHidden = el.style.display === 'none';
+  el.style.display = isHidden ? 'block' : 'none';
+  const count = btn.dataset.count || (btn.textContent.match(/\d+/) || [''])[0];
+  btn.dataset.count = count;
+  btn.textContent = isHidden ? '▴ less' : '+' + count + ' more';
+  // Move btn after the extra div when expanded, before when collapsed
+}
+
+function togglePurchase(id, btn) {
+  const el = document.getElementById(id);
+  const isHidden = el.style.display === 'none';
+  el.style.display = isHidden ? 'block' : 'none';
+  btn.innerHTML = isHidden
+    ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg> Show less'
+    : '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> Show more';
+}
+
+function sortTable(col) {
+  if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
+  const tbody = document.getElementById('orders-body');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  rows.sort((a, b) => {
+    const aT = a.cells[col] ? a.cells[col].textContent.trim() : '';
+    const bT = b.cells[col] ? b.cells[col].textContent.trim() : '';
+    return sortAsc ? aT.localeCompare(bT) : bT.localeCompare(aT);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+</script>
+</body>
+</html>
