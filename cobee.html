@@ -10,7 +10,7 @@
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F4F6F8; color: #1a1a1a; display: flex; flex-direction: column; }
 
   /* ── TOPBAR ── */
-  .topbar { background: #009A97; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; flex-shrink: 0; z-index: 600; }
+  .topbar { background: #009A97; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; flex-shrink: 0; z-index: 600; position: relative; }
   .topbar-brand p:first-child { font-size: 15px; font-weight: 600; color: white; line-height: 1.1; }
   .topbar-brand p:last-child  { font-size: 9px; color: rgba(255,255,255,0.65); }
   .topbar-right { display: flex; align-items: center; gap: 12px; }
@@ -458,12 +458,12 @@
 
   /* ── SWITCH VIEW DRAWER ── */
   .drawer-overlay {
-    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: transparent;
+    display: none; position: fixed; top: 52px; left: 0; right: 0; bottom: 0; background: transparent;
     z-index: 500;
   }
   .drawer-overlay.open { display: block; }
   .drawer {
-    position: fixed; top: 0; left: 0; bottom: 0; width: 260px;
+    position: fixed; top: 52px; left: 0; bottom: 0; width: 260px;
     background: white; z-index: 501; display: flex; flex-direction: column;
     transform: translateX(-100%); transition: transform 0.28s ease;
     box-shadow: 4px 0 24px rgba(0,0,0,0.15);
@@ -530,9 +530,11 @@
 <!-- ══════════════════════════════════════════════
      MOBILE FEED VIEW
 ══════════════════════════════════════════════ -->
-<div id="feed-view" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
   <div class="topbar">
-    <div class="topbar-brand">
+    <div onclick="openDrawer()" style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.15);flex-shrink:0;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </div>
+    <div class="topbar-brand" style="position:absolute;left:50%;transform:translateX(-50%);text-align:center;">
       <p>co<span style="color:#F5A623;">·</span>bee</p>
       <p>Good things must share!</p>
     </div>
@@ -549,6 +551,7 @@
     </div>
   </div>
 
+<div id="feed-view" style="display:flex;flex-direction:column;flex:1;overflow:hidden;transition:margin-left 0.28s ease;">
   <div class="nav-tabs">
     <div class="nav-tab active" onclick="switchTab('all')">Events (3)</div>
     <div class="nav-tab" onclick="switchTab('purchase')">My Purchase</div>
@@ -1355,10 +1358,7 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
       Hosting
     </button>
-    <button class="bottom-btn" onclick="openDrawer()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      Switch View
-    </button>
+  
     <button class="bottom-btn">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       Hosted Event
@@ -1535,6 +1535,7 @@ function openDrawer() {
   document.getElementById('switch-drawer').classList.add('open');
   document.getElementById('drawer-overlay').classList.add('open');
   document.getElementById('feed-view').style.marginLeft = '260px';
+  document.getElementById('feed-view').style.transition = 'margin-left 0.28s ease';
 }
 function closeDrawer() {
   document.getElementById('switch-drawer').classList.remove('open');
@@ -1560,7 +1561,6 @@ function copyInvite() {
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="switch-drawer">
 
-  <div style="height:52px;background:#009A97;flex-shrink:0;"></div>
   <div class="drawer-group">
     <div class="drawer-group-av">M6</div>
     <div>
