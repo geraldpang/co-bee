@@ -171,7 +171,7 @@ function navigate(src, btn) {
   document.querySelectorAll('.bottom-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   document.querySelectorAll('.drawer-item').forEach(a => a.classList.remove('active'));
-  closeDrawer();
+  // Do NOT close drawer - let it stay open if user navigated from sidebar
 }
 
 function iframeTab(tab) {
@@ -179,9 +179,17 @@ function iframeTab(tab) {
   document.querySelectorAll('.nav-tab').forEach((t, i) => {
     t.classList.toggle('active', ['all','purchase','group'][i] === tab);
   });
-  // Tell iframe to switch tab
   const frame = document.getElementById('main-frame');
-  frame.contentWindow.postMessage({type:'switchTab', tab: tab}, '*');
+  // If not on member.html, load it first then switch tab after load
+  if (!frame.src.endsWith('member.html')) {
+    frame.src = 'member.html';
+    frame.onload = function() {
+      frame.contentWindow.postMessage({type:'switchTab', tab: tab}, '*');
+      frame.onload = null;
+    };
+  } else {
+    frame.contentWindow.postMessage({type:'switchTab', tab: tab}, '*');
+  }
 }
 
 function toggleDrawer() {
