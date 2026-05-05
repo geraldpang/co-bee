@@ -18,7 +18,7 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
 .avatar { width: 30px; height: 30px; border-radius: 50%; background: #E8971A; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: white; cursor: pointer; }
 
 /* ── CONTENT AREA ── */
-.content-wrap { flex: 1; display: flex; overflow: hidden; transition: margin-left 0.28s ease; }
+.content-wrap { flex: 1; display: flex; overflow: hidden; min-height: 0; }
 
 /* ── IFRAME ── */
 .main-frame { flex: 1; border: none; width: 100%; height: 100%; background: #F4F6F8; }
@@ -81,6 +81,7 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
 </div>
 
 
+<div id="main-wrap" style="flex:1;display:flex;flex-direction:column;overflow:hidden;transition:margin-left 0.28s ease;min-height:0;">
 <!-- NAV TABS — member view only -->
 <div id="nav-tabs-wrap" style="display:flex;flex-direction:column;">
   <div class="nav-tabs">
@@ -111,6 +112,7 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
   </button>
 </div>
 
+</div><!-- end main-wrap -->
 <!-- SIDEBAR DRAWER -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="switch-drawer">
@@ -196,12 +198,14 @@ function openDrawer() {
   drawerOpen = true;
   document.getElementById('switch-drawer').classList.add('open');
   document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('main-wrap').style.marginLeft = '260px';
 }
 
 function closeDrawer() {
   drawerOpen = false;
   document.getElementById('switch-drawer').classList.remove('open');
   document.getElementById('drawer-overlay').classList.remove('open');
+  document.getElementById('main-wrap').style.marginLeft = '0';
 }
 </script>
 </body>
