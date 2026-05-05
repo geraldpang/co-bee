@@ -23,7 +23,7 @@
   .avatar.xl { width: 38px; height: 38px; font-size: 13px; }
 
   /* ── COMBINED NAV BAR ── */
-  .nav-tabs { background: white; border-bottom: 0.5px solid #e0e0e0; display: flex; justify-content: center; flex-shrink: 0; z-index: 90; }
+  .nav-tabs { background: white; border-bottom: 0.5px solid #e0e0e0; display: flex; justify-content: center; flex-shrink: 0; z-index: 90; transition: margin-left 0.28s ease; }
   .nav-tab { padding: 11px 18px; font-size: 13px; color: #666; cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.15s; white-space: nowrap; }
   .nav-tab.active { color: #009A97; border-bottom-color: #009A97; font-weight: 500; }
 
@@ -54,7 +54,7 @@
   .card-desc { font-size: 13px; color: #666; line-height: 1.5; }
 
   /* ── BOTTOM NAV ── */
-  .bottom-bar { background: white; border-top: 0.5px solid #e0e0e0; display: flex; align-items: center; flex-shrink: 0; z-index: 100; }
+  .bottom-bar { background: white; border-top: 0.5px solid #e0e0e0; display: flex; align-items: center; flex-shrink: 0; z-index: 100; transition: margin-left 0.28s ease; }
   .bottom-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 0; cursor: pointer; color: #888; font-size: 10px; transition: color 0.15s; border: none; background: none; }
   .bottom-btn.active { color: #009A97; }
   .bottom-btn:hover { color: #009A97; }
@@ -455,6 +455,74 @@
   .ps-closed   .pcard-sdot   { background: #B4B2A9; }
   .ps-closed   .pcard-stxt   { color: #5F5E5A; }
   .ps-closed   { opacity: 0.65; }
+
+  /* ── SWITCH VIEW DRAWER ── */
+  .drawer-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: transparent;
+    z-index: 500;
+  }
+  .drawer-overlay.open { display: block; }
+  .drawer {
+    position: fixed; top: 0; left: 0; bottom: 0; width: 260px;
+    background: white; z-index: 501; display: flex; flex-direction: column;
+    transform: translateX(-100%); transition: transform 0.28s ease;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-header {
+    background: #009A97; padding: 14px 16px;
+    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+  }
+  .drawer-header-title { font-size: 13px; font-weight: 600; color: white; }
+  .drawer-header-sub { font-size: 10px; color: rgba(255,255,255,0.65); margin-top: 1px; }
+  .drawer-close {
+    width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .drawer-group {
+    display: flex; align-items: center; gap: 10px; padding: 0 16px;
+    background: #009A97; border-bottom: 0.5px solid #007A77; cursor: pointer;
+    height: 52px; flex-shrink: 0;
+  }
+  .drawer-group-av {
+    width: 30px; height: 30px; border-radius: 50%; background: #E8971A;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: white; flex-shrink: 0;
+  }
+  .drawer-group-name { font-size: 13px; font-weight: 600; color: white; }
+  .drawer-group-sub  { font-size: 11px; color: rgba(255,255,255,0.65); }
+  .drawer-nav { flex: 1; overflow-y: auto; padding: 8px; }
+  .drawer-section { font-size: 10px; font-weight: 600; color: #888780; letter-spacing: 0.07em; text-transform: uppercase; padding: 10px 8px 4px; }
+  .drawer-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border-radius: 8px; font-size: 13px; color: #1a1a18; cursor: pointer;
+    text-decoration: none; transition: background 0.12s;
+  }
+  .drawer-item:hover { background: #f0fafa; color: #007A77; }
+  .drawer-item.active { background: #E0F5F5; color: #007A77; font-weight: 600; }
+  .drawer-item svg { flex-shrink: 0; color: inherit; }
+  .drawer-badge {
+    margin-left: auto; font-size: 10px; font-weight: 600;
+    background: #f0f0f0; color: #888; border-radius: 99px; padding: 1px 7px;
+    border: 0.5px solid #e0e0e0;
+  }
+  .drawer-item.active .drawer-badge { background: #009A97; color: white; border-color: #009A97; }
+  .drawer-footer {
+    padding: 12px 16px; border-top: 0.5px solid #e0dfd8;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .drawer-footer-av {
+    width: 34px; height: 34px; border-radius: 50%; background: #E8971A;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: white; flex-shrink: 0;
+  }
+  .drawer-footer-name { font-size: 13px; font-weight: 600; color: #1a1a18; }
+  .drawer-footer-role { font-size: 11px; color: #009A97; }
+  .drawer-switch-btn {
+    margin-left: auto; font-size: 11px; font-weight: 600; color: #009A97;
+    background: #E0F5F5; border: 0.5px solid #80CCCB; border-radius: 6px;
+    padding: 5px 10px; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  }
 </style>
 </head>
 <body>
@@ -1287,7 +1355,7 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
       Hosting
     </button>
-    <button class="bottom-btn" onclick="switchToDesktop()">
+    <button class="bottom-btn" onclick="openDrawer()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       Switch View
     </button>
@@ -1463,8 +1531,19 @@ document.addEventListener('click', function(e) {
   }
 });
 
-function switchToDesktop() {
-  alert('Host dashboard coming soon!');
+function openDrawer() {
+  document.getElementById('switch-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('feed-view').style.marginLeft = '260px';
+  document.querySelector('.nav-tabs').style.marginLeft = '260px';
+  document.querySelector('.bottom-bar').style.marginLeft = '260px';
+}
+function closeDrawer() {
+  document.getElementById('switch-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.getElementById('feed-view').style.marginLeft = '';
+  document.querySelector('.nav-tabs').style.marginLeft = '';
+  document.querySelector('.bottom-bar').style.marginLeft = '';
 }
 
 
@@ -1480,5 +1559,72 @@ function copyInvite() {
   setTimeout(() => { btn.textContent = 'Copy link'; btn.style.background = '#009A97'; }, 2000);
 }
 </script>
+
+<!-- ── SWITCH VIEW DRAWER ── -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="switch-drawer">
+
+  <div class="drawer-group" style="margin-top:0;">
+    <div class="drawer-group-av">M6</div>
+    <div>
+      <div class="drawer-group-name">M6 Group</div>
+      <div class="drawer-group-sub">2 members</div>
+    </div>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+
+  <nav class="drawer-nav">
+    <div class="drawer-section">Main</div>
+
+    <a class="drawer-item active" href="hosted-events.html">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Hosted Events
+      <span class="drawer-badge">5</span>
+    </a>
+
+    <a class="drawer-item" href="#">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      Order Management
+    </a>
+
+    <a class="drawer-item" href="products-items.html">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Products / Items
+    </a>
+
+    <a class="drawer-item" href="#">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4"/></svg>
+      Delivery
+    </a>
+
+    <a class="drawer-item" href="#">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Packing List
+    </a>
+
+    <div class="drawer-section" style="margin-top:10px;">Administration</div>
+
+    <a class="drawer-item" href="#">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Members
+    </a>
+
+    <a class="drawer-item" href="#">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      Settings
+    </a>
+  </nav>
+
+  <div class="drawer-footer">
+    <div class="drawer-footer-av">MC</div>
+    <div>
+      <div class="drawer-footer-name">Minh Cong</div>
+      <div class="drawer-footer-role">Admin</div>
+    </div>
+    <div class="drawer-switch-btn" onclick="closeDrawer()">← Member view</div>
+  </div>
+
+</div>
+
 </body>
 </html>
