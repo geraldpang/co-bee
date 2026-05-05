@@ -82,9 +82,12 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
 
 
 <!-- NAV TABS — member view only -->
-<div id="nav-tabs-wrap" style="display:flex;">
+<div id="nav-tabs-wrap" style="display:flex;flex-direction:column;">
   <div class="nav-tabs">
     <div class="nav-tab active" onclick="iframeTab('all')">Events (3)</div>
+    <div class="nav-tab" onclick="iframeTab('purchase')">My Purchase</div>
+    <div class="nav-tab" onclick="iframeTab('group')">My Group</div>
+  </div>
 </div>
 
 <!-- CONTENT AREA with iframe -->
