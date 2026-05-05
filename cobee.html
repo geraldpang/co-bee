@@ -11,7 +11,7 @@
 
   /* ── TOPBAR ── */
   .topbar { background: #009A97; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; flex-shrink: 0; z-index: 600; position: relative; }
-  .topbar-brand p:first-child { font-size: 15px; font-weight: 600; color: white; line-height: 1.1; }
+  .topbar-brand p:first-child { font-size: 17px; font-weight: 600; color: white; line-height: 1.1; }
   .topbar-brand p:last-child  { font-size: 9px; color: rgba(255,255,255,0.65); }
   .topbar-right { display: flex; align-items: center; gap: 12px; }
   .search-pill { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 12px; cursor: pointer; }
@@ -531,14 +531,14 @@
      MOBILE FEED VIEW
 ══════════════════════════════════════════════ -->
   <div class="topbar">
-    <div onclick="openDrawer()" style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.15);flex-shrink:0;">
+    <div style="width:80px;display:flex;align-items:center;flex-shrink:0;"><div onclick="openDrawer()" style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.15);">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </div>
-    <div class="topbar-brand" style="position:absolute;left:50%;transform:translateX(-50%);text-align:center;">
+    </div></div>
+    <div class="topbar-brand" id="topbar-brand" style="flex:1;text-align:center;pointer-events:none;transition:margin-left 0.28s ease;">
       <p>co<span style="color:#F5A623;">·</span>bee</p>
       <p>Good things must share!</p>
     </div>
-    <div class="topbar-right">
+    <div class="topbar-right" style="width:80px;justify-content:flex-end;">
       <div class="search-pill">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <span>Search</span>
@@ -1531,16 +1531,29 @@ document.addEventListener('click', function(e) {
   }
 });
 
+let drawerOpen = false;
 function openDrawer() {
+  if (drawerOpen) {
+    // toggle off
+    drawerOpen = false;
+    document.getElementById('switch-drawer').classList.remove('open');
+    document.getElementById('drawer-overlay').classList.remove('open');
+    document.getElementById('feed-view').style.marginLeft = '0';
+    document.getElementById('topbar-brand').style.marginLeft = '0';
+    return;
+  }
+  drawerOpen = true;
   document.getElementById('switch-drawer').classList.add('open');
   document.getElementById('drawer-overlay').classList.add('open');
   document.getElementById('feed-view').style.marginLeft = '260px';
-  document.getElementById('feed-view').style.transition = 'margin-left 0.28s ease';
+  document.getElementById('topbar-brand').style.marginLeft = '260px';
 }
 function closeDrawer() {
+  drawerOpen = false;
   document.getElementById('switch-drawer').classList.remove('open');
   document.getElementById('drawer-overlay').classList.remove('open');
   document.getElementById('feed-view').style.marginLeft = '0';
+  document.getElementById('topbar-brand').style.marginLeft = '0';
 }
 
 
