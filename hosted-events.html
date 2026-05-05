@@ -183,7 +183,7 @@ a:hover { text-decoration: underline; }
 .badge.gray   { background: var(--sand); color: var(--mid); border: 0.5px solid var(--border-light); }
 .badge.buy    { background: var(--teal); color: var(--white); }
 .badge.buy.zero { background: var(--sand); color: var(--mid); border: 0.5px solid var(--border-light); }
-.badge.buy.hot  { background: var(--amber); color: var(--white); }
+.badge.buy.hot  { background: var(--teal); color: var(--white); }
 
 /* ── AVATAR ── */
 .avatar {
@@ -449,7 +449,7 @@ body { background: #F4F6F8; }
             <p class="page-subtitle">Manage your group buy events and packages</p>
           </div>
           <div class="page-actions">
-            <button class="btn primary" onclick="openModal('new-event-modal')">
+            <button class="btn primary" onclick="window.parent.navigate('hosting.html', null)">
               <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
               New event
             </button>
@@ -462,10 +462,19 @@ body { background: #F4F6F8; }
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <input class="input" type="text" placeholder="Search events&hellip;" id="search-input" oninput="filterCards()" />
           </div>
-          <button class="btn secondary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
-            Sort
-          </button>
+          <div style="position:relative;">
+            <button class="btn secondary" onclick="toggleFilterMenu()" id="filter-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+              Filter
+            </button>
+            <div id="filter-menu" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:100;min-width:160px;overflow:hidden;">
+              <div onclick="setFilter('all')" class="filter-item filter-active" data-filter="all" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #f0f0f0;">All <span style="font-size:10px;color:#009A97;display:none;">✓</span></div>
+              <div onclick="setFilter('active')" class="filter-item" data-filter="active" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #f0f0f0;">Active <span style="font-size:10px;color:#009A97;display:none;">✓</span></div>
+              <div onclick="setFilter('draft')" class="filter-item" data-filter="draft" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #f0f0f0;">Draft <span style="font-size:10px;color:#009A97;display:none;">✓</span></div>
+              <div onclick="setFilter('closing')" class="filter-item" data-filter="closing" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #f0f0f0;">Closing soon <span style="font-size:10px;color:#009A97;display:none;">✓</span></div>
+              <div onclick="setFilter('expired')" class="filter-item" data-filter="expired" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">Expired <span style="font-size:10px;color:#009A97;display:none;">✓</span></div>
+            </div>
+          </div>
           <div class="toolbar-right">
             <div class="view-toggle" id="view-toggle">
               <button class="btn active" id="btn-tile" title="Tile view" onclick="setView('tile')">
@@ -633,10 +642,6 @@ body { background: #F4F6F8; }
         <div id="list-view" style="display:none;">
           <div class="table-wrap">
             <div class="table-toolbar">
-              <div class="search-wrap">
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input class="input" type="text" placeholder="Search events&hellip;" />
-              </div>
               <button class="btn secondary sm">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
                 Export
@@ -646,15 +651,35 @@ body { background: #F4F6F8; }
               <thead>
                 <tr>
                   <th class="col-check"><input type="checkbox" /></th>
-                  <th class="sortable">Event name</th>
-                  <th>Status</th>
-                  <th>Created</th>
-                  <th>Closing</th>
-                  <th>Buys</th>
+                  <th class="sortable" onclick="sortTable(0)" style="cursor:pointer;">Event name <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+                  <th class="sortable" onclick="sortTable(1)" style="cursor:pointer;">Status <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+                  <th class="sortable" onclick="sortTable(2)" style="cursor:pointer;">Created <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+                  <th class="sortable" onclick="sortTable(3)" style="cursor:pointer;">Closing <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+                  <th class="sortable" onclick="sortTable(4)" style="cursor:pointer;">Buys <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
                   <th class="col-action"></th>
                 </tr>
               </thead>
               <tbody>
+                <tr style="background:#E0F5F5;border-left:3px solid #009A97;">
+                  <td class="col-check"><input type="checkbox" /></td>
+                  <td>
+                    <div style="font-weight:500;color:#009A97;">Artisan keycap set — round 3</div>
+                    <div style="font-size:11px;color:#888780;margin-top:2px;display:flex;align-items:center;gap:5px;">
+                      <div style="width:16px;height:16px;border-radius:50%;background:#E8971A;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:white;flex-shrink:0;">MC</div>
+                      Template shared by Minh Cong
+                    </div>
+                  </td>
+                  <td><span class="badge teal">Template</span></td>
+                  <td class="muted">15/03/2026</td>
+                  <td class="muted">—</td>
+                  <td><span class="badge buy zero">—</span></td>
+                  <td class="col-action">
+                    <div style="display:flex;gap:6px;">
+                      <button class="btn secondary sm" onclick="window.parent.navigate('hosting.html',null)" style="font-size:11px;padding:3px 8px;">Use</button>
+                      <button class="btn secondary sm" style="font-size:11px;padding:3px 8px;">Preview</button>
+                    </div>
+                  </td>
+                </tr>
                 <tr>
                   <td class="col-check"><input type="checkbox" /></td>
                   <td><span style="font-weight:500;">atea 1</span></td>
@@ -662,7 +687,14 @@ body { background: #F4F6F8; }
                   <td class="muted">09/04/2026</td>
                   <td class="muted">—</td>
                   <td><span class="badge buy zero">0 buy</span></td>
-                  <td class="col-action"><div class="dot-menu" onclick="openModal('edit-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></td>
+                  <td class="col-action"><div class="dot-menu-wrap" style="position:relative;">
+                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
+                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
+                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
+                  </div>
+                </div></td>
                 </tr>
                 <tr>
                   <td class="col-check"><input type="checkbox" /></td>
@@ -671,7 +703,14 @@ body { background: #F4F6F8; }
                   <td class="muted">24/04/2026</td>
                   <td style="color:var(--amber-dark);font-size:12px;">0 days left</td>
                   <td><span class="badge buy">2 buy</span></td>
-                  <td class="col-action"><div class="dot-menu" onclick="openModal('edit-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></td>
+                  <td class="col-action"><div class="dot-menu-wrap" style="position:relative;">
+                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
+                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
+                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
+                  </div>
+                </div></td>
                 </tr>
                 <tr>
                   <td class="col-check"><input type="checkbox" /></td>
@@ -680,7 +719,14 @@ body { background: #F4F6F8; }
                   <td class="muted">27/04/2026</td>
                   <td style="color:var(--red-dark);font-size:12px;">Closed</td>
                   <td><span class="badge buy zero">0 buy</span></td>
-                  <td class="col-action"><div class="dot-menu" onclick="openModal('delete-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></td>
+                  <td class="col-action"><div class="dot-menu-wrap" style="position:relative;">
+                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
+                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
+                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
+                  </div>
+                </div></td>
                 </tr>
                 <tr>
                   <td class="col-check"><input type="checkbox" /></td>
@@ -689,7 +735,14 @@ body { background: #F4F6F8; }
                   <td class="muted">29/04/2026</td>
                   <td class="muted">14 days left</td>
                   <td><span class="badge buy hot">6 buy</span></td>
-                  <td class="col-action"><div class="dot-menu" onclick="openModal('edit-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></td>
+                  <td class="col-action"><div class="dot-menu-wrap" style="position:relative;">
+                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
+                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
+                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
+                  </div>
+                </div></td>
                 </tr>
                 <tr>
                   <td class="col-check"><input type="checkbox" /></td>
@@ -698,7 +751,14 @@ body { background: #F4F6F8; }
                   <td class="muted">30/04/2026</td>
                   <td class="muted">15 days left</td>
                   <td><span class="badge buy zero">0 buy</span></td>
-                  <td class="col-action"><div class="dot-menu" onclick="openModal('edit-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></td>
+                  <td class="col-action"><div class="dot-menu-wrap" style="position:relative;">
+                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
+                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
+                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
+                  </div>
+                </div></td>
                 </tr>
               </tbody>
             </table>
@@ -859,6 +919,90 @@ function showToast(message, type) {
   setTimeout(() => t.remove(), 3000);
 }
 
+
+function toggleFilterMenu() {
+  const menu = document.getElementById('filter-menu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+function setFilter(filter) {
+  // Update active state
+  document.querySelectorAll('.filter-item').forEach(item => {
+    const isActive = item.dataset.filter === filter;
+    item.querySelector('span').style.display = isActive ? 'inline' : 'none';
+    item.style.background = isActive ? '#f5fafa' : '';
+    item.style.color = isActive ? '#009A97' : '#1a1a18';
+  });
+
+  // Update filter button label
+  const labels = {all:'Filter', active:'Active', draft:'Draft', closing:'Closing soon', expired:'Expired'};
+  const svgIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>';
+  document.getElementById('filter-btn').innerHTML = svgIcon + ' ' + (filter === 'all' ? 'Filter' : labels[filter]);
+
+  // Filter cards (tile view)
+  document.querySelectorAll('.event-card').forEach(card => {
+    if (filter === 'all') { card.closest('.card-col').style.display = ''; return; }
+    const badge = card.querySelector('.badge');
+    const text = badge ? badge.textContent.toLowerCase() : '';
+    const match = (filter === 'active' && text.includes('active')) ||
+                  (filter === 'draft' && text.includes('draft')) ||
+                  (filter === 'closing' && text.includes('closing')) ||
+                  (filter === 'expired' && text.includes('expired'));
+    card.closest('.card-col').style.display = match ? '' : 'none';
+  });
+
+  // Filter table rows (list view)
+  document.querySelectorAll('#list-view tbody tr').forEach(row => {
+    if (filter === 'all') { row.style.display = ''; return; }
+    const badge = row.querySelector('.badge');
+    const text = badge ? badge.textContent.toLowerCase() : '';
+    const match = (filter === 'active' && text.includes('active')) ||
+                  (filter === 'draft' && text.includes('draft')) ||
+                  (filter === 'closing' && text.includes('closing')) ||
+                  (filter === 'expired' && text.includes('expired')) ||
+                  (filter === 'active' && text.includes('template'));
+    row.style.display = match || filter === 'all' ? '' : 'none';
+  });
+
+  document.getElementById('filter-menu').style.display = 'none';
+}
+
+// Close filter menu on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#filter-btn') && !e.target.closest('#filter-menu')) {
+    const menu = document.getElementById('filter-menu');
+    if (menu) menu.style.display = 'none';
+  }
+});
+
+function sortTable(colIdx) {
+  const table = document.querySelector('#list-view table');
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const headers = table.querySelectorAll('th.sortable');
+  const header = headers[colIdx];
+  const asc = header.dataset.sort !== 'asc';
+  headers.forEach(h => { h.dataset.sort = ''; });
+  header.dataset.sort = asc ? 'asc' : 'desc';
+  rows.sort((a, b) => {
+    const aText = a.cells[colIdx + 1]?.textContent.trim() || '';
+    const bText = b.cells[colIdx + 1]?.textContent.trim() || '';
+    return asc ? aText.localeCompare(bText) : bText.localeCompare(aText);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+function toggleDotMenu(el) {
+  const dd = el.nextElementSibling;
+  const isOpen = dd.style.display === 'block';
+  document.querySelectorAll('.dot-dropdown').forEach(d => d.style.display = 'none');
+  dd.style.display = isOpen ? 'none' : 'block';
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.dot-menu-wrap')) {
+    document.querySelectorAll('.dot-dropdown').forEach(d => d.style.display = 'none');
+  }
+});
 </script>
 </body>
 </html>
