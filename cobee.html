@@ -10,7 +10,7 @@
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F4F6F8; color: #1a1a1a; display: flex; flex-direction: column; }
 
   /* ── TOPBAR ── */
-  .topbar { background: #009A97; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; flex-shrink: 0; z-index: 100; }
+  .topbar { background: #009A97; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; flex-shrink: 0; z-index: 600; }
   .topbar-brand p:first-child { font-size: 15px; font-weight: 600; color: white; line-height: 1.1; }
   .topbar-brand p:last-child  { font-size: 9px; color: rgba(255,255,255,0.65); }
   .topbar-right { display: flex; align-items: center; gap: 12px; }
@@ -23,7 +23,7 @@
   .avatar.xl { width: 38px; height: 38px; font-size: 13px; }
 
   /* ── COMBINED NAV BAR ── */
-  .nav-tabs { background: white; border-bottom: 0.5px solid #e0e0e0; display: flex; justify-content: center; flex-shrink: 0; z-index: 90; transition: margin-left 0.28s ease; }
+  .nav-tabs { background: white; border-bottom: 0.5px solid #e0e0e0; display: flex; justify-content: center; flex-shrink: 0; z-index: 90; }
   .nav-tab { padding: 11px 18px; font-size: 13px; color: #666; cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.15s; white-space: nowrap; }
   .nav-tab.active { color: #009A97; border-bottom-color: #009A97; font-weight: 500; }
 
@@ -54,7 +54,7 @@
   .card-desc { font-size: 13px; color: #666; line-height: 1.5; }
 
   /* ── BOTTOM NAV ── */
-  .bottom-bar { background: white; border-top: 0.5px solid #e0e0e0; display: flex; align-items: center; flex-shrink: 0; z-index: 100; transition: margin-left 0.28s ease; }
+  .bottom-bar { background: white; border-top: 0.5px solid #e0e0e0; display: flex; align-items: center; flex-shrink: 0; z-index: 100; }
   .bottom-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 0; cursor: pointer; color: #888; font-size: 10px; transition: color 0.15s; border: none; background: none; }
   .bottom-btn.active { color: #009A97; }
   .bottom-btn:hover { color: #009A97; }
@@ -480,17 +480,17 @@
     display: flex; align-items: center; justify-content: center; cursor: pointer;
   }
   .drawer-group {
-    display: flex; align-items: center; gap: 10px; padding: 0 16px;
-    background: #009A97; border-bottom: 0.5px solid #007A77; cursor: pointer;
-    height: 52px; flex-shrink: 0;
+    display: flex; align-items: center; gap: 10px; padding: 0 14px;
+    background: #E0F5F5; border-bottom: 0.5px solid #b2e4e3; cursor: pointer;
+    height: 44px; flex-shrink: 0;
   }
   .drawer-group-av {
     width: 30px; height: 30px; border-radius: 50%; background: #E8971A;
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: 700; color: white; flex-shrink: 0;
   }
-  .drawer-group-name { font-size: 13px; font-weight: 600; color: white; }
-  .drawer-group-sub  { font-size: 11px; color: rgba(255,255,255,0.65); }
+  .drawer-group-name { font-size: 13px; font-weight: 600; color: #005f5d; }
+  .drawer-group-sub  { font-size: 11px; color: #009A97; }
   .drawer-nav { flex: 1; overflow-y: auto; padding: 8px; }
   .drawer-section { font-size: 10px; font-weight: 600; color: #888780; letter-spacing: 0.07em; text-transform: uppercase; padding: 10px 8px 4px; }
   .drawer-item {
@@ -1535,15 +1535,11 @@ function openDrawer() {
   document.getElementById('switch-drawer').classList.add('open');
   document.getElementById('drawer-overlay').classList.add('open');
   document.getElementById('feed-view').style.marginLeft = '260px';
-  document.querySelector('.nav-tabs').style.marginLeft = '260px';
-  document.querySelector('.bottom-bar').style.marginLeft = '260px';
 }
 function closeDrawer() {
   document.getElementById('switch-drawer').classList.remove('open');
   document.getElementById('drawer-overlay').classList.remove('open');
-  document.getElementById('feed-view').style.marginLeft = '';
-  document.querySelector('.nav-tabs').style.marginLeft = '';
-  document.querySelector('.bottom-bar').style.marginLeft = '';
+  document.getElementById('feed-view').style.marginLeft = '0';
 }
 
 
@@ -1564,13 +1560,14 @@ function copyInvite() {
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="switch-drawer">
 
-  <div class="drawer-group" style="margin-top:0;">
+  <div style="height:52px;background:#009A97;flex-shrink:0;"></div>
+  <div class="drawer-group">
     <div class="drawer-group-av">M6</div>
     <div>
       <div class="drawer-group-name">M6 Group</div>
       <div class="drawer-group-sub">2 members</div>
     </div>
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
   </div>
 
   <nav class="drawer-nav">
