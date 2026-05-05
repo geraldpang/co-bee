@@ -104,6 +104,50 @@ tr:hover td { background: #FAFAF8; }
 .page-btn.active { background: #009A97; color: white; border-color: #009A97; font-weight: 600; }
 .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 .rows-select { height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px; font-size: 12px; font-family: inherit; padding: 0 24px 0 8px; color: #1a1a18; background: white; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; }
+
+/* Date picker modal */
+.modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:1000; align-items:center; justify-content:center; }
+.modal-backdrop.open { display:flex; }
+.date-modal { background:white; border-radius:14px; padding:20px; width:360px; box-shadow:0 8px 32px rgba(0,0,0,0.15); }
+.date-inputs { display:flex; gap:8px; margin-bottom:16px; }
+.date-input-wrap { flex:1; border:1px solid #D3D1C7; border-radius:8px; padding:8px 12px; font-size:13px; color:#1a1a18; cursor:pointer; text-align:center; transition:border-color 0.15s; }
+.date-input-wrap.active { border-color:#009A97; }
+.cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.cal-nav { background:none; border:none; cursor:pointer; color:#888780; font-size:16px; padding:4px 8px; border-radius:6px; }
+.cal-nav:hover { background:#f0f0f0; }
+.cal-month-year { display:flex; gap:6px; }
+.cal-select { border:none; font-size:13px; font-weight:600; color:#1a1a18; cursor:pointer; background:none; outline:none; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.cal-day-hd { text-align:center; font-size:11px; color:#888780; font-weight:600; padding:4px 0; }
+.cal-day { text-align:center; font-size:12px; padding:6px 2px; border-radius:6px; cursor:pointer; transition:background 0.1s; }
+.cal-day:hover { background:#E0F5F5; color:#009A97; }
+.cal-day.other { color:#D3D1C7; }
+.cal-day.selected { background:#009A97; color:white; font-weight:600; }
+.cal-day.in-range { background:#E0F5F5; color:#007A77; border-radius:0; }
+.cal-day.range-start { border-radius:6px 0 0 6px; }
+.cal-day.range-end { border-radius:0 6px 6px 0; }
+.modal-footer { display:flex; align-items:center; justify-content:flex-end; gap:10px; margin-top:16px; }
+.btn-ok { height:36px; padding:0 24px; background:#009A97; color:white; border:none; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; }
+.btn-cancel-link { font-size:13px; color:#888780; cursor:pointer; background:none; border:none; font-family:inherit; }
+
+/* Consolidated lists */
+.consolidate-section { margin-top:20px; }
+.consolidate-section-title { font-size:11px; font-weight:600; color:#888780; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px; }
+.list-item { background:white; border:0.5px solid #e0dfd8; border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px; margin-bottom:6px; cursor:pointer; transition:border-color 0.12s; }
+.list-item:hover { border-color:#009A97; }
+.list-item-name { flex:1; font-size:13px; color:#009A97; font-weight:500; }
+.list-item-actions { display:flex; gap:6px; }
+.list-action-btn { background:none; border:none; cursor:pointer; color:#B4B2A9; padding:3px; border-radius:4px; }
+.list-action-btn:hover { color:#009A97; background:#E0F5F5; }
+.list-action-btn.del:hover { color:#E24B4A; background:#FCEBEB; }
+
+/* Consolidated view modal */
+.consol-modal { background:white; border-radius:14px; padding:20px; width:560px; max-height:80vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,0.15); }
+.consol-row { padding:10px 0; border-bottom:0.5px solid #f0f0f0; }
+.consol-row:last-child { border-bottom:none; }
+.consol-name { font-size:13px; font-weight:600; color:#1a1a18; margin-bottom:4px; }
+.consol-events { font-size:12px; color:#888780; margin-bottom:2px; }
+.consol-total { font-size:13px; font-weight:600; color:#009A97; }
 </style>
 </head>
 <body>
@@ -150,7 +194,7 @@ tr:hover td { background: #FAFAF8; }
       <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input class="search-input" type="text" placeholder="Search Name / Mobile Number / Order Reference" oninput="filterTable()" id="search-input" />
     </div>
-    <div class="loading-info">Loading events created from <span>05/04/2026</span> to <span>05/05/2026</span></div>
+    <div class="loading-info">Loading events created from <span id="loading-from">05/04/2026</span> to <span id="loading-to">05/05/2026</span></div>
   </div>
 
   <!-- FILTERS -->
@@ -399,6 +443,15 @@ tr:hover td { background: #FAFAF8; }
     </div>
   </div>
 
+  <!-- Consolidated Lists -->
+  <div class="consolidate-section" id="consol-section" style="display:none;">
+    <div class="consolidate-section-title">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M9 11l3 3L22 4"/></svg>
+      Consolidated Lists
+    </div>
+    <div id="consol-lists"></div>
+  </div>
+
 </div>
 
 </div>
@@ -516,6 +569,148 @@ function toggleExtra(id, btn) {
 }
 
 
+
+// ── DATE RANGE PICKER ──
+let calDate = new Date(2026, 4, 1);
+let dateFrom = new Date(2026, 3, 5);
+let dateTo   = new Date(2026, 4, 5);
+let selectingInput = 'from';
+
+function openDateModal() {
+  renderCal();
+  document.getElementById('date-modal').classList.add('open');
+}
+
+function selectInput(which) {
+  selectingInput = which;
+  document.getElementById('date-from-display').classList.toggle('active', which === 'from');
+  document.getElementById('date-to-display').classList.toggle('active', which === 'to');
+}
+
+function calNav(dir) {
+  calDate.setMonth(calDate.getMonth() + dir);
+  document.getElementById('cal-month').value = calDate.getMonth();
+  document.getElementById('cal-year').value = calDate.getFullYear();
+  renderCal();
+}
+
+function renderCal() {
+  const m = parseInt(document.getElementById('cal-month').value);
+  const y = parseInt(document.getElementById('cal-year').value);
+  calDate = new Date(y, m, 1);
+  const grid = document.getElementById('cal-grid');
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html = days.map(d => '<div class="cal-day-hd">' + d + '</div>').join('');
+  const first = new Date(y, m, 1).getDay();
+  const total = new Date(y, m+1, 0).getDate();
+  const prevTotal = new Date(y, m, 0).getDate();
+  for (let i = 0; i < first; i++) {
+    const d = prevTotal - first + 1 + i;
+    html += '<div class="cal-day other">' + d + '</div>';
+  }
+  for (let d = 1; d <= total; d++) {
+    const curr = new Date(y, m, d);
+    let cls = 'cal-day';
+    const isFrom = dateFrom && curr.toDateString() === dateFrom.toDateString();
+    const isTo = dateTo && curr.toDateString() === dateTo.toDateString();
+    const inRange = dateFrom && dateTo && curr > dateFrom && curr < dateTo;
+    if (isFrom) cls += ' selected range-start';
+    else if (isTo) cls += ' selected range-end';
+    else if (inRange) cls += ' in-range';
+    html += '<div class="' + cls + '" onclick="pickDay(' + d + ',' + m + ',' + y + ')">' + d + '</div>';
+  }
+  let rem = 42 - first - total;
+  for (let d = 1; d <= rem; d++) html += '<div class="cal-day other">' + d + '</div>';
+  grid.innerHTML = html;
+}
+
+function pickDay(d, m, y) {
+  const picked = new Date(y, m, d);
+  if (selectingInput === 'from') {
+    dateFrom = picked;
+    document.getElementById('date-from-display').textContent = picked.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+    selectInput('to');
+  } else {
+    dateTo = picked < dateFrom ? dateFrom : picked;
+    document.getElementById('date-to-display').textContent = dateTo.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+  }
+  renderCal();
+}
+
+function applyDateRange() {
+  document.getElementById('loading-from').textContent = dateFrom.toLocaleDateString('en-AU');
+  document.getElementById('loading-to').textContent = dateTo.toLocaleDateString('en-AU');
+  closeModal('date-modal');
+}
+
+// ── CONSOLIDATE ──
+let consolLists = [];
+let consolCount = 0;
+
+function consolidate() {
+  consolCount++;
+  const rows = Array.from(document.querySelectorAll('#orders-body tr'));
+  const groups = {};
+  rows.forEach(row => {
+    if (row.style.display === 'none') return;
+    const name = row.cells[0]?.textContent.trim();
+    const event = row.cells[2]?.textContent.trim();
+    const purchase = row.cells[5]?.textContent.trim();
+    const priceText = row.cells[6]?.textContent.trim().replace(/[^\d.]/g,'');
+    const price = parseFloat(priceText) || 0;
+    if (!name) return;
+    if (!groups[name]) groups[name] = { events: [], total: 0 };
+    groups[name].events.push({ event, purchase, price });
+    groups[name].total += price;
+  });
+
+  const listId = 'list-' + consolCount;
+  consolLists.push({ id: listId, name: 'List ' + consolCount, groups });
+
+  // Show section
+  document.getElementById('consol-section').style.display = 'block';
+  renderConsolLists();
+}
+
+function renderConsolLists() {
+  const wrap = document.getElementById('consol-lists');
+  wrap.innerHTML = '';
+  consolLists.forEach((list, idx) => {
+    const item = document.createElement('div');
+    item.className = 'list-item';
+    item.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>'
+      + '<span class="list-item-name">' + list.name + '</span>'
+      + '<div class="list-item-actions">'
+      + '<button class="list-action-btn" title="View" onclick="viewConsolList(' + idx + ')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>'
+      + '<button class="list-action-btn del" title="Delete" onclick="deleteConsolList(' + idx + ')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>'
+      + '</div>';
+    item.querySelector('.list-item-name').onclick = () => viewConsolList(idx);
+    wrap.appendChild(item);
+  });
+}
+
+function viewConsolList(idx) {
+  const list = consolLists[idx];
+  document.getElementById('consol-modal-title').textContent = list.name;
+  let body = '';
+  Object.entries(list.groups).forEach(([name, data]) => {
+    const eventLines = data.events.map(e => e.event + (e.purchase ? ' — ' + e.purchase : '')).join('<br/>');
+    body += '<div class="consol-row">'
+      + '<div class="consol-name">' + name + '</div>'
+      + '<div class="consol-events">' + eventLines + '</div>'
+      + '<div class="consol-total">Total: $' + data.total.toFixed(2) + '</div>'
+      + '</div>';
+  });
+  document.getElementById('consol-modal-body').innerHTML = body;
+  document.getElementById('consol-view-modal').classList.add('open');
+}
+
+function deleteConsolList(idx) {
+  consolLists.splice(idx, 1);
+  if (consolLists.length === 0) document.getElementById('consol-section').style.display = 'none';
+  else renderConsolLists();
+}
+
 // ── PAGINATION ──
 let currentPage = 1;
 let rowsPerPage = 10;
@@ -576,5 +771,47 @@ function sortTable(col) {
   rows.forEach(r => tbody.appendChild(r));
 }
 </script>
+
+<!-- Date Range Picker -->
+<div class="modal-backdrop" id="date-modal">
+  <div class="date-modal">
+    <div class="date-inputs">
+      <div class="date-input-wrap active" id="date-from-display" onclick="selectInput('from')">May 5, 2026</div>
+      <div class="date-input-wrap" id="date-to-display" onclick="selectInput('to')">May 5, 2026</div>
+    </div>
+    <div class="cal-header">
+      <button class="cal-nav" onclick="calNav(-1)">&#8249;</button>
+      <div class="cal-month-year">
+        <select class="cal-select" id="cal-month" onchange="renderCal()">
+          <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+          <option value="3">April</option><option value="4" selected>May</option><option value="5">June</option>
+          <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+          <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+        </select>
+        <select class="cal-select" id="cal-year" onchange="renderCal()">
+          <option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option>
+        </select>
+      </div>
+      <button class="cal-nav" onclick="calNav(1)">&#8250;</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="modal-footer">
+      <button class="btn-ok" onclick="applyDateRange()">Ok</button>
+      <button class="btn-cancel-link" onclick="closeModal('date-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Consolidated List View -->
+<div class="modal-backdrop" id="consol-view-modal">
+  <div class="consol-modal">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div style="font-size:16px;font-weight:600;color:#1a1a18;" id="consol-modal-title">List 1</div>
+      <button onclick="closeModal('consol-view-modal')" style="background:none;border:none;cursor:pointer;color:#888780;font-size:18px;">×</button>
+    </div>
+    <div id="consol-modal-body"></div>
+  </div>
+</div>
+
 </body>
 </html>
