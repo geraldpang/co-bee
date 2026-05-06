@@ -45,7 +45,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
 
   /* FEED  */
   .feed { padding: 12px; display: flex; flex-direction: column; gap: 12px; }
-  .event-card { cursor:pointer; background: white; border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; transition: border-color 0.15s; }
+  .event-card { cursor:pointer; background: white; border: 0.5px solid #e0dfd8; border-radius: 12px; overflow: hidden; transition: border-color 0.15s; box-shadow:0 1px 6px rgba(0,0,0,0.05); }
   .event-card:hover { border-color: #009A97; }
   .event-card * { cursor: pointer; }
   .card-header { padding: 12px 14px 10px; display: flex; align-items: center; justify-content: space-between; }
@@ -55,8 +55,8 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .card-badges { display: flex; align-items: center; gap: 6px; }
   .closing-text { font-size: 11px; color: #E87722; font-weight: 500; }
   .buy-badge { font-size: 11px; font-weight: 500; border-radius: 12px; padding: 3px 9px; color: white; }
-  .card-img { background: #D4ECEC; height: 180px; display: flex; align-items: center; justify-content: center; }
-  .card-body { padding: 12px 14px 14px; }
+  .card-img { background: #E0F5F5; height: 200px; display: flex; align-items: center; justify-content: center; }
+  .card-body { padding: 12px 14px 6px; }
   .card-title { font-size: 14px; font-weight: 500; color: #009A97; margin-bottom: 4px; }
   .card-desc { font-size: 13px; color: #666; line-height: 1.5; }
 
@@ -304,7 +304,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .group-search-top { padding: 10px 0 6px; background: #F4F6F8; position: relative; display: flex; justify-content: center; }
   .group-search-top .inner { width: 100%; max-width: 600px; padding: 0 14px; display: flex; align-items: center; gap: 12px; }
   .group-search-top .grp-lbl { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
-  .group-search-top .s-wrap { position: relative; width: 200px; flex-shrink: 0; margin-left: auto; }
+  .group-search-top .s-wrap { position: relative; flex: 1; min-width: 0; }
   .group-search-top .s-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #B4B2A9; }
   .group-search-top .s-input {
     width: 100%; height: 32px; border: 0.5px solid #D3D1C7;
@@ -397,7 +397,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .star.empty { color: #D3D1C7; }
   .rating-score { font-size: 12px; font-weight: 600; color: #1a1a18; }
   .rating-count { font-size: 11px; color: #888; }
-  .card-info-grid { display:grid;grid-template-columns:72px 1fr;gap:3px 0;font-size:11px;padding:8px 14px 10px;border-top:0.5px solid #f0f0f0;}
+  .card-info-grid { display:grid;grid-template-columns:72px 1fr;gap:3px 0;font-size:11px;padding:0 14px 8px;}
   .card-info-lbl { color:#888780; }
   .card-info-val { color:#1a1a18; }
   .rating-preview { font-size: 11px; color: #888; font-style: italic; padding: 0 14px 10px; margin-top:0; line-height: 1.4; }
@@ -1900,7 +1900,7 @@ select:focus { border-color: #009A97; }
         <div class="s-wrap">
           <svg class="s-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input class="s-input" id="group-search-input" placeholder="Search for a group to join…" oninput="searchGroups(this.value)" autocomplete="off" />
-          <div id="group-search-preview" style="display:none;position:absolute;top:100%;left:0;right:0;background:white;border:0.5px solid #D3D1C7;border-radius:0 0 10px 10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:100;max-height:220px;overflow-y:auto;"></div>
+          <div id="group-search-preview" style="display:none;position:absolute;top:calc(100% + 4px);left:-14px;right:-14px;background:white;border:0.5px solid #D3D1C7;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.12);z-index:100;max-height:260px;overflow-y:auto;"></div>
         </div>
       </div>
       <!-- Dropdown results -->
