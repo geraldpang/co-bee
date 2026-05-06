@@ -1455,8 +1455,6 @@ select:focus { border-color: #009A97; }
             <div><div style="font-size:13px;font-weight:600;color:#1a1a18;">Minh Cong</div><div style="font-size:11px;color:#888780;">M6 group</div></div>
           </div>
           <div style="text-align:right;">
-            <div style="font-size:11px;color:#E8971A;font-weight:500;">29-05-2026</div>
-            <div style="font-size:11px;color:#E8971A;margin-bottom:4px;">10AM - 5PM</div>
             <div id="ev2-buys" style="background:#f0f0f0;color:#888780;font-size:11px;font-weight:700;border-radius:20px;padding:3px 10px;display:inline-block;">1 BUY</div>
           </div>
         </div>
@@ -1478,19 +1476,89 @@ select:focus { border-color: #009A97; }
             <!-- Order summary card -->
       <div style="background:white;border-radius:14px;border:0.5px solid #e0dfd8;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,0.04);">
         <div style="padding:12px 14px;border-bottom:0.5px solid #f0f0f0;">
-          <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:10px;">ORDER SUMMARY</div>
-          <div id="ev2-items" style="display:flex;flex-direction:column;gap:8px;"></div>
+          <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:12px;">ORDER SUMMARY</div>
+          <!-- Items -->
+          <div style="display:flex;flex-direction:column;gap:0;">
+
+            <!-- Regular item -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid #f8f8f8;">
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;color:#1a1a18;">Spec</div>
+                <div style="font-size:11px;color:#888780;margin-top:1px;">Frame: Blue · Lens: Clear</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0;margin-left:12px;">
+                <div style="font-size:12px;color:#888780;">QTY: 1</div>
+                <div style="font-size:13px;font-weight:600;color:#1a1a18;">$20.00</div>
+              </div>
+            </div>
+
+            <!-- Item with option - different option -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid #f8f8f8;">
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;color:#1a1a18;">Spec</div>
+                <div style="font-size:11px;color:#888780;margin-top:1px;">Frame: Red · Lens: Tinted</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0;margin-left:12px;">
+                <div style="font-size:12px;color:#888780;">QTY: 1</div>
+                <div style="font-size:13px;font-weight:600;color:#1a1a18;">$20.00</div>
+              </div>
+            </div>
+
+            <!-- Toothpaste -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid #f8f8f8;">
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;color:#1a1a18;">Toothpaste</div>
+                <div style="font-size:11px;color:#888780;margin-top:1px;">Clean teeth</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0;margin-left:12px;">
+                <div style="font-size:12px;color:#888780;">QTY: 2</div>
+                <div style="font-size:13px;font-weight:600;color:#1a1a18;">$4.00</div>
+              </div>
+            </div>
+
+            <!-- Chestnut split case -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;">
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;color:#1a1a18;">Chestnut</div>
+                <div style="font-size:11px;color:#888780;margin-top:1px;">Individual (split case · 1/6)</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0;margin-left:12px;">
+                <div style="font-size:12px;color:#888780;">QTY: 1</div>
+                <div style="font-size:13px;font-weight:600;color:#1a1a18;">$3.00</div>
+              </div>
+            </div>
+
+          </div>
         </div>
+        <!-- Totals -->
         <div style="padding:12px 14px;">
-          <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
-            <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Subtotal</span><span id="ev2-total" style="color:#1a1a18;font-weight:500;">$0.00</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Discount</span><span style="color:#888780;">$0.00 (TBC)</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Delivery</span><span style="color:#888780;">$0.00 (TBC)</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Admin fee</span><span style="color:#888780;">$0.00</span></div>
+          <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="color:#888780;">Subtotal</span>
+              <span id="ev2-total" style="color:#1a1a18;font-weight:500;">$47.00</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="color:#888780;">Discount</span>
+                <span style="font-size:10px;color:#888780;background:#f0f0f0;border-radius:4px;padding:1px 5px;">TBC</span>
+              </div>
+              <span style="color:#888780;">$0.00</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="color:#888780;">Delivery</span>
+                <span style="font-size:10px;color:#888780;background:#f0f0f0;border-radius:4px;padding:1px 5px;">TBC</span>
+              </div>
+              <span style="color:#888780;">$0.00</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="color:#888780;">Admin fee</span>
+              <span style="color:#888780;">$0.00</span>
+            </div>
           </div>
           <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid #e0dfd8;display:flex;justify-content:space-between;align-items:center;">
             <span style="font-size:14px;font-weight:700;color:#1a1a18;">Total</span>
-            <span id="ev2-final" style="font-size:18px;font-weight:700;color:#1a1a18;">$0.00</span>
+            <span id="ev2-final" style="font-size:18px;font-weight:700;color:#1a1a18;">$47.00</span>
           </div>
         </div>
         <div style="padding:12px 14px;border-top:0.5px solid #f0f0f0;background:#FAFAF8;">
@@ -1503,8 +1571,8 @@ select:focus { border-color: #009A97; }
       <div style="background:white;border-radius:14px;border:0.5px solid #e0dfd8;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 6px rgba(0,0,0,0.04);">
 
         <!-- Step 1 -->
-        <div style="background:#FAFAF8;border-bottom:0.5px solid #e0dfd8;padding:12px 14px;display:flex;align-items:center;gap:10px;">
-          <div style="width:24px;height:24px;border-radius:50%;background:#1a1a18;color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+        <div style="background:#E0F5F5;border-bottom:0.5px solid #80CCCB;padding:12px 14px;display:flex;align-items:center;gap:10px;">
+          <div style="width:24px;height:24px;border-radius:50%;background:#009A97;color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
           <div>
             <div style="font-size:13px;font-weight:600;color:#1a1a18;">Scan to Pay</div>
             <div style="font-size:11px;color:#888780;">Pay <strong id="ev2-payamt" style="color:#1a1a18;">$0.00</strong> to <strong style="color:#1a1a18;">83062355</strong></div>
@@ -1547,10 +1615,10 @@ select:focus { border-color: #009A97; }
 
         <!-- Step 2 -->
         <div style="border-top:0.5px solid #e0dfd8;">
-          <div style="background:#FAFAF8;border-bottom:0.5px solid #e0dfd8;padding:12px 14px;display:flex;align-items:center;gap:10px;">
-            <div style="width:24px;height:24px;border-radius:50%;background:#1a1a18;color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div style="background:#E0F5F5;border-bottom:0.5px solid #80CCCB;padding:12px 14px;display:flex;align-items:center;gap:10px;">
+            <div style="width:24px;height:24px;border-radius:50%;background:#009A97;color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
             <div>
-              <div style="font-size:13px;font-weight:600;color:#1a1a18;">Upload Payment Proof</div>
+              <div style="font-size:13px;font-weight:600;color:#007A77;">Upload Payment Proof</div>
               <div style="font-size:11px;color:#888780;">Attach your PayNow screenshot (do not attach SMS)</div>
             </div>
           </div>
