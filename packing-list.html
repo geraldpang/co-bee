@@ -133,7 +133,7 @@ tr.buyer-row:hover > td { background: #FAFAF8; cursor: pointer; }
       </div>
       <button class="btn-primary" onclick="openNewPackage()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        New Package
+        New Packing List
       </button>
     </div>
 
@@ -209,7 +209,7 @@ tr.buyer-row:hover > td { background: #FAFAF8; cursor: pointer; }
       </div>
     </div>
 
-    <div class="search-row">
+      <div class="search-row">
       <div class="search-wrap">
         <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input class="search-input" type="text" placeholder="Search name / mobile / order ref..." oninput="filterBuyers(this.value)" />
@@ -221,94 +221,147 @@ tr.buyer-row:hover > td { background: #FAFAF8; cursor: pointer; }
         <thead>
           <tr>
             <th>Contact</th>
+            <th>Events</th>
             <th>Orders</th>
-            <th>Qty</th>
+            <th>Address</th>
+            <th>Total Cost</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody id="buyers-body">
 
-          <tr class="buyer-row" onclick="toggleDetails('d1')">
+          <!-- BUYER 1: Minh Cong -->
+          <tr class="buyer-row">
             <td>
               <div style="font-weight:500;">Minh Cong</div>
               <div style="color:#888780;font-size:11px;">09622240816</div>
-              <button class="show-details-btn" id="btn-d1">
+            </td>
+            <td style="font-size:12px;">
+              <div style="color:#009A97;font-size:11px;font-weight:500;">atea 1</div>
+              <div style="color:#009A97;font-size:11px;font-weight:500;">new event</div>
+              <div style="color:#009A97;font-size:11px;font-weight:500;">order without login</div>
+            </td>
+            <td>
+              <button class="show-details-btn" id="btn-d1" onclick="toggleDetails('d1',this)">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 Show details
               </button>
               <div class="details-panel" id="d1">
                 <div class="detail-event-group">
                   <div class="detail-event-name">atea 1</div>
-                  <div class="detail-item-row"><span style="flex:1;">Dev cùi (qty:1)</span><span>$10.00</span></div>
+                  <div class="detail-item-row"><span style="flex:1;">Dev cùi</span><span style="margin:0 8px;color:#B4B2A9;">x1</span><span>$10.00</span></div>
                 </div>
                 <div class="detail-event-group">
                   <div class="detail-event-name">new event</div>
-                  <div class="detail-item-row"><span style="flex:1;">Item 1 (qty:1)</span><span>$10.00</span></div>
-                  <div class="detail-item-row"><span style="flex:1;">Bundle Pack A (qty:1)</span><span>$25.00</span></div>
+                  <div class="detail-item-row"><span style="flex:1;">Item 1</span><span style="margin:0 8px;color:#B4B2A9;">x1</span><span>$10.00</span></div>
+                  <div class="detail-item-row"><span style="flex:1;">Bundle Pack A</span><span style="margin:0 8px;color:#B4B2A9;">x1</span><span>$25.00</span></div>
                 </div>
                 <div class="detail-event-group">
                   <div class="detail-event-name">order without login</div>
-                  <div class="detail-item-row"><span style="flex:1;">pro 1 (qty:1)</span><span>$1.00</span></div>
+                  <div class="detail-item-row"><span style="flex:1;">pro 1</span><span style="margin:0 8px;color:#B4B2A9;">x1</span><span>$1.00</span></div>
                 </div>
-                <div style="display:flex;justify-content:flex-end;font-size:12px;font-weight:600;padding-top:6px;border-top:0.5px solid #e0dfd8;color:#1a1a18;">Total: $46.00</div>
               </div>
             </td>
-            <td style="vertical-align:middle;">4 products</td>
-            <td style="vertical-align:middle;font-weight:600;">5 qty</td>
-            <td style="vertical-align:middle;"><span class="status-badge status-none">Paid 0 / 3</span></td>
+            <td>
+              <div style="font-size:12px;color:#1a1a18;line-height:1.4;" id="addr-d1">123 Orchard Rd<br/>#05-12, S238858</div>
+              <button onclick="changeAddress('d1')" style="font-size:11px;color:#009A97;background:none;border:none;cursor:pointer;padding:0;margin-top:3px;font-family:inherit;">Change</button>
+            </td>
+            <td style="white-space:nowrap;vertical-align:top;">
+              <div style="font-weight:600;font-size:13px;">$46.00</div>
+              <div style="font-size:10px;color:#888780;margin-top:2px;line-height:1.6;">
+                Items: $46.00<br/>
+                Delivery: $0.00<br/>
+                Admin: $0.00<br/>
+                <span style="color:#E24B4A;">Disc: -$0.00</span>
+              </div>
+            </td>
+            <td style="vertical-align:top;"><span class="status-badge status-none">Paid 0 / 3</span></td>
           </tr>
 
-          <tr class="buyer-row" onclick="toggleDetails('d2')">
+          <!-- BUYER 2: Gerald Pang -->
+          <tr class="buyer-row">
             <td>
               <div style="font-weight:500;">Gerald Pang</div>
               <div style="color:#888780;font-size:11px;">0469787098</div>
-              <button class="show-details-btn" id="btn-d2">
+            </td>
+            <td style="font-size:12px;">
+              <div style="color:#009A97;font-size:11px;font-weight:500;">atea 1</div>
+              <div style="color:#009A97;font-size:11px;font-weight:500;">Test event (no login)</div>
+            </td>
+            <td>
+              <button class="show-details-btn" id="btn-d2" onclick="toggleDetails('d2',this)">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 Show details
               </button>
               <div class="details-panel" id="d2">
                 <div class="detail-event-group">
                   <div class="detail-event-name">atea 1</div>
-                  <div class="detail-item-row"><span style="flex:1;">Dev cùi (qty:1)</span><span>$10.00</span></div>
+                  <div class="detail-item-row"><span style="flex:1;">Dev cùi</span><span style="margin:0 8px;color:#B4B2A9;">x1</span><span>$10.00</span></div>
                 </div>
                 <div class="detail-event-group">
                   <div class="detail-event-name">Test event (no login)</div>
-                  <div class="detail-item-row"><span style="flex:1;">Item 1 (qty:1)</span><span>$59.00</span></div>
-                  <div class="detail-item-row"><span style="flex:1;">item 2 (qty:1)</span><span>$59.00</span></div>
+                  <div class="detail-item-row"><span style="flex:1;">Item 1</span><span style="margin:0 8px;color:#B4B2A9;">x1</span><span>$59.00</span></div>
+                  <div class="detail-item-row"><span style="flex:1;">item 2</span><span style="margin:0 8px;color:#B4B2A9;">x1</span><span>$59.00</span></div>
                 </div>
-                <div style="display:flex;justify-content:flex-end;font-size:12px;font-weight:600;padding-top:6px;border-top:0.5px solid #e0dfd8;color:#1a1a18;">Total: $128.00</div>
               </div>
             </td>
-            <td style="vertical-align:middle;">3 products</td>
-            <td style="vertical-align:middle;font-weight:600;">3 qty</td>
-            <td style="vertical-align:middle;"><span class="status-badge status-part">Paid 1 / 2</span></td>
+            <td>
+              <div style="font-size:12px;color:#1a1a18;line-height:1.4;" id="addr-d2">1 Raffles Place<br/>#20-01, S048616</div>
+              <button onclick="changeAddress('d2')" style="font-size:11px;color:#009A97;background:none;border:none;cursor:pointer;padding:0;margin-top:3px;font-family:inherit;">Change</button>
+            </td>
+            <td style="white-space:nowrap;vertical-align:top;">
+              <div style="font-weight:600;font-size:13px;">$128.00</div>
+              <div style="font-size:10px;color:#888780;margin-top:2px;line-height:1.6;">
+                Items: $128.00<br/>
+                Delivery: $0.00<br/>
+                Admin: $0.00<br/>
+                <span style="color:#E24B4A;">Disc: -$0.00</span>
+              </div>
+            </td>
+            <td style="vertical-align:top;"><span class="status-badge status-part">Paid 1 / 2</span></td>
           </tr>
 
-          <tr class="buyer-row" onclick="toggleDetails('d3')">
+          <!-- BUYER 3: Janet Lee -->
+          <tr class="buyer-row">
             <td>
               <div style="font-weight:500;">Janet Lee</div>
               <div style="color:#888780;font-size:11px;">0412345678</div>
-              <button class="show-details-btn" id="btn-d3">
+            </td>
+            <td style="font-size:12px;">
+              <div style="color:#009A97;font-size:11px;font-weight:500;">Test event (no login)</div>
+            </td>
+            <td>
+              <button class="show-details-btn" id="btn-d3" onclick="toggleDetails('d3',this)">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 Show details
               </button>
               <div class="details-panel" id="d3">
                 <div class="detail-event-group">
                   <div class="detail-event-name">Test event (no login)</div>
-                  <div class="detail-item-row"><span style="flex:1;">Item 1 (qty:2)</span><span>$118.00</span></div>
+                  <div class="detail-item-row"><span style="flex:1;">Item 1</span><span style="margin:0 8px;color:#B4B2A9;">x2</span><span>$118.00</span></div>
                 </div>
-                <div style="display:flex;justify-content:flex-end;font-size:12px;font-weight:600;padding-top:6px;border-top:0.5px solid #e0dfd8;color:#1a1a18;">Total: $118.00</div>
               </div>
             </td>
-            <td style="vertical-align:middle;">1 product</td>
-            <td style="vertical-align:middle;font-weight:600;">2 qty</td>
-            <td style="vertical-align:middle;"><span class="status-badge status-full">Paid 1 / 1</span></td>
+            <td>
+              <div style="font-size:12px;color:#E8971A;font-weight:500;" id="addr-d3">No address — assign</div>
+              <button onclick="changeAddress('d3')" style="font-size:11px;color:#009A97;background:none;border:none;cursor:pointer;padding:0;margin-top:3px;font-family:inherit;">+ Add address</button>
+            </td>
+            <td style="white-space:nowrap;vertical-align:top;">
+              <div style="font-weight:600;font-size:13px;">$118.00</div>
+              <div style="font-size:10px;color:#888780;margin-top:2px;line-height:1.6;">
+                Items: $118.00<br/>
+                Delivery: $0.00<br/>
+                Admin: $0.00<br/>
+                <span style="color:#E24B4A;">Disc: -$0.00</span>
+              </div>
+            </td>
+            <td style="vertical-align:top;"><span class="status-badge status-full">Paid 1 / 1</span></td>
           </tr>
 
         </tbody>
       </table>
     </div>
-  </div>
+</div>
 
 </div>
 
@@ -316,7 +369,7 @@ tr.buyer-row:hover > td { background: #FAFAF8; cursor: pointer; }
 <div class="modal-backdrop" id="new-pkg-modal">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-hd">
-      <span class="modal-title">New Package</span>
+      <span class="modal-title">New Packing List</span>
       <button class="modal-close" onclick="closeModal('new-pkg-modal')">×</button>
     </div>
     <div class="modal-body">
@@ -338,7 +391,7 @@ tr.buyer-row:hover > td { background: #FAFAF8; cursor: pointer; }
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-primary" style="width:100%;justify-content:center;height:42px;font-size:14px;" onclick="createPackage()">Create Package</button>
+      <button class="btn-primary" style="width:100%;justify-content:center;height:42px;font-size:14px;" onclick="createPackage()">Create List</button>
     </div>
   </div>
 </div>
@@ -423,9 +476,27 @@ function backToList() {
 }
 
 // ── EXPAND/COLLAPSE ──
-function toggleDetails(id) {
+function changeAddress(buyerId) {
+  window._currentAddrBuyer = buyerId;
+  openModal('addr-modal');
+  document.querySelectorAll('input[name="addr-sel"]').forEach((r,i) => r.checked = i===0);
+}
+
+function applyAddress() {
+  const sel = document.querySelector('input[name="addr-sel"]:checked');
+  const idx = [...document.querySelectorAll('input[name="addr-sel"]')].indexOf(sel);
+  const addresses = [
+    '123 Orchard Rd<br/>#05-12, S238858',
+    '1 Raffles Place<br/>#20-01, S048616',
+    document.getElementById('custom-addr-input').value || 'Custom address'
+  ];
+  const addrEl = document.getElementById('addr-' + window._currentAddrBuyer);
+  if (addrEl) addrEl.innerHTML = addresses[idx];
+  closeModal('addr-modal');
+}
+
+function toggleDetails(id, btn) {
   const panel = document.getElementById(id);
-  const btn = document.getElementById('btn-' + id);
   const isOpen = panel.classList.contains('open');
   panel.classList.toggle('open', !isOpen);
   btn.innerHTML = isOpen
@@ -453,7 +524,7 @@ document.querySelectorAll('.modal-backdrop').forEach(b => {
 
 // ── CREATE PACKAGE ──
 function createPackage() {
-  const name = document.getElementById('new-pkg-name').value.trim() || 'New Package';
+  const name = document.getElementById('new-pkg-name').value.trim() || 'New Packing List';
   const checked = document.querySelectorAll('#event-check-list input:checked');
   if (checked.length === 0) { alert('Please select at least one event.'); return; }
   closeModal('new-pkg-modal');
@@ -486,5 +557,45 @@ function updatePdfPage() {
   document.getElementById('pdf-page-total').textContent = pdfTotal;
 }
 </script>
+
+<!-- ADDRESS CHANGE MODAL -->
+<div class="modal-backdrop" id="addr-modal">
+  <div class="modal" style="width:360px;" onclick="event.stopPropagation()">
+    <div class="modal-hd">
+      <span class="modal-title">Select Address</span>
+      <button class="modal-close" onclick="closeModal('addr-modal')">×</button>
+    </div>
+    <div class="modal-body" style="padding:12px 16px;">
+      <label class="event-check-item">
+        <input type="radio" name="addr-sel" checked style="accent-color:#009A97;" />
+        <div>
+          <div class="event-check-label">Home <span style="font-size:10px;background:#E0F5F5;color:#009A97;border-radius:99px;padding:1px 7px;font-weight:600;">Default</span></div>
+          <div class="event-check-meta">123 Orchard Rd, #05-12, S238858</div>
+        </div>
+      </label>
+      <label class="event-check-item">
+        <input type="radio" name="addr-sel" style="accent-color:#009A97;" />
+        <div>
+          <div class="event-check-label">Office</div>
+          <div class="event-check-meta">1 Raffles Place, #20-01, S048616</div>
+        </div>
+      </label>
+      <label class="event-check-item">
+        <input type="radio" name="addr-sel" style="accent-color:#009A97;" />
+        <div>
+          <div class="event-check-label">Custom address</div>
+          <div class="event-check-meta">Enter manually</div>
+        </div>
+      </label>
+      <div style="margin-top:8px;">
+        <textarea id="custom-addr-input" placeholder="Enter address..." style="width:100%;height:60px;border:0.5px solid #D3D1C7;border-radius:8px;padding:8px;font-size:12px;font-family:inherit;outline:none;resize:none;display:none;"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" style="width:100%;justify-content:center;" onclick="applyAddress()">Apply</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
