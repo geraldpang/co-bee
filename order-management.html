@@ -697,42 +697,24 @@ function consolidate() {
   div.id = 'consol-table-' + listId;
   div.style.display = 'none';
 
-  let tableHTML = '<div class="table-wrap" style="margin-top:8px;"><table><thead><tr>'
+  // ── Packing List button + checkbox table ──
+  const packBar = document.createElement('div');
+  packBar.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;margin-bottom:6px;';
+  packBar.innerHTML = '<span style="font-size:12px;color:#888780;" id="csel-' + listId + '">All selected</span>'
+    + '<button onclick="createPackingFromConsol(\'' + listId + '\')" style="height:30px;padding:0 12px;border:1px solid #009A97;border-radius:8px;background:white;font-size:12px;font-weight:600;color:#009A97;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;">'
+    + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>'
+    + '+ New Packing List</button>';
+  div.appendChild(packBar);
+
+  let tableHTML = '<div class="table-wrap"><table><thead><tr>'
+    + '<th style="width:32px;padding:0 8px;"><input type="checkbox" checked id="call-' + listId + '" style="accent-color:#009A97;" onchange="toggleAllCb(\'' + listId + '\',this)"></th>'
     + '<th>Name</th>'
     + '<th>Mobile</th>'
-    + '<th>Event</th>'
-    + '<th>Closing Date</th>'
     + '<th>Purchase</th>'
     + '<th>Total Price</th>'
     + '<th>Payment Status</th>'
     + '<th>Fulfilment</th>'
     + '</tr></thead><tbody>';
-
-  // ── EXAMPLE ROW (demo) ──
-  const demoId = 'demo-' + listId;
-  tableHTML += '<tr style="background:#fafff9;">'
-    + '<td><span class="name-link">Gerald Pang</span></td>'
-    + '<td>0469787098</td>'
-    + '<td>'
-    +   '<div class="col-event"><span class="event-text">atea 1</span></div>'
-    +   '<div id="' + demoId + '-events" style="display:none;">'
-    +     '<div class="col-event"><span class="event-text">new event</span></div>'
-    +     '<div class="col-event"><span class="event-text">order without login</span></div>'
-    +   '</div>'
-    +   '<button class="purchase-more" style="margin-top:4px;" onclick="toggleConsolRow(\'' + demoId + '\',this)">+2 more</button>'
-    + '</td>'
-    + '<td>'
-    +   '<div>20/04/2026</div>'
-    +   '<div id="' + demoId + '-closing" style="display:none;"><div>15/05/2026</div><div>26/04/2026</div></div>'
-    + '</td>'
-    + '<td class="purchase-cell">'
-    +   '<div>Dev cùi (qty:1)</div>'
-    +   '<div id="' + demoId + '-purchase" style="display:none;"><div>Item 1 (qty:1)</div><div>pro 1 (qty:1)</div></div>'
-    + '</td>'
-    + '<td style="font-weight:600;color:#009A97;white-space:nowrap;">$21.00<div style="font-size:10px;color:#888780;font-weight:400;">3 events</div></td>'
-    + '<td><span class="badge pay-verified"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg> Verified</span></td>'
-    + '<td><select class="ful-select"><option selected>Verified</option><option>Collected</option></select></td>'
-    + '</tr>';
 
   order.forEach(name => {
     const data = groups[name];
@@ -740,33 +722,19 @@ function consolidate() {
     const first = data.entries[0];
     const rest = data.entries.slice(1);
     const rowId = 'cr-' + listId + '-' + name.replace(/\s/g,'_');
-
-    // First event row
-    const firstEvent = '<div class="col-event"><span class="event-text" title="' + first.event + '">' + first.event + '</span></div>';
     const firstPurchase = '<div>' + (first.purchase || '—') + '</div>';
-
-    // Extra rows (hidden by default)
-    let extraEvents = '', extraPurchase = '';
-    rest.forEach(e => {
-      extraEvents += '<div class="col-event"><span class="event-text" title="' + e.event + '">' + e.event + '</span></div>';
-      extraPurchase += '<div>' + (e.purchase || '—') + '</div>';
-    });
-
-    const expandBtn = isMulti
-      ? '<button class="purchase-more" style="margin-top:4px;" onclick="toggleConsolRow(\'' + rowId + '\',this)">+' + rest.length + ' more</button>'
-      : '';
-
-    const extraDiv = isMulti
-      ? '<div id="' + rowId + '-events" style="display:none;">' + extraEvents + '</div>'
-        + '<div id="' + rowId + '-purchase" style="display:none;">' + extraPurchase + '</div>'
-      : '';
-
+    let extraPurchase = '';
+    rest.forEach(e => { extraPurchase += '<div>' + (e.purchase || '—') + '</div>'; });
+    const purchaseCell = isMulti
+      ? '<div style="font-size:11px;color:#888780;" id="' + rowId + '-sum">' + data.entries.length + ' items</div>'
+        + '<div id="' + rowId + '-det" style="display:none;">' + firstPurchase + extraPurchase + '</div>'
+        + '<button class="purchase-more" style="margin-top:3px;" onclick="toggleConsolRow(\'' + rowId + '\',this)">Show details</button>'
+      : firstPurchase;
     tableHTML += '<tr>'
+      + '<td style="padding:0 8px;text-align:center;"><input type="checkbox" checked class="ccb-' + listId + '" style="accent-color:#009A97;" onchange="updateCsel(\'' + listId + '\')"></td>'
       + '<td><span class="name-link">' + name + '</span></td>'
       + '<td>' + data.mobile + '</td>'
-      + '<td>' + firstEvent + (isMulti ? '<div id="' + rowId + '-events" style="display:none;">' + extraEvents + '</div>' + expandBtn : '') + '</td>'
-      + '<td>' + (first.closing || '—') + (isMulti ? '<div id="' + rowId + '-closing" style="display:none;">' + rest.map(e => '<div>' + e.closing + '</div>').join('') + '</div>' : '') + '</td>'
-      + '<td class="purchase-cell">' + firstPurchase + (isMulti ? '<div id="' + rowId + '-purchase" style="display:none;">' + extraPurchase + '</div>' : '') + '</td>'
+      + '<td class="purchase-cell">' + purchaseCell + '</td>'
       + '<td style="font-weight:600;color:#009A97;white-space:nowrap;">$' + data.total.toFixed(2) + (isMulti ? '<div style="font-size:10px;color:#888780;font-weight:400;">' + data.entries.length + ' events</div>' : '') + '</td>'
       + '<td>' + data.payBadge + '</td>'
       + '<td>' + data.fulSelect + '</td>'
@@ -774,7 +742,7 @@ function consolidate() {
   });
 
   tableHTML += '</tbody></table></div>';
-  div.innerHTML = tableHTML;
+  div.innerHTML += tableHTML;
   wrap.appendChild(div);
 
   // Switch to the new tab
@@ -802,15 +770,31 @@ function setTabMain(tabEl) {
   tabEl.classList.add('active');
 }
 
+function toggleAllCb(listId, cb) {
+  document.querySelectorAll('.ccb-' + listId).forEach(c => c.checked = cb.checked);
+  updateCsel(listId);
+}
+function updateCsel(listId) {
+  const all = document.querySelectorAll('.ccb-' + listId);
+  const checked = document.querySelectorAll('.ccb-' + listId + ':checked');
+  const lbl = document.getElementById('csel-' + listId);
+  if (lbl) lbl.textContent = checked.length + ' of ' + all.length + ' selected';
+  const allCb = document.getElementById('call-' + listId);
+  if (allCb) allCb.checked = checked.length === all.length;
+}
+function createPackingFromConsol(listId) {
+  const checked = document.querySelectorAll('.ccb-' + listId + ':checked');
+  if (checked.length === 0) { alert('Please select at least one name.'); return; }
+  window.parent.navigate('packing-list.html', null);
+}
+
 function toggleConsolRow(rowId, btn) {
-  const evEl = document.getElementById(rowId + '-events');
-  const purEl = document.getElementById(rowId + '-purchase');
-  const closEl = document.getElementById(rowId + '-closing');
-  const isHidden = evEl && evEl.style.display === 'none';
-  [evEl, purEl, closEl].forEach(el => { if (el) el.style.display = isHidden ? 'block' : 'none'; });
-  const count = btn.dataset.count || (btn.textContent.match(/\d+/) || [''])[0];
-  btn.dataset.count = count;
-  btn.textContent = isHidden ? '▴ less' : '+' + count + ' more';
+  const sum = document.getElementById(rowId + '-sum');
+  const det = document.getElementById(rowId + '-det');
+  const isHidden = det && det.style.display === 'none';
+  if (sum) sum.style.display = isHidden ? 'none' : 'block';
+  if (det) det.style.display = isHidden ? 'block' : 'none';
+  btn.textContent = isHidden ? 'Hide details' : 'Show details';
 }
 
 function removeConsolTab(listId) {
