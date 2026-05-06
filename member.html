@@ -1430,96 +1430,179 @@ select:focus { border-color: #009A97; }
     </div>
 
     <!-- SCREEN 2: Order confirmation + payment -->
-    <div id="ev-screen-2" style="display:none;">
+    <div id="ev-screen-2" style="display:none;padding:14px 14px 32px;">
+
       <!-- Order header -->
-      <div style="background:white;border-radius:12px;margin:12px 14px 0;overflow:hidden;border:0.5px solid #e0dfd8;">
-        <div style="text-align:center;padding:10px 14px 6px;font-size:13px;font-weight:600;color:#1a1a18;border-bottom:0.5px solid #f0f0f0;">ORDER NO: <span id="ev2-ordernum">1</span></div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="width:36px;height:36px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;">MC</div>
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.08em;margin-bottom:4px;">ORDER CONFIRMED</div>
+        <div style="font-size:22px;font-weight:700;color:#1a1a18;">Order #<span id="ev2-ordernum">1</span></div>
+      </div>
+
+      <!-- Event info card -->
+      <div style="background:white;border-radius:14px;border:0.5px solid #e0dfd8;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,0.04);">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:#E8971A;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;flex-shrink:0;">MC</div>
             <div><div style="font-size:13px;font-weight:600;color:#1a1a18;">Minh Cong</div><div style="font-size:11px;color:#888780;">M6 group</div></div>
           </div>
           <div style="text-align:right;">
-            <div style="font-size:11px;color:#E8971A;">29-05-2026</div>
-            <div style="font-size:11px;color:#E8971A;margin-bottom:3px;">10AM - 5PM</div>
-            <div id="ev2-buys" style="background:#E8971A;color:white;font-size:11px;font-weight:700;border-radius:4px;padding:2px 7px;">1 BUY</div>
+            <div style="font-size:11px;color:#E8971A;font-weight:500;">29-05-2026</div>
+            <div style="font-size:11px;color:#E8971A;margin-bottom:4px;">10AM - 5PM</div>
+            <div id="ev2-buys" style="background:#E8971A;color:white;font-size:11px;font-weight:700;border-radius:20px;padding:3px 10px;display:inline-block;">1 BUY</div>
           </div>
         </div>
-        <div style="padding:0 14px 12px;">
-          <div id="ev2-title" style="font-size:14px;font-weight:600;color:#009A97;margin-bottom:3px;"></div>
-          <div id="ev2-desc" style="font-size:12px;color:#888780;margin-bottom:8px;"></div>
-          <div style="display:grid;grid-template-columns:80px 1fr;gap:4px 0;font-size:12px;">
+        <div style="border-top:0.5px solid #f0f0f0;padding:12px 14px;">
+          <div id="ev2-title" style="font-size:14px;font-weight:700;color:#009A97;margin-bottom:3px;"></div>
+          <div id="ev2-desc" style="font-size:12px;color:#888780;margin-bottom:10px;"></div>
+          <div style="display:grid;grid-template-columns:80px 1fr;gap:5px 0;font-size:12px;">
             <span style="color:#888780;">Closing:</span><span style="color:#1a1a18;">15-05-2026</span>
             <span style="color:#888780;">Collection:</span><span style="color:#009A97;">29-05-2026</span>
-            <span style="color:#888780;">Address:</span><span style="color:#009A97;">206 Trương Định, Phường Châu Phú B</span>
+            <span style="color:#888780;">Address:</span><span style="color:#009A97;">Simei Street 1</span>
           </div>
-          <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px;font-size:11px;font-weight:600;">
-            <span style="color:#009A97;cursor:pointer;">EDIT</span>
-            <span style="color:#E24B4A;cursor:pointer;">CANCEL</span>
+          <div style="display:flex;justify-content:flex-end;gap:14px;margin-top:10px;">
+            <button style="background:none;border:none;font-size:12px;font-weight:600;color:#009A97;cursor:pointer;font-family:inherit;padding:0;">Edit</button>
+            <button style="background:none;border:none;font-size:12px;font-weight:600;color:#E24B4A;cursor:pointer;font-family:inherit;padding:0;">Cancel Order</button>
           </div>
         </div>
       </div>
 
-      <!-- Order items card -->
-      <div style="background:#E0F5F5;border-radius:12px;margin:10px 14px 0;padding:14px;">
-        <div id="ev2-items" style="margin-bottom:10px;"></div>
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
-          <div style="flex:1;">
-            <img style="width:80px;height:80px;border-radius:8px;object-fit:cover;background:#D3D1C7;" src="" onerror="this.style.background='#D3D1C7';this.removeAttribute('src')" />
-          </div>
-          <div style="flex:2;font-size:12px;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:#888780;">Total:</span><span style="font-weight:600;" id="ev2-total">$0.00</span></div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:#888780;">Discount:</span><span>$0.00 (TBC)</span></div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:#888780;">Delivery:</span><span>$0.00 (TBC)</span></div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:#888780;">Admin fee:</span><span>$0.00</span></div>
-            <div style="display:flex;justify-content:space-between;font-weight:700;font-size:13px;border-top:0.5px solid #80CCCB;padding-top:6px;"><span>Final:</span><span id="ev2-final" style="color:#009A97;">$0.00</span></div>
+      <!-- Order summary card -->
+      <div style="background:white;border-radius:14px;border:0.5px solid #e0dfd8;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,0.04);">
+        <div style="padding:12px 14px;border-bottom:0.5px solid #f0f0f0;">
+          <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:10px;">Order Summary</div>
+          <div id="ev2-items" style="display:flex;flex-direction:column;gap:6px;"></div>
+        </div>
+        <!-- Totals -->
+        <div style="padding:12px 14px;background:#FAFAF8;">
+          <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+            <div style="display:flex;justify-content:space-between;color:#888780;"><span>Subtotal</span><span id="ev2-total" style="color:#1a1a18;font-weight:500;">$0.00</span></div>
+            <div style="display:flex;justify-content:space-between;color:#888780;"><span>Discount</span><span>$0.00 (TBC)</span></div>
+            <div style="display:flex;justify-content:space-between;color:#888780;"><span>Delivery</span><span>$0.00 (TBC)</span></div>
+            <div style="display:flex;justify-content:space-between;color:#888780;"><span>Admin fee</span><span>$0.00</span></div>
+            <div style="border-top:0.5px solid #e0dfd8;margin-top:4px;padding-top:8px;display:flex;justify-content:space-between;font-size:14px;font-weight:700;">
+              <span>Total</span>
+              <span id="ev2-final" style="color:#009A97;">$0.00</span>
+            </div>
           </div>
         </div>
-        <div style="margin-top:10px;">
-          <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:5px;">NOTES TO THE HOST</div>
-          <textarea style="width:100%;height:70px;border:0.5px solid #80CCCB;border-radius:8px;padding:8px;font-size:12px;font-family:inherit;outline:none;resize:none;background:white;"></textarea>
+        <!-- Notes -->
+        <div style="padding:12px 14px;border-top:0.5px solid #f0f0f0;">
+          <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:6px;">NOTES TO THE HOST</div>
+          <textarea style="width:100%;height:60px;border:0.5px solid #D3D1C7;border-radius:8px;padding:8px 10px;font-size:12px;font-family:inherit;outline:none;resize:none;background:white;" placeholder="Optional notes for the host..."></textarea>
         </div>
       </div>
 
       <!-- Payment card -->
-      <div style="background:#E0F5F5;border-radius:12px;margin:10px 14px 0;padding:14px;">
-        <div style="font-size:13px;color:#1a1a18;margin-bottom:10px;text-align:center;line-height:1.6;">
-          <strong>Step 1:</strong> Please scan the following QR code to pay <strong id="ev2-payamt">$0.00</strong> to <strong>83062355</strong>
+      <div style="background:white;border-radius:14px;border:0.5px solid #e0dfd8;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 6px rgba(0,0,0,0.04);">
+
+        <!-- Step 1 header -->
+        <div style="background:#009A97;padding:14px 16px;">
+          <div style="font-size:13px;font-weight:600;color:white;margin-bottom:2px;">Step 1 — Scan to Pay</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.8);">Pay <strong id="ev2-payamt" style="color:white;">$0.00</strong> to <strong style="color:white;">83062355</strong></div>
         </div>
-        <div style="font-size:12px;color:#888780;text-align:center;margin-bottom:12px;">
-          Add your unique reference code <strong style="color:#1a1a18;">5uv9-no2</strong>
+
+        <div style="padding:16px;">
+          <!-- Reference code chip -->
+          <div style="display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
+            <div style="background:#E0F5F5;border-radius:8px;padding:8px 16px;text-align:center;">
+              <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:2px;">YOUR REFERENCE CODE</div>
+              <div style="font-size:16px;font-weight:700;color:#009A97;letter-spacing:0.1em;">5UV9-NO2</div>
+            </div>
+          </div>
+
+          <!-- QR code -->
+          <div style="border:0.5px solid #e0dfd8;border-radius:12px;padding:20px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;background:#FAFAF8;">
+            <svg width="140" height="140" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <!-- QR pattern -->
+              <rect width="100" height="100" fill="white"/>
+              <!-- Top-left finder -->
+              <rect x="10" y="10" width="25" height="25" fill="#1a1a18" rx="2"/>
+              <rect x="14" y="14" width="17" height="17" fill="white" rx="1"/>
+              <rect x="18" y="18" width="9" height="9" fill="#1a1a18" rx="1"/>
+              <!-- Top-right finder -->
+              <rect x="65" y="10" width="25" height="25" fill="#1a1a18" rx="2"/>
+              <rect x="69" y="14" width="17" height="17" fill="white" rx="1"/>
+              <rect x="73" y="18" width="9" height="9" fill="#1a1a18" rx="1"/>
+              <!-- Bottom-left finder -->
+              <rect x="10" y="65" width="25" height="25" fill="#1a1a18" rx="2"/>
+              <rect x="14" y="69" width="17" height="17" fill="white" rx="1"/>
+              <rect x="18" y="73" width="9" height="9" fill="#1a1a18" rx="1"/>
+              <!-- Data modules -->
+              <rect x="40" y="10" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="50" y="10" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="60" y="10" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="40" y="20" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="55" y="20" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="40" y="30" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="50" y="30" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="60" y="30" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="10" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="20" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="30" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="45" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="55" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="65" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="80" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="10" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="25" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="40" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="55" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="70" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="85" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="10" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="20" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="35" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="50" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="65" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="80" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="40" y="70" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="50" y="70" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="60" y="70" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="75" y="70" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="85" y="70" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="40" y="80" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="55" y="80" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="70" y="80" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="40" y="90" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="50" y="90" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="65" y="90" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="80" y="90" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+            </svg>
+          </div>
+
+          <!-- Download / reload -->
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:0;">
+            <button style="display:flex;align-items:center;gap:5px;color:#009A97;background:none;border:none;cursor:pointer;font-size:11px;font-family:inherit;padding:0;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download QR Code
+            </button>
+            <button style="color:#888780;background:none;border:none;cursor:pointer;font-size:11px;font-family:inherit;padding:0;">↻ Reload QR Code</button>
+          </div>
         </div>
-        <!-- QR code placeholder -->
-        <div style="background:white;border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;min-height:160px;">
-          <div style="text-align:center;">
-            <div style="width:120px;height:120px;border:2px solid #1a1a18;border-radius:4px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:8px;margin:0 auto;">
-              <div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div>
-              <div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div>
-              <div style="background:#1a1a18;border-radius:1px;"></div><div></div><div></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div>
-              <div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div>
-              <div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div>
+
+        <!-- Step 2 -->
+        <div style="border-top:0.5px solid #e0dfd8;">
+          <div style="background:#009A97;padding:14px 16px;">
+            <div style="font-size:13px;font-weight:600;color:white;margin-bottom:2px;">Step 2 — Upload Payment Proof</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.8);">Attach your PayNow screenshot (do not attach SMS)</div>
+          </div>
+          <div style="padding:16px;">
+            <div onclick="alert('Upload screenshot')" style="border:1.5px dashed #80CCCB;border-radius:12px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;background:#FAFAF8;transition:background 0.15s;">
+              <div style="width:44px;height:44px;border-radius:50%;background:#E0F5F5;display:flex;align-items:center;justify-content:center;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              </div>
+              <div style="font-size:13px;font-weight:600;color:#009A97;">Tap to upload screenshot</div>
+              <div style="font-size:11px;color:#888780;">PNG, JPG or PDF accepted</div>
             </div>
           </div>
         </div>
-        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:14px;">
-          <span style="color:#009A97;cursor:pointer;display:flex;align-items:center;gap:4px;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download QRCode
-          </span>
-          <span style="color:#888780;cursor:pointer;">Click to reload QRCode</span>
-        </div>
-        <div style="font-size:13px;color:#1a1a18;margin-bottom:10px;text-align:center;">
-          <strong>Step 2:</strong> Attach PayNow screenshot (Do not attach SMS)
-        </div>
-        <!-- Screenshot upload -->
-        <div style="background:white;border-radius:10px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;border:1px dashed #80CCCB;margin-bottom:14px;" onclick="alert('Upload screenshot')">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          <div style="font-size:11px;color:#888780;">Screenshot</div>
-        </div>
-        <button onclick="confirmPayment()" style="width:100%;height:46px;background:#009A97;border:none;border-radius:8px;font-size:14px;font-weight:700;color:white;cursor:pointer;font-family:inherit;letter-spacing:0.05em;">CONFIRM PAYMENT</button>
       </div>
 
-      <div style="height:24px;"></div>
+      <!-- Confirm button -->
+      <button onclick="confirmPayment()" style="width:100%;height:52px;background:#009A97;border:none;border-radius:12px;font-size:15px;font-weight:700;color:white;cursor:pointer;font-family:inherit;letter-spacing:0.05em;box-shadow:0 4px 14px rgba(0,154,151,0.3);">
+        Confirm Payment
+      </button>
+
     </div>
 
   </div>
