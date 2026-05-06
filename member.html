@@ -1222,9 +1222,9 @@ select:focus { border-color: #009A97; }
           <div id="ev1-title" style="font-size:17px;font-weight:700;color:#1a1a18;margin-bottom:4px;"></div>
           <div id="ev1-desc" style="font-size:13px;color:#888780;margin-bottom:10px;"></div>
           <div style="display:grid;grid-template-columns:80px 1fr;gap:5px 0;font-size:12px;margin-bottom:12px;">
-            <span style="color:#888780;">Closing:</span><span style="color:#1a1a18;">15-05-2026</span>
-            <span style="color:#888780;">Collection:</span><span style="color:#1a1a18;">22-05-2026 (10AM - 5PM)</span>
-            <span style="color:#888780;">Address:</span><span style="color:#1a1a18;">Simei Street 1</span>
+            <span style="color:#888780;">Closing:</span><span class="ev-info-val" style="color:#1a1a18;">15-05-2026</span>
+            <span style="color:#888780;">Collection:</span><span class="ev-info-val" style="color:#1a1a18;">22-05-2026 (10AM - 5PM)</span>
+            <span style="color:#888780;">Address:</span><span class="ev-info-val" style="color:#1a1a18;">Simei Street 1</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;">
             <span style="color:#E8971A;font-size:14px;">★★★★</span><span style="color:#D3D1C7;font-size:14px;">★</span>
@@ -3627,53 +3627,6 @@ function changeQty2(id, delta) {
   updateTotal2();
 }
 
-function updateTotal2() {
-  const prices = { p1: 20, p2: 2, p3: 10, p4: 3 };
-  let total = 0;
-  Object.keys(prices).forEach(id => {
-    const el = document.getElementById(id);
-    if (el) total += parseInt(el.textContent || 0) * prices[id];
-  });
-  // Dynamic spec entries (ps2, ps3...)
-  document.querySelectorAll('[id^="ps"]').forEach(el => {
-    total += parseInt(el.textContent || 0) * 20;
-  });
-  const el = document.getElementById('ev1-total');
-  if (el) el.textContent = '$' + total.toFixed(2);
-  return total;
-}
-
-function placeOrder2() {
-  const total = updateTotal2();
-  if (total === 0) { alert('Please select at least 1 item.'); return; }
-  // Build order items list
-  const items = [
-    { id: 'p1', name: 'Spec', price: 20 },
-    { id: 'p2', name: 'Toothpaste', price: 2 },
-    { id: 'p3', name: 'Chestnut (case)', price: 10 },
-    { id: 'p4', name: 'Chestnut (individual)', price: 3 },
-  ];
-  let itemsHtml = '';
-  items.forEach(item => {
-    const qty = parseInt(document.getElementById(item.id)?.textContent || 0);
-    if (qty > 0) {
-      itemsHtml += '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">'
-        + '<span>' + item.name + '</span>'
-        + '<span style="color:#888780;">QTY:' + qty + '</span>'
-        + '<span>$' + (qty * item.price).toFixed(2) + '</span>'
-        + '</div>';
-    }
-  });
-  document.getElementById('ev2-items').innerHTML = itemsHtml;
-  document.getElementById('ev2-total').textContent = '$' + total.toFixed(2);
-  document.getElementById('ev2-final').textContent = '$' + total.toFixed(2);
-  document.getElementById('ev2-payamt').textContent = '$' + total.toFixed(2);
-  document.getElementById('ev2-ordernum').textContent = Math.floor(Math.random() * 10) + 1;
-  // Switch to screen 2
-  document.getElementById('ev-screen-1').style.display = 'none';
-  document.getElementById('ev-screen-2').style.display = 'block';
-  document.getElementById('view-event-detail').scrollTop = 0;
-}
 
 function confirmPayment() {
   showToast('Payment confirmed!', 'success');
