@@ -1201,173 +1201,203 @@ select:focus { border-color: #009A97; }
 
     <!-- SCREEN 1: Event detail + order -->
     <div id="ev-screen-1">
-      <!-- Event header -->
-      <div style="background:white;border-radius:12px;margin:12px 14px 0;overflow:hidden;border:0.5px solid #e0dfd8;">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="width:36px;height:36px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;">MC</div>
-            <div><div style="font-size:13px;font-weight:600;color:#1a1a18;">Minh Cong</div><div style="font-size:11px;color:#888780;">M6 group</div></div>
+
+      <!-- Event header card - matches event feed card style -->
+      <div style="background:white;border-radius:14px;margin:12px 14px 0;overflow:hidden;border:0.5px solid #e0dfd8;box-shadow:0 1px 8px rgba(0,0,0,0.05);">
+        <!-- Host row -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 10px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:#E8971A;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;flex-shrink:0;">MC</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1a1a18;">Minh Cong</div>
+              <div style="font-size:11px;color:#888780;">M6 group</div>
+            </div>
           </div>
-          <div style="text-align:right;">
-            <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.06em;">MANAGE</div>
-            <div id="ev1-days" style="font-size:12px;font-weight:600;color:#E8971A;margin-bottom:3px;"></div>
-            <div id="ev1-buys" style="background:#E8971A;color:white;font-size:11px;font-weight:700;border-radius:4px;padding:2px 7px;display:none;"></div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div id="ev1-days" style="font-size:12px;font-weight:600;color:#E8971A;"></div>
+            <div id="ev1-buys" style="background:#f0f0f0;color:#888780;font-size:11px;font-weight:700;border-radius:20px;padding:3px 10px;display:inline-block;">0 BUY</div>
           </div>
         </div>
         <!-- Banner -->
-        <div style="height:200px;background:linear-gradient(135deg,#E0F5F5,#009A97);position:relative;overflow:hidden;">
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.3;">
-            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        <div style="height:200px;background:#E0F5F5;display:flex;align-items:center;justify-content:center;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <!-- Title + desc + rating -->
+        <div style="padding:14px;">
+          <div id="ev1-title" style="font-size:17px;font-weight:700;color:#1a1a18;margin-bottom:4px;"></div>
+          <div id="ev1-desc" style="font-size:13px;color:#888780;margin-bottom:12px;"></div>
+          <!-- Stars -->
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+            <span style="color:#E8971A;font-size:14px;">★★★★</span><span style="color:#D3D1C7;font-size:14px;">★</span>
+            <span style="font-size:12px;font-weight:600;color:#1a1a18;">4.0</span>
+            <span style="font-size:11px;color:#888780;">(3 reviews)</span>
           </div>
+          <div style="font-size:12px;color:#888780;font-style:italic;"><strong style="color:#1a1a18;font-style:normal;">Janet:</strong> "Great quality, will order again next round!"</div>
         </div>
         <!-- Event info -->
-        <div style="padding:12px 14px;">
-          <div id="ev1-title" style="font-size:15px;font-weight:700;color:#009A97;margin-bottom:4px;"></div>
-          <div id="ev1-desc" style="font-size:12px;color:#888780;margin-bottom:10px;"></div>
-          <div style="display:grid;grid-template-columns:80px 1fr;gap:4px 0;font-size:12px;">
-            <span style="color:#888780;">Closing:</span><span id="ev1-closing" style="color:#1a1a18;">15-05-2026</span>
-            <span style="color:#888780;">Collection:</span><span style="color:#009A97;">22-05-2026 (10AM - 5PM)</span>
-            <span style="color:#888780;">Address:</span><span style="color:#009A97;">Simei Street 1</span>
-          </div>
+        <div style="border-top:0.5px solid #f0f0f0;padding:12px 14px;display:grid;grid-template-columns:80px 1fr;gap:6px 0;font-size:12px;">
+          <span style="color:#888780;">Closing:</span><span id="ev1-closing" style="color:#1a1a18;">15-05-2026</span>
+          <span style="color:#888780;">Collection:</span><span style="color:#009A97;">22-05-2026 (10AM - 5PM)</span>
+          <span style="color:#888780;">Address:</span><span style="color:#009A97;">Simei Street 1</span>
         </div>
       </div>
 
-      <!-- Search -->
+      <!-- Search bar -->
       <div style="margin:10px 14px 0;position:relative;">
         <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#B4B2A9;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input placeholder="Search product" style="width:100%;height:38px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 12px 0 32px;font-size:13px;font-family:inherit;outline:none;background:white;" />
+        <input placeholder="Search product" style="width:100%;height:38px;border:0.5px solid #D3D1C7;border-radius:20px;padding:0 12px 0 32px;font-size:12px;font-family:inherit;outline:none;background:white;"/>
       </div>
 
       <!-- Products -->
-      <div style="margin:10px 14px 0;display:flex;flex-direction:column;gap:0;">
+      <div style="margin:10px 14px 0;display:flex;flex-direction:column;gap:8px;">
 
-        <!-- Product 1: Spec with sub-items -->
-        <div style="background:white;border:0.5px solid #e0dfd8;border-radius:10px;padding:12px;margin-bottom:8px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <div style="width:56px;height:56px;border-radius:8px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <!-- Product: Spec with sub-items -->
+        <div style="background:white;border-radius:12px;border:0.5px solid #e0dfd8;overflow:hidden;">
+          <div style="display:flex;gap:12px;padding:12px;">
+            <div style="width:60px;height:60px;border-radius:10px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </div>
             <div style="flex:1;min-width:0;">
               <div style="font-size:13px;font-weight:600;color:#009A97;">Spec</div>
-              <div style="font-size:11px;color:#888780;">Good Spec from Vietnam</div>
-              <div style="font-size:13px;font-weight:600;color:#E8971A;margin-top:2px;">$20.00</div>
+              <div style="font-size:11px;color:#888780;margin-top:1px;">Good Spec from Vietnam</div>
+              <div style="font-size:14px;font-weight:700;color:#1a1a18;margin-top:4px;">$20.00</div>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-              <button onclick="changeQty2('p1',-1)" style="width:28px;height:28px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:16px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
-              <span id="p1" style="font-size:13px;font-weight:600;min-width:16px;text-align:center;">0</span>
-              <button onclick="changeQty2('p1',1)" style="width:28px;height:28px;border-radius:50%;border:none;background:#E8971A;cursor:pointer;font-size:16px;line-height:1;color:white;font-family:inherit;">+</button>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;flex-shrink:0;">
+              <button onclick="changeQty2('p1',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
+              <span id="p1" style="font-size:14px;font-weight:700;min-width:20px;text-align:center;">0</span>
+              <button onclick="changeQty2('p1',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;">+</button>
             </div>
           </div>
-          <select style="width:100%;height:34px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 8px;font-size:12px;font-family:inherit;margin-top:8px;color:#888780;outline:none;">
-            <option>Option</option><option>Blue Frame</option><option>Red Frame</option>
-          </select>
-          <div style="font-size:11px;color:#888780;margin-top:6px;">0 order(s) made</div>
-          <div style="font-size:11px;color:#009A97;text-align:right;cursor:pointer;margin-top:2px;">Add Another Order with a different selection</div>
+          <!-- Sub-item selector -->
+          <div style="border-top:0.5px solid #f0f0f0;padding:8px 12px;background:#FAFAF8;">
+            <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:6px;">FRAME COLOR</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <label style="display:flex;align-items:center;gap:5px;padding:5px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;background:white;">
+                <input type="radio" name="spec-color" style="accent-color:#009A97;" /> Blue
+              </label>
+              <label style="display:flex;align-items:center;gap:5px;padding:5px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;background:white;">
+                <input type="radio" name="spec-color" /> Red
+              </label>
+              <label style="display:flex;align-items:center;gap:5px;padding:5px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;background:white;">
+                <input type="radio" name="spec-color" /> Green
+              </label>
+            </div>
+          </div>
+          <div style="padding:6px 12px 10px;font-size:11px;color:#888780;display:flex;justify-content:space-between;align-items:center;">
+            <span>0 order(s) made</span>
+            <span style="color:#009A97;cursor:pointer;font-size:11px;">+ Add with different option</span>
+          </div>
         </div>
 
-        <!-- Product 2: Toothpaste -->
-        <div style="background:white;border:0.5px solid #e0dfd8;border-radius:10px;padding:12px;margin-bottom:8px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <div style="width:56px;height:56px;border-radius:8px;background:#f0f0f0;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4B2A9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <!-- Product: Toothpaste -->
+        <div style="background:white;border-radius:12px;border:0.5px solid #e0dfd8;overflow:hidden;">
+          <div style="display:flex;gap:12px;padding:12px;">
+            <div style="width:60px;height:60px;border-radius:10px;background:#f0f0f0;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B4B2A9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </div>
             <div style="flex:1;min-width:0;">
               <div style="font-size:13px;font-weight:600;color:#009A97;">Toothpaste</div>
-              <div style="font-size:11px;color:#888780;">Clean teeth</div>
-              <div style="font-size:13px;font-weight:600;color:#E8971A;margin-top:2px;">$2.00</div>
+              <div style="font-size:11px;color:#888780;margin-top:1px;">Clean teeth</div>
+              <div style="font-size:14px;font-weight:700;color:#1a1a18;margin-top:4px;">$2.00</div>
+              <div style="font-size:11px;color:#888780;margin-top:2px;">0 order(s) made</div>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-              <button onclick="changeQty2('p2',-1)" style="width:28px;height:28px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:16px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
-              <span id="p2" style="font-size:13px;font-weight:600;min-width:16px;text-align:center;">0</span>
-              <button onclick="changeQty2('p2',1)" style="width:28px;height:28px;border-radius:50%;border:none;background:#E8971A;cursor:pointer;font-size:16px;line-height:1;color:white;font-family:inherit;">+</button>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;flex-shrink:0;">
+              <button onclick="changeQty2('p2',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
+              <span id="p2" style="font-size:14px;font-weight:700;min-width:20px;text-align:center;">0</span>
+              <button onclick="changeQty2('p2',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;">+</button>
             </div>
           </div>
-          <div style="font-size:11px;color:#888780;margin-top:6px;">0 order(s) made</div>
         </div>
 
-        <!-- Product 3: Chestnut (split case) -->
-        <div style="background:white;border:0.5px solid #e0dfd8;border-radius:10px;padding:12px;margin-bottom:8px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <div style="width:56px;height:56px;border-radius:8px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        <!-- Product: Chestnut (case) -->
+        <div style="background:white;border-radius:12px;border:0.5px solid #e0dfd8;overflow:hidden;">
+          <div style="display:flex;gap:12px;padding:12px;">
+            <div style="width:60px;height:60px;border-radius:10px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
             </div>
             <div style="flex:1;min-width:0;">
               <div style="font-size:13px;font-weight:600;color:#009A97;">Chestnut</div>
-              <div style="font-size:11px;color:#888780;">6 per case/carton</div>
-              <div style="font-size:13px;font-weight:600;color:#E8971A;margin-top:2px;">$10.00</div>
+              <div style="font-size:11px;color:#888780;margin-top:1px;">6 per case/carton</div>
+              <div style="font-size:14px;font-weight:700;color:#1a1a18;margin-top:4px;">$10.00</div>
+              <div style="font-size:11px;color:#888780;margin-top:2px;">1 order(s) made</div>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-              <button onclick="changeQty2('p3',-1)" style="width:28px;height:28px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:16px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
-              <span id="p3" style="font-size:13px;font-weight:600;min-width:16px;text-align:center;">0</span>
-              <button onclick="changeQty2('p3',1)" style="width:28px;height:28px;border-radius:50%;border:none;background:#E8971A;cursor:pointer;font-size:16px;line-height:1;color:white;font-family:inherit;">+</button>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;flex-shrink:0;">
+              <button onclick="changeQty2('p3',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
+              <span id="p3" style="font-size:14px;font-weight:700;min-width:20px;text-align:center;">0</span>
+              <button onclick="changeQty2('p3',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;">+</button>
             </div>
           </div>
-          <div style="font-size:11px;color:#888780;margin-top:6px;">1 order(s) made</div>
         </div>
 
-        <!-- Product 4: Chestnut individual (split case individual) -->
-        <div style="background:white;border:0.5px solid #e0dfd8;border-radius:10px;padding:12px;margin-bottom:8px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <div style="width:56px;height:56px;border-radius:8px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        <!-- Product: Chestnut individual (split case) -->
+        <div style="background:white;border-radius:12px;border:0.5px solid #e0dfd8;overflow:hidden;">
+          <div style="display:flex;gap:12px;padding:12px;">
+            <div style="width:60px;height:60px;border-radius:10px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
             </div>
             <div style="flex:1;min-width:0;">
               <div style="font-size:13px;font-weight:600;color:#009A97;">Chestnut</div>
-              <div style="font-size:11px;color:#888780;">Individual pieces (split case)</div>
-              <div style="font-size:13px;font-weight:600;color:#E8971A;margin-top:2px;">$3.00</div>
+              <div style="font-size:11px;color:#888780;margin-top:1px;">Individual pieces (split case)</div>
+              <div style="font-size:14px;font-weight:700;color:#1a1a18;margin-top:4px;">$3.00</div>
+              <div style="font-size:11px;color:#888780;margin-top:2px;">0 order(s) made</div>
+              <!-- Split case progress -->
+              <div style="margin-top:6px;">
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:#888780;margin-bottom:3px;">
+                  <span>Case fill progress</span><span>(0 / 6)</span>
+                </div>
+                <div style="height:4px;background:#e0dfd8;border-radius:2px;">
+                  <div style="width:0%;height:100%;background:#009A97;border-radius:2px;"></div>
+                </div>
+                <div style="font-size:11px;color:#E24B4A;margin-top:3px;">Need 6 more to fulfill orders</div>
+              </div>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-              <button onclick="changeQty2('p4',-1)" style="width:28px;height:28px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:16px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
-              <span id="p4" style="font-size:13px;font-weight:600;min-width:16px;text-align:center;">0</span>
-              <button onclick="changeQty2('p4',1)" style="width:28px;height:28px;border-radius:50%;border:none;background:#E8971A;cursor:pointer;font-size:16px;line-height:1;color:white;font-family:inherit;">+</button>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;flex-shrink:0;">
+              <button onclick="changeQty2('p4',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
+              <span id="p4" style="font-size:14px;font-weight:700;min-width:20px;text-align:center;">0</span>
+              <button onclick="changeQty2('p4',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;">+</button>
             </div>
-          </div>
-          <div style="font-size:11px;color:#888780;margin-top:6px;">0 order(s) made</div>
-          <div style="margin-top:6px;">
-            <div style="display:flex;justify-content:space-between;font-size:10px;color:#888780;margin-bottom:2px;"><span></span><span>(0 / 6)</span></div>
-            <div style="height:4px;background:#e0dfd8;border-radius:2px;"><div style="width:0%;height:100%;background:#009A97;border-radius:2px;"></div></div>
-            <div style="font-size:11px;color:#E24B4A;margin-top:3px;">Need 6 more to fulfill orders</div>
           </div>
         </div>
 
       </div>
 
-      <!-- Please note -->
-      <div style="margin:8px 14px 0;font-size:12px;color:#1a1a18;">
-        <div style="margin-bottom:6px;font-weight:500;">Please note:</div>
-        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
-          <input type="checkbox" checked style="accent-color:#009A97;margin-top:2px;flex-shrink:0;" />
-          <span style="font-size:12px;color:#888780;">Additional note is added here</span>
-        </label>
-      </div>
-
-      <!-- More info -->
-      <div style="margin:10px 14px 0;font-size:12px;color:#1a1a18;">
-        <div style="font-weight:500;margin-bottom:4px;">More Information:</div>
-        <a href="#" style="color:#009A97;font-size:12px;">sss.com</a>
+      <!-- Notes & info -->
+      <div style="background:white;border-radius:12px;border:0.5px solid #e0dfd8;margin:10px 14px 0;padding:12px 14px;">
+        <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:8px;">Please note</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="display:flex;gap:8px;font-size:12px;color:#888780;align-items:flex-start;">
+            <span style="color:#009A97;font-weight:700;flex-shrink:0;margin-top:1px;">•</span>
+            <span>Additional note is added here</span>
+          </div>
+          <div style="display:flex;gap:8px;font-size:12px;color:#888780;align-items:flex-start;">
+            <span style="color:#009A97;font-weight:700;flex-shrink:0;margin-top:1px;">•</span>
+            <span>More information: <a href="https://sss.com" style="color:#009A97;text-decoration:underline;">sss.com</a></span>
+          </div>
+        </div>
       </div>
 
       <!-- Total bar -->
-      <div style="margin:12px 14px 0;background:#E0F5F5;border-radius:10px;padding:12px 14px;text-align:right;">
-        <div style="font-size:17px;font-weight:700;color:#009A97;" id="ev1-total">$0.00 SGD</div>
-        <div style="font-size:11px;color:#888780;">$0.00 admin fee included</div>
-      </div>
-
-      <!-- Purchase on behalf -->
-      <div style="text-align:center;margin:8px 14px 0;">
-        <span style="font-size:12px;color:#009A97;text-decoration:underline;cursor:pointer;">Purchase-on-Behalf</span>
+      <div style="margin:10px 14px 0;background:#E0F5F5;border-radius:12px;padding:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:12px;color:#888780;">Subtotal</div>
+          <div style="font-size:18px;font-weight:700;color:#009A97;" id="ev1-total">$0.00 SGD</div>
+        </div>
+        <div style="font-size:11px;color:#888780;text-align:right;margin-top:1px;">$0.00 admin fee included</div>
+        <div style="text-align:center;margin-top:8px;">
+          <span style="font-size:12px;color:#009A97;text-decoration:underline;cursor:pointer;">Purchase-on-Behalf</span>
+        </div>
       </div>
 
       <!-- Notes to host -->
       <div style="margin:10px 14px 0;">
         <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:6px;">NOTES TO THE HOST</div>
-        <textarea id="ev1-notes" placeholder="" style="width:100%;height:80px;border:0.5px solid #D3D1C7;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;resize:none;"></textarea>
+        <textarea placeholder="Any notes for the host..." style="width:100%;height:70px;border:0.5px solid #D3D1C7;border-radius:10px;padding:10px;font-size:12px;font-family:inherit;outline:none;resize:none;background:white;"></textarea>
       </div>
 
       <!-- Actions -->
-      <div style="display:flex;gap:10px;margin:12px 14px 24px;">
-        <button onclick="showView('view-all')" style="flex:1;height:46px;border:0.5px solid #D3D1C7;border-radius:8px;background:white;font-size:14px;font-weight:600;color:#888780;cursor:pointer;font-family:inherit;">CANCEL</button>
-        <button onclick="placeOrder2()" style="flex:2;height:46px;background:#009A97;border:none;border-radius:8px;font-size:14px;font-weight:600;color:white;cursor:pointer;font-family:inherit;">PLACE ORDER</button>
+      <div style="display:flex;gap:10px;margin:12px 14px 28px;">
+        <button onclick="showView('view-all')" style="flex:1;height:48px;border:0.5px solid #D3D1C7;border-radius:10px;background:white;font-size:14px;font-weight:600;color:#888780;cursor:pointer;font-family:inherit;">Cancel</button>
+        <button onclick="placeOrder2()" style="flex:2;height:48px;background:#009A97;border:none;border-radius:10px;font-size:14px;font-weight:700;color:white;cursor:pointer;font-family:inherit;letter-spacing:0.03em;">Place Order</button>
       </div>
     </div>
 
