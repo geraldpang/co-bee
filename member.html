@@ -3628,10 +3628,7 @@ function changeQty2(id, delta) {
 }
 
 
-function confirmPayment() {
-  showToast('Payment confirmed!', 'success');
-  switchTab('purchase');
-}
+
 
 
 function changeQty(id, delta) {
@@ -3655,6 +3652,15 @@ function placeOrder() {
 function showPaymentFlow() {
   // Navigate to purchase tab and show payment view
   switchTab('purchase');
+}
+
+
+function togglePcard(id) {
+  const items = document.getElementById(id);
+  const chevron = document.getElementById('chev-' + id);
+  if (!items) return;
+  items.classList.toggle('open');
+  if (chevron) chevron.classList.toggle('open');
 }
 
 function switchTab(tab) {
