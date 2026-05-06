@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>co·bee — Packing List</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body { min-height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; color: #1a1a18; }
+.page { padding: 20px 20px 40px; max-width: 1100px; margin: 0 auto; }
+
+/* HEADER */
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; gap: 12px; flex-wrap: wrap; }
+.page-title { font-size: 22px; font-weight: 700; color: #009A97; }
+.page-subtitle { font-size: 12px; color: #888780; margin-top: 3px; }
+.btn-primary { height: 34px; padding: 0 14px; border: none; border-radius: 8px; background: #009A97; font-size: 12px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; transition: background 0.12s; }
+.btn-primary:hover { background: #007A77; }
+.btn-outline { height: 34px; padding: 0 14px; border: 1px solid #009A97; border-radius: 8px; background: white; font-size: 12px; font-weight: 600; color: #009A97; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; transition: background 0.12s; }
+.btn-outline:hover { background: #E0F5F5; }
+.btn-danger { height: 34px; padding: 0 14px; border: 1px solid #E24B4A; border-radius: 8px; background: white; font-size: 12px; font-weight: 600; color: #E24B4A; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; }
+.btn-danger:hover { background: #FCEBEB; }
+
+/* PACKAGE LIST */
+.package-grid { display: flex; flex-direction: column; gap: 10px; }
+.package-card { background: white; border: 0.5px solid #e0dfd8; border-radius: 12px; padding: 16px 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.15s; }
+.package-card:hover { border-color: #009A97; box-shadow: 0 2px 12px rgba(0,154,151,0.08); }
+.package-icon { width: 48px; height: 48px; border-radius: 10px; background: #E0F5F5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #009A97; }
+.package-info { flex: 1; }
+.package-name { font-size: 15px; font-weight: 600; color: #1a1a18; }
+.package-meta { font-size: 12px; color: #888780; margin-top: 3px; display: flex; gap: 12px; }
+.package-meta span { display: flex; align-items: center; gap: 4px; }
+.package-arrow { color: #B4B2A9; }
+
+/* DETAIL VIEW */
+.detail-view { display: none; }
+.breadcrumb { font-size: 12px; color: #888780; margin-bottom: 16px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+.breadcrumb:hover { color: #009A97; }
+.detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; gap: 12px; flex-wrap: wrap; }
+.detail-title-wrap { display: flex; align-items: center; gap: 8px; }
+.detail-title { font-size: 20px; font-weight: 700; color: #1a1a18; border: none; background: none; font-family: inherit; outline: none; min-width: 60px; }
+.detail-title:focus { border-bottom: 1.5px solid #009A97; }
+.edit-title-btn { color: #B4B2A9; cursor: pointer; background: none; border: none; padding: 2px; }
+.edit-title-btn:hover { color: #009A97; }
+.detail-actions { display: flex; gap: 8px; }
+
+/* SEARCH */
+.search-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.search-wrap { width: 300px; position: relative; flex-shrink: 0; }
+.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #888780; }
+.search-input { width: 100%; height: 36px; border: 0.5px solid #D3D1C7; border-radius: 20px; padding: 0 12px 0 34px; font-size: 12px; font-family: inherit; outline: none; background: white; }
+.search-input:focus { border-color: #009A97; }
+.search-input::placeholder { color: #B4B2A9; }
+
+/* TABLE */
+.table-wrap { background: white; border-radius: 10px; border: 0.5px solid #e0dfd8; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead { background: #FAFAF8; }
+th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.04em; text-transform: uppercase; border-bottom: 0.5px solid #e0dfd8; white-space: nowrap; }
+td { padding: 10px 14px; border-bottom: 0.5px solid #f0f0f0; vertical-align: top; font-size: 12px; }
+tr:last-child > td { border-bottom: none; }
+tr.buyer-row:hover > td { background: #FAFAF8; cursor: pointer; }
+
+/* STATUS BADGE */
+.status-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; border-radius: 99px; padding: 3px 10px; white-space: nowrap; }
+.status-none  { background: #FCEBEB; color: #A32D2D; }
+.status-part  { background: #FEF2DC; color: #BA7517; }
+.status-full  { background: #e8f5e9; color: #2e7d32; }
+
+/* EXPAND */
+.show-details-btn { color: #009A97; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 3px; background: none; border: none; font-family: inherit; margin-top: 4px; padding: 0; }
+.details-panel { display: none; margin-top: 8px; border-top: 0.5px solid #f0f0f0; padding-top: 8px; }
+.details-panel.open { display: block; }
+.detail-item-row { display: flex; gap: 8px; font-size: 11px; color: #888780; padding: 3px 0; border-bottom: 0.5px solid #f8f8f8; }
+.detail-item-row:last-child { border-bottom: none; }
+.detail-event-group { margin-bottom: 8px; }
+.detail-event-name { font-size: 11px; font-weight: 600; color: #009A97; margin-bottom: 3px; }
+
+/* MODAL */
+.modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 1000; align-items: center; justify-content: center; }
+.modal-backdrop.open { display: flex; }
+.modal { background: white; border-radius: 14px; width: 420px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
+.modal-hd { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 0.5px solid #e0dfd8; flex-shrink: 0; }
+.modal-title { font-size: 15px; font-weight: 600; color: #009A97; }
+.modal-close { background: none; border: none; cursor: pointer; color: #888780; font-size: 20px; line-height: 1; }
+.modal-body { padding: 16px 20px; overflow-y: auto; flex: 1; }
+.modal-footer { padding: 12px 20px 16px; border-top: 0.5px solid #e0dfd8; flex-shrink: 0; }
+.modal-note { font-size: 11px; color: #888780; margin-top: 12px; display: flex; align-items: flex-start; gap: 5px; }
+
+/* NAME INPUT */
+.name-input { width: 100%; height: 40px; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 0 10px; font-size: 13px; font-family: inherit; outline: none; margin-bottom: 14px; }
+.name-input:focus { border-color: #009A97; }
+
+/* EVENT CHECKBOXES */
+.event-check-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid #f0f0f0; cursor: pointer; }
+.event-check-item:last-child { border-bottom: none; }
+.event-check-item input { accent-color: #009A97; width: 15px; height: 15px; flex-shrink: 0; cursor: pointer; }
+.event-check-label { font-size: 13px; color: #1a1a18; flex: 1; }
+.event-check-meta { font-size: 11px; color: #B4B2A9; }
+
+/* PDF PREVIEW */
+.pdf-modal { width: 560px; max-height: 90vh; }
+.pdf-page { background: white; padding: 32px; border: 0.5px solid #e0dfd8; border-radius: 4px; font-family: Arial, sans-serif; }
+.pdf-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.pdf-title { font-size: 22px; font-weight: 700; }
+.pdf-barcode { font-size: 10px; letter-spacing: 4px; font-family: monospace; border: 0.5px solid #888; padding: 4px 8px; }
+.pdf-group { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+.pdf-events { font-size: 12px; color: #444; margin-bottom: 8px; }
+.pdf-recipient { margin-bottom: 20px; }
+.pdf-recipient-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.pdf-recipient p { font-size: 12px; color: #333; line-height: 1.6; }
+.pdf-items-hd { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; border-top: 2px solid #000; border-bottom: 1px solid #ccc; padding: 6px 0; margin-bottom: 4px; }
+.pdf-item-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 0.5px solid #eee; }
+.pdf-item-img { width: 48px; height: 48px; background: #F5E6C8; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pdf-item-name { flex: 1; font-size: 12px; }
+.pdf-item-qty { font-size: 13px; font-weight: 600; }
+.pdf-totals { margin-top: 12px; text-align: right; font-size: 12px; }
+.pdf-totals div { display: flex; justify-content: flex-end; gap: 20px; padding: 2px 0; }
+.pdf-totals .total-row { font-weight: 700; border-top: 0.5px solid #ccc; padding-top: 4px; margin-top: 4px; }
+.pdf-pagination { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+.btn-sm { height: 28px; padding: 0 10px; font-size: 11px; border-radius: 6px; cursor: pointer; font-family: inherit; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── LIST VIEW ── -->
+  <div id="list-view">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Packing List</div>
+        <div class="page-subtitle">Consolidate events into packing packages per buyer</div>
+      </div>
+      <button class="btn-primary" onclick="openNewPackage()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Package
+      </button>
+    </div>
+
+    <div class="package-grid" id="package-grid">
+
+      <div class="package-card" onclick="openDetail('dsa')">
+        <div class="package-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <div class="package-info">
+          <div class="package-name">dsa</div>
+          <div class="package-meta">
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg> 3 events</span>
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> 7 total orders</span>
+          </div>
+        </div>
+        <svg class="package-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+      <div class="package-card" onclick="openDetail('test_bth')">
+        <div class="package-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <div class="package-info">
+          <div class="package-name">test bth</div>
+          <div class="package-meta">
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg> 1 event</span>
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> 1 total order</span>
+          </div>
+        </div>
+        <svg class="package-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+      <div class="package-card" onclick="openDetail('example')">
+        <div class="package-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <div class="package-info">
+          <div class="package-name">example name</div>
+          <div class="package-meta">
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg> 4 events</span>
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> 6 total orders</span>
+          </div>
+        </div>
+        <svg class="package-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── DETAIL VIEW ── -->
+  <div id="detail-view" class="detail-view">
+    <div class="breadcrumb" onclick="backToList()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Package
+    </div>
+    <div class="detail-header">
+      <div class="detail-title-wrap">
+        <input class="detail-title" id="detail-title-input" value="example name" />
+        <button class="edit-title-btn" onclick="document.getElementById('detail-title-input').focus()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+      </div>
+      <div class="detail-actions">
+        <button class="btn-outline" onclick="openPdfPreview()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export PDF
+        </button>
+        <button class="btn-danger" onclick="deletePackage()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Delete
+        </button>
+      </div>
+    </div>
+
+    <div class="search-row">
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" type="text" placeholder="Search name / mobile / order ref..." oninput="filterBuyers(this.value)" />
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Contact</th>
+            <th>Orders</th>
+            <th>Qty</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="buyers-body">
+
+          <tr class="buyer-row" onclick="toggleDetails('d1')">
+            <td>
+              <div style="font-weight:500;">Minh Cong</div>
+              <div style="color:#888780;font-size:11px;">09622240816</div>
+              <button class="show-details-btn" id="btn-d1">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                Show details
+              </button>
+              <div class="details-panel" id="d1">
+                <div class="detail-event-group">
+                  <div class="detail-event-name">atea 1</div>
+                  <div class="detail-item-row"><span style="flex:1;">Dev cùi (qty:1)</span><span>$10.00</span></div>
+                </div>
+                <div class="detail-event-group">
+                  <div class="detail-event-name">new event</div>
+                  <div class="detail-item-row"><span style="flex:1;">Item 1 (qty:1)</span><span>$10.00</span></div>
+                  <div class="detail-item-row"><span style="flex:1;">Bundle Pack A (qty:1)</span><span>$25.00</span></div>
+                </div>
+                <div class="detail-event-group">
+                  <div class="detail-event-name">order without login</div>
+                  <div class="detail-item-row"><span style="flex:1;">pro 1 (qty:1)</span><span>$1.00</span></div>
+                </div>
+                <div style="display:flex;justify-content:flex-end;font-size:12px;font-weight:600;padding-top:6px;border-top:0.5px solid #e0dfd8;color:#1a1a18;">Total: $46.00</div>
+              </div>
+            </td>
+            <td style="vertical-align:middle;">4 products</td>
+            <td style="vertical-align:middle;font-weight:600;">5 qty</td>
+            <td style="vertical-align:middle;"><span class="status-badge status-none">Paid 0 / 3</span></td>
+          </tr>
+
+          <tr class="buyer-row" onclick="toggleDetails('d2')">
+            <td>
+              <div style="font-weight:500;">Gerald Pang</div>
+              <div style="color:#888780;font-size:11px;">0469787098</div>
+              <button class="show-details-btn" id="btn-d2">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                Show details
+              </button>
+              <div class="details-panel" id="d2">
+                <div class="detail-event-group">
+                  <div class="detail-event-name">atea 1</div>
+                  <div class="detail-item-row"><span style="flex:1;">Dev cùi (qty:1)</span><span>$10.00</span></div>
+                </div>
+                <div class="detail-event-group">
+                  <div class="detail-event-name">Test event (no login)</div>
+                  <div class="detail-item-row"><span style="flex:1;">Item 1 (qty:1)</span><span>$59.00</span></div>
+                  <div class="detail-item-row"><span style="flex:1;">item 2 (qty:1)</span><span>$59.00</span></div>
+                </div>
+                <div style="display:flex;justify-content:flex-end;font-size:12px;font-weight:600;padding-top:6px;border-top:0.5px solid #e0dfd8;color:#1a1a18;">Total: $128.00</div>
+              </div>
+            </td>
+            <td style="vertical-align:middle;">3 products</td>
+            <td style="vertical-align:middle;font-weight:600;">3 qty</td>
+            <td style="vertical-align:middle;"><span class="status-badge status-part">Paid 1 / 2</span></td>
+          </tr>
+
+          <tr class="buyer-row" onclick="toggleDetails('d3')">
+            <td>
+              <div style="font-weight:500;">Janet Lee</div>
+              <div style="color:#888780;font-size:11px;">0412345678</div>
+              <button class="show-details-btn" id="btn-d3">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                Show details
+              </button>
+              <div class="details-panel" id="d3">
+                <div class="detail-event-group">
+                  <div class="detail-event-name">Test event (no login)</div>
+                  <div class="detail-item-row"><span style="flex:1;">Item 1 (qty:2)</span><span>$118.00</span></div>
+                </div>
+                <div style="display:flex;justify-content:flex-end;font-size:12px;font-weight:600;padding-top:6px;border-top:0.5px solid #e0dfd8;color:#1a1a18;">Total: $118.00</div>
+              </div>
+            </td>
+            <td style="vertical-align:middle;">1 product</td>
+            <td style="vertical-align:middle;font-weight:600;">2 qty</td>
+            <td style="vertical-align:middle;"><span class="status-badge status-full">Paid 1 / 1</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── NEW PACKAGE MODAL ── -->
+<div class="modal-backdrop" id="new-pkg-modal">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hd">
+      <span class="modal-title">New Package</span>
+      <button class="modal-close" onclick="closeModal('new-pkg-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <label style="font-size:11px;font-weight:600;color:#888780;display:block;margin-bottom:4px;">Package Name</label>
+      <input class="name-input" id="new-pkg-name" type="text" placeholder="e.g. May 2026 Batch" />
+      <label style="font-size:11px;font-weight:600;color:#888780;display:block;margin-bottom:8px;">Select Events to Pack</label>
+      <div id="event-check-list">
+        <label class="event-check-item"><input type="checkbox" /><div><div class="event-check-label">atea 1</div><div class="event-check-meta">● Closed · 3 orders</div></div></label>
+        <label class="event-check-item"><input type="checkbox" /><div><div class="event-check-label">order without login</div><div class="event-check-meta">● Closed · 2 orders</div></div></label>
+        <label class="event-check-item"><input type="checkbox" /><div><div class="event-check-label">batch 3</div><div class="event-check-meta">● Closed · 5 orders</div></div></label>
+        <label class="event-check-item"><input type="checkbox" /><div><div class="event-check-label">batch 4</div><div class="event-check-meta">● Closed · 4 orders</div></div></label>
+        <label class="event-check-item"><input type="checkbox" /><div><div class="event-check-label">test batch</div><div class="event-check-meta">● Closed · 1 order</div></div></label>
+        <label class="event-check-item"><input type="checkbox" /><div><div class="event-check-label">Batch after update 1</div><div class="event-check-meta">● Closed · 8 orders</div></div></label>
+        <label class="event-check-item"><input type="checkbox" /><div><div class="event-check-label">no batch after update</div><div class="event-check-meta">● Closed · 2 orders</div></div></label>
+      </div>
+      <div class="modal-note">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Only closed events can be consolidated into a package.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" style="width:100%;justify-content:center;height:42px;font-size:14px;" onclick="createPackage()">Create Package</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PDF PREVIEW MODAL ── -->
+<div class="modal-backdrop" id="pdf-modal">
+  <div class="modal pdf-modal" onclick="event.stopPropagation()">
+    <div class="modal-hd">
+      <span class="modal-title">Export Packing List</span>
+      <button class="modal-close" onclick="closeModal('pdf-modal')">×</button>
+    </div>
+    <div class="modal-body" style="padding:12px 16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-size:12px;color:#888780;">Page <span id="pdf-page-num">1</span> of <span id="pdf-page-total">3</span> buyers</div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn-sm btn-outline" onclick="pdfNav(-1)">‹ Prev</button>
+          <button class="btn-sm btn-outline" onclick="pdfNav(1)">Next ›</button>
+          <button class="btn-sm btn-primary" onclick="alert('Printing all 3 pages...')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/><line x1="12" y1="15" x2="12" y2="3"/><path d="M20 21H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1z"/></svg>
+            Print All
+          </button>
+        </div>
+      </div>
+      <div id="pdf-pages">
+        <!-- Page 1 -->
+        <div class="pdf-page" id="pdf-p1">
+          <div class="pdf-header">
+            <div class="pdf-title">Packing List</div>
+            <div class="pdf-barcode">||| ||| || ||| || ||||</div>
+          </div>
+          <div class="pdf-group">&lt; Group Buy: M6 &gt;</div>
+          <div class="pdf-events">Events: atea 1, new event, order without login</div>
+          <div class="pdf-recipient">
+            <div class="pdf-recipient-title">Recipient Information</div>
+            <p>Customer: Minh Cong<br>Phone: 09622240816<br>Email: minhcong@example.com</p>
+          </div>
+          <div class="pdf-items-hd"><span>Items</span><span>Qty</span></div>
+          <div class="pdf-item-row">
+            <div class="pdf-item-img"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+            <div class="pdf-item-name">Dev cùi (individual)</div>
+            <div class="pdf-item-qty">1</div>
+          </div>
+          <div class="pdf-item-row">
+            <div class="pdf-item-img"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+            <div class="pdf-item-name">Item 1 (individual)</div>
+            <div class="pdf-item-qty">1</div>
+          </div>
+          <div class="pdf-item-row">
+            <div class="pdf-item-img"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+            <div class="pdf-item-name">Bundle Pack A (individual)</div>
+            <div class="pdf-item-qty">1</div>
+          </div>
+          <div class="pdf-item-row">
+            <div class="pdf-item-img"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+            <div class="pdf-item-name">pro 1 (individual)</div>
+            <div class="pdf-item-qty">1</div>
+          </div>
+          <div class="pdf-totals">
+            <div class="total-row"><span>Total</span><span>5</span></div>
+            <div><span style="color:#666;">Delivery fee:</span><span>$0.00</span></div>
+            <div><span style="color:#E24B4A;">Discount:</span><span style="color:#E24B4A;">-$0.00</span></div>
+            <div><span style="color:#666;">Admin fee:</span><span>$0.00</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── VIEW SWITCHING ──
+function openDetail(id) {
+  document.getElementById('list-view').style.display = 'none';
+  document.getElementById('detail-view').style.display = 'block';
+  const names = { dsa: 'dsa', test_bth: 'test bth', example: 'example name' };
+  document.getElementById('detail-title-input').value = names[id] || id;
+}
+
+function backToList() {
+  document.getElementById('list-view').style.display = 'block';
+  document.getElementById('detail-view').style.display = 'none';
+}
+
+// ── EXPAND/COLLAPSE ──
+function toggleDetails(id) {
+  const panel = document.getElementById(id);
+  const btn = document.getElementById('btn-' + id);
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  btn.innerHTML = isOpen
+    ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> Show details'
+    : '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg> Hide details';
+}
+
+// ── SEARCH ──
+function filterBuyers(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.buyer-row').forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = !q || text.includes(q) ? '' : 'none';
+  });
+}
+
+// ── MODAL ──
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openNewPackage() { openModal('new-pkg-modal'); }
+
+document.querySelectorAll('.modal-backdrop').forEach(b => {
+  b.addEventListener('click', function() { this.classList.remove('open'); });
+});
+
+// ── CREATE PACKAGE ──
+function createPackage() {
+  const name = document.getElementById('new-pkg-name').value.trim() || 'New Package';
+  const checked = document.querySelectorAll('#event-check-list input:checked');
+  if (checked.length === 0) { alert('Please select at least one event.'); return; }
+  closeModal('new-pkg-modal');
+  openDetail('example');
+  document.getElementById('detail-title-input').value = name;
+}
+
+// ── DELETE ──
+function deletePackage() {
+  if (confirm('Delete this package?')) backToList();
+}
+
+// ── PDF PREVIEW ──
+let pdfPage = 1;
+const pdfTotal = 3;
+
+function openPdfPreview() {
+  pdfPage = 1;
+  updatePdfPage();
+  openModal('pdf-modal');
+}
+
+function pdfNav(dir) {
+  pdfPage = Math.max(1, Math.min(pdfTotal, pdfPage + dir));
+  updatePdfPage();
+}
+
+function updatePdfPage() {
+  document.getElementById('pdf-page-num').textContent = pdfPage;
+  document.getElementById('pdf-page-total').textContent = pdfTotal;
+}
+</script>
+</body>
+</html>
