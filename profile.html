@@ -8,9 +8,12 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; color: #1a1a18; }
 
-/* ── BANNER ── */
-.profile-banner {
-  height: 140px; background: linear-gradient(135deg, #009A97 0%, #007A77 50%, #005f5d 100%);
+/* ── PROFILE HERO CARD ── */
+.profile-hero { max-width: 600px; margin: 16px auto 0; padding: 0 16px; }
+.profile-card { background: white; border-radius: 16px; border: 0.5px solid #e0dfd8; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.profile-card-cover {
+  height: 90px;
+  background: linear-gradient(135deg, #009A97 0%, #007A77 50%, #005f5d 100%);
   position: relative; overflow: hidden;
 }
 .banner-pattern {
@@ -21,32 +24,29 @@ html, body { height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -
   background-size: 40px 40px, 60px 60px, 50px 50px;
 }
 .banner-edit-btn {
-  position: absolute; top: 10px; right: 12px;
+  position: absolute; top: 8px; right: 10px;
   background: rgba(255,255,255,0.2); border: none; border-radius: 8px;
-  padding: 6px 10px; color: white; font-size: 11px; font-weight: 600;
+  padding: 5px 10px; color: white; font-size: 11px; font-weight: 600;
   cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 4px;
   backdrop-filter: blur(4px); transition: background 0.15s;
 }
 .banner-edit-btn:hover { background: rgba(255,255,255,0.3); }
-
-/* ── PROFILE HERO ── */
-.profile-hero { max-width: 600px; margin: 0 auto; padding: 0 16px; }
-.avatar-row { display: flex; align-items: flex-end; justify-content: space-between; margin-top: -40px; padding-bottom: 12px; }
-.profile-avatar-wrap { position: relative; cursor: pointer; }
+.profile-card-body { padding: 0 16px 18px; text-align: center; }
+.profile-avatar-wrap { position: relative; display: inline-block; margin-top: -36px; cursor: pointer; }
 .profile-avatar {
-  width: 80px; height: 80px; border-radius: 50%; background: #E8971A;
+  width: 72px; height: 72px; border-radius: 50%; background: #E8971A;
   display: flex; align-items: center; justify-content: center;
-  font-size: 26px; font-weight: 700; color: white;
-  border: 3px solid white; box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  font-size: 22px; font-weight: 700; color: white;
+  border: 3px solid white; box-shadow: 0 2px 10px rgba(0,0,0,0.15);
 }
 .avatar-edit-badge {
-  position: absolute; bottom: 2px; right: 2px; width: 22px; height: 22px;
+  position: absolute; bottom: 2px; right: 2px; width: 20px; height: 20px;
   background: #009A97; border-radius: 50%; border: 2px solid white;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
 }
-.profile-name { font-size: 20px; font-weight: 700; color: #1a1a18; margin-top: 6px; }
-.profile-sub { font-size: 12px; color: #888780; margin-top: 2px; }
-.profile-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; background: #009A97; color: white; border-radius: 99px; padding: 2px 10px; margin-top: 6px; }
+.profile-name { font-size: 18px; font-weight: 700; color: #1a1a18; margin-top: 8px; }
+.profile-sub { font-size: 11px; color: #888780; margin-top: 3px; }
+.profile-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; background: #009A97; color: white; border-radius: 99px; padding: 2px 10px; margin-top: 8px; }
 
 /* ── QUICK ACTIONS ── */
 .quick-actions { display: flex; border-top: 0.5px solid #e0dfd8; border-bottom: 0.5px solid #e0dfd8; background: white; margin: 14px 0 0; }
@@ -130,41 +130,37 @@ html, body { height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -
 </head>
 <body>
 
-<!-- BANNER -->
-<div class="profile-banner">
-  <div class="banner-pattern"></div>
-  <button class="banner-edit-btn">
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-    Edit Cover
-  </button>
-</div>
-
-<!-- HERO -->
+<!-- PROFILE HERO CARD -->
 <div class="profile-hero">
-  <div class="avatar-row">
-    <div class="profile-avatar-wrap" onclick="switchTab('profile')">
-      <div class="profile-avatar" id="hero-avatar">MC</div>
-      <div class="avatar-edit-badge">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <button class="banner-edit-btn" style="position:static;background:#f0f0f0;color:#1a1a18;backdrop-filter:none;" onclick="switchTab('profile')">
+  <div class="profile-card">
+    <!-- Cover strip -->
+    <div class="profile-card-cover">
+      <div class="banner-pattern"></div>
+      <button class="banner-edit-btn" onclick="switchTab('profile')">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        Edit Profile
+        Edit Cover
       </button>
     </div>
-  </div>
-  <div class="profile-name" id="hero-name">Minh Cong</div>
-  <div class="profile-sub">Member since 01-11-2025 · M6 Group</div>
-  <div class="profile-badge">
-    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-    Admin
+    <!-- Avatar + info -->
+    <div class="profile-card-body">
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar" id="hero-avatar">MC</div>
+        <div class="avatar-edit-badge" onclick="switchTab('profile')">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </div>
+      </div>
+      <div class="profile-name" id="hero-name">Minh Cong</div>
+      <div class="profile-sub">Member since 01-11-2025 · M6 Group</div>
+      <div class="profile-badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Admin
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- QUICK ACTIONS -->
-<div class="profile-hero" style="padding-top:0;">
+<div class="profile-hero" style="margin-top:10px;">
   <div class="quick-actions">
     <div class="quick-action active" id="qa-notif" onclick="switchTab('notifications')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -172,7 +168,7 @@ html, body { height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -
       <span class="unread-badge" id="unread-count">3</span>
     </div>
     <div class="quick-action" id="qa-profile" onclick="switchTab('profile')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       Edit Profile
     </div>
     <div class="quick-action" id="qa-security" onclick="switchTab('security')">
@@ -200,7 +196,7 @@ html, body { height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -
         <button class="section-action" onclick="markAllRead()">Mark all read</button>
       </div>
 
-      <div id="notif-list">
+      <div id="notif-list" style="max-height:420px;overflow-y:auto;">
 
         <div class="notif-item unread" id="notif-1">
           <div class="notif-icon collect">
@@ -401,6 +397,7 @@ html, body { height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -
   </div>
 
 </div>
+<script>
 const TAB_MAP = { notifications: 'notif', profile: 'profile', security: 'security', addresses: 'addresses' };
 
 function switchTab(tab) {
@@ -437,6 +434,8 @@ function confirmLogout() {
     alert('Logged out successfully.');
   }
 }
+
+function saveProfile() {
   const name = document.querySelector('#tab-profile .field-input').value;
   document.getElementById('hero-name').textContent = name || 'Minh Cong';
   const btn = document.querySelector('.save-btn');
