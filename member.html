@@ -391,7 +391,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .view-order-btn:hover { background: #f5fafa; }
 
   /* RATING  */
-  .card-rating { display: flex; align-items: center; gap: 6px; padding: 6px 14px 10px; }
+  .card-rating { display: flex; align-items: center; gap: 6px; padding: 4px 14px 4px; }
   .stars { display: flex; gap: 2px; }
   .star { color: #F5A623; font-size: 13px; }
   .star.empty { color: #D3D1C7; }
@@ -400,7 +400,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .card-info-grid { display:grid;grid-template-columns:72px 1fr;gap:3px 0;font-size:11px;padding:8px 14px 10px;border-top:0.5px solid #f0f0f0;}
   .card-info-lbl { color:#888780; }
   .card-info-val { color:#1a1a18; }
-  .rating-preview { font-size: 11px; color: #888; font-style: italic; padding: 0 14px 10px; line-height: 1.4; border-top: 0.5px solid #f0f0f0; padding-top: 8px; }
+  .rating-preview { font-size: 11px; color: #888; font-style: italic; padding: 2px 14px 12px; line-height: 1.4; }
   .rating-preview strong { color: #1a1a18; font-style: normal; }
 
 
@@ -1724,16 +1724,30 @@ select:focus { border-color: #009A97; }
           <div class="pcard-host"><div class="avatar lg">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M6 group</div></div></div>
           <div class="pcard-meta">01-12-2025<br/>1PM – 8PM</div>
         </div>
-        <div class="pcard-summary" onclick="togglePcard('p1')">
+        <div class="pcard-summary" onclick="togglePcard('pcard-p1')">
           <div class="pcard-title">Moi nua</div>
           <div class="pcard-summary-right">
             <span class="pcard-total">$24.00</span>
             <span class="pcard-icount">2 items</span>
-            <svg class="pcard-chevron" id="chev-p1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="pcard-chevron" id="pcard-chev-p1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="pcard-items" id="p1">
-          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×2</span><span class="pcard-item-price">$24.00</span></div>
+        <div class="pcard-items" id="pcard-p1">
+          <div style="padding:10px 14px;border-bottom:0.5px solid #f0f0f0;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div><div style="font-size:12px;font-weight:600;color:#1a1a18;">Spec</div><div style="font-size:11px;color:#888780;">Frame: Blue · Lens: Clear</div></div>
+              <div style="text-align:right;"><div style="font-size:11px;color:#888780;">QTY: 2</div><div style="font-size:13px;font-weight:600;color:#1a1a18;">$40.00</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div><div style="font-size:12px;font-weight:600;color:#1a1a18;">Toothpaste</div><div style="font-size:11px;color:#888780;">Clean teeth</div></div>
+              <div style="text-align:right;"><div style="font-size:11px;color:#888780;">QTY: 1</div><div style="font-size:13px;font-weight:600;color:#1a1a18;">$2.00</div></div>
+            </div>
+          </div>
+          <div style="padding:8px 14px;display:flex;flex-direction:column;gap:4px;font-size:11px;background:#FAFAF8;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Subtotal</span><span style="font-weight:500;">$42.00</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Delivery <span style="background:#f0f0f0;border-radius:3px;padding:0 4px;">TBC</span></span><span style="color:#888780;">$0.00</span></div>
+            <div style="display:flex;justify-content:space-between;font-weight:700;padding-top:4px;border-top:0.5px solid #e0dfd8;"><span>Total</span><span>$42.00</span></div>
+          </div>
           <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$24.00</span></div>
         </div>
         <div class="pcard-action">
@@ -1748,16 +1762,25 @@ select:focus { border-color: #009A97; }
           <div class="pcard-host"><div class="avatar lg">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M6 group</div></div></div>
           <div class="pcard-meta">20-02-2026<br/>9AM – 4PM</div>
         </div>
-        <div class="pcard-summary" onclick="togglePcard('p2')">
+        <div class="pcard-summary" onclick="togglePcard('pcard-p2')">
           <div class="pcard-title">Bubble Tea</div>
           <div class="pcard-summary-right">
             <span class="pcard-total">$12.00</span>
             <span class="pcard-icount">1 item</span>
-            <svg class="pcard-chevron" id="chev-p2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="pcard-chevron" id="pcard-chev-p2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="pcard-items" id="p2">
-          <div class="pcard-item-row"><span class="pcard-item-name">Bundle pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$12.00</span></div>
+        <div class="pcard-items" id="pcard-p2">
+          <div style="padding:10px 14px;border-bottom:0.5px solid #f0f0f0;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div><div style="font-size:12px;font-weight:600;color:#1a1a18;">Chestnut</div><div style="font-size:11px;color:#888780;">Individual (split case · 1/6)</div></div>
+              <div style="text-align:right;"><div style="font-size:11px;color:#888780;">QTY: 1</div><div style="font-size:13px;font-weight:600;color:#1a1a18;">$3.00</div></div>
+            </div>
+          </div>
+          <div style="padding:8px 14px;display:flex;flex-direction:column;gap:4px;font-size:11px;background:#FAFAF8;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Subtotal</span><span style="font-weight:500;">$3.00</span></div>
+            <div style="display:flex;justify-content:space-between;font-weight:700;padding-top:4px;border-top:0.5px solid #e0dfd8;"><span>Total</span><span>$3.00</span></div>
+          </div>
           <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$12.00</span></div>
         </div>
         <div class="pcard-action">
@@ -1772,15 +1795,15 @@ select:focus { border-color: #009A97; }
           <div class="pcard-host"><div class="avatar lg">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M5</div></div></div>
           <div class="pcard-meta">27-02-2026<br/>1PM – 8PM</div>
         </div>
-        <div class="pcard-summary" onclick="togglePcard('p3')">
+        <div class="pcard-summary" onclick="togglePcard('pcard-p3')">
           <div class="pcard-title">M5 first event 2026</div>
           <div class="pcard-summary-right">
             <span class="pcard-total">$66.00</span>
             <span class="pcard-icount">4 items</span>
-            <svg class="pcard-chevron" id="chev-p3" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="pcard-chevron" id="pcard-chev-p3" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="pcard-items" id="p3">
+        <div class="pcard-items" id="pcard-p3">
           <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×3</span><span class="pcard-item-price">$36.00</span></div>
           <div class="pcard-item-row"><span class="pcard-item-name">Bundle pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$30.00</span></div>
           <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$66.00</span></div>
@@ -1797,15 +1820,15 @@ select:focus { border-color: #009A97; }
           <div class="pcard-host"><div class="avatar lg">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M5</div></div></div>
           <div class="pcard-meta">27-02-2026<br/>1PM – 8PM</div>
         </div>
-        <div class="pcard-summary" onclick="togglePcard('p4')">
+        <div class="pcard-summary" onclick="togglePcard('pcard-p4')">
           <div class="pcard-title">M5 March round</div>
           <div class="pcard-summary-right">
             <span class="pcard-total">$18.00</span>
             <span class="pcard-icount">1 item</span>
-            <svg class="pcard-chevron" id="chev-p4" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="pcard-chevron" id="pcard-chev-p4" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="pcard-items" id="p4">
+        <div class="pcard-items" id="pcard-p4">
           <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$18.00</span></div>
           <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$18.00</span></div>
         </div>
@@ -1822,15 +1845,15 @@ select:focus { border-color: #009A97; }
           <div class="pcard-host"><div class="avatar lg">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M6 group</div></div></div>
           <div class="pcard-meta">20-02-2026<br/>9AM – 4PM</div>
         </div>
-        <div class="pcard-summary" onclick="togglePcard('p5')">
+        <div class="pcard-summary" onclick="togglePcard('pcard-p5')">
           <div class="pcard-title">Bubble Tea Feb</div>
           <div class="pcard-summary-right">
             <span class="pcard-total">$8.00</span>
             <span class="pcard-icount">1 item</span>
-            <svg class="pcard-chevron" id="chev-p5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="pcard-chevron" id="pcard-chev-p5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="pcard-items" id="p5">
+        <div class="pcard-items" id="pcard-p5">
           <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$8.00</span></div>
           <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$8.00</span></div>
         </div>
@@ -1846,15 +1869,15 @@ select:focus { border-color: #009A97; }
           <div class="pcard-host"><div class="avatar lg" style="background:#B4B2A9;">MC</div><div><div class="pcard-hname">Minh Cong</div><div class="pcard-hgrp">M6 group</div></div></div>
           <div class="pcard-meta">01-12-2025<br/>1PM – 8PM</div>
         </div>
-        <div class="pcard-summary" onclick="togglePcard('p6')">
+        <div class="pcard-summary" onclick="togglePcard('pcard-p6')">
           <div class="pcard-title" style="color:#888780;">Moi nua (Dec round)</div>
           <div class="pcard-summary-right">
             <span class="pcard-total" style="color:#888780;">$12.00</span>
             <span class="pcard-icount">1 item</span>
-            <svg class="pcard-chevron" id="chev-p6" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="pcard-chevron" id="pcard-chev-p6" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="pcard-items" id="p6">
+        <div class="pcard-items" id="pcard-p6">
           <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$12.00</span></div>
           <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$12.00</span></div>
         </div>
@@ -1878,6 +1901,7 @@ select:focus { border-color: #009A97; }
         <div class="s-wrap">
           <svg class="s-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input class="s-input" id="group-search-input" placeholder="Search for a group to join…" oninput="searchGroups(this.value)" autocomplete="off" />
+          <div id="group-search-preview" style="display:none;position:absolute;top:100%;left:0;right:0;background:white;border:0.5px solid #D3D1C7;border-radius:0 0 10px 10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:100;max-height:220px;overflow-y:auto;"></div>
         </div>
       </div>
       <!-- Dropdown results -->
@@ -3664,9 +3688,69 @@ function showPaymentFlow() {
 }
 
 
+
+function searchGroups(query) {
+  const preview = document.getElementById('group-search-preview');
+  if (!preview) return;
+  if (!query || query.trim().length < 1) { preview.style.display = 'none'; return; }
+  const allGroups = [
+    { id: 'g1', name: 'M6 Group', members: 24, admin: 'Minh Cong' },
+    { id: 'g2', name: 'Foodie Pals', members: 18, admin: 'Janet Lee' },
+    { id: 'g3', name: 'Tech Buys SG', members: 45, admin: 'David Tan' },
+    { id: 'g4', name: 'Mums Collective', members: 12, admin: 'Sarah Wong' },
+    { id: 'g5', name: 'Coffee Lovers', members: 31, admin: 'Tom Nguyen' },
+  ];
+  const q = query.toLowerCase();
+  const results = allGroups.filter(function(g) { return g.name.toLowerCase().includes(q) || g.admin.toLowerCase().includes(q); });
+  preview.innerHTML = '';
+  if (results.length === 0) {
+    const empty = document.createElement('div');
+    empty.style.cssText = 'padding:12px 14px;font-size:12px;color:#888780;';
+    empty.textContent = 'No groups found';
+    preview.appendChild(empty);
+  } else {
+    results.forEach(function(g) {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid #f0f0f0;cursor:pointer;';
+      row.onmouseover = function() { row.style.background = '#f5fafa'; };
+      row.onmouseout = function() { row.style.background = ''; };
+      const info = document.createElement('div');
+      const nameEl = document.createElement('div');
+      nameEl.style.cssText = 'font-size:13px;font-weight:500;color:#1a1a18;';
+      nameEl.textContent = g.name;
+      const metaEl = document.createElement('div');
+      metaEl.style.cssText = 'font-size:11px;color:#888780;';
+      metaEl.textContent = g.members + ' members · Admin: ' + g.admin;
+      info.appendChild(nameEl);
+      info.appendChild(metaEl);
+      const btn = document.createElement('button');
+      btn.style.cssText = 'height:28px;padding:0 12px;background:#009A97;color:white;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;';
+      btn.textContent = 'Join';
+      btn.onclick = function(e) { e.stopPropagation(); joinGroup(g.id, g.name); };
+      row.appendChild(info);
+      row.appendChild(btn);
+      preview.appendChild(row);
+    });
+  }
+  preview.style.display = 'block';
+}
+
+function joinGroup(id, name) {
+  document.getElementById('group-search-input').value = '';
+  document.getElementById('group-search-preview').style.display = 'none';
+  showToast('Joined ' + name + '!', 'success');
+}
+
+document.addEventListener('click', function(e) {
+  const preview = document.getElementById('group-search-preview');
+  if (preview && !e.target.closest('#group-search-input') && !e.target.closest('#group-search-preview')) {
+    preview.style.display = 'none';
+  }
+});
+
 function togglePcard(id) {
   const items = document.getElementById(id);
-  const chevron = document.getElementById('chev-' + id);
+  const chevron = document.getElementById('pcard-chev-' + id.replace('pcard-',''));
   if (!items) return;
   items.classList.toggle('open');
   if (chevron) chevron.classList.toggle('open');
