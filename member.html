@@ -44,7 +44,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .chip.active { background: #009A97; color: white; border-color: #009A97; font-weight: 600; }
 
   /* FEED  */
-  .feed { padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+  .feed { padding: 12px 0; display: flex; flex-direction: column; gap: 12px; }
   .event-card { cursor:pointer; background: white; border: 0.5px solid #e0dfd8; border-radius: 12px; overflow: hidden; transition: border-color 0.15s; box-shadow:0 1px 6px rgba(0,0,0,0.05); }
   .event-card:hover { border-color: #009A97; }
   .event-card * { cursor: pointer; }
@@ -55,9 +55,9 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .card-badges { display: flex; align-items: center; gap: 6px; }
   .closing-text { font-size: 11px; color: #E87722; font-weight: 500; }
   .buy-badge { font-size: 11px; font-weight: 500; border-radius: 12px; padding: 3px 9px; color: white; }
-  .card-img { background: #E0F5F5; height: 200px; display: flex; align-items: center; justify-content: center; }
+  .card-img { background: #E0F5F5; height: 200px; width: 100%; display: flex; align-items: center; justify-content: center; }
   .card-body { padding: 12px 14px 6px; }
-  .card-title { font-size: 14px; font-weight: 500; color: #009A97; margin-bottom: 4px; }
+  .card-title { font-size: 15px; font-weight: 700; color: #1a1a18; margin-bottom: 4px; }
   .card-desc { font-size: 13px; color: #666; line-height: 1.5; }
 
   /* BOTTOM NAV  */
@@ -304,7 +304,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .group-search-top { padding: 10px 0 6px; background: #F4F6F8; position: relative; display: flex; justify-content: center; }
   .group-search-top .inner { width: 100%; max-width: 600px; padding: 0 14px; display: flex; align-items: center; gap: 12px; }
   .group-search-top .grp-lbl { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
-  .group-search-top .s-wrap { position: relative; flex: 1; min-width: 0; }
+  .group-search-top .s-wrap { position: relative; width: 80%; max-width: 400px; }
   .group-search-top .s-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #B4B2A9; }
   .group-search-top .s-input {
     width: 100%; height: 32px; border: 0.5px solid #D3D1C7;
