@@ -391,7 +391,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .view-order-btn:hover { background: #f5fafa; }
 
   /* RATING  */
-  .card-rating { display: flex; align-items: center; gap: 6px; padding: 4px 14px 4px; }
+  .card-rating { display: flex; align-items: center; gap: 6px; padding: 10px 14px 2px; }
   .stars { display: flex; gap: 2px; }
   .star { color: #F5A623; font-size: 13px; }
   .star.empty { color: #D3D1C7; }
@@ -400,7 +400,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .card-info-grid { display:grid;grid-template-columns:72px 1fr;gap:3px 0;font-size:11px;padding:8px 14px 10px;border-top:0.5px solid #f0f0f0;}
   .card-info-lbl { color:#888780; }
   .card-info-val { color:#1a1a18; }
-  .rating-preview { font-size: 11px; color: #888; font-style: italic; padding: 2px 14px 12px; line-height: 1.4; }
+  .rating-preview { font-size: 11px; color: #888; font-style: italic; padding: 0 14px 10px; margin-top:0; line-height: 1.4; }
   .rating-preview strong { color: #1a1a18; font-style: normal; }
 
 
@@ -3715,6 +3715,10 @@ function searchGroups(query) {
       row.onmouseover = function() { row.style.background = '#f5fafa'; };
       row.onmouseout = function() { row.style.background = ''; };
       const info = document.createElement('div');
+      const avatarEl = document.createElement('div');
+      const colors = ['#9B59B6','#009A97','#E8971A','#E74C3C','#3498DB'];
+      avatarEl.style.cssText = 'width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;margin-right:10px;background:' + colors[results.indexOf(g) % colors.length] + ';';
+      avatarEl.textContent = g.name.charAt(0).toUpperCase();
       const nameEl = document.createElement('div');
       nameEl.style.cssText = 'font-size:13px;font-weight:500;color:#1a1a18;';
       nameEl.textContent = g.name;
@@ -3723,6 +3727,7 @@ function searchGroups(query) {
       metaEl.textContent = g.members + ' members · Admin: ' + g.admin;
       info.appendChild(nameEl);
       info.appendChild(metaEl);
+      row.insertBefore(avatarEl, info);
       const btn = document.createElement('button');
       btn.style.cssText = 'height:28px;padding:0 12px;background:#009A97;color:white;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;';
       btn.textContent = 'Join';
