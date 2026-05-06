@@ -1198,81 +1198,272 @@ select:focus { border-color: #009A97; }
 
   <!-- EVENT DETAIL VIEW -->
   <div id="view-event-detail" style="display:none;">
-    <div style="padding:14px 16px 24px;max-width:600px;margin:0 auto;">
-      <button onclick="showView('view-all')" style="display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;color:#888780;font-size:12px;font-family:inherit;margin-bottom:14px;padding:0;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to Events
-      </button>
-      <!-- Banner -->
-      <div style="height:120px;background:linear-gradient(135deg,#009A97,#007A77);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-      </div>
-      <!-- Info card -->
-      <div style="background:white;border-radius:12px;padding:14px;margin-bottom:10px;border:0.5px solid #e0dfd8;">
-        <div id="ev-detail-title" style="font-size:17px;font-weight:700;color:#1a1a18;margin-bottom:5px;"></div>
-        <div id="ev-detail-desc" style="font-size:12px;color:#888780;margin-bottom:10px;"></div>
-        <div style="display:flex;gap:14px;flex-wrap:wrap;">
-          <div style="font-size:11px;color:#888780;display:flex;align-items:center;gap:4px;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Hosted by <span id="ev-detail-host" style="margin-left:2px;"></span>
+
+    <!-- SCREEN 1: Event detail + order -->
+    <div id="ev-screen-1">
+      <!-- Event header -->
+      <div style="background:white;border-radius:12px;margin:12px 14px 0;overflow:hidden;border:0.5px solid #e0dfd8;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;">MC</div>
+            <div><div style="font-size:13px;font-weight:600;color:#1a1a18;">Minh Cong</div><div style="font-size:11px;color:#888780;">M6 group</div></div>
           </div>
-          <div id="ev-detail-days" style="font-size:11px;font-weight:600;display:flex;align-items:center;gap:4px;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div style="text-align:right;">
+            <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.06em;">MANAGE</div>
+            <div id="ev1-days" style="font-size:12px;font-weight:600;color:#E8971A;margin-bottom:3px;"></div>
+            <div id="ev1-buys" style="background:#E8971A;color:white;font-size:11px;font-weight:700;border-radius:4px;padding:2px 7px;display:none;"></div>
+          </div>
+        </div>
+        <!-- Banner -->
+        <div style="height:200px;background:linear-gradient(135deg,#E0F5F5,#009A97);position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.3;">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+        </div>
+        <!-- Event info -->
+        <div style="padding:12px 14px;">
+          <div id="ev1-title" style="font-size:15px;font-weight:700;color:#009A97;margin-bottom:4px;"></div>
+          <div id="ev1-desc" style="font-size:12px;color:#888780;margin-bottom:10px;"></div>
+          <div style="display:grid;grid-template-columns:80px 1fr;gap:4px 0;font-size:12px;">
+            <span style="color:#888780;">Closing:</span><span id="ev1-closing" style="color:#1a1a18;">15-05-2026</span>
+            <span style="color:#888780;">Collection:</span><span style="color:#009A97;">22-05-2026 (10AM - 5PM)</span>
+            <span style="color:#888780;">Address:</span><span style="color:#009A97;">Simei Street 1</span>
           </div>
         </div>
       </div>
-      <!-- Items -->
-      <div style="background:white;border-radius:12px;padding:14px;margin-bottom:10px;border:0.5px solid #e0dfd8;">
-        <div style="font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:12px;">Items</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid #f0f0f0;">
-          <div>
-            <div style="font-size:13px;font-weight:500;">Item 1</div>
-            <div style="font-size:11px;color:#888780;margin-top:2px;">Min order: 1</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div style="font-weight:600;font-size:13px;">$59.00</div>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <button onclick="changeQty('q1',-1)" style="width:26px;height:26px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:16px;line-height:1;color:#1a1a18;">−</button>
-              <span id="q1" style="font-size:13px;font-weight:600;min-width:18px;text-align:center;">0</span>
-              <button onclick="changeQty('q1',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:16px;line-height:1;color:white;">+</button>
+
+      <!-- Search -->
+      <div style="margin:10px 14px 0;position:relative;">
+        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#B4B2A9;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input placeholder="Search product" style="width:100%;height:38px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 12px 0 32px;font-size:13px;font-family:inherit;outline:none;background:white;" />
+      </div>
+
+      <!-- Products -->
+      <div style="margin:10px 14px 0;display:flex;flex-direction:column;gap:0;">
+
+        <!-- Product 1: Spec with sub-items -->
+        <div style="background:white;border:0.5px solid #e0dfd8;border-radius:10px;padding:12px;margin-bottom:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="width:56px;height:56px;border-radius:8px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:600;color:#009A97;">Spec</div>
+              <div style="font-size:11px;color:#888780;">Good Spec from Vietnam</div>
+              <div style="font-size:13px;font-weight:600;color:#E8971A;margin-top:2px;">$20.00</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+              <button onclick="changeQty2('p1',-1)" style="width:28px;height:28px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:16px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
+              <span id="p1" style="font-size:13px;font-weight:600;min-width:16px;text-align:center;">0</span>
+              <button onclick="changeQty2('p1',1)" style="width:28px;height:28px;border-radius:50%;border:none;background:#E8971A;cursor:pointer;font-size:16px;line-height:1;color:white;font-family:inherit;">+</button>
             </div>
           </div>
+          <select style="width:100%;height:34px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 8px;font-size:12px;font-family:inherit;margin-top:8px;color:#888780;outline:none;">
+            <option>Option</option><option>Blue Frame</option><option>Red Frame</option>
+          </select>
+          <div style="font-size:11px;color:#888780;margin-top:6px;">0 order(s) made</div>
+          <div style="font-size:11px;color:#009A97;text-align:right;cursor:pointer;margin-top:2px;">Add Another Order with a different selection</div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;">
-          <div>
-            <div style="font-size:13px;font-weight:500;">Item 2</div>
-            <div style="font-size:11px;color:#888780;margin-top:2px;">Min order: 1</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div style="font-weight:600;font-size:13px;">$59.00</div>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <button onclick="changeQty('q2',-1)" style="width:26px;height:26px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:16px;line-height:1;color:#1a1a18;">−</button>
-              <span id="q2" style="font-size:13px;font-weight:600;min-width:18px;text-align:center;">0</span>
-              <button onclick="changeQty('q2',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:16px;line-height:1;color:white;">+</button>
+
+        <!-- Product 2: Toothpaste -->
+        <div style="background:white;border:0.5px solid #e0dfd8;border-radius:10px;padding:12px;margin-bottom:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="width:56px;height:56px;border-radius:8px;background:#f0f0f0;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4B2A9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:600;color:#009A97;">Toothpaste</div>
+              <div style="font-size:11px;color:#888780;">Clean teeth</div>
+              <div style="font-size:13px;font-weight:600;color:#E8971A;margin-top:2px;">$2.00</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+              <button onclick="changeQty2('p2',-1)" style="width:28px;height:28px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:16px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
+              <span id="p2" style="font-size:13px;font-weight:600;min-width:16px;text-align:center;">0</span>
+              <button onclick="changeQty2('p2',1)" style="width:28px;height:28px;border-radius:50%;border:none;background:#E8971A;cursor:pointer;font-size:16px;line-height:1;color:white;font-family:inherit;">+</button>
             </div>
           </div>
+          <div style="font-size:11px;color:#888780;margin-top:6px;">0 order(s) made</div>
         </div>
+
+        <!-- Product 3: Chestnut (split case) -->
+        <div style="background:white;border:0.5px solid #e0dfd8;border-radius:10px;padding:12px;margin-bottom:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="width:56px;height:56px;border-radius:8px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:600;color:#009A97;">Chestnut</div>
+              <div style="font-size:11px;color:#888780;">6 per case/carton</div>
+              <div style="font-size:13px;font-weight:600;color:#E8971A;margin-top:2px;">$10.00</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+              <button onclick="changeQty2('p3',-1)" style="width:28px;height:28px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:16px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
+              <span id="p3" style="font-size:13px;font-weight:600;min-width:16px;text-align:center;">0</span>
+              <button onclick="changeQty2('p3',1)" style="width:28px;height:28px;border-radius:50%;border:none;background:#E8971A;cursor:pointer;font-size:16px;line-height:1;color:white;font-family:inherit;">+</button>
+            </div>
+          </div>
+          <div style="font-size:11px;color:#888780;margin-top:6px;">1 order(s) made</div>
+        </div>
+
+        <!-- Product 4: Chestnut individual (split case individual) -->
+        <div style="background:white;border:0.5px solid #e0dfd8;border-radius:10px;padding:12px;margin-bottom:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="width:56px;height:56px;border-radius:8px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:600;color:#009A97;">Chestnut</div>
+              <div style="font-size:11px;color:#888780;">Individual pieces (split case)</div>
+              <div style="font-size:13px;font-weight:600;color:#E8971A;margin-top:2px;">$3.00</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+              <button onclick="changeQty2('p4',-1)" style="width:28px;height:28px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:16px;line-height:1;color:#1a1a18;font-family:inherit;">−</button>
+              <span id="p4" style="font-size:13px;font-weight:600;min-width:16px;text-align:center;">0</span>
+              <button onclick="changeQty2('p4',1)" style="width:28px;height:28px;border-radius:50%;border:none;background:#E8971A;cursor:pointer;font-size:16px;line-height:1;color:white;font-family:inherit;">+</button>
+            </div>
+          </div>
+          <div style="font-size:11px;color:#888780;margin-top:6px;">0 order(s) made</div>
+          <div style="margin-top:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:#888780;margin-bottom:2px;"><span></span><span>(0 / 6)</span></div>
+            <div style="height:4px;background:#e0dfd8;border-radius:2px;"><div style="width:0%;height:100%;background:#009A97;border-radius:2px;"></div></div>
+            <div style="font-size:11px;color:#E24B4A;margin-top:3px;">Need 6 more to fulfill orders</div>
+          </div>
+        </div>
+
       </div>
-      <!-- Order summary -->
-      <div style="background:white;border-radius:12px;padding:14px;margin-bottom:10px;border:0.5px solid #e0dfd8;">
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;">
-          <span style="color:#888780;">Subtotal</span>
-          <span id="ev-subtotal" style="font-weight:600;">$0.00</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:#888780;margin-bottom:12px;">
-          <span>Payment method</span><span>Pay together</span>
-        </div>
-        <button onclick="placeOrder()" style="width:100%;height:44px;background:#009A97;color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Place Order</button>
+
+      <!-- Please note -->
+      <div style="margin:8px 14px 0;font-size:12px;color:#1a1a18;">
+        <div style="margin-bottom:6px;font-weight:500;">Please note:</div>
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+          <input type="checkbox" checked style="accent-color:#009A97;margin-top:2px;flex-shrink:0;" />
+          <span style="font-size:12px;color:#888780;">Additional note is added here</span>
+        </label>
       </div>
-      <!-- Existing order (shown when hasOrders) -->
-      <div id="ev-existing-order" style="display:none;background:white;border-radius:12px;padding:14px;border:0.5px solid #e0dfd8;">
-        <div style="font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:8px;">Your Existing Order</div>
-        <div style="font-size:12px;color:#888780;margin-bottom:4px;">1 x Item 1 · $59.00</div>
-        <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-size:13px;font-weight:600;">$59.00</span>
-          <button onclick="switchTab('purchase')" style="height:34px;padding:0 14px;background:#009A97;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Make Payment</button>
-        </div>
+
+      <!-- More info -->
+      <div style="margin:10px 14px 0;font-size:12px;color:#1a1a18;">
+        <div style="font-weight:500;margin-bottom:4px;">More Information:</div>
+        <a href="#" style="color:#009A97;font-size:12px;">sss.com</a>
+      </div>
+
+      <!-- Total bar -->
+      <div style="margin:12px 14px 0;background:#E0F5F5;border-radius:10px;padding:12px 14px;text-align:right;">
+        <div style="font-size:17px;font-weight:700;color:#009A97;" id="ev1-total">$0.00 SGD</div>
+        <div style="font-size:11px;color:#888780;">$0.00 admin fee included</div>
+      </div>
+
+      <!-- Purchase on behalf -->
+      <div style="text-align:center;margin:8px 14px 0;">
+        <span style="font-size:12px;color:#009A97;text-decoration:underline;cursor:pointer;">Purchase-on-Behalf</span>
+      </div>
+
+      <!-- Notes to host -->
+      <div style="margin:10px 14px 0;">
+        <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:6px;">NOTES TO THE HOST</div>
+        <textarea id="ev1-notes" placeholder="" style="width:100%;height:80px;border:0.5px solid #D3D1C7;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;resize:none;"></textarea>
+      </div>
+
+      <!-- Actions -->
+      <div style="display:flex;gap:10px;margin:12px 14px 24px;">
+        <button onclick="showView('view-all')" style="flex:1;height:46px;border:0.5px solid #D3D1C7;border-radius:8px;background:white;font-size:14px;font-weight:600;color:#888780;cursor:pointer;font-family:inherit;">CANCEL</button>
+        <button onclick="placeOrder2()" style="flex:2;height:46px;background:#009A97;border:none;border-radius:8px;font-size:14px;font-weight:600;color:white;cursor:pointer;font-family:inherit;">PLACE ORDER</button>
       </div>
     </div>
+
+    <!-- SCREEN 2: Order confirmation + payment -->
+    <div id="ev-screen-2" style="display:none;">
+      <!-- Order header -->
+      <div style="background:white;border-radius:12px;margin:12px 14px 0;overflow:hidden;border:0.5px solid #e0dfd8;">
+        <div style="text-align:center;padding:10px 14px 6px;font-size:13px;font-weight:600;color:#1a1a18;border-bottom:0.5px solid #f0f0f0;">ORDER NO: <span id="ev2-ordernum">1</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;">MC</div>
+            <div><div style="font-size:13px;font-weight:600;color:#1a1a18;">Minh Cong</div><div style="font-size:11px;color:#888780;">M6 group</div></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:#E8971A;">29-05-2026</div>
+            <div style="font-size:11px;color:#E8971A;margin-bottom:3px;">10AM - 5PM</div>
+            <div id="ev2-buys" style="background:#E8971A;color:white;font-size:11px;font-weight:700;border-radius:4px;padding:2px 7px;">1 BUY</div>
+          </div>
+        </div>
+        <div style="padding:0 14px 12px;">
+          <div id="ev2-title" style="font-size:14px;font-weight:600;color:#009A97;margin-bottom:3px;"></div>
+          <div id="ev2-desc" style="font-size:12px;color:#888780;margin-bottom:8px;"></div>
+          <div style="display:grid;grid-template-columns:80px 1fr;gap:4px 0;font-size:12px;">
+            <span style="color:#888780;">Closing:</span><span style="color:#1a1a18;">15-05-2026</span>
+            <span style="color:#888780;">Collection:</span><span style="color:#009A97;">29-05-2026</span>
+            <span style="color:#888780;">Address:</span><span style="color:#009A97;">206 Trương Định, Phường Châu Phú B</span>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px;font-size:11px;font-weight:600;">
+            <span style="color:#009A97;cursor:pointer;">EDIT</span>
+            <span style="color:#E24B4A;cursor:pointer;">CANCEL</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order items card -->
+      <div style="background:#E0F5F5;border-radius:12px;margin:10px 14px 0;padding:14px;">
+        <div id="ev2-items" style="margin-bottom:10px;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+          <div style="flex:1;">
+            <img style="width:80px;height:80px;border-radius:8px;object-fit:cover;background:#D3D1C7;" src="" onerror="this.style.background='#D3D1C7';this.removeAttribute('src')" />
+          </div>
+          <div style="flex:2;font-size:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:#888780;">Total:</span><span style="font-weight:600;" id="ev2-total">$0.00</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:#888780;">Discount:</span><span>$0.00 (TBC)</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:#888780;">Delivery:</span><span>$0.00 (TBC)</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:#888780;">Admin fee:</span><span>$0.00</span></div>
+            <div style="display:flex;justify-content:space-between;font-weight:700;font-size:13px;border-top:0.5px solid #80CCCB;padding-top:6px;"><span>Final:</span><span id="ev2-final" style="color:#009A97;">$0.00</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;">
+          <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:5px;">NOTES TO THE HOST</div>
+          <textarea style="width:100%;height:70px;border:0.5px solid #80CCCB;border-radius:8px;padding:8px;font-size:12px;font-family:inherit;outline:none;resize:none;background:white;"></textarea>
+        </div>
+      </div>
+
+      <!-- Payment card -->
+      <div style="background:#E0F5F5;border-radius:12px;margin:10px 14px 0;padding:14px;">
+        <div style="font-size:13px;color:#1a1a18;margin-bottom:10px;text-align:center;line-height:1.6;">
+          <strong>Step 1:</strong> Please scan the following QR code to pay <strong id="ev2-payamt">$0.00</strong> to <strong>83062355</strong>
+        </div>
+        <div style="font-size:12px;color:#888780;text-align:center;margin-bottom:12px;">
+          Add your unique reference code <strong style="color:#1a1a18;">5uv9-no2</strong>
+        </div>
+        <!-- QR code placeholder -->
+        <div style="background:white;border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;min-height:160px;">
+          <div style="text-align:center;">
+            <div style="width:120px;height:120px;border:2px solid #1a1a18;border-radius:4px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:8px;margin:0 auto;">
+              <div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div>
+              <div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div>
+              <div style="background:#1a1a18;border-radius:1px;"></div><div></div><div></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div>
+              <div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div>
+              <div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div><div></div><div style="background:#1a1a18;border-radius:1px;"></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:14px;">
+          <span style="color:#009A97;cursor:pointer;display:flex;align-items:center;gap:4px;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download QRCode
+          </span>
+          <span style="color:#888780;cursor:pointer;">Click to reload QRCode</span>
+        </div>
+        <div style="font-size:13px;color:#1a1a18;margin-bottom:10px;text-align:center;">
+          <strong>Step 2:</strong> Attach PayNow screenshot (Do not attach SMS)
+        </div>
+        <!-- Screenshot upload -->
+        <div style="background:white;border-radius:10px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;border:1px dashed #80CCCB;margin-bottom:14px;" onclick="alert('Upload screenshot')">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <div style="font-size:11px;color:#888780;">Screenshot</div>
+        </div>
+        <button onclick="confirmPayment()" style="width:100%;height:46px;background:#009A97;border:none;border-radius:8px;font-size:14px;font-weight:700;color:white;cursor:pointer;font-family:inherit;letter-spacing:0.05em;">CONFIRM PAYMENT</button>
+      </div>
+
+      <div style="height:24px;"></div>
+    </div>
+
   </div>
 
   <!-- ALL EVENTS VIEW -->
@@ -3020,20 +3211,173 @@ function showView(viewId) {
 }
 
 function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
-  document.getElementById('ev-detail-title').textContent = title;
-  document.getElementById('ev-detail-desc').textContent = desc;
-  document.getElementById('ev-detail-host').textContent = host + ' · ' + group;
-  const days = parseInt(daysLeft);
-  const daysEl = document.getElementById('ev-detail-days');
-  daysEl.style.color = days <= 3 ? '#E24B4A' : '#009A97';
-  daysEl.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Closes in ' + daysLeft + ' days';
-  // Reset qty
-  document.getElementById('q1').textContent = '0';
-  document.getElementById('q2').textContent = '0';
-  document.getElementById('ev-subtotal').textContent = '$0.00';
-  // Show/hide existing order
-  document.getElementById('ev-existing-order').style.display = parseInt(ordersPlaced) > 0 ? 'block' : 'none';
+  document.getElementById('ev1-title').textContent = title;
+  document.getElementById('ev2-title').textContent = title;
+  document.getElementById('ev1-desc').textContent = desc;
+  document.getElementById('ev2-desc').textContent = desc;
+  document.getElementById('ev1-days').textContent = daysLeft + ' days left';
+  if (parseInt(ordersPlaced) > 0) {
+    document.getElementById('ev1-buys').textContent = ordersPlaced + ' BUY';
+    document.getElementById('ev1-buys').style.display = 'inline-block';
+    document.getElementById('ev2-buys').textContent = ordersPlaced + ' BUY';
+  }
+  // Reset qtys
+  ['p1','p2','p3','p4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = '0';
+  });
+  document.getElementById('ev1-total').textContent = '$0.00 SGD';
+  // Show screen 1
+  document.getElementById('ev-screen-1').style.display = 'block';
+  document.getElementById('ev-screen-2').style.display = 'none';
   showView('view-event-detail');
+}
+
+function changeQty2(id, delta) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const val = Math.max(0, parseInt(el.textContent) + delta);
+  el.textContent = val;
+  updateTotal2();
+}
+
+function updateTotal2() {
+  const prices = { p1: 20, p2: 2, p3: 10, p4: 3 };
+  let total = 0;
+  Object.keys(prices).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) total += parseInt(el.textContent || 0) * prices[id];
+  });
+  const el = document.getElementById('ev1-total');
+  if (el) el.textContent = '$' + total.toFixed(2) + ' SGD';
+  return total;
+}
+
+function placeOrder2() {
+  const total = updateTotal2();
+  if (total === 0) { alert('Please select at least 1 item.'); return; }
+  // Build order items list
+  const items = [
+    { id: 'p1', name: 'Spec', price: 20 },
+    { id: 'p2', name: 'Toothpaste', price: 2 },
+    { id: 'p3', name: 'Chestnut (case)', price: 10 },
+    { id: 'p4', name: 'Chestnut (individual)', price: 3 },
+  ];
+  let itemsHtml = '';
+  items.forEach(item => {
+    const qty = parseInt(document.getElementById(item.id)?.textContent || 0);
+    if (qty > 0) {
+      itemsHtml += '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">'
+        + '<span>' + item.name + '</span>'
+        + '<span style="color:#888780;">QTY:' + qty + '</span>'
+        + '<span>$' + (qty * item.price).toFixed(2) + '</span>'
+        + '</div>';
+    }
+  });
+  document.getElementById('ev2-items').innerHTML = itemsHtml;
+  document.getElementById('ev2-total').textContent = '$' + total.toFixed(2);
+  document.getElementById('ev2-final').textContent = '$' + total.toFixed(2);
+  document.getElementById('ev2-payamt').textContent = '$' + total.toFixed(2);
+  document.getElementById('ev2-ordernum').textContent = Math.floor(Math.random() * 10) + 1;
+  // Switch to screen 2
+  document.getElementById('ev-screen-1').style.display = 'none';
+  document.getElementById('ev-screen-2').style.display = 'block';
+  document.getElementById('view-event-detail').scrollTop = 0;
+}
+
+function confirmPayment() {
+  showToast('Payment confirmed!', 'success');
+  switchTab('purchase');
+}
+
+
+function showView(viewId) {
+  ['view-all','view-purchase','view-group','view-group-detail','view-event-detail'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  const target = document.getElementById(viewId);
+  if (target) target.style.display = 'block';
+}
+
+function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
+  document.getElementById('ev1-title').textContent = title;
+  document.getElementById('ev2-title').textContent = title;
+  document.getElementById('ev1-desc').textContent = desc;
+  document.getElementById('ev2-desc').textContent = desc;
+  document.getElementById('ev1-days').textContent = daysLeft + ' days left';
+  if (parseInt(ordersPlaced) > 0) {
+    document.getElementById('ev1-buys').textContent = ordersPlaced + ' BUY';
+    document.getElementById('ev1-buys').style.display = 'inline-block';
+    document.getElementById('ev2-buys').textContent = ordersPlaced + ' BUY';
+  }
+  // Reset qtys
+  ['p1','p2','p3','p4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = '0';
+  });
+  document.getElementById('ev1-total').textContent = '$0.00 SGD';
+  // Show screen 1
+  document.getElementById('ev-screen-1').style.display = 'block';
+  document.getElementById('ev-screen-2').style.display = 'none';
+  showView('view-event-detail');
+}
+
+function changeQty2(id, delta) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const val = Math.max(0, parseInt(el.textContent) + delta);
+  el.textContent = val;
+  updateTotal2();
+}
+
+function updateTotal2() {
+  const prices = { p1: 20, p2: 2, p3: 10, p4: 3 };
+  let total = 0;
+  Object.keys(prices).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) total += parseInt(el.textContent || 0) * prices[id];
+  });
+  const el = document.getElementById('ev1-total');
+  if (el) el.textContent = '$' + total.toFixed(2) + ' SGD';
+  return total;
+}
+
+function placeOrder2() {
+  const total = updateTotal2();
+  if (total === 0) { alert('Please select at least 1 item.'); return; }
+  // Build order items list
+  const items = [
+    { id: 'p1', name: 'Spec', price: 20 },
+    { id: 'p2', name: 'Toothpaste', price: 2 },
+    { id: 'p3', name: 'Chestnut (case)', price: 10 },
+    { id: 'p4', name: 'Chestnut (individual)', price: 3 },
+  ];
+  let itemsHtml = '';
+  items.forEach(item => {
+    const qty = parseInt(document.getElementById(item.id)?.textContent || 0);
+    if (qty > 0) {
+      itemsHtml += '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">'
+        + '<span>' + item.name + '</span>'
+        + '<span style="color:#888780;">QTY:' + qty + '</span>'
+        + '<span>$' + (qty * item.price).toFixed(2) + '</span>'
+        + '</div>';
+    }
+  });
+  document.getElementById('ev2-items').innerHTML = itemsHtml;
+  document.getElementById('ev2-total').textContent = '$' + total.toFixed(2);
+  document.getElementById('ev2-final').textContent = '$' + total.toFixed(2);
+  document.getElementById('ev2-payamt').textContent = '$' + total.toFixed(2);
+  document.getElementById('ev2-ordernum').textContent = Math.floor(Math.random() * 10) + 1;
+  // Switch to screen 2
+  document.getElementById('ev-screen-1').style.display = 'none';
+  document.getElementById('ev-screen-2').style.display = 'block';
+  document.getElementById('view-event-detail').scrollTop = 0;
+}
+
+function confirmPayment() {
+  showToast('Payment confirmed!', 'success');
+  switchTab('purchase');
 }
 
 
