@@ -1196,6 +1196,8 @@ select:focus { border-color: #009A97; }
 
 <div class="scroll-area">
 
+  <!-- EVENT DETAIL VIEW -->
+  <div id="view-event-detail" style="display:none;"></div>
 
   <!-- ALL EVENTS VIEW -->
   <div id="view-all">
@@ -2501,9 +2503,6 @@ select:focus { border-color: #009A97; }
 
 
 </div><!-- end scroll-area -->
-
-<!-- EVENT DETAIL VIEW (injected via showDetail) -->
-<div id="view-event-detail" style="display:none;" class="scroll-area"></div>
 <script>
 
 function handleTemplateUpload(input) {
@@ -2941,7 +2940,7 @@ function showView(viewId) {
     if (el) el.style.display = 'none';
   });
   const target = document.getElementById(viewId);
-  if (target) target.style.display = '';
+  if (target) target.style.display = 'block';
 }
 
 function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
