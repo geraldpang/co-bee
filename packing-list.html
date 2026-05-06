@@ -98,6 +98,10 @@ tr.buyer-row:hover > td { background: #FAFAF8; cursor: pointer; }
 .event-check-label { font-size: 13px; color: #1a1a18; flex: 1; }
 .event-check-meta { font-size: 11px; color: #B4B2A9; }
 
+.include-cb { accent-color: #009A97; cursor: pointer; width: 15px; height: 15px; }
+.row-excluded td { opacity: 0.45; }
+.row-excluded .include-cb { opacity: 1; }
+
 /* PDF PREVIEW */
 .pdf-modal { width: 560px; max-height: 90vh; }
 .pdf-page { background: white; padding: 32px; border: 0.5px solid #e0dfd8; border-radius: 4px; font-family: Arial, sans-serif; }
@@ -220,8 +224,8 @@ tr.buyer-row:hover > td { background: #FAFAF8; cursor: pointer; }
       <table>
         <thead>
           <tr>
+            <th style="width:32px;padding:0 8px;"><input type="checkbox" id="pack-select-all" checked style="accent-color:#009A97;cursor:pointer;" onchange="toggleAllPack(this)"></th>
             <th>Contact</th>
-            <th>Events</th>
             <th>Orders</th>
             <th>Address</th>
             <th>Total Cost</th>
@@ -231,17 +235,14 @@ tr.buyer-row:hover > td { background: #FAFAF8; cursor: pointer; }
         <tbody id="buyers-body">
 
           <!-- BUYER 1: Minh Cong -->
-          <tr class="buyer-row">
+          <tr class="buyer-row" id="pack-row-1">
+            <td style="padding:0 8px;text-align:center;vertical-align:middle;"><input type="checkbox" class="include-cb" checked onchange="togglePackRow('pack-row-1',this)"></td>
             <td>
               <div style="font-weight:500;">Minh Cong</div>
               <div style="color:#888780;font-size:11px;">09622240816</div>
             </td>
-            <td style="font-size:12px;">
-              <div style="color:#009A97;font-size:11px;font-weight:500;">atea 1</div>
-              <div style="color:#009A97;font-size:11px;font-weight:500;">new event</div>
-              <div style="color:#009A97;font-size:11px;font-weight:500;">order without login</div>
-            </td>
             <td>
+              <div style="font-size:11px;color:#888780;" id="summary-d1">4 items · 3 events</div>
               <button class="show-details-btn" id="btn-d1" onclick="toggleDetails('d1',this)">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 Show details
@@ -279,16 +280,14 @@ tr.buyer-row:hover > td { background: #FAFAF8; cursor: pointer; }
           </tr>
 
           <!-- BUYER 2: Gerald Pang -->
-          <tr class="buyer-row">
+          <tr class="buyer-row" id="pack-row-2">
+            <td style="padding:0 8px;text-align:center;vertical-align:middle;"><input type="checkbox" class="include-cb" checked onchange="togglePackRow('pack-row-2',this)"></td>
             <td>
               <div style="font-weight:500;">Gerald Pang</div>
               <div style="color:#888780;font-size:11px;">0469787098</div>
             </td>
-            <td style="font-size:12px;">
-              <div style="color:#009A97;font-size:11px;font-weight:500;">atea 1</div>
-              <div style="color:#009A97;font-size:11px;font-weight:500;">Test event (no login)</div>
-            </td>
             <td>
+              <div style="font-size:11px;color:#888780;" id="summary-d2">3 items · 2 events</div>
               <button class="show-details-btn" id="btn-d2" onclick="toggleDetails('d2',this)">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 Show details
@@ -322,15 +321,14 @@ tr.buyer-row:hover > td { background: #FAFAF8; cursor: pointer; }
           </tr>
 
           <!-- BUYER 3: Janet Lee -->
-          <tr class="buyer-row">
+          <tr class="buyer-row" id="pack-row-3">
+            <td style="padding:0 8px;text-align:center;vertical-align:middle;"><input type="checkbox" class="include-cb" checked onchange="togglePackRow('pack-row-3',this)"></td>
             <td>
               <div style="font-weight:500;">Janet Lee</div>
               <div style="color:#888780;font-size:11px;">0412345678</div>
             </td>
-            <td style="font-size:12px;">
-              <div style="color:#009A97;font-size:11px;font-weight:500;">Test event (no login)</div>
-            </td>
             <td>
+              <div style="font-size:11px;color:#888780;" id="summary-d3">2 items · 1 event</div>
               <button class="show-details-btn" id="btn-d3" onclick="toggleDetails('d3',this)">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 Show details
@@ -497,11 +495,35 @@ function applyAddress() {
 
 function toggleDetails(id, btn) {
   const panel = document.getElementById(id);
+  const summary = document.getElementById('summary-' + id);
   const isOpen = panel.classList.contains('open');
   panel.classList.toggle('open', !isOpen);
+  if (summary) summary.style.display = isOpen ? 'block' : 'none';
   btn.innerHTML = isOpen
     ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> Show details'
     : '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg> Hide details';
+}
+
+function togglePackRow(rowId, cb) {
+  const row = document.getElementById(rowId);
+  if (cb.checked) { row.classList.remove('row-excluded'); }
+  else { row.classList.add('row-excluded'); }
+  updatePackSelectAll();
+}
+
+function toggleAllPack(cb) {
+  document.querySelectorAll('.include-cb').forEach(c => {
+    c.checked = cb.checked;
+    const row = c.closest('tr');
+    if (row) row.classList.toggle('row-excluded', !cb.checked);
+  });
+}
+
+function updatePackSelectAll() {
+  const all = document.querySelectorAll('.include-cb');
+  const checked = document.querySelectorAll('.include-cb:checked');
+  const allCb = document.getElementById('pack-select-all');
+  if (allCb) allCb.checked = all.length === checked.length;
 }
 
 // ── SEARCH ──
