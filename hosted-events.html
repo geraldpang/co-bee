@@ -450,7 +450,7 @@ body { background: #F4F6F8; }
             <p class="page-subtitle">Manage your group buy events and packages</p>
           </div>
           <div class="page-actions">
-            <button class="btn secondary" onclick="window.parent.navigate('packing-list.html', null)" style="border-color:#009A97;color:#009A97;">
+            <button class="btn secondary" onclick="openNewPackingListModal()" style="border-color:#009A97;color:#009A97;">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
               New Packing List
             </button>
@@ -1009,5 +1009,71 @@ document.addEventListener('click', function(e) {
   }
 });
 </script>
+
+<!-- NEW PACKING LIST MODAL -->
+<div class="modal-backdrop" id="new-packing-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:14px;width:420px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,0.15);" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:0.5px solid #e0dfd8;">
+      <span style="font-size:15px;font-weight:600;color:#009A97;">New Packing List</span>
+      <button onclick="closePackingModal()" style="background:none;border:none;cursor:pointer;color:#888780;font-size:20px;line-height:1;">×</button>
+    </div>
+    <div style="padding:16px 20px;overflow-y:auto;flex:1;">
+      <label style="font-size:11px;font-weight:600;color:#888780;display:block;margin-bottom:4px;">Packing List Name</label>
+      <input id="packing-list-name" type="text" placeholder="e.g. May 2026 Batch" style="width:100%;height:40px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:14px;" />
+      <label style="font-size:11px;font-weight:600;color:#888780;display:block;margin-bottom:8px;">Select Events to Pack</label>
+      <div id="packing-event-list" style="max-height:280px;overflow-y:auto;">
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid #f0f0f0;cursor:pointer;">
+          <input type="checkbox" style="accent-color:#009A97;width:15px;height:15px;flex-shrink:0;cursor:pointer;" />
+          <div><div style="font-size:13px;color:#1a1a18;">atea 1</div><div style="font-size:11px;color:#B4B2A9;">● Closed · 3 orders</div></div>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid #f0f0f0;cursor:pointer;">
+          <input type="checkbox" style="accent-color:#009A97;width:15px;height:15px;flex-shrink:0;cursor:pointer;" />
+          <div><div style="font-size:13px;color:#1a1a18;">order without login</div><div style="font-size:11px;color:#B4B2A9;">● Closed · 2 orders</div></div>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid #f0f0f0;cursor:pointer;">
+          <input type="checkbox" style="accent-color:#009A97;width:15px;height:15px;flex-shrink:0;cursor:pointer;" />
+          <div><div style="font-size:13px;color:#1a1a18;">batch 3</div><div style="font-size:11px;color:#B4B2A9;">● Closed · 5 orders</div></div>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid #f0f0f0;cursor:pointer;">
+          <input type="checkbox" style="accent-color:#009A97;width:15px;height:15px;flex-shrink:0;cursor:pointer;" />
+          <div><div style="font-size:13px;color:#1a1a18;">batch 4</div><div style="font-size:11px;color:#B4B2A9;">● Closed · 4 orders</div></div>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;">
+          <input type="checkbox" style="accent-color:#009A97;width:15px;height:15px;flex-shrink:0;cursor:pointer;" />
+          <div><div style="font-size:13px;color:#1a1a18;">test batch</div><div style="font-size:11px;color:#B4B2A9;">● Closed · 1 order</div></div>
+        </label>
+      </div>
+      <div style="font-size:11px;color:#888780;margin-top:12px;display:flex;align-items:flex-start;gap:5px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Only closed events can be consolidated into a packing list.
+      </div>
+    </div>
+    <div style="padding:12px 20px 16px;border-top:0.5px solid #e0dfd8;">
+      <button onclick="createPackingList()" style="width:100%;height:42px;background:#009A97;color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Create List</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openNewPackingListModal() {
+  const m = document.getElementById('new-packing-modal');
+  m.style.display = 'flex';
+}
+function closePackingModal() {
+  document.getElementById('new-packing-modal').style.display = 'none';
+}
+function createPackingList() {
+  const name = document.getElementById('packing-list-name').value.trim();
+  const checked = document.querySelectorAll('#packing-event-list input:checked');
+  if (!name) { alert('Please enter a packing list name.'); return; }
+  if (checked.length === 0) { alert('Please select at least one event.'); return; }
+  closePackingModal();
+  window.parent.navigate('packing-list.html', null);
+}
+document.getElementById('new-packing-modal').addEventListener('click', function(e) {
+  if (e.target === this) closePackingModal();
+});
+</script>
+
 </body>
 </html>
