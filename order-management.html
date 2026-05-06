@@ -107,6 +107,8 @@ tr:hover td { background: #FAFAF8; }
 .rows-select { height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px; font-size: 12px; font-family: inherit; padding: 0 24px 0 8px; color: #1a1a18; background: white; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; }
 
 /* Date picker modal */
+.packing-rename-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:2000; align-items:center; justify-content:center; }
+.packing-rename-backdrop.open { display:flex; }
 .modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:1000; align-items:center; justify-content:center; }
 .modal-backdrop.open { display:flex; }
 .date-modal { background:white; border-radius:14px; padding:20px; width:360px; box-shadow:0 8px 32px rgba(0,0,0,0.15); }
@@ -699,7 +701,7 @@ function consolidate() {
 
   // ── Packing List button + checkbox table ──
   const packBar = document.createElement('div');
-  packBar.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;margin-bottom:6px;';
+  packBar.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;margin-bottom:6px;padding:0 4px;';
   packBar.innerHTML = '<span style="font-size:12px;color:#888780;" id="csel-' + listId + '">All selected</span>'
     + '<button onclick="createPackingFromConsol(\'' + listId + '\')" style="height:30px;padding:0 12px;border:1px solid #009A97;border-radius:8px;background:white;font-size:12px;font-weight:600;color:#009A97;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;">'
     + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>'
@@ -770,6 +772,12 @@ function setTabMain(tabEl) {
   tabEl.classList.add('active');
 }
 
+function confirmPackingName() {
+  const name = document.getElementById('packing-list-rename-input').value.trim() || 'Packing List';
+  document.getElementById('packing-rename-modal').classList.remove('open');
+  window.parent.navigate('packing-list.html', null);
+}
+
 function toggleAllCb(listId, cb) {
   document.querySelectorAll('.ccb-' + listId).forEach(c => c.checked = cb.checked);
   updateCsel(listId);
@@ -785,7 +793,10 @@ function updateCsel(listId) {
 function createPackingFromConsol(listId) {
   const checked = document.querySelectorAll('.ccb-' + listId + ':checked');
   if (checked.length === 0) { alert('Please select at least one name.'); return; }
-  window.parent.navigate('packing-list.html', null);
+  window._packingListId = listId;
+  document.getElementById('packing-rename-modal').classList.add('open');
+  document.getElementById('packing-list-rename-input').value = '';
+  document.getElementById('packing-list-rename-input').focus();
 }
 
 function toggleConsolRow(rowId, btn) {
@@ -903,6 +914,29 @@ function sortTable(col) {
       <button onclick="closeModal('consol-view-modal')" style="background:none;border:none;cursor:pointer;color:#888780;font-size:18px;">×</button>
     </div>
     <div id="consol-modal-body"></div>
+  </div>
+</div>
+
+
+<!-- PACKING LIST RENAME MODAL -->
+<div class="packing-rename-backdrop" id="packing-rename-modal">
+  <div style="background:white;border-radius:14px;width:360px;box-shadow:0 8px 32px rgba(0,0,0,0.15);overflow:hidden;" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:0.5px solid #e0dfd8;">
+      <span style="font-size:15px;font-weight:600;color:#009A97;">Name Your Packing List</span>
+      <button onclick="document.getElementById('packing-rename-modal').classList.remove('open')" style="background:none;border:none;cursor:pointer;color:#888780;font-size:20px;line-height:1;">×</button>
+    </div>
+    <div style="padding:16px 20px;">
+      <label style="font-size:11px;font-weight:600;color:#888780;display:block;margin-bottom:6px;">Packing List Name</label>
+      <input id="packing-list-rename-input" type="text" placeholder="e.g. May 2026 Batch" style="width:100%;height:40px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;" onkeydown="if(event.key==='Enter')confirmPackingName()" />
+      <div style="font-size:11px;color:#888780;margin-top:8px;display:flex;align-items:center;gap:4px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Selected names from the consolidated list will be included.
+      </div>
+    </div>
+    <div style="padding:0 20px 16px;display:flex;gap:8px;">
+      <button onclick="document.getElementById('packing-rename-modal').classList.remove('open')" style="flex:1;height:38px;background:white;color:#888780;border:0.5px solid #D3D1C7;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>
+      <button onclick="confirmPackingName()" style="flex:2;height:38px;background:#009A97;color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Create List</button>
+    </div>
   </div>
 </div>
 
