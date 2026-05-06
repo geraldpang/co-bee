@@ -2501,6 +2501,9 @@ select:focus { border-color: #009A97; }
 
 
 </div><!-- end scroll-area -->
+
+<!-- EVENT DETAIL VIEW (injected via showDetail) -->
+<div id="view-event-detail" style="display:none;" class="scroll-area"></div>
 <script>
 
 function handleTemplateUpload(input) {
@@ -2932,11 +2935,113 @@ window.addEventListener('message', function(e) {
   }
 });
 
+function showView(viewId) {
+  ['view-all','view-purchase','view-group','view-group-detail','view-event-detail'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  const target = document.getElementById(viewId);
+  if (target) target.style.display = '';
+}
+
+function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
+  const el = document.getElementById('view-event-detail');
+  const hasOrders = parseInt(ordersPlaced) > 0;
+  const isShared = shared === 'true';
+
+  el.innerHTML = '<div style="max-width:600px;margin:0 auto;padding:16px;">'
+
+    // Back button
+    + '<button onclick="showView(\'view-all\')" style="display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;color:#888780;font-size:12px;font-family:inherit;margin-bottom:14px;padding:0;">'
+    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to Events</button>'
+
+    // Banner
+    + '<div style="height:120px;background:linear-gradient(135deg,#009A97,#007A77);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">'
+    + '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>'
+
+    // Title + meta
+    + '<div style="background:white;border-radius:12px;padding:16px;margin-bottom:12px;border:0.5px solid #e0dfd8;">'
+    + '<div style="font-size:17px;font-weight:700;color:#1a1a18;margin-bottom:6px;">' + title + '</div>'
+    + '<div style="font-size:12px;color:#888780;margin-bottom:10px;">' + desc + '</div>'
+    + '<div style="display:flex;gap:16px;flex-wrap:wrap;">'
+    + '<div style="font-size:11px;color:#888780;display:flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Hosted by ' + host + '</div>'
+    + '<div style="font-size:11px;color:#888780;display:flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> ' + group + '</div>'
+    + '<div style="font-size:11px;color:' + (parseInt(daysLeft) <= 3 ? '#E24B4A' : '#009A97') + ';font-weight:600;display:flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Closes in ' + daysLeft + ' days</div>'
+    + '</div></div>'
+
+    // Items to order (sample)
+    + '<div style="background:white;border-radius:12px;padding:16px;margin-bottom:12px;border:0.5px solid #e0dfd8;">'
+    + '<div style="font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:12px;">Items</div>'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid #f0f0f0;">'
+    + '<div><div style="font-size:13px;font-weight:500;">Item 1</div><div style="font-size:11px;color:#888780;margin-top:2px;">Min order: 1</div></div>'
+    + '<div style="display:flex;align-items:center;gap:10px;">'
+    + '<div style="font-weight:600;font-size:13px;">$59.00</div>'
+    + '<div style="display:flex;align-items:center;gap:6px;">'
+    + '<button onclick="changeQty(\'q1\',-1)" style="width:26px;height:26px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:#1a1a18;">−</button>'
+    + '<span id="q1" style="font-size:13px;font-weight:600;min-width:16px;text-align:center;">0</span>'
+    + '<button onclick="changeQty(\'q1\',1)" style="width:26px;height:26px;border-radius:50%;border:0.5px solid #009A97;background:#009A97;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:white;">+</button>'
+    + '</div></div></div>'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;">'
+    + '<div><div style="font-size:13px;font-weight:500;">Item 2</div><div style="font-size:11px;color:#888780;margin-top:2px;">Min order: 1</div></div>'
+    + '<div style="display:flex;align-items:center;gap:10px;">'
+    + '<div style="font-weight:600;font-size:13px;">$59.00</div>'
+    + '<div style="display:flex;align-items:center;gap:6px;">'
+    + '<button onclick="changeQty(\'q2\',-1)" style="width:26px;height:26px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:#1a1a18;">−</button>'
+    + '<span id="q2" style="font-size:13px;font-weight:600;min-width:16px;text-align:center;">0</span>'
+    + '<button onclick="changeQty(\'q2\',1)" style="width:26px;height:26px;border-radius:50%;border:0.5px solid #009A97;background:#009A97;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:white;">+</button>'
+    + '</div></div></div></div>'
+
+    // Order summary + place order
+    + '<div style="background:white;border-radius:12px;padding:16px;margin-bottom:12px;border:0.5px solid #e0dfd8;">'
+    + '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;"><span style="color:#888780;">Subtotal</span><span id="subtotal" style="font-weight:600;">$0.00</span></div>'
+    + '<div style="display:flex;justify-content:space-between;font-size:11px;color:#888780;margin-bottom:12px;"><span>Payment method</span><span>Pay together</span></div>'
+    + '<button onclick="placeOrder()" style="width:100%;height:44px;background:#009A97;color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Place Order</button>'
+    + '</div>'
+
+    // Existing order (if any)
+    + (hasOrders ? '<div style="background:white;border-radius:12px;padding:16px;border:0.5px solid #e0dfd8;">'
+    + '<div style="font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:10px;">Your Order</div>'
+    + '<div style="font-size:12px;color:#888780;margin-bottom:6px;">Order ref: <span style="color:#009A97;font-weight:600;">ORD-' + Math.random().toString(36).substr(2,6).toUpperCase() + '</span></div>'
+    + '<div style="font-size:12px;color:#888780;">1 x Item 1 · $59.00</div>'
+    + '<div style="margin-top:10px;padding-top:10px;border-top:0.5px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;">'
+    + '<span style="font-size:13px;font-weight:600;">$59.00</span>'
+    + '<button onclick="showPaymentFlow()" style="height:34px;padding:0 14px;background:#009A97;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Make Payment</button>'
+    + '</div></div>' : '')
+
+    + '</div>';
+
+  showView('view-event-detail');
+}
+
+function changeQty(id, delta) {
+  const el = document.getElementById(id);
+  const val = Math.max(0, parseInt(el.textContent) + delta);
+  el.textContent = val;
+  // Update subtotal
+  const q1 = parseInt(document.getElementById('q1')?.textContent || 0);
+  const q2 = parseInt(document.getElementById('q2')?.textContent || 0);
+  const sub = document.getElementById('subtotal');
+  if (sub) sub.textContent = '$' + ((q1 + q2) * 59).toFixed(2);
+}
+
+function placeOrder() {
+  const q1 = parseInt(document.getElementById('q1')?.textContent || 0);
+  const q2 = parseInt(document.getElementById('q2')?.textContent || 0);
+  if (q1 + q2 === 0) { alert('Please select at least 1 item.'); return; }
+  alert('Order placed! Total: $' + ((q1 + q2) * 59).toFixed(2));
+  showView('view-all');
+}
+
+function showPaymentFlow() {
+  // Navigate to purchase tab and show payment view
+  switchTab('purchase');
+}
+
 function switchTab(tab) {
   const views = { all: 'view-all', purchase: 'view-purchase', group: 'view-group' };
   const order = ['all', 'purchase', 'group'];
-  // Always hide group detail when switching tabs
   document.getElementById('view-group-detail').style.display = 'none';
+  document.getElementById('view-event-detail').style.display = 'none';
   order.forEach(t => {
     const el = document.getElementById(views[t]);
     if (el) el.style.display = t === tab ? 'block' : 'none';
