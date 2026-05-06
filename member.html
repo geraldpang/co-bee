@@ -1299,10 +1299,10 @@ select:focus { border-color: #009A97; }
             </div>
           </div>
         </div>
-        <!-- Add with different option -->
-        <div style="padding:8px 14px 10px;border-bottom:0.5px solid #f0f0f0;background:#FAFAF8;">
+        <!-- Add with different option - inside the Spec item, no bg -->
+        <div style="padding:0 14px 12px 14px;margin-left:70px;">
           <button onclick="addSpecEntry()" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:#009A97;font-family:inherit;padding:0;">
-            <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
             Add with a different option
           </button>
         </div>
@@ -1367,12 +1367,12 @@ select:focus { border-color: #009A97; }
                 <div style="font-size:14px;font-weight:700;color:#009A97;">$3.00</div>
               </div>
               <div style="font-size:11px;color:#888780;margin-top:1px;">Individual pieces (split case)</div>
-              <div style="margin-top:6px;background:#f8f8f8;border-radius:6px;padding:6px 8px;">
-                <div style="display:flex;justify-content:space-between;font-size:10px;color:#888780;margin-bottom:4px;">
-                  <span>Case fill progress</span><span style="font-weight:600;">0 / 6 units</span>
+              <div style="margin-top:6px;">
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:#888780;margin-bottom:3px;max-width:140px;">
+                  <span>Case fill</span><span style="font-weight:600;">0 / 6</span>
                 </div>
-                <div style="height:5px;background:#e0dfd8;border-radius:3px;overflow:hidden;">
-                  <div style="width:0%;height:100%;background:#009A97;border-radius:3px;transition:width 0.3s;"></div>
+                <div style="height:4px;background:#e0dfd8;border-radius:3px;overflow:hidden;max-width:140px;">
+                  <div style="width:0%;height:100%;background:#009A97;border-radius:3px;"></div>
                 </div>
                 <div style="font-size:10px;color:#E24B4A;margin-top:3px;">Need 6 more to fulfill</div>
               </div>
@@ -1392,9 +1392,9 @@ select:focus { border-color: #009A97; }
 
       <!-- Subtotal -->
       <div style="margin:10px 14px 0;border-radius:12px;overflow:hidden;border:0.5px solid #e0dfd8;">
-        <div style="background:#009A97;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-size:13px;font-weight:600;color:white;">Order Total</span>
-          <span style="font-size:18px;font-weight:700;color:white;" id="ev1-total">$0.00</span>
+        <div style="background:#E0F5F5;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid #80CCCB;">
+          <span style="font-size:13px;font-weight:600;color:#007A77;">Order Total</span>
+          <span style="font-size:18px;font-weight:700;color:#007A77;" id="ev1-total">$0.00</span>
         </div>
         <div style="background:white;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:11px;color:#888780;">Admin fee included: $0.00</span>
@@ -1453,7 +1453,7 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div style="border-top:0.5px solid #f0f0f0;padding:12px 14px;">
-          <div id="ev2-title" style="font-size:15px;font-weight:700;color:#1a1a18;margin-bottom:3px;"></div>
+          <div id="ev2-title" style="font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:3px;"></div>
           <div id="ev2-desc" style="font-size:12px;color:#888780;margin-bottom:10px;"></div>
           <div style="display:grid;grid-template-columns:80px 1fr;gap:5px 0;font-size:12px;">
             <span style="color:#888780;">Closing:</span><span style="color:#1a1a18;">15-05-2026</span>
