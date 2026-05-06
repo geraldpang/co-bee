@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>co·bee — Profile</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; color: #1a1a18; }
+
+/* ── BANNER ── */
+.profile-banner {
+  height: 140px; background: linear-gradient(135deg, #009A97 0%, #007A77 50%, #005f5d 100%);
+  position: relative; overflow: hidden;
+}
+.banner-pattern {
+  position: absolute; inset: 0; opacity: 0.12;
+  background-image: radial-gradient(circle at 20% 50%, white 1px, transparent 1px),
+    radial-gradient(circle at 80% 20%, white 1px, transparent 1px),
+    radial-gradient(circle at 50% 80%, white 1px, transparent 1px);
+  background-size: 40px 40px, 60px 60px, 50px 50px;
+}
+.banner-edit-btn {
+  position: absolute; top: 10px; right: 12px;
+  background: rgba(255,255,255,0.2); border: none; border-radius: 8px;
+  padding: 6px 10px; color: white; font-size: 11px; font-weight: 600;
+  cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 4px;
+  backdrop-filter: blur(4px); transition: background 0.15s;
+}
+.banner-edit-btn:hover { background: rgba(255,255,255,0.3); }
+
+/* ── PROFILE HERO ── */
+.profile-hero { max-width: 600px; margin: 0 auto; padding: 0 16px; }
+.avatar-row { display: flex; align-items: flex-end; justify-content: space-between; margin-top: -40px; padding-bottom: 12px; }
+.profile-avatar-wrap { position: relative; cursor: pointer; }
+.profile-avatar {
+  width: 80px; height: 80px; border-radius: 50%; background: #E8971A;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 700; color: white;
+  border: 3px solid white; box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.avatar-edit-badge {
+  position: absolute; bottom: 2px; right: 2px; width: 22px; height: 22px;
+  background: #009A97; border-radius: 50%; border: 2px solid white;
+  display: flex; align-items: center; justify-content: center;
+}
+.profile-name { font-size: 20px; font-weight: 700; color: #1a1a18; margin-top: 6px; }
+.profile-sub { font-size: 12px; color: #888780; margin-top: 2px; }
+.profile-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; background: #009A97; color: white; border-radius: 99px; padding: 2px 10px; margin-top: 6px; }
+
+/* ── QUICK ACTIONS ── */
+.quick-actions { display: flex; border-top: 0.5px solid #e0dfd8; border-bottom: 0.5px solid #e0dfd8; background: white; margin: 14px 0 0; }
+.quick-action { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 14px 8px; cursor: pointer; border-right: 0.5px solid #e0dfd8; transition: background 0.12s; font-size: 11px; color: #888780; font-weight: 500; }
+.quick-action:last-child { border-right: none; }
+.quick-action:hover { background: #f5fafa; color: #009A97; }
+.quick-action.active { color: #009A97; border-bottom: 2px solid #009A97; }
+.quick-action svg { color: inherit; }
+
+/* ── PAGE CONTENT ── */
+.page-content { max-width: 600px; margin: 0 auto; padding: 0 16px 40px; }
+
+/* ── SECTION CARDS ── */
+.section-card { background: white; border-radius: 12px; border: 0.5px solid #e0dfd8; margin-top: 12px; overflow: hidden; }
+.section-hd { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 0.5px solid #f0f0f0; }
+.section-title { font-size: 13px; font-weight: 600; color: #1a1a18; display: flex; align-items: center; gap: 8px; }
+.section-title svg { color: #009A97; }
+.section-action { font-size: 12px; font-weight: 600; color: #009A97; cursor: pointer; background: none; border: none; font-family: inherit; }
+
+/* ── PROFILE FORM ── */
+.profile-form { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.field-group { display: flex; flex-direction: column; gap: 4px; }
+.field-label { font-size: 11px; font-weight: 600; color: #888780; }
+.field-value { font-size: 13px; color: #1a1a18; padding: 8px 10px; background: #FAFAF8; border-radius: 8px; border: 0.5px solid #e0dfd8; }
+.field-input { font-size: 13px; color: #1a1a18; padding: 8px 10px; background: white; border-radius: 8px; border: 0.5px solid #D3D1C7; font-family: inherit; outline: none; width: 100%; }
+.field-input:focus { border-color: #009A97; }
+.field-row { display: flex; gap: 10px; }
+.field-row .field-group { flex: 1; }
+.save-btn { height: 42px; background: #009A97; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 4px; transition: background 0.12s; }
+.save-btn:hover { background: #007A77; }
+
+/* ── NOTIFICATIONS ── */
+.notif-item { display: flex; gap: 12px; padding: 12px 16px; border-bottom: 0.5px solid #f0f0f0; transition: background 0.1s; position: relative; }
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: #FAFAF8; }
+.notif-item.unread { background: #f0fafa; }
+.notif-item.unread::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #009A97; border-radius: 0 2px 2px 0; }
+.notif-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.notif-icon.collect { background: #E0F5F5; color: #009A97; }
+.notif-icon.payment { background: #FEF2DC; color: #E8971A; }
+.notif-icon.system  { background: #f0f0f0; color: #888780; }
+.notif-icon.event   { background: #E0F5F5; color: #007A77; }
+.notif-body { flex: 1; min-width: 0; }
+.notif-date { font-size: 10px; color: #B4B2A9; margin-bottom: 2px; }
+.notif-text { font-size: 12px; color: #1a1a18; line-height: 1.5; }
+.notif-text strong { color: #009A97; cursor: pointer; }
+.notif-text strong:hover { text-decoration: underline; }
+.notif-sub { font-size: 11px; color: #888780; margin-top: 3px; line-height: 1.5; }
+.notif-tag { font-size: 10px; color: #888780; }
+.notif-del { opacity: 0; color: #B4B2A9; cursor: pointer; flex-shrink: 0; padding: 4px; border-radius: 4px; background: none; border: none; transition: all 0.12s; align-self: flex-start; margin-top: 2px; }
+.notif-item:hover .notif-del { opacity: 1; }
+.notif-del:hover { color: #E24B4A; background: #FCEBEB; }
+
+/* ── SETTINGS LIST ── */
+.settings-list { padding: 4px 0; }
+.settings-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border-bottom: 0.5px solid #f0f0f0; cursor: pointer; transition: background 0.1s; }
+.settings-row:last-child { border-bottom: none; }
+.settings-row:hover { background: #FAFAF8; }
+.settings-row-left { display: flex; align-items: center; gap: 10px; }
+.settings-row-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.settings-row-label { font-size: 13px; color: #1a1a18; }
+.settings-row-sub { font-size: 11px; color: #888780; margin-top: 1px; }
+.settings-row-right { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #888780; }
+
+/* ── TOGGLE ── */
+.toggle { width: 36px; height: 20px; border-radius: 10px; background: #D3D1C7; cursor: pointer; position: relative; transition: background 0.2s; flex-shrink: 0; }
+.toggle.on { background: #009A97; }
+.toggle::after { content: ''; position: absolute; width: 16px; height: 16px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.toggle.on::after { left: 18px; }
+
+/* ── TABS ── */
+.content-tabs { display: flex; gap: 0; border-bottom: 0.5px solid #e0dfd8; margin-top: 16px; background: white; border-radius: 12px 12px 0 0; overflow: hidden; }
+.content-tab { flex: 1; padding: 12px; text-align: center; font-size: 12px; font-weight: 500; color: #888780; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+.content-tab.active { color: #009A97; border-bottom-color: #009A97; background: #f5fafa; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* ── UNREAD BADGE ── */
+.unread-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; background: #E24B4A; color: white; border-radius: 99px; font-size: 10px; font-weight: 700; padding: 0 5px; }
+</style>
+</head>
+<body>
+
+<!-- BANNER -->
+<div class="profile-banner">
+  <div class="banner-pattern"></div>
+  <button class="banner-edit-btn">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    Edit Cover
+  </button>
+</div>
+
+<!-- HERO -->
+<div class="profile-hero">
+  <div class="avatar-row">
+    <div class="profile-avatar-wrap" onclick="switchTab('profile')">
+      <div class="profile-avatar" id="hero-avatar">MC</div>
+      <div class="avatar-edit-badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="banner-edit-btn" style="position:static;background:#f0f0f0;color:#1a1a18;backdrop-filter:none;" onclick="switchTab('profile')">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit Profile
+      </button>
+    </div>
+  </div>
+  <div class="profile-name" id="hero-name">Minh Cong</div>
+  <div class="profile-sub">Member since 01-11-2025 · M6 Group</div>
+  <div class="profile-badge">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Admin
+  </div>
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="profile-hero" style="padding-top:0;">
+  <div class="quick-actions">
+    <div class="quick-action active" id="qa-notif" onclick="switchTab('notifications')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Notifications
+      <span class="unread-badge" id="unread-count">3</span>
+    </div>
+    <div class="quick-action" id="qa-profile" onclick="switchTab('profile')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Edit Profile
+    </div>
+    <div class="quick-action" id="qa-security" onclick="switchTab('security')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Security
+    </div>
+    <div class="quick-action" id="qa-addresses" onclick="switchTab('addresses')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Addresses
+    </div>
+  </div>
+</div>
+
+<!-- PAGE CONTENT -->
+<div class="page-content">
+
+  <!-- NOTIFICATIONS TAB -->
+  <div class="tab-pane active" id="tab-notifications">
+    <div class="section-card" style="margin-top:12px;">
+      <div class="section-hd">
+        <div class="section-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Notifications
+        </div>
+        <button class="section-action" onclick="markAllRead()">Mark all read</button>
+      </div>
+
+      <div id="notif-list">
+
+        <div class="notif-item unread" id="notif-1">
+          <div class="notif-icon collect">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </div>
+          <div class="notif-body">
+            <div class="notif-date">03-04-2026</div>
+            <div class="notif-text">Today's collection — <strong>TF-OIK72P</strong>, test for no sign in purchase</div>
+            <div class="notif-sub">• 1 x item 2<br>• 1 x item 1</div>
+          </div>
+          <div class="notif-tag">System</div>
+          <button class="notif-del" onclick="deleteNotif('notif-1')" title="Delete">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </button>
+        </div>
+
+        <div class="notif-item unread" id="notif-2">
+          <div class="notif-icon payment">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <div class="notif-body">
+            <div class="notif-date">21-03-2026</div>
+            <div class="notif-text">Today's collection — <strong>P2-R7E9SZ</strong>, paytogether 2</div>
+            <div class="notif-sub">• 7 x paytogether 2</div>
+            <div class="notif-text" style="margin-top:6px;">Order Ref: <strong>PI-NKJRZH</strong>, paytogether 1</div>
+            <div class="notif-sub">• 2 x paytogether 1</div>
+          </div>
+          <div class="notif-tag">System</div>
+          <button class="notif-del" onclick="deleteNotif('notif-2')" title="Delete">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </button>
+        </div>
+
+        <div class="notif-item unread" id="notif-3">
+          <div class="notif-icon system">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="notif-body">
+            <div class="notif-date">28-11-2025</div>
+            <div class="notif-text">Today's collection — <strong>HT-BAGYOR</strong>, Haha T11</div>
+            <div class="notif-sub">• 1 x PKEI273554633</div>
+          </div>
+          <div class="notif-tag">System</div>
+          <button class="notif-del" onclick="deleteNotif('notif-3')" title="Delete">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </button>
+        </div>
+
+        <div class="notif-item" id="notif-4">
+          <div class="notif-icon event">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="notif-body">
+            <div class="notif-date">01-11-2025</div>
+            <div class="notif-text">New event closing soon — <strong>atea 1</strong></div>
+            <div class="notif-sub">Closes in 2 days. Don't miss out!</div>
+          </div>
+          <div class="notif-tag">Event</div>
+          <button class="notif-del" onclick="deleteNotif('notif-4')" title="Delete">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE TAB -->
+  <div class="tab-pane" id="tab-profile">
+    <div class="section-card">
+      <div class="section-hd">
+        <div class="section-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Personal Information
+        </div>
+      </div>
+      <div class="profile-form">
+        <div class="field-row">
+          <div class="field-group"><label class="field-label">First Name</label><input class="field-input" value="Minh" /></div>
+          <div class="field-group"><label class="field-label">Last Name</label><input class="field-input" value="Cong" /></div>
+        </div>
+        <div class="field-group"><label class="field-label">Display Name</label><input class="field-input" value="Minh Cong" /></div>
+        <div class="field-group"><label class="field-label">Email</label><input class="field-input" type="email" value="minhcong@example.com" /></div>
+        <div class="field-group"><label class="field-label">Phone / WhatsApp</label><input class="field-input" type="tel" value="83062355" /></div>
+        <div class="field-group">
+          <label class="field-label">Bio (optional)</label>
+          <textarea class="field-input" style="height:70px;resize:none;">Group buy enthusiast based in Singapore 🇸🇬</textarea>
+        </div>
+        <button class="save-btn" onclick="saveProfile()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECURITY TAB -->
+  <div class="tab-pane" id="tab-security">
+    <div class="section-card">
+      <div class="section-hd">
+        <div class="section-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Security Settings
+        </div>
+      </div>
+      <div class="settings-list">
+        <div class="settings-row" onclick="alert('Change PIN')">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:#E0F5F5;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div><div class="settings-row-label">Change PIN</div><div class="settings-row-sub">Update your payment PIN</div></div>
+          </div>
+          <div class="settings-row-right"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="settings-row" onclick="alert('Change Password')">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:#FEF2DC;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+            </div>
+            <div><div class="settings-row-label">Change Password</div><div class="settings-row-sub">Last changed 90 days ago</div></div>
+          </div>
+          <div class="settings-row-right"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:#E0F5F5;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div><div class="settings-row-label">Two-Factor Authentication</div><div class="settings-row-sub">Add extra security to your account</div></div>
+          </div>
+          <div class="settings-row-right"><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:#f0f0f0;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+            </div>
+            <div><div class="settings-row-label">Push Notifications</div><div class="settings-row-sub">Order updates and reminders</div></div>
+          </div>
+          <div class="settings-row-right"><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADDRESSES TAB -->
+  <div class="tab-pane" id="tab-addresses">
+    <div class="section-card">
+      <div class="section-hd">
+        <div class="section-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Saved Addresses
+        </div>
+        <button class="section-action" onclick="alert('Add address')">+ Add</button>
+      </div>
+      <div class="settings-list">
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:#E0F5F5;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            </div>
+            <div>
+              <div class="settings-row-label">Home <span style="font-size:10px;background:#E0F5F5;color:#009A97;border-radius:99px;padding:1px 7px;font-weight:600;margin-left:4px;">Default</span></div>
+              <div class="settings-row-sub">123 Orchard Road, #05-12, Singapore 238858</div>
+            </div>
+          </div>
+          <div class="settings-row-right">
+            <button style="background:none;border:none;cursor:pointer;color:#888780;font-size:11px;" onclick="alert('Edit address')">Edit</button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left">
+            <div class="settings-row-icon" style="background:#f0f0f0;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </div>
+            <div>
+              <div class="settings-row-label">Office</div>
+              <div class="settings-row-sub">1 Raffles Place, #20-01, Singapore 048616</div>
+            </div>
+          </div>
+          <div class="settings-row-right">
+            <button style="background:none;border:none;cursor:pointer;color:#888780;font-size:11px;" onclick="alert('Edit address')">Edit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGOUT -->
+  <div class="section-card" style="margin-top:12px;border-color:#FCEBEB;">
+    <div class="settings-row" onclick="confirmLogout()" style="border-bottom:none;">
+      <div class="settings-row-left">
+        <div class="settings-row-icon" style="background:#FCEBEB;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </div>
+        <div class="settings-row-label" style="color:#E24B4A;font-weight:600;">Log Out</div>
+      </div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+  </div>
+
+</div>
+const TAB_MAP = { notifications: 'notif', profile: 'profile', security: 'security', addresses: 'addresses' };
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.quick-action').forEach(q => q.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('qa-' + TAB_MAP[tab]).classList.add('active');
+}
+
+function deleteNotif(id) {
+  const el = document.getElementById(id);
+  el.style.transition = 'opacity 0.2s, max-height 0.3s';
+  el.style.opacity = '0';
+  el.style.overflow = 'hidden';
+  el.style.maxHeight = el.offsetHeight + 'px';
+  setTimeout(() => { el.style.maxHeight = '0'; el.style.padding = '0'; }, 200);
+  setTimeout(() => { el.remove(); updateUnreadCount(); }, 500);
+}
+
+function updateUnreadCount() {
+  const unread = document.querySelectorAll('.notif-item.unread').length;
+  const badge = document.getElementById('unread-count');
+  badge.textContent = unread;
+  badge.style.display = unread > 0 ? '' : 'none';
+}
+
+function markAllRead() {
+  document.querySelectorAll('.notif-item.unread').forEach(n => n.classList.remove('unread'));
+  updateUnreadCount();
+}
+
+function confirmLogout() {
+  if (confirm('Are you sure you want to log out?')) {
+    alert('Logged out successfully.');
+  }
+}
+  const name = document.querySelector('#tab-profile .field-input').value;
+  document.getElementById('hero-name').textContent = name || 'Minh Cong';
+  const btn = document.querySelector('.save-btn');
+  btn.textContent = 'Saved ✓';
+  btn.style.background = '#007A77';
+  setTimeout(() => { btn.textContent = 'Save Changes'; btn.style.background = ''; }, 2000);
+}
+</script>
+</body>
+</html>
