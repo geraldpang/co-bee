@@ -397,6 +397,9 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .star.empty { color: #D3D1C7; }
   .rating-score { font-size: 12px; font-weight: 600; color: #1a1a18; }
   .rating-count { font-size: 11px; color: #888; }
+  .card-info-grid { display:grid;grid-template-columns:72px 1fr;gap:3px 0;font-size:11px;padding:8px 14px 10px;border-top:0.5px solid #f0f0f0;}
+  .card-info-lbl { color:#888780; }
+  .card-info-val { color:#1a1a18; }
   .rating-preview { font-size: 11px; color: #888; font-style: italic; padding: 0 14px 10px; line-height: 1.4; border-top: 0.5px solid #f0f0f0; padding-top: 8px; }
   .rating-preview strong { color: #1a1a18; font-style: normal; }
 
@@ -417,7 +420,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .pcard-chevron { color: #B4B2A9; transition: transform 0.2s; }
   .pcard-chevron.open { transform: rotate(180deg); }
   .pcard-items { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; border-top: 0.5px solid #f0f0f0; }
-  .pcard-items.open { max-height: 400px; }
+  .pcard-items.open { max-height: 600px; }
   .pcard-item-row { display: flex; align-items: center; padding: 7px 14px; font-size: 12px; border-bottom: 0.5px solid #f8f8f8; }
   .pcard-item-name { flex: 1; color: #1a1a18; }
   .pcard-item-qty  { color: #888; margin-right: 12px; }
@@ -1666,6 +1669,7 @@ select:focus { border-color: #009A97; }
         </div>
         <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
         <div class="card-body"><div class="card-title">Groupbuy Event test</div><div class="card-desc">This is how it looks like in an actual group buy</div></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
         <div class="card-rating"><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span></div><span class="rating-score">4.0</span><span class="rating-count">(3 reviews)</span></div>
         <div class="rating-preview"><strong>Janet:</strong> "Great quality, will order again next round!"</div>
       </div>
@@ -1681,6 +1685,7 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div class="card-body"><div class="card-title">New event</div><div class="card-desc">test</div></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
       </div>
       <div class="event-card" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
         <div class="card-header">
@@ -1694,6 +1699,7 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div class="card-body"><div class="card-title">This is a test event for Purchase with no login</div><div class="card-desc">test</div></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">14-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
         <div class="card-rating"><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><span class="rating-score">5.0</span><span class="rating-count">(6 reviews)</span></div>
         <div class="rating-preview"><strong>Minh:</strong> "Smooth process, delivery was on time."</div>
       </div>
@@ -3569,10 +3575,13 @@ function placeOrder2() {
         + '</div>';
     }
   });
-  document.getElementById('ev2-items').innerHTML = itemsHtml;
-  document.getElementById('ev2-total').textContent = '$' + total.toFixed(2);
-  document.getElementById('ev2-final').textContent = '$' + total.toFixed(2);
-  document.getElementById('ev2-payamt').textContent = '$' + total.toFixed(2);
+  // ev2-items is static HTML; just update totals
+  const totalEl = document.getElementById('ev2-total');
+  const finalEl = document.getElementById('ev2-final');
+  const payEl = document.getElementById('ev2-payamt');
+  if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
+  if (finalEl) finalEl.textContent = '$' + total.toFixed(2);
+  if (payEl) payEl.textContent = '$' + total.toFixed(2);
   document.getElementById('ev2-ordernum').textContent = Math.floor(Math.random() * 10) + 1;
   // Switch to screen 2
   document.getElementById('ev-screen-1').style.display = 'none';
