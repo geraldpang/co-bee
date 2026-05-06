@@ -1258,9 +1258,12 @@ select:focus { border-color: #009A97; }
                 </div>
                 <div style="font-size:11px;color:#888780;margin-top:1px;margin-bottom:8px;">Good Spec from Vietnam</div>
 
-                <!-- Frame Color option — one price, choice of colour -->
+                <!-- Frame Color option -->
                 <div style="margin-bottom:8px;">
-                  <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.05em;margin-bottom:5px;">FRAME COLOR <span style="color:#E24B4A;font-size:9px;">Required</span></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+                    <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.05em;">FRAME COLOR <span style="color:#E24B4A;font-size:9px;">Required</span></div>
+                    <div style="font-size:11px;font-weight:600;color:#009A97;">+$10</div>
+                  </div>
                   <div style="display:flex;gap:6px;flex-wrap:wrap;">
                     <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
                       <input type="radio" name="spec1-frame" style="accent-color:#009A97;width:12px;height:12px;"/> Blue
@@ -1275,8 +1278,11 @@ select:focus { border-color: #009A97; }
                 </div>
 
                 <!-- Lens option -->
-                <div style="margin-bottom:10px;">
-                  <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.05em;margin-bottom:5px;">LENS COLOR <span style="color:#E24B4A;font-size:9px;">Required</span></div>
+                <div style="margin-bottom:8px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+                    <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.05em;">LENS COLOR <span style="color:#E24B4A;font-size:9px;">Required</span></div>
+                    <div style="font-size:11px;font-weight:600;color:#009A97;">+$5</div>
+                  </div>
                   <div style="display:flex;gap:6px;flex-wrap:wrap;">
                     <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
                       <input type="radio" name="spec1-lens" style="accent-color:#009A97;width:12px;height:12px;"/> Clear
@@ -1287,8 +1293,14 @@ select:focus { border-color: #009A97; }
                   </div>
                 </div>
 
+                <!-- Add with different option — directly under options, above orders made -->
+                <button onclick="addSpecEntry()" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:#009A97;font-family:inherit;padding:0;margin-bottom:8px;">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+                  Add with a different option
+                </button>
+
                 <!-- Qty + orders made row -->
-                <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;justify-content:space-between;border-top:0.5px solid #f0f0f0;padding-top:8px;">
                   <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
                   <div style="display:flex;align-items:center;gap:10px;">
                     <button onclick="changeQty2('p1',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
@@ -1299,13 +1311,6 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
           </div>
-        </div>
-        <!-- Add with different option - inside the Spec item, no bg -->
-        <div style="padding:0 14px 12px 14px;margin-left:70px;">
-          <button onclick="addSpecEntry()" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:#009A97;font-family:inherit;padding:0;">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-            Add with a different option
-          </button>
         </div>
 
         <!-- Item 2: Toothpaste (no options) -->
