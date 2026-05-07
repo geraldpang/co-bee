@@ -17,21 +17,14 @@ jobs:
         run: |
           zip -r co-bee-backup.zip . \
             --exclude ".git/*" \
-            --exclude ".github/*" \
-            --exclude "*.yml"
+            --exclude ".github/*"
           echo "ZIP created: $(du -sh co-bee-backup.zip)"
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
+      - name: Upload to Google Drive
+        uses: adityak74/google-drive-upload-git-action@main
         with:
-          credentials_json: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
-
-      - name: Upload ZIP to Google Drive
-        uses: google-github-actions/upload-cloud-storage@v2
-        with:
-          path: co-bee-backup.zip
-          destination: ${{ secrets.GDRIVE_FOLDER_ID }}
-          process_gcloudignore: false
-
-      - name: Confirm upload
-        run: echo "✅ Backup uploaded to Google Drive folder ${{ secrets.GDRIVE_FOLDER_ID }}"
+          credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
+          filename: co-bee-backup.zip
+          folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
+          name: co-bee-backup.zip
+          overwrite: true
