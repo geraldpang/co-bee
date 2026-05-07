@@ -1,9 +1,9 @@
 name: Backup to Google Drive
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 0 * * 0'  # Every Sunday at midnight UTC
+  workflow_dispatch:       # Also allows manual trigger from Actions tab
 
 jobs:
   backup:
@@ -13,18 +13,20 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Create ZIP archive
+      - name: Create ZIP archive with date stamp
         run: |
-          zip -r co-bee-backup.zip . \
+          DATE=$(date +'%Y-%m-%d')
+          zip -r co-bee-backup-$DATE.zip . \
             --exclude ".git/*" \
             --exclude ".github/*"
-          echo "ZIP created: $(du -sh co-bee-backup.zip)"
+          echo "ZIP_NAME=co-bee-backup-$DATE.zip" >> $GITHUB_ENV
+          echo "ZIP created: $(du -sh co-bee-backup-$DATE.zip)"
 
       - name: Upload to Google Drive
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
-          filename: co-bee-backup.zip
+          filename: ${{ env.ZIP_NAME }}
           folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
-          name: co-bee-backup.zip
-          overwrite: true
+          name: ${{ env.ZIP_NAME }}
+          overwrite: false
