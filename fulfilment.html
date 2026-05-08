@@ -644,8 +644,9 @@ function renderCompactList() {
       const row = document.createElement('div');
       row.className = 'compact-row';
       row.innerHTML = '<div class="compact-num pickup">P</div>'
-        + '<div style="flex:1;min-width:0;"><div class="compact-name">' + r.name + '</div><div class="compact-sub">' + r.location + '</div></div>'
-        + '<span class="badge ' + r.status + '">' + r.status + '</span>';
+        + '<div style="flex:1;min-width:0;"><div class="compact-name">' + r.name + '</div></div>'
+        + '<span class="badge ' + r.status + '" style="margin-right:6px;">' + r.status + '</span>'
+        + '<button class="mark-btn ' + (r.status==='collected'?'gray':'') + '" style="height:22px;font-size:10px;padding:0 8px;" onclick="openCollectModal(' + r.id + ')">' + (r.status==='collected'?'✓ Done':'Collect') + '</button>';
       container.appendChild(row);
     });
   }
@@ -667,8 +668,10 @@ function renderCompactList() {
       row.setAttribute('ondragend', 'dragEnd(event)');
       row.innerHTML = '<div class="drag-handle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="15" y2="6"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="18" x2="15" y2="18"/></svg></div>'
         + '<div class="compact-num">' + (idx+1) + '</div>'
-        + '<div style="flex:1;min-width:0;"><div class="compact-name">' + r.name + '</div><div class="compact-sub">' + r.location + '</div></div>'
-        + '<button class="mark-btn" style="height:22px;font-size:10px;padding:0 8px;" onclick="openCollectModal(' + r.id + ')">Collect</button>';
+        + '<div style="width:100px;flex-shrink:0;min-width:0;"><div class="compact-name">' + r.name + '</div></div>'
+        + '<div style="flex:1;min-width:0;font-size:11px;color:#888780;">' + r.location + '</div>'
+        + '<span class="badge ' + r.status + '" style="flex-shrink:0;margin-right:6px;">' + r.status + '</span>'
+        + '<button class="mark-btn ' + (r.status === 'collected' ? 'gray' : '') + '" style="height:22px;font-size:10px;padding:0 8px;flex-shrink:0;" onclick="openCollectModal(' + r.id + ')">' + (r.status === 'collected' ? '✓ Done' : 'Collect') + '</button>';
       container.appendChild(row);
     });
   }
