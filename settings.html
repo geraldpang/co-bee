@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>co·bee — Settings</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F4F6F8;color:#1a1a18;font-size:13px;}
+
+.tab-bar{background:white;border-bottom:0.5px solid #E0DFD8;display:flex;padding:0 24px;gap:0;position:sticky;top:0;z-index:50;}
+.tab{padding:14px 18px;font-size:13px;font-weight:500;color:#888780;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;white-space:nowrap;}
+.tab:hover{color:#009A97;}
+.tab.active{color:#009A97;border-bottom-color:#009A97;font-weight:600;}
+
+.page{padding:24px;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+.section{background:white;border-radius:12px;border:0.5px solid #E0DFD8;margin-bottom:16px;overflow:hidden;}
+.section-header{padding:14px 18px;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;}
+.section-title{font-size:12px;font-weight:700;color:#1a1a18;letter-spacing:0.04em;text-transform:uppercase;}
+.section-body{padding:20px 18px;}
+.divider{height:0.5px;background:#f0f0f0;margin:18px 0;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px 20px;}
+
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;}
+.field label .req{color:#E24B4A;margin-left:2px;}
+.input{height:38px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 12px;font-size:13px;font-family:inherit;outline:none;color:#1a1a18;background:white;width:100%;}
+.input:focus{border-color:#009A97;}
+.textarea{border:0.5px solid #D3D1C7;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;outline:none;color:#1a1a18;background:white;width:100%;resize:vertical;min-height:80px;}
+.textarea:focus{border-color:#009A97;}
+.select{height:38px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 28px 0 12px;font-size:13px;font-family:inherit;outline:none;background:white;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;width:100%;}
+.input-prefix{display:flex;align-items:center;border:0.5px solid #D3D1C7;border-radius:8px;overflow:hidden;}
+.input-prefix .prefix{padding:0 10px;background:#f5f5f5;border-right:0.5px solid #D3D1C7;height:38px;display:flex;align-items:center;font-size:12px;color:#888780;white-space:nowrap;gap:5px;flex-shrink:0;}
+.input-prefix .input{border:none;border-radius:0;flex:1;}
+.helper{font-size:11px;color:#888780;margin-top:2px;}
+
+.toggle-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:0.5px solid #f0f0f0;}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-label-title{font-size:13px;font-weight:500;color:#1a1a18;}
+.toggle-label-sub{font-size:11px;color:#888780;margin-top:2px;line-height:1.5;}
+.toggle{width:38px;height:22px;border-radius:99px;background:#D3D1C7;border:none;cursor:pointer;position:relative;flex-shrink:0;margin-top:2px;transition:background 0.2s;}
+.toggle.on{background:#009A97;}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;background:white;border-radius:50%;top:2px;left:2px;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.toggle.on::after{left:18px;}
+
+.profile-photo-wrap{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;}
+.photo-circle{width:80px;height:80px;border-radius:50%;background:#E0F5F5;border:2px dashed #80CCCB;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:4px;transition:all 0.15s;flex-shrink:0;}
+.photo-circle:hover{border-color:#009A97;}
+.photo-circle svg{color:#80CCCB;}
+.photo-circle span{font-size:9px;color:#888780;text-align:center;line-height:1.2;}
+
+.contact-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.contact-row:last-child{margin-bottom:0;}
+.contact-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+.color-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.color-field{display:flex;flex-direction:column;gap:6px;}
+.color-field label{font-size:11px;font-weight:600;color:#888780;}
+.color-preview{display:flex;align-items:center;gap:8px;}
+.color-swatch{width:40px;height:38px;border-radius:8px;border:0.5px solid #D3D1C7;cursor:pointer;flex-shrink:0;padding:2px;}
+.color-input-hex{height:38px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 10px;font-size:12px;font-family:monospace;width:100px;outline:none;}
+.color-input-hex:focus{border-color:#009A97;}
+.color-presets{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;}
+.color-preset{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color 0.1s;flex-shrink:0;}
+.color-preset:hover{border-color:#1a1a18;}
+
+.banner-upload{border:1.5px dashed #D3D1C7;border-radius:8px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all 0.15s;}
+.banner-upload:hover{border-color:#009A97;background:#f5fafa;}
+.banner-thumb{width:80px;height:54px;background:#E0F5F5;border-radius:6px;border:0.5px solid #E0DFD8;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+.radio-group{background:#E0F5F5;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;}
+.radio-section-title{font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;}
+.radio-row{display:flex;gap:28px;}
+.radio-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:500;color:#1a1a18;}
+.radio-label input[type=radio]{accent-color:#009A97;width:16px;height:16px;}
+
+/* Payment single-select */
+.pay-method{border:0.5px solid #D3D1C7;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.15s;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;}
+.pay-method:last-child{margin-bottom:0;}
+.pay-method:hover{border-color:#009A97;}
+.pay-method.selected{border-color:#009A97;background:#E0F5F5;}
+.pay-method-radio{width:18px;height:18px;border-radius:50%;border:2px solid #D3D1C7;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.pay-method.selected .pay-method-radio{border-color:#009A97;background:#009A97;}
+.pay-method.selected .pay-method-radio::after{content:'';width:6px;height:6px;background:white;border-radius:50%;}
+.pay-method-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pay-method-body{flex:1;}
+.pay-method-name{font-size:13px;font-weight:600;color:#1a1a18;}
+.pay-method-sub{font-size:11px;color:#888780;margin-top:2px;}
+.pay-method-detail{margin-top:12px;padding-top:12px;border-top:0.5px solid #80CCCB;display:none;}
+.pay-method.selected .pay-method-detail{display:block;}
+
+.keyword-row{display:flex;gap:8px;align-items:center;}
+.setting-card{border:0.5px solid #D3D1C7;border-radius:10px;padding:12px;cursor:pointer;transition:all 0.15s;display:flex;align-items:flex-start;gap:10px;}
+.setting-card:hover{border-color:#009A97;}
+.setting-card.selected{border-color:#009A97;background:#E0F5F5;}
+.setting-card-check{width:18px;height:18px;border-radius:50%;border:2px solid #D3D1C7;flex-shrink:0;margin-top:1px;transition:all 0.15s;}
+.setting-card-check.on{border-color:#009A97;background:#009A97;background-image:url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4l3 3 5-6' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;}
+.setting-card-title{font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:3px;}
+.setting-card-sub{font-size:11px;color:#888780;line-height:1.4;}
+.btn{height:36px;padding:0 16px;border-radius:8px;border:0.5px solid #D3D1C7;background:white;font-size:13px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:6px;color:#1a1a18;transition:all 0.12s;}
+.btn:hover{background:#f5f5f5;}
+.btn.primary{background:#009A97;border-color:#009A97;color:white;}
+.btn.primary:hover{background:#007A77;}
+.btn.danger{color:#E24B4A;border-color:#F09595;}
+.btn.danger:hover{background:#FCEBEB;}
+.btn.sm{height:30px;padding:0 12px;font-size:12px;}
+
+
+</style>
+</head>
+<body>
+
+<div class="tab-bar">
+  <div class="tab active"  onclick="switchTab('general',this)">Profile</div>
+  <div class="tab"         onclick="switchTab('appearance',this)">Appearance</div>
+  <div class="tab"         onclick="switchTab('group',this)">Group</div>
+  <div class="tab"         onclick="switchTab('advance',this)">Advance</div>
+  <div class="tab"         onclick="switchTab('payment',this)">Payment</div>
+</div>
+
+<div class="page">
+
+<!-- ═══════════ GENERAL ═══════════ -->
+<div id="tab-general" class="tab-content active">
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Profile</span>
+    </div>
+    <div class="section-body">
+
+      <!-- Group photo + name row -->
+      <div class="profile-photo-wrap">
+        <div class="photo-circle" onclick="alert('Upload profile photo')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Add Photo</span>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:11px;color:#888780;margin-bottom:8px;">This photo appears on event cards and is seen by all buyers.</div>
+          <button class="btn sm">Upload Photo</button>
+        </div>
+      </div>
+
+      <!-- Shop / Group info -->
+      <div class="two-col" style="margin-bottom:16px;">
+        <div class="field">
+          <label>Group Name <span class="req">*</span></label>
+          <input class="input" value="M6 Group"/>
+          <span class="helper">Domain: co-bee.pages.dev/m6-group</span>
+        </div>
+        <div class="field">
+          <label>Address <span class="req">*</span></label>
+          <input class="input" value="Simei Street 1, Singapore 529948"/>
+        </div>
+      </div>
+      <div class="two-col" style="margin-bottom:16px;">
+        <div class="field">
+          <label>Time Zone</label>
+          <select class="select"><option selected>Asia / Singapore</option><option>Asia / Kuala Lumpur</option><option>UTC</option></select>
+        </div>
+        <div class="field">
+          <label>Currency</label>
+          <select class="select"><option selected>SGD — Singapore Dollar</option><option>MYR — Malaysian Ringgit</option><option>USD — US Dollar</option></select>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:16px;">
+        <label>Headline / Description</label>
+        <textarea class="textarea">Good things must share! Join M6 Group for the best group buys in Singapore.</textarea>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Contact & Social -->
+      <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:12px;">Contact &amp; Social</div>
+      <div class="contact-row">
+        <div class="contact-icon" style="background:#E8F8EF;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.58 3.47 2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 19z"/></svg></div>
+        <div class="input-prefix" style="flex:1;"><span class="prefix">WhatsApp</span><input class="input" value="+65 9123 4567"/></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon" style="background:#FEF2DC;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+        <div class="input-prefix" style="flex:1;"><span class="prefix">Instagram</span><input class="input" placeholder="@handle or URL"/></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon" style="background:#EBF5FB;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3498DB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
+        <div class="input-prefix" style="flex:1;"><span class="prefix">Facebook</span><input class="input" value="https://facebook.com/m6group"/></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon" style="background:#F0F0F0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div class="input-prefix" style="flex:1;"><span class="prefix">Website</span><input class="input" placeholder="https://yourwebsite.com"/></div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ APPEARANCE ═══════════ -->
+<div id="tab-appearance" class="tab-content">
+
+  <!-- Banner -->
+  <div class="section">
+    <div class="section-header"><span class="section-title">Banner Images</span></div>
+    <div class="section-body">
+      <div style="position:relative;cursor:pointer;" onclick="document.getElementById('banner-input').click()" id="banner-drop">
+        <!-- Preview area — shows placeholder or uploaded image -->
+        <div id="banner-preview" style="width:100%;height:160px;background:#E0F5F5;border-radius:10px;border:1.5px dashed #80CCCB;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transition:all 0.15s;overflow:hidden;position:relative;">
+          <svg id="banner-placeholder-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span id="banner-placeholder-text" style="font-size:12px;font-weight:500;color:#888780;">Click to upload banner image</span>
+          <span id="banner-placeholder-sub" style="font-size:10px;color:#B4B2A9;">PNG, JPG up to 5MB — recommended 1200×400px. Replaces the event page header.</span>
+          <!-- Uploaded image shown here -->
+          <img id="banner-img" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:8px;"/>
+        </div>
+        <!-- Overlay on hover when image is loaded -->
+        <div id="banner-overlay" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.35);border-radius:10px;align-items:center;justify-content:center;gap:8px;flex-direction:column;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span style="font-size:12px;font-weight:600;color:white;">Change Banner</span>
+        </div>
+      </div>
+      <input type="file" id="banner-input" accept="image/*" style="display:none;" onchange="previewBanner(this)"/>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+        <span style="font-size:11px;color:#888780;" id="banner-filename">No file selected</span>
+        <button class="btn sm danger" id="banner-remove" style="display:none;" onclick="removeBanner(event)">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color Scheme -->
+  <div class="section">
+    <div class="section-header"><span class="section-title">Color Scheme</span></div>
+    <div class="section-body">
+      <div style="font-size:11px;color:#888780;margin-bottom:16px;">Color changes apply to both member-facing event pages and the admin interface.</div>
+
+      <!-- Title -->
+      <div style="margin-bottom:18px;padding-bottom:18px;border-bottom:0.5px solid #f0f0f0;">
+        <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:10px;">Site Title</div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <div class="field" style="flex:1;min-width:180px;">
+            <label>Title Text</label>
+            <input class="input" value="co·bee" id="site-title-input" oninput="previewTitle(this.value)" placeholder="e.g. co·bee"/>
+            <span class="helper">Replaces the "co·bee" header across the platform.</span>
+          </div>
+          <div id="title-preview-box" style="background:#009A97;border-radius:8px;padding:10px 18px;display:flex;align-items:center;gap:6px;">
+            <span id="site-title-preview" style="font-size:16px;font-weight:700;color:#FFFFFF;letter-spacing:-0.02em;">co·bee</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colors -->
+      <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:12px;">Colors</div>
+      <div class="color-grid" style="margin-bottom:16px;">
+        <div class="color-field">
+          <label>Primary (Teal)</label>
+          <div class="color-preview"><input type="color" class="color-swatch" value="#009A97" id="clr-primary" oninput="syncHex('primary',this.value)"/><input class="color-input-hex" value="#009A97" id="hex-primary" oninput="syncSwatch('primary',this.value)" maxlength="7"/></div>
+          <div class="color-presets">
+            <div class="color-preset" style="background:#009A97;" onclick="applyColor('primary','#009A97')"></div>
+            <div class="color-preset" style="background:#0077CC;" onclick="applyColor('primary','#0077CC')"></div>
+            <div class="color-preset" style="background:#7B2D8B;" onclick="applyColor('primary','#7B2D8B')"></div>
+            <div class="color-preset" style="background:#E24B4A;" onclick="applyColor('primary','#E24B4A')"></div>
+            <div class="color-preset" style="background:#27AE60;" onclick="applyColor('primary','#27AE60')"></div>
+          </div>
+        </div>
+        <div class="color-field">
+          <label>Accent (Amber / Badge)</label>
+          <div class="color-preview"><input type="color" class="color-swatch" value="#E8971A" id="clr-accent" oninput="syncHex('accent',this.value)"/><input class="color-input-hex" value="#E8971A" id="hex-accent" oninput="syncSwatch('accent',this.value)" maxlength="7"/></div>
+          <div class="color-presets">
+            <div class="color-preset" style="background:#E8971A;" onclick="applyColor('accent','#E8971A')"></div>
+            <div class="color-preset" style="background:#F5A623;" onclick="applyColor('accent','#F5A623')"></div>
+            <div class="color-preset" style="background:#E74C3C;" onclick="applyColor('accent','#E74C3C')"></div>
+            <div class="color-preset" style="background:#8E44AD;" onclick="applyColor('accent','#8E44AD')"></div>
+            <div class="color-preset" style="background:#2ECC71;" onclick="applyColor('accent','#2ECC71')"></div>
+          </div>
+        </div>
+        <div class="color-field">
+          <label>Page Background</label>
+          <div class="color-preview"><input type="color" class="color-swatch" value="#F4F6F8" id="clr-bg" oninput="syncHex('bg',this.value)"/><input class="color-input-hex" value="#F4F6F8" id="hex-bg" oninput="syncSwatch('bg',this.value)" maxlength="7"/></div>
+          <div class="color-presets">
+            <div class="color-preset" style="background:#F4F6F8;border:1px solid #ddd;" onclick="applyColor('bg','#F4F6F8')"></div>
+            <div class="color-preset" style="background:#FFFFFF;border:1px solid #ddd;" onclick="applyColor('bg','#FFFFFF')"></div>
+            <div class="color-preset" style="background:#F1EFE8;" onclick="applyColor('bg','#F1EFE8')"></div>
+            <div class="color-preset" style="background:#EAF4F4;" onclick="applyColor('bg','#EAF4F4')"></div>
+          </div>
+        </div>
+        <div class="color-field">
+          <label>Topbar Background</label>
+          <div class="color-preview"><input type="color" class="color-swatch" value="#009A97" id="clr-topbar" oninput="syncHex('topbar',this.value)"/><input class="color-input-hex" value="#009A97" id="hex-topbar" oninput="syncSwatch('topbar',this.value)" maxlength="7"/></div>
+          <div class="color-presets">
+            <div class="color-preset" style="background:#009A97;" onclick="applyColor('topbar','#009A97')"></div>
+            <div class="color-preset" style="background:#1a1a18;" onclick="applyColor('topbar','#1a1a18')"></div>
+            <div class="color-preset" style="background:#2C3E50;" onclick="applyColor('topbar','#2C3E50')"></div>
+            <div class="color-preset" style="background:#7B2D8B;" onclick="applyColor('topbar','#7B2D8B')"></div>
+            <div class="color-preset" style="background:#FFFFFF;border:1px solid #ddd;" onclick="applyColor('topbar','#FFFFFF')"></div>
+          </div>
+        </div>
+        <div class="color-field">
+          <label>Topbar Text</label>
+          <div class="color-preview"><input type="color" class="color-swatch" value="#FFFFFF" id="clr-header" oninput="syncHex('header',this.value)"/><input class="color-input-hex" value="#FFFFFF" id="hex-header" oninput="syncSwatch('header',this.value)" maxlength="7"/></div>
+          <div class="color-presets">
+            <div class="color-preset" style="background:#FFFFFF;border:1px solid #ddd;" onclick="applyColor('header','#FFFFFF')"></div>
+            <div class="color-preset" style="background:#1a1a18;" onclick="applyColor('header','#1a1a18')"></div>
+            <div class="color-preset" style="background:#E0F5F5;" onclick="applyColor('header','#E0F5F5')"></div>
+          </div>
+        </div>
+        <div class="color-field">
+          <label>Price Color</label>
+          <div class="color-preview"><input type="color" class="color-swatch" value="#009A97" id="clr-price" oninput="syncHex('price',this.value)"/><input class="color-input-hex" value="#009A97" id="hex-price" oninput="syncSwatch('price',this.value)" maxlength="7"/></div>
+        </div>
+        <div class="color-field">
+          <label>Item Title Color</label>
+          <div class="color-preview"><input type="color" class="color-swatch" value="#009A97" id="clr-item" oninput="syncHex('item',this.value)"/><input class="color-input-hex" value="#009A97" id="hex-item" oninput="syncSwatch('item',this.value)" maxlength="7"/></div>
+        </div>
+      </div>
+      <button class="btn" onclick="resetColors()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+        Reset to Default
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ GROUP ═══════════ -->
+<div id="tab-group" class="tab-content">
+
+  <div class="section">
+    <div class="section-header"><span class="section-title">Group Settings</span></div>
+    <div class="section-body">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+
+        <!-- Group Type -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div style="font-size:12px;font-weight:600;color:#888780;width:130px;flex-shrink:0;">Group type</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;">
+            <div class="setting-card selected" onclick="selectSetting(this,'grp-type','private')">
+              <div class="setting-card-check on"></div>
+              <div><div class="setting-card-title">Private</div><div class="setting-card-sub">Events are private and only invited members can participate.</div></div>
+            </div>
+            <div class="setting-card" onclick="selectSetting(this,'grp-type','public')">
+              <div class="setting-card-check"></div>
+              <div><div class="setting-card-title">Public</div><div class="setting-card-sub">Anyone in co-bee can participate in Group-Buy.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:0.5px;background:#f0f0f0;"></div>
+
+        <!-- Default Permission -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div style="font-size:12px;font-weight:600;color:#888780;width:130px;flex-shrink:0;">Default Permission</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;">
+            <div class="setting-card selected" onclick="selectSetting(this,'grp-perm','member')">
+              <div class="setting-card-check on"></div>
+              <div><div class="setting-card-title">Member</div><div class="setting-card-sub">All members by default don't have the right to host group-buy.</div></div>
+            </div>
+            <div class="setting-card" onclick="selectSetting(this,'grp-perm','host')">
+              <div class="setting-card-check"></div>
+              <div><div class="setting-card-title">Host</div><div class="setting-card-sub">All members by default can host group-buy events.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:0.5px;background:#f0f0f0;"></div>
+
+        <!-- Approval Type -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div style="font-size:12px;font-weight:600;color:#888780;width:130px;flex-shrink:0;">Approval Type</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;">
+            <div class="setting-card selected" onclick="selectSetting(this,'grp-approval','admin')">
+              <div class="setting-card-check on"></div>
+              <div><div class="setting-card-title">Admin</div><div class="setting-card-sub">Requires Admin to verify new joiners before admitting them.</div></div>
+            </div>
+            <div class="setting-card" onclick="selectSetting(this,'grp-approval','auto')">
+              <div class="setting-card-check"></div>
+              <div><div class="setting-card-title">Auto Join</div><div class="setting-card-sub">Auto admit new joiners without the need for verification.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:0.5px;background:#f0f0f0;"></div>
+
+        <!-- Member Privacy -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div style="font-size:12px;font-weight:600;color:#888780;width:130px;flex-shrink:0;">Member Privacy</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;">
+            <div class="setting-card" onclick="selectSetting(this,'grp-privacy','yes')">
+              <div class="setting-card-check"></div>
+              <div><div class="setting-card-title">Yes</div><div class="setting-card-sub">All members can see who is in the group.</div></div>
+            </div>
+            <div class="setting-card selected" onclick="selectSetting(this,'grp-privacy','no')">
+              <div class="setting-card-check on"></div>
+              <div><div class="setting-card-title">No</div><div class="setting-card-sub">All members cannot see who is in the group.</div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Join Question card — only shown when Approval Type = Admin -->
+  <div class="section" id="join-question-card">
+    <div class="section-header">
+      <span class="section-title">Join Question</span>
+      <span style="font-size:11px;color:#888780;">Only shown when Approval Type is Admin</span>
+    </div>
+    <div class="section-body">
+      <div class="field" style="margin-bottom:16px;">
+        <label>Question to ask before joining</label>
+        <input class="input" placeholder="e.g. How did you hear about us?"/>
+        <span class="helper">New members must answer this before their request is reviewed.</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Keyword auto-approve -->
+      <div class="toggle-row" style="margin-bottom:0;">
+        <div>
+          <div class="toggle-label-title">Keyword Auto-Approve</div>
+          <div class="toggle-label-sub">If a member's answer contains a matching keyword, they are automatically approved without admin review.</div>
+        </div>
+        <button class="toggle" id="keyword-toggle" onclick="this.classList.toggle('on');toggleKeywords()"></button>
+      </div>
+
+      <div id="keyword-section" style="display:none;margin-top:14px;">
+        <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:8px;">Keywords</div>
+        <div id="keyword-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+          <div class="keyword-row">
+            <input class="input" placeholder="Keyword (e.g. COBEE2026)" style="flex:1;"/>
+            <input class="input" placeholder="Label (optional, e.g. WhatsApp group)" style="flex:1;"/>
+            <button class="btn sm danger" onclick="this.closest('.keyword-row').remove()">Remove</button>
+          </div>
+        </div>
+        <button class="btn sm" onclick="addKeyword()">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+          Add Keyword
+        </button>
+        <div style="font-size:11px;color:#888780;margin-top:8px;display:flex;align-items:flex-start;gap:5px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          A member is auto-approved if their answer <strong>contains</strong> any keyword (case-insensitive). Share keywords privately — anyone who knows one will be approved instantly.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invite Members card -->
+  <div class="section">
+    <div class="section-header"><span class="section-title">Invite Members</span></div>
+    <div class="section-body">
+      <div style="margin-bottom:16px;">
+        <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Invite Link</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px;">
+          <input class="input" value="https://co-bee.pages.dev/join/m6group-abc123" readonly style="background:#FAFAF8;color:#888780;font-size:11px;flex:1;"/>
+          <button class="btn sm" onclick="copyLink()">Copy</button>
+          <button class="btn sm" onclick="showToast('Link regenerated')">Regenerate</button>
+        </div>
+        <span class="helper">Share this link to invite new members directly.</span>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:8px;">Invite by Email</div>
+        <div style="display:flex;gap:8px;">
+          <input class="input" placeholder="Enter email address" id="invite-email" style="flex:1;"/>
+          <select class="select" style="width:130px;"><option>Member</option><option>Host</option></select>
+          <button class="btn primary sm" onclick="sendInvite()">Send Invite</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="section-title">WhatsApp Group Link</span></div>
+    <div class="section-body">
+      <div class="toggle-row" style="margin-bottom:14px;">
+        <div>
+          <div class="toggle-label-title">Show WhatsApp Group Link to Members</div>
+          <div class="toggle-label-sub">Display a WhatsApp join button on your group page so members can quickly join your chat.</div>
+        </div>
+        <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="field" style="max-width:440px;margin-top:14px;">
+        <label>WhatsApp Group Invite Link</label>
+        <div class="input-prefix">
+          <span class="prefix" style="background:#E8F8EF;color:#27AE60;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.58 3.47 2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 19z"/></svg></span>
+          <input class="input" placeholder="https://chat.whatsapp.com/xxxxxxxxxxxxxxx"/>
+        </div>
+        <span class="helper">Get this from WhatsApp group → Invite via link → Copy link</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ ADVANCE ═══════════ -->
+<div id="tab-advance" class="tab-content">
+
+  <div class="section">
+    <div class="section-header"><span class="section-title">Default Options</span></div>
+    <div class="section-body" style="padding-bottom:8px;padding-top:8px;">
+
+      <!-- Transaction Fees at the very top -->
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label-title">Add Transaction Fees</div>
+          <div class="toggle-label-sub">Pass payment processing fees on to buyers (e.g. 2.5% handling fee).</div>
+        </div>
+        <button class="toggle" onclick="this.classList.toggle('on')"></button>
+      </div>
+
+
+      <!-- Payment type -->
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label-title">Payment after Closing Date</div>
+          <div class="toggle-label-sub">Host consolidates discount and distributes delivery cost after the event closes. Amounts set in Dashboard.</div>
+        </div>
+        <button class="toggle" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label-title">Pay Together</div>
+          <div class="toggle-label-sub">Members can pay for multiple events at once via Pay Together.</div>
+        </div>
+        <button class="toggle" onclick="this.classList.toggle('on')"></button>
+      </div>
+
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label-title">Important Notes to Buyers</div>
+          <div class="toggle-label-sub">Show a notes section on all events for important messages to buyers.</div>
+        </div>
+        <button class="toggle" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label-title">External URL</div>
+          <div class="toggle-label-sub">Allow a custom link (e.g. product page) to be shown on each event.</div>
+        </div>
+        <button class="toggle" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label-title">Request Delivery Details from Buyers</div>
+          <div class="toggle-label-sub">Ask buyers to provide their delivery address when placing an order.</div>
+        </div>
+        <button class="toggle" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label-title">Show Reviews on Events</div>
+          <div class="toggle-label-sub">Display star ratings and buyer reviews on event pages.</div>
+        </div>
+        <button class="toggle" onclick="this.classList.toggle('on')"></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ PAYMENT ═══════════ --> ═══════════ -->
+<div id="tab-payment" class="tab-content">
+
+  <div class="section">
+    <div class="section-header"><span class="section-title">Payment Method</span></div>
+    <div class="section-body">
+      <div style="font-size:11px;color:#888780;margin-bottom:14px;">Select one primary payment method for your buyers.</div>
+
+      <div class="pay-method selected" onclick="selectPay(this)">
+        <div class="pay-method-radio"></div>
+        <div class="pay-method-icon" style="background:#E0F5F5;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div class="pay-method-body">
+          <div class="pay-method-name">PayNow</div>
+          <div class="pay-method-sub">Buyers pay via Singapore's PayNow QR code system.</div>
+          <div class="pay-method-detail">
+            <div class="field" style="max-width:280px;">
+              <label>PayNow UEN / Phone Number</label>
+              <input class="input" value="83062355" placeholder="e.g. 83062355 or UEN"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pay-method" onclick="selectPay(this)">
+        <div class="pay-method-radio"></div>
+        <div class="pay-method-icon" style="background:#EBF5FB;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3498DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div class="pay-method-body">
+          <div class="pay-method-name">Bank Transfer</div>
+          <div class="pay-method-sub">Buyers pay via direct bank transfer to your account.</div>
+          <div class="pay-method-detail">
+            <div class="two-col" style="max-width:460px;margin-bottom:10px;">
+              <div class="field"><label>Bank Name</label><input class="input" placeholder="e.g. DBS, OCBC, UOB"/></div>
+              <div class="field"><label>Account Number</label><input class="input" placeholder="1234567890"/></div>
+            </div>
+            <div class="field" style="max-width:220px;">
+              <label>Account Name</label><input class="input" placeholder="As shown on bank account"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pay-method" onclick="selectPay(this)">
+        <div class="pay-method-radio"></div>
+        <div class="pay-method-icon" style="background:#E8F8EF;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="pay-method-body">
+          <div class="pay-method-name">Cash on Pickup</div>
+          <div class="pay-method-sub">Buyers pay in cash when collecting their order at pickup.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- .page -->
+
+<div style="padding:16px 24px 32px;display:flex;justify-content:flex-end;gap:8px;">
+  <button class="btn" onclick="showToast('Changes discarded','warn')">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+    Cancel
+  </button>
+  <button class="btn primary" onclick="showToast('Settings saved ✓')">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13"/><polyline points="7 3 7 8 15 8"/></svg>
+    Save Settings
+  </button>
+</div>
+
+<div id="toast" style="position:fixed;bottom:72px;right:24px;font-size:12px;font-weight:500;padding:10px 16px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.2);opacity:0;transition:opacity 0.25s;pointer-events:none;z-index:999;background:#1a1a18;color:white;"></div>
+
+<script>
+function toggleKeywords() {
+  var on = document.getElementById('keyword-toggle').classList.contains('on');
+  document.getElementById('keyword-section').style.display = on ? 'block' : 'none';
+}
+function addKeyword() {
+  var list = document.getElementById('keyword-list');
+  var row = document.createElement('div');
+  row.className = 'keyword-row';
+  var k = document.createElement('input');
+  k.className = 'input'; k.placeholder = 'Keyword'; k.style.flex = '1';
+  var lb = document.createElement('input');
+  lb.className = 'input'; lb.placeholder = 'Label (optional)'; lb.style.flex = '1';
+  var btn = document.createElement('button');
+  btn.className = 'btn sm danger'; btn.textContent = 'Remove';
+  btn.onclick = function(){ row.remove(); };
+  row.appendChild(k); row.appendChild(lb); row.appendChild(btn);
+  list.appendChild(row);
+}
+function selectSetting(el, group, val) {
+  var allCards = el.closest('.section-body').querySelectorAll('.setting-card');
+  allCards.forEach(function(c) {
+    if ((c.getAttribute('onclick') || '').indexOf(group) !== -1) {
+      c.classList.remove('selected');
+      c.querySelector('.setting-card-check').classList.remove('on');
+    }
+  });
+  el.classList.add('selected');
+  el.querySelector('.setting-card-check').classList.add('on');
+  if (group === 'grp-approval') {
+    var card = document.getElementById('join-question-card');
+    if (card) card.style.display = (val === 'admin') ? 'block' : 'none';
+  }
+}
+function updateTitlePreview(id, val) {
+  var box = document.getElementById('title-preview-box');
+  var text = document.getElementById('site-title-preview');
+  if (!box || !text) return;
+  if (id === 'topbar') box.style.background = val;
+  if (id === 'header') text.style.color = val;
+}
+function previewTitle(val) {
+  document.getElementById('site-title-preview').textContent = val || 'co·bee';
+}
+function previewBanner(input) {
+  if (!input.files || !input.files[0]) return;
+  var file = input.files[0];
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = document.getElementById('banner-img');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    document.getElementById('banner-placeholder-icon').style.display = 'none';
+    document.getElementById('banner-placeholder-text').style.display = 'none';
+    document.getElementById('banner-placeholder-sub').style.display = 'none';
+    document.getElementById('banner-preview').style.border = '1.5px solid #009A97';
+    document.getElementById('banner-filename').textContent = file.name;
+    document.getElementById('banner-remove').style.display = 'inline-flex';
+  };
+  reader.readAsDataURL(file);
+}
+function removeBanner(e) {
+  e.stopPropagation();
+  document.getElementById('banner-img').src = '';
+  document.getElementById('banner-img').style.display = 'none';
+  document.getElementById('banner-placeholder-icon').style.display = 'block';
+  document.getElementById('banner-placeholder-text').style.display = 'block';
+  document.getElementById('banner-placeholder-sub').style.display = 'block';
+  document.getElementById('banner-preview').style.border = '1.5px dashed #80CCCB';
+  document.getElementById('banner-filename').textContent = 'No file selected';
+  document.getElementById('banner-remove').style.display = 'none';
+  document.getElementById('banner-input').value = '';
+}
+// Hover overlay when image is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  var drop = document.getElementById('banner-drop');
+  var overlay = document.getElementById('banner-overlay');
+  if (!drop || !overlay) return;
+  drop.addEventListener('mouseenter', function() {
+    if (document.getElementById('banner-img').src) overlay.style.display = 'flex';
+  });
+  drop.addEventListener('mouseleave', function() {
+    overlay.style.display = 'none';
+  });
+});
+function switchTab(id, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
+function selectPay(el) {
+  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function syncHex(id, val) {
+  document.getElementById('hex-' + id).value = val;
+  updateTitlePreview(id, val);
+}
+function syncSwatch(id, val) {
+  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+    document.getElementById('clr-' + id).value = val;
+    updateTitlePreview(id, val);
+  }
+}
+function applyColor(id, val) {
+  document.getElementById('clr-' + id).value = val;
+  document.getElementById('hex-' + id).value = val;
+  updateTitlePreview(id, val);
+}
+function resetColors() {
+  var d = {primary:'#009A97',accent:'#E8971A',bg:'#F4F6F8',topbar:'#009A97',header:'#FFFFFF',price:'#009A97',item:'#009A97'};
+  Object.keys(d).forEach(function(k){ applyColor(k, d[k]); });
+  showToast('Colors reset to default');
+}
+
+function copyLink() {
+  var val = document.querySelector('input[value*="co-bee.pages.dev/join"]').value;
+  navigator.clipboard.writeText(val).then(function(){ showToast('Link copied!'); });
+}
+function sendInvite() {
+  var e = document.getElementById('invite-email').value.trim();
+  if (!e) return;
+  document.getElementById('invite-email').value = '';
+  showToast('Invite sent to ' + e);
+}
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = type === 'warn' ? '#E8971A' : '#1a1a18';
+  t.style.opacity = '1';
+  setTimeout(function(){ t.style.opacity = '0'; }, 2500);
+}
+</script>
+</body>
+</html>
