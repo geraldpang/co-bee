@@ -343,9 +343,9 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-share { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #009A97; cursor: pointer; background: #E0F5F5; padding: 5px 10px; border-radius: 99px; border: none; font-family: inherit; transition: background 0.15s; }
   .gd-share:hover { background: #c8eaea; }
   /* Avatar card — no hero, just sits on page bg */
-  .gd-avatar-card { background: white; margin: 0 0; border-radius: 0; padding: 14px 16px 14px; border-bottom: 0.5px solid #E0DFD8; }
-  .gd-avatar-wrap { display: flex; align-items: flex-start; gap: 14px; padding-top: 10px; }
-  .gd-avatar { width: 64px; height: 64px; border-radius: 14px; background: #009A97; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: white; flex-shrink: 0; position: relative; }
+  .gd-avatar-card { background: white; margin: 12px 14px; border-radius: 12px; padding: 16px; border: 0.5px solid #E0DFD8; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+  .gd-avatar-wrap { display: flex; align-items: center; gap: 14px; }
+  .gd-avatar { width: 56px; height: 56px; border-radius: 50%; background: #009A97; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; position: relative; }
   .gd-avatar-badge { position: absolute; bottom: -4px; right: -4px; width: 20px; height: 20px; background: #E8971A; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; }
   .gd-info { flex: 1; min-width: 0; }
   .gd-name { font-size: 17px; font-weight: 700; color: #1a1a18; margin-bottom: 3px; }
@@ -353,13 +353,16 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-admin-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #009A97; background: #E0F5F5; border: none; border-radius: 6px; padding: 4px 9px; cursor: pointer; font-family: inherit; margin-top: 8px; transition: background 0.12s; }
   .gd-admin-link:hover { background: #c8eaea; }
   /* Stats */
-  .gd-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border: 0.5px solid #E0DFD8; border-radius: 10px; overflow: hidden; margin: 0 16px 16px; background: white; }
-  .gd-stat { padding: 12px 8px; text-align: center; }
+  .gd-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border: 0.5px solid #E0DFD8; border-radius: 10px; overflow: hidden; margin: 0 14px 14px; background: white; }
+  .gd-stat { padding: 12px 8px; text-align: center; transition: background 0.12s; }
+  .gd-stat.clickable { cursor: pointer; }
+  .gd-stat.clickable:hover { background: #f5fafa; }
+  .gd-stat.clickable:hover .gd-stat-val { color: #009A97; }
   .gd-stat + .gd-stat { border-left: 0.5px solid #E0DFD8; }
   .gd-stat-val { font-size: 20px; font-weight: 700; color: #1a1a18; letter-spacing: -0.5px; }
   .gd-stat-lbl { font-size: 9px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #888780; margin-top: 2px; }
   /* Events section */
-  .gd-events { padding: 0 16px; }
+  .gd-events { padding: 0 14px; }
   .gd-events-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .gd-events-label { font-size: 12px; font-weight: 700; color: #1a1a18; letter-spacing: 0.04em; text-transform: uppercase; }
   .gd-host-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: white; background: #009A97; border: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-family: inherit; transition: background 0.12s; }
@@ -1974,13 +1977,13 @@ select:focus { border-color: #009A97; }
 
       <!-- Stats row -->
       <div class="gd-stats">
-        <div class="gd-stat">
+        <div class="gd-stat clickable" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosted-events.html',null) : null" title="View hosted events">
           <div class="gd-stat-val">19</div>
-          <div class="gd-stat-lbl">Events Hosted</div>
+          <div class="gd-stat-lbl">Events Hosted ›</div>
         </div>
-        <div class="gd-stat">
+        <div class="gd-stat clickable" onclick="window.parent && window.parent.navigate ? window.parent.navigate('members.html',null) : null" title="View members">
           <div class="gd-stat-val">2</div>
-          <div class="gd-stat-lbl">Members</div>
+          <div class="gd-stat-lbl">Members ›</div>
         </div>
         <div class="gd-stat">
           <div class="gd-stat-val">47</div>
