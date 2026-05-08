@@ -130,7 +130,11 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
 /* QUICK ACTIONS */
 
 
-/* FILTER BAR */
+/* Inactive member rows */
+.inactive-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border-light);}
+.inactive-row:last-child{border-bottom:none;}
+
+
 .filter-bar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:20px; padding:12px 16px; background:white; border-radius:12px; border:0.5px solid #E0DFD8; }
 .filter-label { font-size:11px; font-weight:600; color:#888780; letter-spacing:0.05em; text-transform:uppercase; white-space:nowrap; margin-right:4px; }
 .filter-chip { height:30px; padding:0 12px; border:0.5px solid #D3D1C7; border-radius:99px; background:white; font-size:11px; color:#888780; cursor:pointer; font-family:inherit; white-space:nowrap; transition:all 0.12s; display:inline-flex; align-items:center; gap:5px; }
@@ -407,15 +411,77 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
               <div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"><span style="font-size:12px;font-weight:500;color:var(--ink);">Dev c&#432;i</span><span style="font-size:11px;color:var(--mid);">3 orders &middot; $30</span></div><div style="height:6px;background:var(--sand);border-radius:3px;overflow:hidden;"><div style="width:15%;height:100%;background:#80CCCB;border-radius:3px;"></div></div></div>
             </div>
           </div>
-          <!-- Top buyers -->
+          <!-- Top buyers / Inactive tabs -->
           <div class="panel-card">
-            <div class="panel-header"><div class="panel-title">Top Buyers</div><a href="members.html" class="panel-link">View all &#x2192;</a></div>
-            <div>
+            <div class="panel-header">
+              <div style="display:flex;gap:2px;background:var(--sand);border-radius:8px;padding:3px;">
+                <button class="period-tab active" id="tab-buyers" onclick="switchMemberTab('buyers')" style="border-radius:6px;">Top Buyers</button>
+                <button class="period-tab" id="tab-inactive" onclick="switchMemberTab('inactive')" style="border-radius:6px;">Inactive</button>
+              </div>
+              <a href="members.html" class="panel-link">View all &#x2192;</a>
+            </div>
+
+            <!-- Top Buyers list -->
+            <div id="panel-buyers">
               <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border-light);"><div style="font-size:11px;font-weight:700;color:var(--faint);width:16px;text-align:center;">1</div><div style="width:30px;height:30px;border-radius:50%;background:#9B59B6;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">J</div><div style="flex:1;"><div style="font-size:12px;font-weight:500;color:var(--ink);">Janet Lee</div><div style="font-size:10px;color:var(--mid);">8 orders &middot; $224</div></div><span class="badge teal">Top buyer</span></div>
               <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border-light);"><div style="font-size:11px;font-weight:700;color:var(--faint);width:16px;text-align:center;">2</div><div style="width:30px;height:30px;border-radius:50%;background:#3498DB;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">D</div><div style="flex:1;"><div style="font-size:12px;font-weight:500;color:var(--ink);">David Tan</div><div style="font-size:10px;color:var(--mid);">6 orders &middot; $186</div></div><span class="badge gray">Active</span></div>
               <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border-light);"><div style="font-size:11px;font-weight:700;color:var(--faint);width:16px;text-align:center;">3</div><div style="width:30px;height:30px;border-radius:50%;background:#E8971A;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">S</div><div style="flex:1;"><div style="font-size:12px;font-weight:500;color:var(--ink);">Sarah Wong</div><div style="font-size:10px;color:var(--mid);">5 orders &middot; $155</div></div><span class="badge gray">Active</span></div>
               <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border-light);"><div style="font-size:11px;font-weight:700;color:var(--faint);width:16px;text-align:center;">4</div><div style="width:30px;height:30px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">T</div><div style="flex:1;"><div style="font-size:12px;font-weight:500;color:var(--ink);">Tom Nguyen</div><div style="font-size:10px;color:var(--mid);">4 orders &middot; $96</div></div><span class="badge amber">Unpaid</span></div>
               <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;"><div style="font-size:11px;font-weight:700;color:var(--faint);width:16px;text-align:center;">5</div><div style="width:30px;height:30px;border-radius:50%;background:#E24B4A;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">M</div><div style="flex:1;"><div style="font-size:12px;font-weight:500;color:var(--ink);">Minh Cong</div><div style="font-size:10px;color:var(--mid);">3 orders &middot; $81</div></div><span class="badge gray">Active</span></div>
+            </div>
+
+            <!-- Inactive Members list -->
+            <div id="panel-inactive" style="display:none;">
+              <!-- Filter row -->
+              <div style="display:flex;align-items:center;gap:6px;padding:8px 16px;border-bottom:0.5px solid var(--border-light);background:var(--sand-mid);">
+                <span style="font-size:10px;color:var(--mid);font-weight:500;">Inactive for:</span>
+                <button class="period-tab active" style="font-size:10px;padding:2px 8px;border-radius:99px;" onclick="filterInactive(30,this)">30d+</button>
+                <button class="period-tab" style="font-size:10px;padding:2px 8px;border-radius:99px;" onclick="filterInactive(60,this)">60d+</button>
+                <button class="period-tab" style="font-size:10px;padding:2px 8px;border-radius:99px;" onclick="filterInactive(90,this)">90d+</button>
+              </div>
+              <!-- Inactive member rows -->
+              <div id="inactive-list">
+                <div class="inactive-row" data-days="45">
+                  <div style="width:30px;height:30px;border-radius:50%;background:#B4B2A9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">R</div>
+                  <div style="flex:1;">
+                    <div style="font-size:12px;font-weight:500;color:var(--ink);">Rachel Lim</div>
+                    <div style="font-size:10px;color:var(--mid);">Last order: 24 Mar &middot; 2 total orders</div>
+                  </div>
+                  <span style="font-size:10px;font-weight:600;color:#E8971A;background:#FEF2DC;padding:2px 7px;border-radius:99px;white-space:nowrap;">45 days ago</span>
+                </div>
+                <div class="inactive-row" data-days="62">
+                  <div style="width:30px;height:30px;border-radius:50%;background:#B4B2A9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">K</div>
+                  <div style="flex:1;">
+                    <div style="font-size:12px;font-weight:500;color:var(--ink);">Kevin Ho</div>
+                    <div style="font-size:10px;color:var(--mid);">Last order: 06 Mar &middot; 3 total orders</div>
+                  </div>
+                  <span style="font-size:10px;font-weight:600;color:#E24B4A;background:#FCEBEB;padding:2px 7px;border-radius:99px;white-space:nowrap;">62 days ago</span>
+                </div>
+                <div class="inactive-row" data-days="78">
+                  <div style="width:30px;height:30px;border-radius:50%;background:#B4B2A9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">A</div>
+                  <div style="flex:1;">
+                    <div style="font-size:12px;font-weight:500;color:var(--ink);">Alice Tan</div>
+                    <div style="font-size:10px;color:var(--mid);">Last order: 19 Feb &middot; 1 total order</div>
+                  </div>
+                  <span style="font-size:10px;font-weight:600;color:#E24B4A;background:#FCEBEB;padding:2px 7px;border-radius:99px;white-space:nowrap;">78 days ago</span>
+                </div>
+                <div class="inactive-row" data-days="94">
+                  <div style="width:30px;height:30px;border-radius:50%;background:#B4B2A9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">B</div>
+                  <div style="flex:1;">
+                    <div style="font-size:12px;font-weight:500;color:var(--ink);">Ben Chua</div>
+                    <div style="font-size:10px;color:var(--mid);">Last order: 03 Feb &middot; 2 total orders</div>
+                  </div>
+                  <span style="font-size:10px;font-weight:600;color:#E24B4A;background:#FCEBEB;padding:2px 7px;border-radius:99px;white-space:nowrap;">94 days ago</span>
+                </div>
+                <div class="inactive-row" data-days="120">
+                  <div style="width:30px;height:30px;border-radius:50%;background:#B4B2A9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">E</div>
+                  <div style="flex:1;">
+                    <div style="font-size:12px;font-weight:500;color:var(--ink);">Emily Yeo</div>
+                    <div style="font-size:10px;color:var(--mid);">Never ordered &middot; joined 4 months ago</div>
+                  </div>
+                  <span style="font-size:10px;font-weight:600;color:#B4B2A9;background:#f0f0f0;padding:2px 7px;border-radius:99px;white-space:nowrap;">Never ordered</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -675,7 +741,24 @@ document.getElementById('dash-subtitle').textContent = greeting + ', Minh Cong. 
 
 // Period tabs
 
-function setDateFilter(btn, period) {
+function switchMemberTab(tab) {
+  var isBuyers = tab === 'buyers';
+  document.getElementById('panel-buyers').style.display = isBuyers ? 'block' : 'none';
+  document.getElementById('panel-inactive').style.display = isBuyers ? 'none' : 'block';
+  document.getElementById('tab-buyers').classList.toggle('active', isBuyers);
+  document.getElementById('tab-inactive').classList.toggle('active', !isBuyers);
+}
+
+function filterInactive(days, btn) {
+  btn.closest('div').querySelectorAll('.period-tab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('#inactive-list .inactive-row').forEach(function(row) {
+    var d = parseInt(row.getAttribute('data-days'));
+    row.style.display = d >= days ? '' : 'none';
+  });
+}
+
+
   document.querySelectorAll('.filter-bar .filter-chip').forEach(b => {
     if (['All Time','This Month','This Week'].includes(b.textContent.trim())) b.classList.remove('active');
   });
