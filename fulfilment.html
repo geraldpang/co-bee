@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>co·bee — Fulfilment</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F4F6F8;color:#1a1a18;font-size:13px;}
+.page{display:flex;flex-direction:column;height:100%;overflow:hidden;}
+
+/* Header */
+.page-header{padding:16px 20px 12px;flex-shrink:0;border-bottom:0.5px solid #E0DFD8;background:white;}
+.page-title{font-size:22px;font-weight:700;color:#009A97;margin-bottom:12px;}
+.header-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;min-width:200px;}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#B4B2A9;}
+.search-input{width:100%;height:34px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 12px 0 32px;font-size:12px;font-family:inherit;outline:none;background:white;}
+.search-input:focus{border-color:#009A97;}
+.btn{height:34px;padding:0 14px;border-radius:8px;border:0.5px solid #D3D1C7;background:white;font-size:12px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:6px;color:#1a1a18;white-space:nowrap;transition:all 0.12s;}
+.btn:hover{background:#f5f5f5;}
+.btn.teal{background:#009A97;border-color:#009A97;color:white;}
+.btn.teal:hover{background:#007A77;}
+.btn.outline-teal{border-color:#009A97;color:#009A97;}
+.btn.outline-teal:hover{background:#E0F5F5;}
+.select{height:34px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 28px 0 10px;font-size:12px;font-family:inherit;outline:none;background:white;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;color:#1a1a18;}
+.select:focus{border-color:#009A97;}
+
+/* Sub-controls */
+.sub-controls{display:flex;align-items:center;gap:12px;padding:8px 20px;background:#FAFAF8;border-bottom:0.5px solid #E0DFD8;flex-shrink:0;flex-wrap:wrap;}
+.date-info{font-size:11px;color:#888780;}
+.date-info strong{color:#009A97;}
+.check-label{display:flex;align-items:center;gap:6px;font-size:12px;color:#888780;cursor:pointer;}
+.check-label input{accent-color:#009A97;}
+.status-pills{display:flex;gap:5px;margin-left:auto;}
+.pill{height:26px;padding:0 10px;border-radius:99px;border:0.5px solid #D3D1C7;background:white;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.12s;color:#888780;}
+.pill.active{background:#009A97;border-color:#009A97;color:white;font-weight:600;}
+.pill:hover:not(.active){border-color:#009A97;color:#009A97;}
+
+/* Body split layout */
+.body-split{display:flex;flex:1;overflow:hidden;}
+
+/* Map panel */
+.map-panel{width:320px;flex-shrink:0;border-right:0.5px solid #E0DFD8;display:flex;flex-direction:column;background:white;overflow:hidden;}
+.map-header{padding:10px 14px;border-bottom:0.5px solid #E0DFD8;display:flex;align-items:center;justify-content:space-between;}
+.map-header-title{font-size:12px;font-weight:600;color:#1a1a18;display:flex;align-items:center;gap:6px;}
+.map-area{flex:1;background:#E8EEF4;position:relative;overflow:hidden;}
+.map-bg{width:100%;height:100%;object-fit:cover;}
+/* Fake map grid */
+.map-grid{position:absolute;inset:0;background-image:linear-gradient(#D0D8E0 1px,transparent 1px),linear-gradient(90deg,#D0D8E0 1px,transparent 1px);background-size:40px 40px;opacity:0.5;}
+.map-roads{position:absolute;inset:0;}
+.map-marker{position:absolute;transform:translate(-50%,-100%);cursor:pointer;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));}
+.map-marker:hover .marker-tooltip{display:block;}
+.marker-pin{display:flex;flex-direction:column;align-items:center;}
+.marker-head{width:32px;height:32px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;}
+.marker-head span{transform:rotate(45deg);display:block;}
+.marker-tail{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;}
+.marker-tooltip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1a18;color:white;font-size:10px;padding:4px 8px;border-radius:6px;white-space:nowrap;z-index:10;}
+.map-legend{padding:8px 14px;border-top:0.5px solid #E0DFD8;background:white;display:flex;flex-direction:column;gap:5px;}
+.legend-row{display:flex;align-items:center;gap:6px;font-size:11px;color:#888780;}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.map-event-list{border-top:0.5px solid #E0DFD8;overflow-y:auto;max-height:160px;}
+.map-event-item{display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:0.5px solid #f0f0f0;cursor:pointer;transition:background 0.1s;}
+.map-event-item:hover{background:#f5fafa;}
+.map-event-item.active{background:#E0F5F5;}
+.map-event-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.map-event-name{font-size:12px;color:#1a1a18;flex:1;font-weight:500;}
+.map-event-count{font-size:11px;color:#888780;}
+
+/* Table panel */
+.table-panel{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.table-wrap{flex:1;overflow:auto;}
+table{width:100%;border-collapse:collapse;}
+thead{background:#FAFAF8;position:sticky;top:0;z-index:5;}
+th{padding:9px 14px;text-align:left;font-size:11px;font-weight:600;color:#888780;letter-spacing:0.04em;border-bottom:0.5px solid #E0DFD8;white-space:nowrap;}
+td{padding:10px 14px;font-size:12px;border-bottom:0.5px solid #f0f0f0;vertical-align:middle;}
+tr:hover td{background:#FAFAF8;}
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap;}
+.badge.collected{background:#E8F8EF;color:#27AE60;}
+.badge.pending{background:#FEF2DC;color:#BA7517;}
+.badge.unpaid{background:#FCEBEB;color:#A32D2D;}
+.badge.delivery{background:#E0F5F5;color:#007A77;}
+.badge.pickup{background:#f0f0f0;color:#888780;}
+.mark-btn{height:26px;padding:0 10px;border-radius:6px;background:#009A97;border:none;color:white;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.mark-btn:hover{background:#007A77;}
+.mark-btn.gray{background:#f0f0f0;color:#888780;border:0.5px solid #D3D1C7;}
+.mark-btn.gray:hover{background:#e0e0e0;}
+
+/* Empty state */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:10px;color:#888780;padding:40px;}
+.empty-state svg{color:#D3D1C7;}
+.empty-title{font-size:14px;font-weight:600;color:#1a1a18;}
+.empty-sub{font-size:12px;color:#888780;}
+
+/* Drag reorder */
+.drag-handle{cursor:grab;color:#D3D1C7;padding:0 6px 0 0;display:flex;align-items:center;flex-shrink:0;}
+.drag-handle:hover{color:#888780;}
+.drag-handle:active{cursor:grabbing;}
+tr.dragging{opacity:0.4;}
+tr.drag-over td{border-top:2px solid #009A97 !important;}
+
+/* Map expand */
+.map-panel { transition: width 0.25s ease; }
+.map-panel.expanded { width: 62%; }
+.table-panel.compact .table-wrap { display: none; }
+.table-panel.compact .search-bar-wrap { display: none; }
+.compact-list { display: none; flex-direction: column; overflow-y: auto; flex: 1; }
+.table-panel.compact .compact-list { display: flex; }
+.table-panel.compact .table-footer { display: flex; }
+.compact-row { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-bottom: 0.5px solid #f0f0f0; cursor: default; transition: background 0.1s; }
+.compact-row:hover { background: #FAFAF8; }
+.compact-num { width: 22px; height: 22px; border-radius: 50%; background: #E24B4A; color: white; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.compact-num.pickup { background: #009A97; }
+.compact-name { font-size: 12px; font-weight: 500; color: #1a1a18; flex: 1; }
+.compact-sub { font-size: 10px; color: #888780; }
+.expand-btn { background: none; border: 0.5px solid #D3D1C7; border-radius: 6px; cursor: pointer; color: #888780; padding: 3px 7px; font-size: 11px; font-family: inherit; display: flex; align-items: center; gap: 4px; transition: all 0.12s; }
+.expand-btn:hover { border-color: #009A97; color: #009A97; background: #E0F5F5; }
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:white;border-radius:14px;width:440px;box-shadow:0 8px 32px rgba(0,0,0,0.15);overflow:hidden;}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:0.5px solid #E0DFD8;}
+.modal-title{font-size:14px;font-weight:600;color:#1a1a18;}
+.modal-close{background:none;border:none;cursor:pointer;color:#888780;font-size:20px;line-height:1;}
+.modal-body{padding:16px 18px;}
+.modal-footer{padding:12px 18px;border-top:0.5px solid #E0DFD8;display:flex;gap:8px;justify-content:flex-end;}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-title">Fulfilment</div>
+    <div class="header-controls">
+      <select class="select" id="event-filter" onchange="filterByEvent(this.value)" style="flex:1;max-width:280px;">
+        <option value="all">All Events</option>
+        <option value="gbt">Groupbuy Event test</option>
+        <option value="new">New event</option>
+        <option value="test">Test event</option>
+        <option value="b4">Batch 4</option>
+        <option value="consol">Consolidated List</option>
+      </select>
+      <button class="btn outline-teal" onclick="openDateModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Fulfilment Date
+      </button>
+      <button class="btn outline-teal" onclick="exportData()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export
+      </button>
+      <button class="btn" onclick="clearFilters()" style="color:#E24B4A;border-color:#F09595;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- SUB-CONTROLS -->
+  <div class="sub-controls">
+    <span class="date-info">Fulfilment date: <strong id="date-from">22-05-2026</strong> to <strong id="date-to">01-06-2026</strong></span>
+    <label class="check-label">
+      <input type="checkbox" id="include-pickup" checked onchange="filterTable()"/> Include Pickup
+    </label>
+    <label class="check-label">
+      <input type="checkbox" id="include-delivery" checked onchange="filterTable()"/> Include Delivery
+    </label>
+    <div class="status-pills">
+      <button class="pill active" onclick="setStatusFilter('all',this)">All</button>
+      <button class="pill" onclick="setStatusFilter('delivery',this)">Delivery</button>
+      <button class="pill" onclick="setStatusFilter('pickup',this)">Pickup</button>
+      <button class="pill" onclick="setStatusFilter('unpaid',this)">Unpaid</button>
+      <button class="pill" onclick="setStatusFilter('pending',this)">Pending</button>
+    </div>
+  </div>
+
+  <!-- BODY SPLIT -->
+  <div class="body-split">
+
+    <!-- MAP PANEL -->
+    <div class="map-panel">
+      <div class="map-header">
+        <div class="map-header-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Collection Map
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;color:#888780;" id="map-loc-count">3 locations</span>
+          <button class="expand-btn" id="expand-btn" onclick="toggleMapExpand()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="expand-icon"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            Expand
+          </button>
+        </div>
+      </div>
+      <div class="map-area">
+        <!-- Fake map background -->
+        <div class="map-grid"></div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 320 280">
+          <!-- Roads -->
+          <line x1="0" y1="140" x2="320" y2="140" stroke="#fff" stroke-width="6" opacity="0.7"/>
+          <line x1="160" y1="0" x2="160" y2="280" stroke="#fff" stroke-width="6" opacity="0.7"/>
+          <line x1="0" y1="80" x2="320" y2="80" stroke="#fff" stroke-width="3" opacity="0.5"/>
+          <line x1="0" y1="200" x2="320" y2="200" stroke="#fff" stroke-width="3" opacity="0.5"/>
+          <line x1="80" y1="0" x2="80" y2="280" stroke="#fff" stroke-width="3" opacity="0.5"/>
+          <line x1="240" y1="0" x2="240" y2="280" stroke="#fff" stroke-width="3" opacity="0.5"/>
+          <!-- Light area fills for blocks -->
+          <rect x="0" y="0" width="75" height="75" fill="white" opacity="0.4" rx="2"/>
+          <rect x="85" y="0" width="70" height="75" fill="white" opacity="0.4" rx="2"/>
+          <rect x="165" y="0" width="70" height="75" fill="white" opacity="0.4" rx="2"/>
+          <rect x="0" y="85" width="75" height="50" fill="white" opacity="0.4" rx="2"/>
+          <rect x="85" y="85" width="70" height="50" fill="white" opacity="0.4" rx="2"/>
+          <rect x="165" y="85" width="70" height="50" fill="white" opacity="0.4" rx="2"/>
+          <rect x="245" y="85" width="70" height="50" fill="white" opacity="0.4" rx="2"/>
+          <rect x="0" y="150" width="75" height="45" fill="white" opacity="0.4" rx="2"/>
+          <rect x="85" y="150" width="70" height="45" fill="white" opacity="0.4" rx="2"/>
+          <rect x="165" y="150" width="70" height="45" fill="white" opacity="0.4" rx="2"/>
+          <rect x="245" y="150" width="70" height="45" fill="white" opacity="0.4" rx="2"/>
+          <rect x="0" y="205" width="75" height="70" fill="white" opacity="0.4" rx="2"/>
+          <rect x="85" y="205" width="70" height="70" fill="white" opacity="0.4" rx="2"/>
+          <rect x="165" y="205" width="70" height="70" fill="white" opacity="0.4" rx="2"/>
+          <rect x="245" y="205" width="70" height="70" fill="white" opacity="0.4" rx="2"/>
+        </svg>
+
+        <!-- Dynamic markers rendered by JS -->
+        <div id="map-markers"></div>
+
+                <!-- Compass -->
+        <div style="position:absolute;bottom:10px;right:10px;width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.2);font-size:10px;font-weight:700;color:#009A97;">N</div>
+      </div>
+      <!-- Legend -->
+      <div class="map-legend">
+        <div class="legend-row"><div class="marker-head" style="background:#009A97;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0;">P</div>Pickup point</div>
+        <div class="legend-row"><div class="marker-head" style="background:#E24B4A;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0;">1</div>Delivery stop (drag rows to reorder)</div>
+      </div>
+      <!-- Event list -->
+      <div class="map-event-list">
+        <div class="map-event-item active" onclick="setActiveEvent(this,'gbt')">
+          <div class="map-event-dot" style="background:#009A97;"></div>
+          <span class="map-event-name">Groupbuy Event test</span>
+          <span class="map-event-count">9 orders</span>
+        </div>
+        <div class="map-event-item" onclick="setActiveEvent(this,'new')">
+          <div class="map-event-dot" style="background:#E8971A;"></div>
+          <span class="map-event-name">New event</span>
+          <span class="map-event-count">4 orders</span>
+        </div>
+        <div class="map-event-item" onclick="setActiveEvent(this,'test')">
+          <div class="map-event-dot" style="background:#009A97;"></div>
+          <span class="map-event-name">Test event for login</span>
+          <span class="map-event-count">13 orders</span>
+        </div>
+        <div class="map-event-item" onclick="setActiveEvent(this,'b4')">
+          <div class="map-event-dot" style="background:#B4B2A9;"></div>
+          <span class="map-event-name">Batch 4</span>
+          <span class="map-event-count">6 orders</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE PANEL -->
+    <div class="table-panel">
+      <!-- Search above table -->
+      <div class="search-bar-wrap" style="padding:8px 14px;border-bottom:0.5px solid #E0DFD8;background:#FAFAF8;flex-shrink:0;">
+        <div style="position:relative;">
+          <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#B4B2A9;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" id="search-input" placeholder="Search by name or phone…" oninput="filterTable()" style="padding-left:32px;border-radius:8px;"/>
+        </div>
+      </div>
+      <div class="table-wrap" id="table-wrap">
+        <table id="fulfilment-table">
+          <thead>
+            <tr>
+              <th style="width:28px;padding:9px 4px;"></th>
+              <th style="width:40px;">No</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Orders / Qty</th>
+              <th>Fulfilment</th>
+              <th>Fulfil Date</th>
+              <th>Status</th>
+              <th style="width:110px;text-align:center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+        <div class="empty-state" id="empty-state" style="display:none;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <div class="empty-title">No records found</div>
+          <div class="empty-sub">Try adjusting your filters or search</div>
+        </div>
+      </div>
+      <!-- Compact list for expanded map view -->
+      <div class="compact-list" id="compact-list"></div>
+
+      <!-- Footer summary -->
+      <div style="padding:8px 16px;border-top:0.5px solid #E0DFD8;background:#FAFAF8;display:flex;align-items:center;gap:16px;flex-shrink:0;">
+        <span style="font-size:11px;color:#888780;" id="table-count">22 records</span>
+        <span style="font-size:11px;color:#27AE60;font-weight:600;" id="collected-count">14 collected</span>
+        <span style="font-size:11px;color:#E8971A;font-weight:600;" id="pending-count">5 pending</span>
+        <span style="font-size:11px;color:#E24B4A;font-weight:600;" id="unpaid-count">3 unpaid</span>
+        <button class="btn teal" style="margin-left:auto;height:28px;" onclick="markAllCollected()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/></svg>
+          Mark All Collected
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM COLLECTED MODAL -->
+<div class="modal-bg" id="collect-modal">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title">Confirm Collection</span>
+      <button class="modal-close" onclick="closeCollectModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+        <div id="modal-avatar" style="width:44px;height:44px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:white;flex-shrink:0;"></div>
+        <div>
+          <div id="modal-name" style="font-size:15px;font-weight:600;color:#1a1a18;"></div>
+          <div id="modal-phone" style="font-size:12px;color:#888780;margin-top:2px;"></div>
+        </div>
+      </div>
+      <div style="background:#FAFAF8;border-radius:8px;padding:12px;margin-bottom:12px;font-size:12px;">
+        <div id="modal-orders" style="color:#888780;margin-bottom:6px;"></div>
+        <div style="display:flex;justify-content:space-between;font-weight:600;font-size:13px;padding-top:6px;border-top:0.5px solid #E0DFD8;">
+          <span>Total</span><span id="modal-total" style="color:#009A97;"></span>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#888780;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        This will mark the order as collected and update the member's purchase status.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeCollectModal()">Cancel</button>
+      <button class="btn teal" onclick="confirmCollect()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/></svg>
+        Confirm Collected
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- DATE MODAL -->
+<div class="modal-bg" id="date-modal">
+  <div class="modal" style="width:340px;" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title">Select Fulfilment Date Range</span>
+      <button class="modal-close" onclick="document.getElementById('date-modal').classList.remove('open')">×</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;">
+      <div>
+        <label style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;display:block;margin-bottom:5px;">FROM</label>
+        <input type="date" id="date-from-input" value="2026-05-22" style="width:100%;height:36px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;"/>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;display:block;margin-bottom:5px;">TO</label>
+        <input type="date" id="date-to-input" value="2026-06-01" style="width:100%;height:36px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="document.getElementById('date-modal').classList.remove('open')">Cancel</button>
+      <button class="btn teal" onclick="applyDate()">Apply</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ORDERS = [
+  { id:1, name:'Janet Lee',    phone:'9123 4567', orders:'Spec ×2, Toothpaste ×1', qty:3, total:'$42.00', type:'pickup',   location:'Simei Street 1', date:'22-05-2026', status:'collected', event:'gbt' },
+  { id:2, name:'David Tan',    phone:'9234 5678', orders:'Chestnut ×1',             qty:1, total:'$10.00', type:'pickup',   location:'Simei Street 1', date:'22-05-2026', status:'pending',   event:'gbt' },
+  { id:3, name:'Sarah Wong',   phone:'9345 6789', orders:'Spec ×1',                 qty:1, total:'$20.00', type:'delivery', location:'Bedok North Ave', date:'24-05-2026', status:'pending',   event:'gbt' },
+  { id:4, name:'Tom Nguyen',   phone:'9456 7890', orders:'Toothpaste ×3',           qty:3, total:'$6.00',  type:'pickup',   location:'Simei Street 1', date:'22-05-2026', status:'unpaid',    event:'gbt' },
+  { id:5, name:'Minh Cong',    phone:'9567 8901', orders:'Chestnut ×2, Spec ×1',    qty:3, total:'$40.00', type:'pickup',   location:'Tampines Hub',   date:'22-05-2026', status:'collected', event:'new' },
+  { id:6, name:'Rachel Lim',   phone:'9678 9012', orders:'Spec ×1',                 qty:1, total:'$20.00', type:'pickup',   location:'Tampines Hub',   date:'22-05-2026', status:'pending',   event:'new' },
+  { id:7, name:'Kevin Ho',     phone:'9789 0123', orders:'Toothpaste ×2',           qty:2, total:'$4.00',  type:'pickup',   location:'Tampines Hub',   date:'22-05-2026', status:'collected', event:'new' },
+  { id:8, name:'Alice Tan',    phone:'9890 1234', orders:'Chestnut ×3',             qty:3, total:'$30.00', type:'delivery', location:'Jurong West St', date:'25-05-2026', status:'pending',   event:'new' },
+  { id:9, name:'Ben Chua',     phone:'9901 2345', orders:'Spec ×2',                 qty:2, total:'$40.00', type:'pickup',   location:'Simei Street 1', date:'28-05-2026', status:'collected', event:'test' },
+  { id:10,name:'Clara Ng',     phone:'9012 3456', orders:'Toothpaste ×1, Chestnut ×1',qty:2,total:'$12.00',type:'pickup',  location:'Simei Street 1', date:'28-05-2026', status:'collected', event:'test' },
+  { id:11,name:'Daniel Koh',   phone:'8123 4567', orders:'Spec ×1',                 qty:1, total:'$20.00', type:'pickup',   location:'Simei Street 1', date:'28-05-2026', status:'unpaid',    event:'test' },
+  { id:12,name:'Emily Yeo',    phone:'8234 5678', orders:'Chestnut ×2',             qty:2, total:'$20.00', type:'delivery', location:'Punggol Dr',     date:'28-05-2026', status:'pending',   event:'test' },
+  { id:13,name:'Frank Lee',    phone:'8345 6789', orders:'Spec ×3',                 qty:3, total:'$60.00', type:'pickup',   location:'Tampines Hub',   date:'01-06-2026', status:'pending',   event:'b4' },
+  { id:14,name:'Grace Toh',    phone:'8456 7890', orders:'Toothpaste ×4',           qty:4, total:'$8.00',  type:'pickup',   location:'Tampines Hub',   date:'01-06-2026', status:'collected', event:'b4' },
+];
+
+let currentRow = null;
+let statusFilter = 'all';
+
+const COLORS = ['#9B59B6','#3498DB','#E8971A','#E24B4A','#009A97','#27AE60','#F39C12','#8E44AD'];
+
+function getInitial(name) { return name.charAt(0).toUpperCase(); }
+function getColor(name) { return COLORS[name.charCodeAt(0) % COLORS.length]; }
+
+
+// Fixed map positions for each location
+const LOCATION_POSITIONS = {
+  'Simei Street 1':  { left: '42%', top: '45%', type: 'pickup' },
+  'Tampines Hub':    { left: '68%', top: '32%', type: 'pickup' },
+  'Bedok North Ave': { left: '58%', top: '62%', type: 'delivery' },
+  'Jurong West St':  { left: '20%', top: '38%', type: 'delivery' },
+  'Punggol Dr':      { left: '72%', top: '58%', type: 'delivery' },
+};
+
+function renderMapMarkers() {
+  const container = document.getElementById('map-markers');
+  if (!container) return;
+
+  const filtered = getFiltered();
+  const incPickup = document.getElementById('include-pickup').checked;
+  const incDelivery = document.getElementById('include-delivery').checked;
+
+  // Build delivery sequence (in current order)
+  const deliveryOrders = filtered.filter(r => r.type === 'delivery');
+  const hasPickup = filtered.some(r => r.type === 'pickup');
+
+  // Get pickup location name for tooltip
+  const pickupLoc = filtered.find(r => r.type === 'pickup');
+  const pickupLabel = pickupLoc ? pickupLoc.location : 'Pickup point';
+
+  let markersHTML = '';
+
+  // Single P marker (fixed position, represents the collection point)
+  if (hasPickup) {
+    markersHTML += `<div class="map-marker" style="left:42%;top:45%;">
+      <div class="marker-pin">
+        <div class="marker-head" style="background:#009A97;width:36px;height:36px;"><span style="font-size:14px;font-weight:700;">P</span></div>
+        <div class="marker-tail" style="border-top:10px solid #009A97;"></div>
+      </div>
+      <div class="marker-tooltip">${pickupLabel}</div>
+    </div>`;
+  }
+
+  // Numbered markers for delivery stops in current sequence
+  deliveryOrders.forEach((r, idx) => {
+    const pos = LOCATION_POSITIONS[r.location];
+    if (!pos) return;
+    const num = idx + 1;
+    markersHTML += `<div class="map-marker" style="left:${pos.left};top:${pos.top};" title="${r.location} · Stop ${num}">
+      <div class="marker-pin">
+        <div class="marker-head" style="background:#E24B4A;width:30px;height:30px;"><span style="font-size:12px;font-weight:700;">${num}</span></div>
+        <div class="marker-tail" style="border-top:8px solid #E24B4A;"></div>
+      </div>
+      <div class="marker-tooltip"><strong>Stop ${num}</strong><br>${r.name}<br><span style="opacity:0.8">${r.location}</span></div>
+    </div>`;
+  });
+
+  container.innerHTML = markersHTML;
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('table-body');
+  const empty = document.getElementById('empty-state');
+  if (!data.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'flex';
+    return;
+  }
+  empty.style.display = 'none';
+  tbody.innerHTML = data.map((r, i) => {
+    const typeTag = r.type === 'pickup'
+      ? '<span class="badge pickup">&#x1F3E2; Pickup</span>'
+      : '<span class="badge delivery">&#x1F69A; Delivery</span>';
+    const statusTag = r.status === 'collected'
+      ? '<span class="badge collected">Collected</span>'
+      : r.status === 'unpaid'
+      ? '<span class="badge unpaid">Unpaid</span>'
+      : '<span class="badge pending">Pending</span>';
+    const actionBtn = r.status === 'collected'
+      ? '<button class="mark-btn gray" disabled>✓ Done</button>'
+      : `<button class="mark-btn" onclick="openCollectModal(${r.id})">Mark Collected</button>`;
+    return `<tr id="row-${r.id}" draggable="true" ondragstart="dragStart(event,${r.id})" ondragover="dragOver(event)" ondrop="drop(event,${r.id})" ondragend="dragEnd(event)">
+      <td style="padding:10px 4px;"><div class="drag-handle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="15" y2="6"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="18" x2="15" y2="18"/></svg></div></td>
+      <td style="color:#888780;">${i+1}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:28px;height:28px;border-radius:50%;background:${getColor(r.name)};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">${getInitial(r.name)}</div>
+          <div>
+            <div style="font-weight:500;color:#1a1a18;">${r.name}</div>
+            <div style="font-size:10px;color:#888780;">${r.location}</div>
+          </div>
+        </div>
+      </td>
+      <td style="color:#888780;">${r.phone}</td>
+      <td>
+        <div style="font-size:11px;color:#1a1a18;">${r.orders}</div>
+        <div style="font-size:10px;color:#888780;font-weight:600;">${r.qty} item${r.qty>1?'s':''} · ${r.total}</div>
+      </td>
+      <td>${typeTag}</td>
+      <td style="color:#1a1a18;font-size:11px;">${r.date}</td>
+      <td>${statusTag}</td>
+      <td style="text-align:center;">${actionBtn}</td>
+    </tr>`;
+  }).join('');
+  updateCounts(data);
+  renderMapMarkers();
+  if (mapExpanded) renderCompactList();
+}
+
+function updateCounts(data) {
+  document.getElementById('table-count').textContent = data.length + ' records';
+  document.getElementById('collected-count').textContent = data.filter(r=>r.status==='collected').length + ' collected';
+  document.getElementById('pending-count').textContent = data.filter(r=>r.status==='pending').length + ' pending';
+  document.getElementById('unpaid-count').textContent = data.filter(r=>r.status==='unpaid').length + ' unpaid';
+}
+
+function getFiltered() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const ev = document.getElementById('event-filter').value;
+  const incPickup = document.getElementById('include-pickup').checked;
+  const incDelivery = document.getElementById('include-delivery').checked;
+  return ORDERS.filter(r => {
+    if (q && !r.name.toLowerCase().includes(q) && !r.phone.includes(q)) return false;
+    if (ev !== 'all' && r.event !== ev) return false;
+    if (!incPickup && r.type === 'pickup') return false;
+    if (!incDelivery && r.type === 'delivery') return false;
+    if (statusFilter === 'delivery' && r.type !== 'delivery') return false;
+    if (statusFilter === 'pickup' && r.type !== 'pickup') return false;
+    if (statusFilter === 'unpaid' && r.status !== 'unpaid') return false;
+    if (statusFilter === 'pending' && r.status !== 'pending') return false;
+    return true;
+  });
+}
+
+function filterTable() { renderTable(getFiltered()); }
+function filterByEvent(val) { filterTable(); }
+
+function setStatusFilter(s, btn) {
+  statusFilter = s;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  filterTable();
+}
+
+
+function setActiveEvent(el, ev) {
+  document.querySelectorAll('.map-event-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('event-filter').value = ev;
+  filterTable();
+}
+
+function highlightLocation(loc) { /* in a real app, zoom map to location */ }
+
+function openCollectModal(id) {
+  const r = ORDERS.find(o => o.id === id);
+  if (!r) return;
+  currentRow = r;
+  document.getElementById('modal-avatar').textContent = getInitial(r.name);
+  document.getElementById('modal-avatar').style.background = getColor(r.name);
+  document.getElementById('modal-name').textContent = r.name;
+  document.getElementById('modal-phone').textContent = r.phone + ' · ' + (r.type === 'pickup' ? '📍 ' + r.location : '🚚 Home delivery');
+  document.getElementById('modal-orders').textContent = r.orders;
+  document.getElementById('modal-total').textContent = r.total;
+  document.getElementById('collect-modal').classList.add('open');
+}
+
+function closeCollectModal() {
+  document.getElementById('collect-modal').classList.remove('open');
+  currentRow = null;
+}
+
+function confirmCollect() {
+  if (!currentRow) return;
+  currentRow.status = 'collected';
+  closeCollectModal();
+  filterTable();
+}
+
+function markAllCollected() {
+  const filtered = getFiltered();
+  filtered.forEach(r => { if (r.status !== 'unpaid') r.status = 'collected'; });
+  filterTable();
+}
+
+function openDateModal() { document.getElementById('date-modal').classList.add('open'); }
+
+function applyDate() {
+  const from = document.getElementById('date-from-input').value;
+  const to = document.getElementById('date-to-input').value;
+  const fmt = d => d.split('-').reverse().join('-');
+  document.getElementById('date-from').textContent = fmt(from);
+  document.getElementById('date-to').textContent = fmt(to);
+  document.getElementById('date-modal').classList.remove('open');
+}
+
+function clearFilters() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('event-filter').value = 'all';
+  document.getElementById('include-pickup').checked = true;
+  document.getElementById('include-delivery').checked = true;
+  statusFilter = 'all';
+  document.querySelectorAll('.pill').forEach((p,i) => p.classList.toggle('active', i===0));
+  renderTable(ORDERS);
+}
+
+function exportData() { alert('Exporting fulfilment list…'); }
+
+// Close modals on backdrop click
+['collect-modal','date-modal'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
+
+
+let mapExpanded = false;
+
+function toggleMapExpand() {
+  mapExpanded = !mapExpanded;
+  const mapPanel = document.querySelector('.map-panel');
+  const tablePanel = document.querySelector('.table-panel');
+  const btn = document.getElementById('expand-btn');
+  if (mapExpanded) {
+    mapPanel.classList.add('expanded');
+    tablePanel.classList.add('compact');
+    btn.textContent = 'Collapse';
+    renderCompactList();
+  } else {
+    mapPanel.classList.remove('expanded');
+    tablePanel.classList.remove('compact');
+    btn.textContent = 'Expand';
+  }
+}
+
+function renderCompactList() {
+  const container = document.getElementById('compact-list');
+  if (!container) return;
+  const filtered = getFiltered();
+  const deliveries = filtered.filter(function(r){ return r.type === 'delivery'; });
+  const pickups   = filtered.filter(function(r){ return r.type === 'pickup'; });
+  container.innerHTML = '';
+
+  // Pickup section header
+  if (pickups.length) {
+    const ph = document.createElement('div');
+    ph.style.cssText = 'padding:6px 14px;background:#FAFAF8;border-bottom:0.5px solid #E0DFD8;font-size:10px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;';
+    ph.textContent = 'Pickup (' + pickups.length + ')';
+    container.appendChild(ph);
+    pickups.forEach(function(r) {
+      const row = document.createElement('div');
+      row.className = 'compact-row';
+      row.innerHTML = '<div class="compact-num pickup">P</div>'
+        + '<div style="flex:1;min-width:0;"><div class="compact-name">' + r.name + '</div><div class="compact-sub">' + r.location + '</div></div>'
+        + '<span class="badge ' + r.status + '">' + r.status + '</span>';
+      container.appendChild(row);
+    });
+  }
+
+  // Delivery section header
+  if (deliveries.length) {
+    const dh = document.createElement('div');
+    dh.style.cssText = 'padding:6px 14px;background:#FAFAF8;border-bottom:0.5px solid #E0DFD8;font-size:10px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;';
+    dh.textContent = 'Delivery stops — drag to reorder';
+    container.appendChild(dh);
+    deliveries.forEach(function(r, idx) {
+      const row = document.createElement('div');
+      row.className = 'compact-row';
+      row.draggable = true;
+      row.id = 'compact-row-' + r.id;
+      row.setAttribute('ondragstart', 'dragStart(event,' + r.id + ')');
+      row.setAttribute('ondragover', 'dragOver(event)');
+      row.setAttribute('ondrop', 'drop(event,' + r.id + ')');
+      row.setAttribute('ondragend', 'dragEnd(event)');
+      row.innerHTML = '<div class="drag-handle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="15" y2="6"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="18" x2="15" y2="18"/></svg></div>'
+        + '<div class="compact-num">' + (idx+1) + '</div>'
+        + '<div style="flex:1;min-width:0;"><div class="compact-name">' + r.name + '</div><div class="compact-sub">' + r.location + '</div></div>'
+        + '<button class="mark-btn" style="height:22px;font-size:10px;padding:0 8px;" onclick="openCollectModal(' + r.id + ')">Collect</button>';
+      container.appendChild(row);
+    });
+  }
+
+  if (!pickups.length && !deliveries.length) {
+    container.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#B4B2A9;">No records</div>';
+  }
+}
+
+
+// Drag to reorder
+let dragSrcId = null;
+
+function dragStart(e, id) {
+  dragSrcId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  e.currentTarget.classList.add('dragging');
+}
+function dragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('tr.drag-over').forEach(r => r.classList.remove('drag-over'));
+  e.currentTarget.classList.add('drag-over');
+}
+function drop(e, targetId) {
+  e.preventDefault();
+  if (dragSrcId === targetId) return;
+  const srcIdx = ORDERS.findIndex(o => o.id === dragSrcId);
+  const tgtIdx = ORDERS.findIndex(o => o.id === targetId);
+  if (srcIdx === -1 || tgtIdx === -1) return;
+  const [moved] = ORDERS.splice(srcIdx, 1);
+  ORDERS.splice(tgtIdx, 0, moved);
+  document.querySelectorAll('tr.drag-over').forEach(r => r.classList.remove('drag-over'));
+  filterTable();
+  renderMapMarkers();
+  if (mapExpanded) renderCompactList();
+}
+function dragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
+  document.querySelectorAll('tr.drag-over').forEach(r => r.classList.remove('drag-over'));
+}
+
+// Initial render
+renderTable(ORDERS);
+</script>
+</body>
+</html>
