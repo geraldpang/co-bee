@@ -729,15 +729,17 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
 </div>
 
 <script>
-// Set topbar date
+// Set topbar date (only if element exists - page may run standalone or in iframe)
 const now = new Date();
-document.getElementById('topbar-date').textContent =
+const topbarDate = document.getElementById('topbar-date');
+if (topbarDate) topbarDate.textContent =
   now.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
 
 // Set subtitle with greeting
 const hr = now.getHours();
 const greeting = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
-document.getElementById('dash-subtitle').textContent = greeting + ', Minh Cong. Here\'s your group buy summary.';
+const dashSub = document.getElementById('dash-subtitle');
+if (dashSub) dashSub.textContent = greeting + ', Minh Cong. Here\'s your group buy summary.';
 
 // Period tabs
 
