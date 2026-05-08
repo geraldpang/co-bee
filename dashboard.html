@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>co·bee — Dashboard</title>
+<style>
+:root {
+  --teal:#009A97; --teal-dark:#007A77; --teal-light:#E0F5F5; --teal-mid:#80CCCB;
+  --amber:#E8971A; --amber-light:#FEF2DC; --amber-dark:#BA7517;
+  --red:#E24B4A; --red-light:#FCEBEB; --red-dark:#A32D2D;
+  --green:#27AE60; --green-light:#E8F8EF;
+  --ink:#1a1a18; --mid:#888780; --faint:#B4B2A9;
+  --border:#D3D1C7; --border-light:#E0DFD8;
+  --sand:#F1EFE8; --sand-mid:#FAFAF8; --white:#FFFFFF;
+  --topbar-h:52px;  --radius-sm:6px; --radius-md:8px; --radius-lg:12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F4F6F8;color:#1a1a18;}
+.page{padding:20px 24px 32px;}
+
+/* BODY */
+/* layout styles removed - runs in iframe */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;padding:24px 28px;}
+.main-inner{max-width:1100px;margin:0 auto;}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:24px;flex-wrap:wrap;}
+.page-title{font-size:22px;font-weight:700;color:var(--ink);}
+.page-subtitle{font-size:13px;color:var(--mid);margin-top:3px;}
+.btn{height:34px;padding:0 14px;border-radius:var(--radius-md);border:0.5px solid var(--border);background:var(--white);color:var(--ink);font-size:12px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:background 0.12s;}
+.btn:hover{background:var(--sand);}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:white;}
+.btn.primary:hover{background:var(--teal-dark);}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.kpi-card{background:var(--white);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:16px 18px;position:relative;overflow:hidden;}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--teal);}
+.kpi-card.amber::before{background:var(--amber);}
+.kpi-card.red::before{background:var(--red);}
+.kpi-card.green::before{background:var(--green);}
+.kpi-icon{width:36px;height:36px;border-radius:var(--radius-md);background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.kpi-card.amber .kpi-icon{background:var(--amber-light);}
+.kpi-card.red .kpi-icon{background:var(--red-light);}
+.kpi-card.green .kpi-icon{background:var(--green-light);}
+.kpi-label{font-size:11px;color:var(--mid);font-weight:500;margin-bottom:4px;}
+.kpi-val{font-size:26px;font-weight:700;color:var(--ink);line-height:1;}
+.kpi-trend{font-size:11px;margin-top:5px;display:flex;align-items:center;gap:3px;}
+.kpi-trend.up{color:var(--green);}
+.kpi-trend.down{color:var(--red);}
+.kpi-trend.neutral{color:var(--mid);}
+
+/* CHART GRID */
+.chart-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px;}
+.chart-card{background:var(--white);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:18px;}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.chart-title{font-size:13px;font-weight:600;color:var(--ink);}
+.chart-sub{font-size:11px;color:var(--mid);margin-top:1px;}
+.period-tabs{display:flex;gap:2px;background:var(--sand);border-radius:var(--radius-sm);padding:2px;}
+.period-tab{font-size:11px;padding:3px 8px;border-radius:4px;cursor:pointer;color:var(--mid);border:none;background:none;font-family:inherit;}
+.period-tab.active{background:white;color:var(--teal);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+
+/* BAR CHART */
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:140px;padding-bottom:20px;position:relative;}
+.bar-chart::after{content:'';position:absolute;bottom:20px;left:0;right:0;height:0.5px;background:var(--border-light);}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;}
+.bar{width:100%;border-radius:4px 4px 0 0;transition:opacity 0.15s;cursor:pointer;min-height:4px;background:var(--teal);position:relative;margin-top:auto;}
+.bar:hover{opacity:0.8;}
+.bar.amber{background:var(--amber);}
+.bar-label{font-size:10px;color:var(--faint);position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+
+/* DONUT CHART */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;}
+.donut-svg{overflow:visible;}
+.donut-center-label{font-size:18px;font-weight:700;fill:var(--ink);}
+.donut-center-sub{font-size:10px;fill:var(--mid);}
+.legend{display:flex;flex-direction:column;gap:6px;width:100%;}
+.legend-item{display:flex;align-items:center;justify-content:space-between;font-size:11px;}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:6px;}
+.legend-label{display:flex;align-items:center;color:var(--mid);}
+.legend-val{font-weight:600;color:var(--ink);}
+
+/* BOTTOM GRID */
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.panel-card{background:var(--white);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);overflow:hidden;}
+.panel-header{padding:14px 16px;border-bottom:0.5px solid var(--border-light);display:flex;align-items:center;justify-content:space-between;}
+.panel-title{font-size:13px;font-weight:600;color:var(--ink);}
+.panel-link{font-size:11px;color:var(--teal);cursor:pointer;text-decoration:none;}
+.panel-link:hover{text-decoration:underline;}
+
+/* EVENT ROWS */
+.event-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border-light);transition:background 0.1s;cursor:pointer;}
+.event-row:last-child{border-bottom:none;}
+.event-row:hover{background:var(--sand-mid);}
+.event-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.event-name{font-size:12px;font-weight:500;color:var(--ink);flex:1;}
+.event-meta{font-size:11px;color:var(--mid);}
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;white-space:nowrap;}
+.badge.teal{background:var(--teal-light);color:var(--teal-dark);}
+.badge.amber{background:var(--amber-light);color:var(--amber-dark);}
+.badge.red{background:var(--red-light);color:var(--red-dark);}
+.badge.green{background:var(--green-light);color:var(--green);}
+.badge.gray{background:var(--sand);color:var(--mid);}
+
+/* ACTIVITY FEED */
+.activity-row{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border-light);}
+.activity-row:last-child{border-bottom:none;}
+.activity-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.activity-text{font-size:12px;color:var(--ink);line-height:1.4;flex:1;}
+.activity-text span{font-weight:600;}
+.activity-time{font-size:10px;color:var(--faint);white-space:nowrap;margin-top:2px;}
+
+/* QUICK ACTIONS */
+
+
+/* FILTER BAR */
+.filter-bar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:20px; padding:12px 16px; background:white; border-radius:12px; border:0.5px solid #E0DFD8; }
+.filter-label { font-size:11px; font-weight:600; color:#888780; letter-spacing:0.05em; text-transform:uppercase; white-space:nowrap; margin-right:4px; }
+.filter-chip { height:30px; padding:0 12px; border:0.5px solid #D3D1C7; border-radius:99px; background:white; font-size:11px; color:#888780; cursor:pointer; font-family:inherit; white-space:nowrap; transition:all 0.12s; display:inline-flex; align-items:center; gap:5px; }
+.filter-chip:hover { border-color:#009A97; color:#009A97; }
+.filter-chip.active { background:#009A97; border-color:#009A97; color:white; font-weight:600; }
+.filter-chip svg { flex-shrink:0; }
+.filter-select { height:30px; padding:0 24px 0 10px; border:0.5px solid #D3D1C7; border-radius:99px; background:white; font-size:11px; color:#888780; cursor:pointer; font-family:inherit; outline:none; appearance:none; background-image:url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 9px center; }
+.filter-select:focus { border-color:#009A97; color:#1a1a18; }
+.filter-divider { width:0.5px; height:20px; background:#E0DFD8; flex-shrink:0; }
+.card-filter { display:flex;align-items:center;gap:4px;font-size:11px;color:#B4B2A9;cursor:pointer;padding:3px 7px;border-radius:6px;border:0.5px solid transparent;transition:all 0.12s;}
+.card-filter:hover{border-color:#D3D1C7;color:#888780;}
+.card-filter.active{border-color:#009A97;color:#009A97;background:#E0F5F5;}
+
+/* SECTION DIVIDER */
+.section-label{font-size:11px;font-weight:600;color:var(--faint);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:10px;margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="page">
+      <div style="max-width:1100px;margin:0 auto;">
+
+        <!-- Page header -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle" id="dash-subtitle">Overview of your group buy activity</p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn" onclick="window.location='hosting.html'">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+              New Event
+            </button>
+            <button class="btn primary">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export Report
+            </button>
+          </div>
+        </div>
+
+        <!-- OVERALL FILTER BAR -->
+        <div class="filter-bar">
+          <span class="filter-label">Filter:</span>
+          <button class="filter-chip active" onclick="setDateFilter(this,'all')">All Time</button>
+          <button class="filter-chip" onclick="setDateFilter(this,'month')">This Month</button>
+          <button class="filter-chip" onclick="setDateFilter(this,'week')">This Week</button>
+          <div class="filter-divider"></div>
+          <select class="filter-select" onchange="setEventFilter(this.value)" title="Filter by event">
+            <option value="all">All Events</option>
+            <option value="gbt">Groupbuy Event test</option>
+            <option value="new">New event</option>
+            <option value="test">Test event</option>
+            <option value="b4">Batch 4</option>
+          </select>
+          <select class="filter-select" onchange="setStatusFilter(this.value)" title="Filter by payment status">
+            <option value="all">All Statuses</option>
+            <option value="paid">Paid</option>
+            <option value="unpaid">Unpaid</option>
+            <option value="pending">Pending</option>
+            <option value="collected">Collected</option>
+          </select>
+          <div class="filter-divider"></div>
+          <button class="filter-chip" onclick="clearFilters(this)" style="color:#E24B4A;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Clear
+          </button>
+        </div>
+
+        <!-- KPI CARDS -->
+        <div class="kpi-grid">
+          <!-- Active Events -->
+          <div class="kpi-card">
+            <div class="kpi-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="kpi-label">Active Events</div>
+            <div class="kpi-val">3</div>
+            <div class="kpi-trend up">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+              2 more than last month
+            </div>
+          </div>
+          <!-- Total Orders -->
+          <div class="kpi-card amber">
+            <div class="kpi-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </div>
+            <div class="kpi-label">Total Orders</div>
+            <div class="kpi-val">47</div>
+            <div class="kpi-trend up" style="color:var(--amber-dark);">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+              12 this week
+            </div>
+          </div>
+          <!-- Pending Payments -->
+          <div class="kpi-card red">
+            <div class="kpi-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+            <div class="kpi-label">Pending Payments</div>
+            <div class="kpi-val">8</div>
+            <div class="kpi-trend down">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              Needs follow-up
+            </div>
+          </div>
+          <!-- Revenue -->
+          <div class="kpi-card green">
+            <div class="kpi-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="kpi-label">Revenue Collected</div>
+            <div class="kpi-val">$1,240</div>
+            <div class="kpi-trend up" style="color:var(--green);">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+              +18% vs last month
+            </div>
+          </div>
+        </div>
+
+        <!-- CHARTS ROW -->
+        <div class="section-label">Analytics</div>
+        <div class="chart-grid">
+
+          <!-- Orders bar chart -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Orders Over Time</div>
+                <div class="chart-sub">Number of orders placed per event</div>
+              </div>
+<button class="card-filter active" onclick="this.classList.toggle('active')" title="Filter this chart"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+              <div class="period-tabs">
+                <button class="period-tab active" onclick="setPeriod(this,'week')">Week</button>
+                <button class="period-tab" onclick="setPeriod(this,'month')">Month</button>
+                <button class="period-tab" onclick="setPeriod(this,'all')">All</button>
+              </div>
+            </div>
+            <!-- Y axis labels -->
+            <div style="display:flex;gap:0;">
+              <div style="display:flex;flex-direction:column;justify-content:space-between;padding-bottom:20px;margin-right:8px;text-align:right;">
+                <span style="font-size:9px;color:var(--faint);">15</span>
+                <span style="font-size:9px;color:var(--faint);">10</span>
+                <span style="font-size:9px;color:var(--faint);">5</span>
+                <span style="font-size:9px;color:var(--faint);">0</span>
+              </div>
+              <div class="bar-chart" style="flex:1;">
+                <div class="bar-wrap"><div class="bar" style="height:60%;" title="Groupbuy Event test · 9 orders"><span class="bar-label">GBT</span></div></div>
+                <div class="bar-wrap"><div class="bar" style="height:27%;" title="New event · 4 orders"><span class="bar-label">New</span></div></div>
+                <div class="bar-wrap"><div class="bar" style="height:87%;" title="Test event · 13 orders"><span class="bar-label">Test</span></div></div>
+                <div class="bar-wrap"><div class="bar amber" style="height:40%;" title="Batch 4 · 6 orders"><span class="bar-label">Bt4</span></div></div>
+                <div class="bar-wrap"><div class="bar amber" style="height:20%;" title="May launch · 3 orders"><span class="bar-label">May</span></div></div>
+              </div>
+            </div>
+            <!-- Legend -->
+            <div style="display:flex;gap:14px;margin-top:4px;padding-left:24px;">
+              <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--mid);">
+                <div style="width:10px;height:10px;background:var(--teal);border-radius:2px;"></div> Closed
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--mid);">
+                <div style="width:10px;height:10px;background:var(--amber);border-radius:2px;"></div> Active
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment status donut -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Payment Status</div>
+                <div class="chart-sub">Across all open events</div>
+              </div>
+            </div>
+            <div class="donut-wrap">
+              <svg class="donut-svg" width="130" height="130" viewBox="0 0 130 130">
+                <!-- Donut: 47 total — Verified 28 (59%), Unpaid 8 (17%), Pending 11 (23%) -->
+                <!-- Teal: 59% = 212deg, Amber: 23% = 83deg, Red: 17% = 60deg -->
+                <!-- stroke-dasharray trick with circumference = 2πr = 2*3.14159*45 = 282.7 -->
+                <circle cx="65" cy="65" r="45" fill="none" stroke="#E0F5F5" stroke-width="18"/>
+                <!-- Verified: 167/283 -->
+                <circle cx="65" cy="65" r="45" fill="none" stroke="#009A97" stroke-width="18"
+                  stroke-dasharray="167 283" stroke-dashoffset="0" stroke-linecap="butt"
+                  transform="rotate(-90 65 65)"/>
+                <!-- Pending: 65/283 offset by 167 -->
+                <circle cx="65" cy="65" r="45" fill="none" stroke="#E8971A" stroke-width="18"
+                  stroke-dasharray="65 283" stroke-dashoffset="-167" stroke-linecap="butt"
+                  transform="rotate(-90 65 65)"/>
+                <!-- Unpaid: 48/283 offset by 232 -->
+                <circle cx="65" cy="65" r="45" fill="none" stroke="#E24B4A" stroke-width="18"
+                  stroke-dasharray="48 283" stroke-dashoffset="-232" stroke-linecap="butt"
+                  transform="rotate(-90 65 65)"/>
+                <!-- Gaps -->
+                <text x="65" y="61" text-anchor="middle" class="donut-center-label" style="font-size:18px;font-weight:700;fill:#1a1a18;font-family:-apple-system,sans-serif;">47</text>
+                <text x="65" y="74" text-anchor="middle" style="font-size:10px;fill:#888780;font-family:-apple-system,sans-serif;">total orders</text>
+              </svg>
+              <div class="legend" style="padding:0 4px;">
+                <div class="legend-item">
+                  <div class="legend-label"><div class="legend-dot" style="background:#009A97;"></div>Verified / Paid</div>
+                  <div class="legend-val" style="color:#009A97;">28 <span style="font-size:10px;font-weight:400;color:var(--mid);">(59%)</span></div>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-label"><div class="legend-dot" style="background:#E8971A;"></div>Pending Review</div>
+                  <div class="legend-val" style="color:#E8971A;">11 <span style="font-size:10px;font-weight:400;color:var(--mid);">(23%)</span></div>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-label"><div class="legend-dot" style="background:#E24B4A;"></div>Unpaid</div>
+                  <div class="legend-val" style="color:#E24B4A;">8 <span style="font-size:10px;font-weight:400;color:var(--mid);">(17%)</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM GRID: Events + Activity -->
+
+        <!-- ROW 2: Revenue trend + Fulfilment status -->
+        <div class="section-label" style="margin-top:18px;">Revenue &amp; Fulfilment</div>
+        <div class="chart-grid" style="margin-bottom:0;">
+          <!-- Revenue trend line chart -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <div><div class="chart-title">Revenue Trend</div><div class="chart-sub">Monthly revenue collected (SGD)</div></div>
+<button class="card-filter" onclick="this.classList.toggle('active')" title="Filter revenue"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+              <div style="font-size:12px;font-weight:600;color:#27AE60;">&#x2191; $1,240 this month</div>
+            </div>
+            <svg width="100%" height="130" viewBox="0 0 460 130" preserveAspectRatio="none" style="overflow:visible;">
+              <line x1="0" y1="110" x2="460" y2="110" stroke="#f0f0f0" stroke-width="1"/>
+              <line x1="0" y1="80" x2="460" y2="80" stroke="#f0f0f0" stroke-width="1"/>
+              <line x1="0" y1="50" x2="460" y2="50" stroke="#f0f0f0" stroke-width="1"/>
+              <line x1="0" y1="20" x2="460" y2="20" stroke="#f0f0f0" stroke-width="1"/>
+              <path d="M0,100 L65,95 L130,85 L195,78 L260,60 L325,45 L390,30 L460,18 L460,110 L0,110 Z" fill="#27AE60" opacity="0.12"/>
+              <path d="M0,100 L65,95 L130,85 L195,78 L260,60 L325,45 L390,30 L460,18" fill="none" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="0" cy="100" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
+              <circle cx="65" cy="95" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
+              <circle cx="130" cy="85" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
+              <circle cx="195" cy="78" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
+              <circle cx="260" cy="60" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
+              <circle cx="325" cy="45" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
+              <circle cx="390" cy="30" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
+              <circle cx="460" cy="18" r="4" fill="#27AE60" stroke="white" stroke-width="2"/>
+              <text x="0" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Oct</text>
+              <text x="65" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Nov</text>
+              <text x="130" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Dec</text>
+              <text x="195" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Jan</text>
+              <text x="260" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Feb</text>
+              <text x="325" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Mar</text>
+              <text x="390" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Apr</text>
+              <text x="460" y="125" text-anchor="middle" style="font-size:9px;fill:#888780;font-weight:600;">May</text>
+            </svg>
+          </div>
+          <!-- Fulfilment horizontal bars -->
+          <div class="chart-card">
+            <div class="chart-header"><div><div class="chart-title">Fulfilment Status</div><div class="chart-sub">Orders by current stage</div></div><button class="card-filter" onclick="this.classList.toggle('active')" title="Filter"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button></div>
+            <div style="display:flex;flex-direction:column;gap:11px;">
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;"><span style="color:var(--ink);font-weight:500;">Collected</span><span style="color:var(--mid);">19 (40%)</span></div><div style="height:7px;background:var(--sand);border-radius:4px;overflow:hidden;"><div style="width:40%;height:100%;background:#27AE60;border-radius:4px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;"><span style="color:var(--ink);font-weight:500;">Verified &amp; Paid</span><span style="color:var(--mid);">9 (19%)</span></div><div style="height:7px;background:var(--sand);border-radius:4px;overflow:hidden;"><div style="width:19%;height:100%;background:#009A97;border-radius:4px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;"><span style="color:var(--ink);font-weight:500;">Submitted &amp; Paid</span><span style="color:var(--mid);">7 (15%)</span></div><div style="height:7px;background:var(--sand);border-radius:4px;overflow:hidden;"><div style="width:15%;height:100%;background:#80CCCB;border-radius:4px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;"><span style="color:var(--ink);font-weight:500;">Submitted, Unpaid</span><span style="color:var(--mid);">5 (11%)</span></div><div style="height:7px;background:var(--sand);border-radius:4px;overflow:hidden;"><div style="width:11%;height:100%;background:#E8971A;border-radius:4px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;"><span style="color:var(--ink);font-weight:500;">Unpaid</span><span style="color:var(--mid);">8 (17%)</span></div><div style="height:7px;background:var(--sand);border-radius:4px;overflow:hidden;"><div style="width:17%;height:100%;background:#E24B4A;border-radius:4px;"></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 3: Top products + Top buyers -->
+        <div class="section-label" style="margin-top:18px;">Products &amp; Members</div>
+        <div class="bottom-grid" style="margin-bottom:0;">
+          <!-- Top products -->
+          <div class="panel-card">
+            <div class="panel-header"><div class="panel-title">Top Products by Orders</div><a href="products-items.html" class="panel-link">View all &#x2192;</a></div>
+            <div style="padding:14px 16px;display:flex;flex-direction:column;gap:11px;">
+              <div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"><span style="font-size:12px;font-weight:500;color:var(--ink);">Spec</span><span style="font-size:11px;color:var(--mid);">18 orders &middot; $360</span></div><div style="height:6px;background:var(--sand);border-radius:3px;overflow:hidden;"><div style="width:90%;height:100%;background:#009A97;border-radius:3px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"><span style="font-size:12px;font-weight:500;color:var(--ink);">Chestnut (case)</span><span style="font-size:11px;color:var(--mid);">12 orders &middot; $120</span></div><div style="height:6px;background:var(--sand);border-radius:3px;overflow:hidden;"><div style="width:60%;height:100%;background:#009A97;border-radius:3px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"><span style="font-size:12px;font-weight:500;color:var(--ink);">Toothpaste</span><span style="font-size:11px;color:var(--mid);">10 orders &middot; $20</span></div><div style="height:6px;background:var(--sand);border-radius:3px;overflow:hidden;"><div style="width:50%;height:100%;background:#009A97;border-radius:3px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"><span style="font-size:12px;font-weight:500;color:var(--ink);">Chestnut (individual)</span><span style="font-size:11px;color:var(--mid);">7 orders &middot; $21</span></div><div style="height:6px;background:var(--sand);border-radius:3px;overflow:hidden;"><div style="width:35%;height:100%;background:#80CCCB;border-radius:3px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"><span style="font-size:12px;font-weight:500;color:var(--ink);">Dev c&#432;i</span><span style="font-size:11px;color:var(--mid);">3 orders &middot; $30</span></div><div style="height:6px;background:var(--sand);border-radius:3px;overflow:hidden;"><div style="width:15%;height:100%;background:#80CCCB;border-radius:3px;"></div></div></div>
+            </div>
+          </div>
+          <!-- Top buyers -->
+          <div class="panel-card">
+            <div class="panel-header"><div class="panel-title">Top Buyers</div><a href="members.html" class="panel-link">View all &#x2192;</a></div>
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border-light);"><div style="font-size:11px;font-weight:700;color:var(--faint);width:16px;text-align:center;">1</div><div style="width:30px;height:30px;border-radius:50%;background:#9B59B6;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">J</div><div style="flex:1;"><div style="font-size:12px;font-weight:500;color:var(--ink);">Janet Lee</div><div style="font-size:10px;color:var(--mid);">8 orders &middot; $224</div></div><span class="badge teal">Top buyer</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border-light);"><div style="font-size:11px;font-weight:700;color:var(--faint);width:16px;text-align:center;">2</div><div style="width:30px;height:30px;border-radius:50%;background:#3498DB;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">D</div><div style="flex:1;"><div style="font-size:12px;font-weight:500;color:var(--ink);">David Tan</div><div style="font-size:10px;color:var(--mid);">6 orders &middot; $186</div></div><span class="badge gray">Active</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border-light);"><div style="font-size:11px;font-weight:700;color:var(--faint);width:16px;text-align:center;">3</div><div style="width:30px;height:30px;border-radius:50%;background:#E8971A;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">S</div><div style="flex:1;"><div style="font-size:12px;font-weight:500;color:var(--ink);">Sarah Wong</div><div style="font-size:10px;color:var(--mid);">5 orders &middot; $155</div></div><span class="badge gray">Active</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border-light);"><div style="font-size:11px;font-weight:700;color:var(--faint);width:16px;text-align:center;">4</div><div style="width:30px;height:30px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">T</div><div style="flex:1;"><div style="font-size:12px;font-weight:500;color:var(--ink);">Tom Nguyen</div><div style="font-size:10px;color:var(--mid);">4 orders &middot; $96</div></div><span class="badge amber">Unpaid</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;"><div style="font-size:11px;font-weight:700;color:var(--faint);width:16px;text-align:center;">5</div><div style="width:30px;height:30px;border-radius:50%;background:#E24B4A;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">M</div><div style="flex:1;"><div style="font-size:12px;font-weight:500;color:var(--ink);">Minh Cong</div><div style="font-size:10px;color:var(--mid);">3 orders &middot; $81</div></div><span class="badge gray">Active</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 4: Performance metrics -->
+        <div class="section-label" style="margin-top:18px;">Performance Metrics</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+          <!-- Avg order value -->
+          <div class="chart-card">
+            <div class="chart-title" style="margin-bottom:10px;">Avg. Order Value</div>
+            <div style="font-size:30px;font-weight:700;color:var(--ink);">$26.38</div>
+            <div style="font-size:11px;color:#27AE60;margin-top:4px;display:flex;align-items:center;gap:3px;">&#x2191; +$4.20 vs last month</div>
+            <div style="margin-top:12px;padding-top:12px;border-top:0.5px solid var(--border-light);display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:var(--mid);">Highest order</span><span style="font-weight:600;">$224 &mdash; Janet</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:var(--mid);">Lowest order</span><span style="font-weight:600;">$2 &mdash; Toothpaste</span></div>
+            </div>
+          </div>
+          <!-- Payment speed -->
+          <div class="chart-card">
+            <div class="chart-title" style="margin-bottom:10px;">Avg. Payment Speed</div>
+            <div style="font-size:30px;font-weight:700;color:var(--ink);">1.8 <span style="font-size:14px;font-weight:400;color:var(--mid);">days</span></div>
+            <div style="font-size:11px;color:#27AE60;margin-top:4px;">&#x2191; 0.4 days faster vs last month</div>
+            <div style="margin-top:12px;padding-top:12px;border-top:0.5px solid var(--border-light);display:flex;flex-direction:column;gap:7px;">
+              <div style="display:flex;justify-content:space-between;font-size:11px;align-items:center;"><span style="color:var(--mid);">Same day</span><div style="display:flex;align-items:center;gap:6px;"><div style="width:60px;height:5px;background:var(--sand);border-radius:3px;overflow:hidden;"><div style="width:45%;height:100%;background:#009A97;border-radius:3px;"></div></div><span style="font-weight:600;">45%</span></div></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;align-items:center;"><span style="color:var(--mid);">1&ndash;2 days</span><div style="display:flex;align-items:center;gap:6px;"><div style="width:60px;height:5px;background:var(--sand);border-radius:3px;overflow:hidden;"><div style="width:35%;height:100%;background:#80CCCB;border-radius:3px;"></div></div><span style="font-weight:600;">35%</span></div></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;align-items:center;"><span style="color:var(--mid);">3+ days</span><div style="display:flex;align-items:center;gap:6px;"><div style="width:60px;height:5px;background:var(--sand);border-radius:3px;overflow:hidden;"><div style="width:20%;height:100%;background:#E8971A;border-radius:3px;"></div></div><span style="font-weight:600;">20%</span></div></div>
+            </div>
+          </div>
+          <!-- Member engagement -->
+          <div class="chart-card">
+            <div class="chart-title" style="margin-bottom:10px;">Member Engagement</div>
+            <div style="font-size:30px;font-weight:700;color:var(--ink);">83% <span style="font-size:14px;font-weight:400;color:var(--mid);">participation</span></div>
+            <div style="font-size:11px;color:#27AE60;margin-top:4px;">&#x2191; +5% vs last event</div>
+            <div style="margin-top:12px;padding-top:12px;border-top:0.5px solid var(--border-light);display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:var(--mid);">Total members</span><span style="font-weight:600;">24</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:var(--mid);">Ordered this month</span><span style="font-weight:600;color:#009A97;">20</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:var(--mid);">Never ordered</span><span style="font-weight:600;color:#E24B4A;">4</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:var(--mid);">New this month</span><span style="font-weight:600;">2</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLOSING SOON + UPCOMING COLLECTIONS -->
+        <div class="section-label" style="margin-top:18px;">Events</div>
+        <div class="bottom-grid" style="margin-bottom:14px;">
+
+          <!-- Card 1: Closing Soon -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title">Closing Soon</div>
+                <div style="font-size:11px;color:var(--mid);margin-top:1px;">Chase payments before orders close</div>
+              </div>
+              <a href="hosted-events.html" class="panel-link">View all →</a>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr auto auto;gap:0;padding:6px 16px;background:#FAFAF8;border-bottom:0.5px solid var(--border-light);">
+              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;">Event</div>
+              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;width:70px;text-align:center;">Closes</div>
+              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;width:56px;text-align:right;">Left</div>
+            </div>
+            <div class="event-row" onclick="window.location='hosted-events.html'">
+              <div class="event-dot" style="background:#E24B4A;flex-shrink:0;"></div>
+              <div style="flex:1;min-width:0;">
+                <div class="event-name">Groupbuy Event test</div>
+                <div class="event-meta">9 orders · <span style="color:#E24B4A;">8 unpaid</span></div>
+              </div>
+              <div style="width:70px;text-align:center;flex-shrink:0;font-size:11px;color:var(--ink);font-weight:500;">15-05-2026</div>
+              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge red">2 days</span></div>
+            </div>
+            <div class="event-row" onclick="window.location='hosted-events.html'">
+              <div class="event-dot" style="background:#E8971A;flex-shrink:0;"></div>
+              <div style="flex:1;min-width:0;">
+                <div class="event-name">New event</div>
+                <div class="event-meta">4 orders · <span style="color:#E8971A;">2 unpaid</span></div>
+              </div>
+              <div style="width:70px;text-align:center;flex-shrink:0;font-size:11px;color:var(--ink);font-weight:500;">15-05-2026</div>
+              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge amber">5 days</span></div>
+            </div>
+            <div class="event-row" onclick="window.location='hosted-events.html'">
+              <div class="event-dot" style="background:#009A97;flex-shrink:0;"></div>
+              <div style="flex:1;min-width:0;">
+                <div class="event-name">Test event for login</div>
+                <div class="event-meta">13 orders · <span style="color:#27AE60;">all paid ✓</span></div>
+              </div>
+              <div style="width:70px;text-align:center;flex-shrink:0;font-size:11px;color:var(--ink);font-weight:500;">20-05-2026</div>
+              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge teal">10 days</span></div>
+            </div>
+            <div class="event-row" onclick="window.location='hosted-events.html'">
+              <div class="event-dot" style="background:#B4B2A9;flex-shrink:0;"></div>
+              <div style="flex:1;min-width:0;">
+                <div class="event-name">Batch 4</div>
+                <div class="event-meta">6 orders · <span style="color:#E8971A;">1 unpaid</span></div>
+              </div>
+              <div style="width:70px;text-align:center;flex-shrink:0;font-size:11px;color:var(--ink);font-weight:500;">25-05-2026</div>
+              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge gray">15 days</span></div>
+            </div>
+          </div>
+
+          <!-- Card 2: Upcoming Collections -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title">Upcoming Collections</div>
+                <div style="font-size:11px;color:var(--mid);margin-top:1px;">Prepare packing for these dates</div>
+              </div>
+              <a href="packing-list.html" class="panel-link">Packing lists →</a>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr auto auto;gap:0;padding:6px 16px;background:#FAFAF8;border-bottom:0.5px solid var(--border-light);">
+              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;">Event</div>
+              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;width:110px;text-align:center;">Collection</div>
+              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;width:56px;text-align:right;">In</div>
+            </div>
+            <div class="event-row" onclick="window.location='packing-list.html'">
+              <div class="event-dot" style="background:#E24B4A;flex-shrink:0;"></div>
+              <div style="flex:1;min-width:0;">
+                <div class="event-name">Groupbuy Event test</div>
+                <div class="event-meta">9 orders · Simei Street 1</div>
+              </div>
+              <div style="width:110px;text-align:center;flex-shrink:0;">
+                <div style="font-size:11px;color:#009A97;font-weight:500;">22-05-2026</div>
+                <div style="font-size:10px;color:var(--mid);">10AM – 5PM</div>
+              </div>
+              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge red">9 days</span></div>
+            </div>
+            <div class="event-row" onclick="window.location='packing-list.html'">
+              <div class="event-dot" style="background:#E8971A;flex-shrink:0;"></div>
+              <div style="flex:1;min-width:0;">
+                <div class="event-name">New event</div>
+                <div class="event-meta">4 orders · Simei Street 1</div>
+              </div>
+              <div style="width:110px;text-align:center;flex-shrink:0;">
+                <div style="font-size:11px;color:#009A97;font-weight:500;">22-05-2026</div>
+                <div style="font-size:10px;color:var(--mid);">10AM – 5PM</div>
+              </div>
+              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge amber">9 days</span></div>
+            </div>
+            <div class="event-row" onclick="window.location='packing-list.html'">
+              <div class="event-dot" style="background:#009A97;flex-shrink:0;"></div>
+              <div style="flex:1;min-width:0;">
+                <div class="event-name">Test event for login</div>
+                <div class="event-meta">13 orders · Tampines Hub</div>
+              </div>
+              <div style="width:110px;text-align:center;flex-shrink:0;">
+                <div style="font-size:11px;color:#009A97;font-weight:500;">28-05-2026</div>
+                <div style="font-size:10px;color:var(--mid);">2PM – 7PM</div>
+              </div>
+              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge teal">18 days</span></div>
+            </div>
+            <div class="event-row" onclick="window.location='packing-list.html'">
+              <div class="event-dot" style="background:#B4B2A9;flex-shrink:0;"></div>
+              <div style="flex:1;min-width:0;">
+                <div class="event-name">Batch 4</div>
+                <div class="event-meta">6 orders · Bedok Mall</div>
+              </div>
+              <div style="width:110px;text-align:center;flex-shrink:0;">
+                <div style="font-size:11px;color:#009A97;font-weight:500;">01-06-2026</div>
+                <div style="font-size:10px;color:var(--mid);">10AM – 5PM</div>
+              </div>
+              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge gray">24 days</span></div>
+            </div>
+            <!-- Start packing CTA -->
+            <div style="padding:10px 16px;border-top:0.5px solid var(--border-light);background:#FAFAF8;">
+              <button onclick="window.location='packing-list.html'" style="width:100%;height:32px;background:white;border:0.5px solid #009A97;border-radius:8px;font-size:12px;font-weight:600;color:#009A97;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                Start Packing List
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity — full width -->
+        <div class="section-label">Recent Activity</div>
+        <div class="panel-card" style="margin-bottom:0;">
+          <div class="panel-header">
+            <div class="panel-title">Activity Feed</div>
+            <a href="order-management.html" class="panel-link">View orders →</a>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);border-top:none;">
+            <div style="border-right:0.5px solid var(--border-light);">
+              <div class="activity-row">
+                <div class="activity-icon" style="background:var(--teal-light);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div class="activity-text"><span>Janet Lee</span> verified payment for Spec ×2</div>
+                  <div class="activity-time">5 mins ago</div>
+                </div>
+              </div>
+              <div class="activity-row">
+                <div class="activity-icon" style="background:var(--amber-light);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div class="activity-text"><span>David Tan</span> placed order — Toothpaste ×3</div>
+                  <div class="activity-time">22 mins ago</div>
+                </div>
+              </div>
+              <div class="activity-row" style="border-bottom:none;">
+                <div class="activity-icon" style="background:var(--teal-light);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div class="activity-text"><span>Sarah Wong</span> joined M6 Group</div>
+                  <div class="activity-time">1 hour ago</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="activity-row">
+                <div class="activity-icon" style="background:var(--red-light);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div class="activity-text"><span>Tom Nguyen</span> has not paid — order #12</div>
+                  <div class="activity-time">3 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-row">
+                <div class="activity-icon" style="background:var(--green-light);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div class="activity-text"><span>$42.00</span> collected from Minh Cong</div>
+                  <div class="activity-time">Yesterday</div>
+                </div>
+              </div>
+              <div class="activity-row" style="border-bottom:none;">
+                <div class="activity-icon" style="background:var(--teal-light);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div class="activity-text"><span>Batch 4</span> packing list created</div>
+                  <div class="activity-time">Yesterday</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div style="height:24px;"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+// Set topbar date
+const now = new Date();
+document.getElementById('topbar-date').textContent =
+  now.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+
+// Set subtitle with greeting
+const hr = now.getHours();
+const greeting = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+document.getElementById('dash-subtitle').textContent = greeting + ', Minh Cong. Here\'s your group buy summary.';
+
+// Period tabs
+
+function setDateFilter(btn, period) {
+  document.querySelectorAll('.filter-bar .filter-chip').forEach(b => {
+    if (['All Time','This Month','This Week'].includes(b.textContent.trim())) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  // In a real app, re-fetch/filter data here
+}
+function setEventFilter(val) { /* filter data by event */ }
+function setStatusFilter(val) { /* filter data by status */ }
+function clearFilters(btn) {
+  document.querySelectorAll('.filter-bar .filter-chip').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-bar .filter-chip')[0].classList.add('active');
+  document.querySelectorAll('.filter-select').forEach(s => s.selectedIndex = 0);
+}
+
+function setPeriod(el, period) {
+  el.closest('.period-tabs').querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
