@@ -1914,7 +1914,7 @@ select:focus { border-color: #009A97; }
 
     <!-- My groups list -->
     <div class="group-list">
-      <div class="group-list-item" onclick="showGroupDetail()">
+      <div class="group-list-item" onclick="showGroupDetail(this.querySelector('.group-name') ? this.querySelector('.group-name').textContent : '')" style="cursor:pointer;">
         <div class="group-avatar-wrap">
           <div class="group-avatar">M6</div>
         </div>
@@ -1924,7 +1924,7 @@ select:focus { border-color: #009A97; }
         </div>
         <div class="group-role">Admin</div>
       </div>
-      <div class="group-list-item" onclick="showGroupDetail()">
+      <div class="group-list-item" onclick="showGroupDetail(this.querySelector('.group-name') ? this.querySelector('.group-name').textContent : '')" style="cursor:pointer;">
         <div class="group-avatar-wrap">
           <div class="group-avatar" style="background:#009A97;">M5</div>
         </div>
@@ -3739,6 +3739,36 @@ function showPaymentFlow() {
 }
 
 
+
+
+function showGroupDetail(groupName) {
+  // Hide all views
+  document.getElementById('view-all').style.display = 'none';
+  document.getElementById('view-purchase').style.display = 'none';
+  document.getElementById('view-group').style.display = 'none';
+  // Show group detail
+  document.getElementById('view-group-detail').style.display = 'block';
+  // Scroll to top
+  document.querySelector('.scroll-area') && document.querySelector('.scroll-area').scrollTo(0,0);
+}
+
+function hideGroupDetail() {
+  document.getElementById('view-group-detail').style.display = 'none';
+  document.getElementById('view-group').style.display = 'block';
+}
+
+function filterGecEvents(filter, btn) {
+  document.querySelectorAll('.gd-filter-tabs .gd-tab').forEach(function(t){ t.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('#gd-grid .gec').forEach(function(c) {
+    var status = c.getAttribute('data-status');
+    c.style.display = (filter === 'all' || filter === status) ? '' : 'none';
+  });
+}
+
+function handleGecClick(el) {
+  if (event && event.target.classList.contains('gec-edit-btn')) return;
+}
 
 function searchGroups(query) {
   const preview = document.getElementById('group-search-preview');
