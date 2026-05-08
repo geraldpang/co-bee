@@ -336,56 +336,58 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .group-drop-none { padding: 20px 12px; text-align: center; font-size: 13px; color: #888; }
 
   /* Group detail */
-  .group-detail { padding: 20px 16px; }
-  .group-detail-header { text-align: center; margin-bottom: 20px; }
-  .group-detail-share {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 12px; color: #009A97; text-decoration: underline;
-    cursor: pointer; margin-bottom: 12px;
-  }
-  .group-detail-avatar {
-    width: 72px; height: 72px; border-radius: 50%;
-    background: #E8971A; margin: 0 auto 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; font-weight: 700; color: white;
-    position: relative;
-  }
-  .group-detail-avatar-edit {
-    position: absolute; bottom: 0; right: 0;
-    width: 22px; height: 22px; background: #888;
-    border-radius: 50%; display: flex; align-items: center;
-    justify-content: center; border: 2px solid white;
-  }
-  .group-detail-name { font-size: 18px; font-weight: 600; color: #1a1a18; margin-bottom: 4px; }
-  .group-detail-desc { font-size: 13px; color: #888; }
-  .group-stats { display: flex; align-items: center; margin: 16px 0; border: 0.5px solid #e0dfd8; border-radius: 12px; overflow: hidden; background: white; }
-  .group-stat { flex: 1; text-align: center; padding: 14px 10px; }
-  .group-stat + .group-stat { border-left: 0.5px solid #e0dfd8; }
-  .group-stat-val { font-size: 22px; font-weight: 700; color: #1a1a18; letter-spacing: -0.5px; }
-  .group-stat-lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #888; margin-top: 2px; }
-  .group-events-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .group-events-title { font-size: 13px; font-weight: 600; color: #1a1a18; }
-  .host-event-link { font-size: 13px; font-weight: 600; color: #009A97; cursor: pointer; }
-  .group-events-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .group-event-card {
-    background: white; border: 0.5px solid #e0dfd8;
-    border-radius: 10px; padding: 10px 12px;
-    cursor: pointer; transition: border-color 0.15s;
-  }
-  .group-event-card:hover { border-color: #009A97; }
-  .group-event-card.expired { background: #f0f0f0; border-color: #e0dfd8; }
-  .group-event-card.expired .gec-title { color: #888; }
-  .group-event-card.expired .gec-edit { color: #B4B2A9; pointer-events: none; }
-  .group-event-card.expired .gec-buy { background: #D3D1C7; color: #888; }
-  .gec-title { font-size: 12px; font-weight: 600; color: #009A97; margin-bottom: 4px; line-height: 1.35; }
-  .gec-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
-  .gec-days { font-size: 11px; color: #009A97; }
-  .gec-days.expired { color: #888; }
-  .gec-buy { font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 99px; }
-  .gec-buy.has { background: #009A97; color: white; }
-  .gec-buy.zero { background: #D3D1C7; color: #5F5E5A; }
-  .gec-host { font-size: 11px; color: #888; margin-top: 4px; }
-  .gec-edit { font-size: 11px; color: #009A97; font-weight: 600; margin-top: 4px; display: inline-block; }
+  /* ── GROUP DETAIL ── */
+  .group-detail { padding: 0 0 24px; }
+  /* Hero banner */
+  .gd-hero { background: linear-gradient(160deg, #007A77 0%, #009A97 100%); padding: 20px 16px 0; position: relative; }
+  .gd-hero-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .gd-back { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: rgba(255,255,255,0.8); cursor: pointer; background: rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 99px; border: none; font-family: inherit; transition: background 0.15s; }
+  .gd-back:hover { background: rgba(255,255,255,0.25); }
+  .gd-share { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: white; cursor: pointer; background: rgba(255,255,255,0.18); padding: 5px 10px; border-radius: 99px; border: none; font-family: inherit; transition: background 0.15s; }
+  .gd-share:hover { background: rgba(255,255,255,0.28); }
+  /* Avatar card — lifts over hero */
+  .gd-avatar-card { background: white; margin: 0 16px; border-radius: 14px; padding: 20px 16px 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.10); position: relative; top: -28px; margin-bottom: -10px; }
+  .gd-avatar-wrap { display: flex; align-items: flex-start; gap: 14px; }
+  .gd-avatar { width: 64px; height: 64px; border-radius: 14px; background: #009A97; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: white; flex-shrink: 0; position: relative; }
+  .gd-avatar-badge { position: absolute; bottom: -4px; right: -4px; width: 20px; height: 20px; background: #E8971A; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; }
+  .gd-info { flex: 1; min-width: 0; }
+  .gd-name { font-size: 17px; font-weight: 700; color: #1a1a18; margin-bottom: 3px; }
+  .gd-desc { font-size: 12px; color: #888780; line-height: 1.5; }
+  .gd-admin-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #009A97; background: #E0F5F5; border: none; border-radius: 6px; padding: 4px 9px; cursor: pointer; font-family: inherit; margin-top: 8px; transition: background 0.12s; }
+  .gd-admin-link:hover { background: #c8eaea; }
+  /* Stats */
+  .gd-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border: 0.5px solid #E0DFD8; border-radius: 10px; overflow: hidden; margin: 0 16px 16px; background: white; }
+  .gd-stat { padding: 12px 8px; text-align: center; }
+  .gd-stat + .gd-stat { border-left: 0.5px solid #E0DFD8; }
+  .gd-stat-val { font-size: 20px; font-weight: 700; color: #1a1a18; letter-spacing: -0.5px; }
+  .gd-stat-lbl { font-size: 9px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #888780; margin-top: 2px; }
+  /* Events section */
+  .gd-events { padding: 0 16px; }
+  .gd-events-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .gd-events-label { font-size: 12px; font-weight: 700; color: #1a1a18; letter-spacing: 0.04em; text-transform: uppercase; }
+  .gd-host-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: white; background: #009A97; border: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-family: inherit; transition: background 0.12s; }
+  .gd-host-btn:hover { background: #007A77; }
+  /* Filter tabs */
+  .gd-filter-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+  .gd-tab { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 99px; border: 0.5px solid #D3D1C7; background: white; color: #888780; cursor: pointer; font-family: inherit; transition: all 0.12s; }
+  .gd-tab.active { background: #009A97; border-color: #009A97; color: white; }
+  /* Event cards grid */
+  .gd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .gec { background: white; border: 0.5px solid #E0DFD8; border-radius: 10px; padding: 11px 12px; cursor: pointer; transition: all 0.15s; }
+  .gec:hover:not(.gec-closed) { border-color: #009A97; box-shadow: 0 2px 8px rgba(0,154,151,0.1); }
+  .gec-closed { background: #F4F6F8; border-color: #E0DFD8; }
+  .gec-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+  .gec-status { font-size: 10px; font-weight: 600; color: #009A97; }
+  .gec-status.closing { color: #E8971A; }
+  .gec-status.closed { color: #B4B2A9; }
+  .gec-buy-badge { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; background: #009A97; color: white; }
+  .gec-buy-badge.zero { background: #E0DFD8; color: #888780; }
+  .gec-title { font-size: 12px; font-weight: 600; color: #1a1a18; line-height: 1.35; margin-bottom: 6px; }
+  .gec-closed .gec-title { color: #888780; }
+  .gec-bottom { display: flex; align-items: center; justify-content: space-between; }
+  .gec-host-tag { font-size: 10px; color: #888780; display: flex; align-items: center; gap: 3px; }
+  .gec-edit-btn { font-size: 10px; font-weight: 600; color: #009A97; background: #E0F5F5; border: none; border-radius: 5px; padding: 2px 7px; cursor: pointer; font-family: inherit; }
+  .gec-closed .gec-edit-btn { color: #B4B2A9; background: #f0f0f0; }
   /* VIEW ORDER LINK  */
   .view-order-btn { display: block; width: 100%; padding: 9px 14px; font-size: 12px; font-weight: 600; color: #009A97; background: none; border: none; border-top: 0.5px solid #e0dfd8; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: space-between; }
   .view-order-btn:hover { background: #f5fafa; }
@@ -1938,103 +1940,153 @@ select:focus { border-color: #009A97; }
   <!-- MY GROUP VIEW — Screen 2: Group Detail -->
   <div id="view-group-detail" style="display:none;">
     <div class="group-detail">
-      <div onclick="hideGroupDetail()" style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#009A97;cursor:pointer;margin-bottom:12px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Back to groups
-      </div>
-      <div class="group-detail-header">
-        <div class="group-detail-share">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          SHARE
+
+      <!-- Hero banner -->
+      <div class="gd-hero">
+        <div class="gd-hero-top">
+          <button class="gd-back" onclick="hideGroupDetail()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back
+          </button>
+          <button class="gd-share" onclick="navigator.share ? navigator.share({title:'M6 Group',url:location.href}) : alert('Link copied!')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share
+          </button>
         </div>
-        <div class="group-detail-avatar">
-          M6
-          <div class="group-detail-avatar-edit">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-          </div>
-        </div>
-        <div class="group-detail-name">M6 group</div>
-        <div class="group-detail-desc">test</div>
+        <!-- Spacer for lifted card -->
+        <div style="height:28px;"></div>
       </div>
 
-      <div class="group-stats">
-        <div class="group-stat">
-          <div class="group-stat-val">19</div>
-          <div class="group-stat-lbl">Event Hosted</div>
-        </div>
-        <div class="group-stat">
-          <div class="group-stat-val">2</div>
-          <div class="group-stat-lbl">Members</div>
+      <!-- Avatar card — lifts over hero -->
+      <div class="gd-avatar-card">
+        <div class="gd-avatar-wrap">
+          <div class="gd-avatar">
+            M6
+            <div class="gd-avatar-badge">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="gd-info">
+            <div class="gd-name">M6 Group</div>
+            <div class="gd-desc">Good things must share! Join M6 Group for the best group buys.</div>
+            <!-- Admin edit link — limited settings -->
+            <button class="gd-admin-link" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+              Edit Group
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="group-events-header">
-        <span class="group-events-title">Events</span>
-        <span class="host-event-link">Host an Event</span>
+      <!-- Stats row -->
+      <div class="gd-stats">
+        <div class="gd-stat">
+          <div class="gd-stat-val">19</div>
+          <div class="gd-stat-lbl">Events Hosted</div>
+        </div>
+        <div class="gd-stat">
+          <div class="gd-stat-val">2</div>
+          <div class="gd-stat-lbl">Members</div>
+        </div>
+        <div class="gd-stat">
+          <div class="gd-stat-val">47</div>
+          <div class="gd-stat-lbl">Total Orders</div>
+        </div>
       </div>
 
-      <div class="group-events-grid">
-
-        <div class="group-event-card">
-          <div class="gec-row">
-            <span class="gec-days">12 days left</span>
-            <span class="gec-buy zero">0 BUY</span>
-          </div>
-          <div class="gec-title">Groupbuy Event test</div>
-          <div class="gec-host">Minh Cong</div>
-          <div class="gec-edit">EDIT</div>
+      <!-- Events section -->
+      <div class="gd-events">
+        <div class="gd-events-hdr">
+          <span class="gd-events-label">Events</span>
+          <button class="gd-host-btn" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+            Host an Event
+          </button>
         </div>
 
-        <div class="group-event-card">
-          <div class="gec-row">
-            <span class="gec-days">12 days left</span>
-            <span class="gec-buy zero">0 BUY</span>
-          </div>
-          <div class="gec-title">new event</div>
-          <div class="gec-host">Minh Cong</div>
-          <div class="gec-edit">EDIT</div>
+        <!-- Filter tabs -->
+        <div class="gd-filter-tabs">
+          <button class="gd-tab active" onclick="filterGecEvents('all',this)">All</button>
+          <button class="gd-tab" onclick="filterGecEvents('active',this)">Active</button>
+          <button class="gd-tab" onclick="filterGecEvents('closed',this)">Closed</button>
         </div>
 
-        <div class="group-event-card">
-          <div class="gec-row">
-            <span class="gec-days">11 days left</span>
-            <span class="gec-buy has">6 BUY</span>
-          </div>
-          <div class="gec-title">This is a test event for Purchase with no login</div>
-          <div class="gec-host">Minh Cong</div>
-          <div class="gec-edit">EDIT</div>
-        </div>
+        <!-- Events grid -->
+        <div class="gd-grid" id="gd-grid">
 
-        <div class="group-event-card expired">
-          <div class="gec-row">
-            <span class="gec-days expired">0 day left</span>
-            <span class="gec-buy zero">0 BUY</span>
+          <div class="gec" data-status="active" onclick="handleGecClick(this)">
+            <div class="gec-top">
+              <span class="gec-status">7 days left</span>
+              <span class="gec-buy-badge">9 BUY</span>
+            </div>
+            <div class="gec-title">Groupbuy Event test</div>
+            <div class="gec-bottom">
+              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
+              <button class="gec-edit-btn">Edit</button>
+            </div>
           </div>
-          <div class="gec-title">test</div>
-          <div class="gec-host">Minh Cong</div>
-          <div class="gec-edit">EDIT</div>
-        </div>
 
-        <div class="group-event-card expired">
-          <div class="gec-row">
-            <span class="gec-days expired">0 day left</span>
-            <span class="gec-buy has">2 BUY</span>
+          <div class="gec" data-status="active" onclick="handleGecClick(this)">
+            <div class="gec-top">
+              <span class="gec-status closing">3 days left</span>
+              <span class="gec-buy-badge">4 BUY</span>
+            </div>
+            <div class="gec-title">New event</div>
+            <div class="gec-bottom">
+              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
+              <button class="gec-edit-btn">Edit</button>
+            </div>
           </div>
-          <div class="gec-title">order without login</div>
-          <div class="gec-host">Minh Cong</div>
-          <div class="gec-edit">EDIT</div>
-        </div>
 
-        <div class="group-event-card expired">
-          <div class="gec-row">
-            <span class="gec-days expired">0 day left</span>
-            <span class="gec-buy has">5 BUY</span>
+          <div class="gec" data-status="active" onclick="handleGecClick(this)">
+            <div class="gec-top">
+              <span class="gec-status">11 days left</span>
+              <span class="gec-buy-badge">6 BUY</span>
+            </div>
+            <div class="gec-title">Test event for Purchase</div>
+            <div class="gec-bottom">
+              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
+              <button class="gec-edit-btn">Edit</button>
+            </div>
           </div>
-          <div class="gec-title">atea 1</div>
-          <div class="gec-host">Minh Cong</div>
-          <div class="gec-edit">EDIT</div>
-        </div>
 
+          <div class="gec gec-closed" data-status="closed">
+            <div class="gec-top">
+              <span class="gec-status closed">Closed</span>
+              <span class="gec-buy-badge zero">0 BUY</span>
+            </div>
+            <div class="gec-title">test</div>
+            <div class="gec-bottom">
+              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
+              <button class="gec-edit-btn">Edit</button>
+            </div>
+          </div>
+
+          <div class="gec gec-closed" data-status="closed">
+            <div class="gec-top">
+              <span class="gec-status closed">Closed</span>
+              <span class="gec-buy-badge">2 BUY</span>
+            </div>
+            <div class="gec-title">order without login</div>
+            <div class="gec-bottom">
+              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
+              <button class="gec-edit-btn">Edit</button>
+            </div>
+          </div>
+
+          <div class="gec gec-closed" data-status="closed">
+            <div class="gec-top">
+              <span class="gec-status closed">Closed</span>
+              <span class="gec-buy-badge">5 BUY</span>
+            </div>
+            <div class="gec-title">atea 1</div>
+            <div class="gec-bottom">
+              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
+              <button class="gec-edit-btn">Edit</button>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
