@@ -1,314 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>co·bee — Design Preview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --teal:        #009A97;
-  --teal-dark:   #007A77;
-  --teal-light:  #E0F5F5;
-  --honey:       #F5A623;
-  --ink:         #1A1A2E;
-  --mid:         #4A4A6A;
-  --sand:        #FFFBF4;
-  --border:      #E8E6DE;
-  --white:       #FFFFFF;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--sand);
-  color: var(--ink);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ── HEADER ── */
-header {
-  padding: 2.5rem 2rem 0;
-  max-width: 900px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.logo {
-  font-family: 'Fraunces', serif;
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--teal);
-  letter-spacing: -1.5px;
-  line-height: 1;
-}
-.logo .dot { color: var(--honey); }
-
-.tagline {
-  font-size: 12px;
-  color: var(--mid);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-top: 4px;
-}
-
-.header-divider {
-  border: none;
-  border-top: 0.5px solid var(--border);
-  margin-top: 2rem;
-}
-
-/* ── MAIN ── */
-main {
-  flex: 1;
-  max-width: 900px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 2.5rem 2rem 4rem;
-}
-
-.intro {
-  margin-bottom: 2.5rem;
-}
-.intro h1 {
-  font-family: 'Fraunces', serif;
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -0.5px;
-  color: var(--ink);
-  line-height: 1.2;
-  margin-bottom: 8px;
-}
-.intro h1 em { color: var(--teal); font-style: italic; }
-.intro p {
-  font-size: 14px;
-  color: var(--mid);
-  line-height: 1.7;
-  max-width: 480px;
-}
-
-/* ── CARDS ── */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
-}
-
-.page-card {
-  background: var(--white);
-  border: 0.5px solid var(--border);
-  border-radius: 16px;
-  padding: 1.5rem;
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
-  cursor: pointer;
-}
-.page-card:hover {
-  border-color: var(--teal);
-  box-shadow: 0 4px 20px rgba(0,154,151,0.1);
-  transform: translateY(-2px);
-  text-decoration: none;
-}
-
-.card-icon {
-  width: 44px; height: 44px;
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.card-icon.teal    { background: var(--teal-light); }
-.card-icon.honey   { background: #FEF2DC; }
-.card-icon.purple  { background: #EEEDFE; }
-
-.card-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--mid);
-  margin-bottom: 2px;
-}
-.card-tag .dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--teal);
-  flex-shrink: 0;
-}
-.card-tag .dot.honey  { background: var(--honey); }
-.card-tag .dot.purple { background: #7F77DD; }
-
-.card-name {
-  font-family: 'Fraunces', serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -0.3px;
-  line-height: 1.2;
-}
-
-.card-desc {
-  font-size: 13px;
-  color: var(--mid);
-  line-height: 1.6;
-  flex: 1;
-}
-
-.card-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 4px;
-}
-.card-filename {
-  font-size: 11px;
-  color: var(--teal);
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  background: var(--teal-light);
-  padding: 3px 8px;
-  border-radius: 6px;
-}
-.arrow-icon {
-  width: 28px; height: 28px;
-  background: var(--teal-light);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s;
-}
-.page-card:hover .arrow-icon { background: var(--teal); }
-.page-card:hover .arrow-icon svg { stroke: white; }
-
-/* ── FOOTER ── */
-footer {
-  border-top: 0.5px solid var(--border);
-  padding: 1.25rem 2rem;
-  max-width: 900px;
-  margin: 0 auto;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.footer-logo {
-  font-family: 'Fraunces', serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--teal);
-  letter-spacing: -0.5px;
-}
-.footer-logo .dot { color: var(--honey); }
-.footer-note {
-  font-size: 11px;
-  color: var(--mid);
-}
-.footer-badge {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--teal);
-  background: var(--teal-light);
-  padding: 3px 10px;
-  border-radius: 99px;
-}
-
-@media (max-width: 600px) {
-  header, main { padding-left: 1.25rem; padding-right: 1.25rem; }
-  .cards { grid-template-columns: 1fr; }
-  .intro h1 { font-size: 22px; }
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--teal:#009A97;--teal-dark:#007A77;--teal-light:#E0F5F5;--honey:#F5A623;--ink:#1A1A2E;--mid:#4A4A6A;--sand:#FFFBF4;--border:#E8E6DE;--white:#FFFFFF;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;}
+header{padding:2.5rem 2rem 0;max-width:1000px;margin:0 auto;width:100%;}
+.logo{font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--teal);letter-spacing:-1.5px;line-height:1;}
+.logo .dot{color:var(--honey);}
+.tagline{font-size:12px;color:var(--mid);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;}
+hr{border:none;border-top:0.5px solid var(--border);margin-top:2rem;}
+main{flex:1;max-width:1000px;margin:0 auto;width:100%;padding:2.5rem 2rem 4rem;}
+.intro{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:2.5rem;flex-wrap:wrap;}
+.intro-text h1{font-family:'Fraunces',serif;font-size:28px;font-weight:900;letter-spacing:-0.5px;color:var(--ink);line-height:1.2;margin-bottom:8px;}
+.intro-text h1 em{color:var(--teal);font-style:italic;}
+.intro-text p{font-size:13px;color:var(--mid);line-height:1.7;max-width:460px;}
+.dl-all-btn{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:white;border:none;border-radius:10px;padding:11px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.15s;white-space:nowrap;}
+.dl-all-btn:hover{background:var(--teal-dark);}
+.dl-all-btn:disabled{background:#B4B2A9;cursor:not-allowed;}
+.dl-progress{font-size:11px;color:var(--mid);margin-top:6px;text-align:right;min-height:16px;}
+.section-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);margin:28px 0 12px;padding-bottom:8px;border-bottom:0.5px solid var(--border);}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.page-card{background:var(--white);border:0.5px solid var(--border);border-radius:14px;padding:1.25rem;display:flex;flex-direction:column;gap:10px;transition:border-color 0.2s,box-shadow 0.2s,transform 0.15s;}
+.page-card:hover{border-color:var(--teal);box-shadow:0 4px 20px rgba(0,154,151,0.1);transform:translateY(-2px);}
+.card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ic-teal{background:var(--teal-light);} .ic-honey{background:#FEF2DC;} .ic-purple{background:#EEEDFE;} .ic-green{background:#E8F8EF;}
+.card-tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--mid);}
+.td{width:6px;height:6px;border-radius:50%;background:var(--teal);}
+.td.h{background:var(--honey);} .td.p{background:#7F77DD;} .td.g{background:#27AE60;}
+.card-name{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--ink);letter-spacing:-0.3px;line-height:1.2;margin-top:2px;}
+.card-desc{font-size:12px;color:var(--mid);line-height:1.6;flex:1;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:2px;}
+.card-filename{font-size:10px;color:var(--teal);font-family:monospace;background:var(--teal-light);padding:3px 7px;border-radius:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+.card-actions{display:flex;gap:6px;flex-shrink:0;}
+.btn-view,.btn-dl{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;text-decoration:none;transition:background 0.15s;}
+.btn-view{background:var(--teal-light);}
+.btn-view:hover{background:var(--teal);}
+.btn-view:hover svg{stroke:white;}
+.btn-dl{background:#f0f0f0;}
+.btn-dl:hover{background:#1a1a18;}
+.btn-dl:hover svg{stroke:white;}
+footer{border-top:0.5px solid var(--border);padding:1.25rem 2rem;max-width:1000px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.footer-logo{font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:var(--teal);letter-spacing:-0.5px;}
+.footer-logo .dot{color:var(--honey);}
+.footer-note{font-size:11px;color:var(--mid);}
+.footer-badge{font-size:11px;font-weight:600;color:var(--teal);background:var(--teal-light);padding:3px 10px;border-radius:99px;}
+@media(max-width:600px){header,main{padding-left:1.25rem;padding-right:1.25rem;}.cards{grid-template-columns:1fr;}}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo">co<span class="dot">·</span>bee</div>
   <div class="tagline">Good things must share!</div>
-  <hr class="header-divider" />
+  <hr/>
 </header>
-
 <main>
   <div class="intro">
-    <h1>Design <em>Preview</em></h1>
-    <p>Select a page below to preview the design. Share this URL with your developer as the single reference point for the co·bee interface.</p>
+    <div class="intro-text">
+      <h1>Design <em>Preview</em></h1>
+      <p>All co·bee UI pages. Click → to preview, ↓ to download a single file, or use Download All to get everything as a ZIP.</p>
+    </div>
+    <div style="text-align:right;flex-shrink:0;">
+      <button class="dl-all-btn" id="dl-btn" onclick="downloadAll()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download All Pages
+      </button>
+      <div class="dl-progress" id="dl-prog"></div>
+    </div>
   </div>
 
+  <!-- SHELL -->
+  <div class="section-label">App Shell</div>
   <div class="cards">
+    <div class="page-card">
+      <div class="card-icon ic-teal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <div><div class="card-tag"><span class="td"></span>Shell</div><div class="card-name">App Shell</div></div>
+      <p class="card-desc">Main container — topbar, bottom nav, drawer sidebar, iframe. Entry point for the full app.</p>
+      <div class="card-footer"><span class="card-filename">cobee.html</span><div class="card-actions"><a href="cobee.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('cobee.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+  </div>
 
-    <!-- Landing Page -->
-    <a href="cobee-redesign__5_.html" class="page-card">
-      <div class="card-icon honey">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      </div>
-      <div>
-        <div class="card-tag"><span class="dot honey"></span>Public</div>
-        <div class="card-name">Landing Page</div>
-      </div>
-      <p class="card-desc">The public-facing marketing site. What visitors see before signing up — hero, how it works, stats, story, and partner section.</p>
-      <div class="card-arrow">
-        <span class="card-filename">cobee-redesign__5_.html</span>
-        <div class="arrow-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </div>
-      </div>
-    </a>
+  <!-- MEMBER -->
+  <div class="section-label">Member Pages</div>
+  <div class="cards">
+    <div class="page-card">
+      <div class="card-icon ic-teal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+      <div><div class="card-tag"><span class="td"></span>Member</div><div class="card-name">Member App</div></div>
+      <p class="card-desc">Event feed, event detail, order & payment, My Purchase, and My Group views.</p>
+      <div class="card-footer"><span class="card-filename">member.html</span><div class="card-actions"><a href="member.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('member.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+    <div class="page-card">
+      <div class="card-icon ic-teal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div><div class="card-tag"><span class="td"></span>Member</div><div class="card-name">Profile</div></div>
+      <p class="card-desc">Member profile — notifications, edit profile, security, addresses, and logout.</p>
+      <div class="card-footer"><span class="card-filename">profile.html</span><div class="card-actions"><a href="profile.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('profile.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+  </div>
 
-    <!-- Member View -->
-    <a href="cobee.html" class="page-card">
-      <div class="card-icon teal">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-      </div>
-      <div>
-        <div class="card-tag"><span class="dot"></span>Member</div>
-        <div class="card-name">Member View</div>
-      </div>
-      <p class="card-desc">What a regular member sees — the group buy event feed, event detail, and bottom navigation. Mobile-first layout.</p>
-      <div class="card-arrow">
-        <span class="card-filename">cobee.html</span>
-        <div class="arrow-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </div>
-      </div>
-    </a>
+  <!-- ADMIN -->
+  <div class="section-label">Host Admin Pages</div>
+  <div class="cards" id="admin-cards">
 
-    <!-- Admin View -->
-    <a href="cobee.html#admin" class="page-card">
-      <div class="card-icon purple">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7F77DD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      </div>
-      <div>
-        <div class="card-tag"><span class="dot purple"></span>Admin / Host</div>
-        <div class="card-name">Admin View</div>
-      </div>
-      <p class="card-desc">What a group host sees — desktop dashboard with sidebar, members table, stats, and hosted event management.</p>
-      <div class="card-arrow">
-        <span class="card-filename">cobee.html → Switch View</span>
-        <div class="arrow-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </div>
-      </div>
-    </a>
+    <div class="page-card">
+      <div class="card-icon ic-honey"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <div><div class="card-tag"><span class="td h"></span>Admin</div><div class="card-name">Dashboard</div></div>
+      <p class="card-desc">KPIs, charts, fulfilment status, top products & buyers, closing soon, collections, and activity feed.</p>
+      <div class="card-footer"><span class="card-filename">dashboard.html</span><div class="card-actions"><a href="dashboard.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('dashboard.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+
+    <div class="page-card">
+      <div class="card-icon ic-honey"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div><div class="card-tag"><span class="td h"></span>Admin</div><div class="card-name">Hosted Events</div></div>
+      <p class="card-desc">List of all hosted events. Create, manage, and archive group buy events.</p>
+      <div class="card-footer"><span class="card-filename">hosted-events.html</span><div class="card-actions"><a href="hosted-events.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('hosted-events.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+
+    <div class="page-card">
+      <div class="card-icon ic-honey"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div><div class="card-tag"><span class="td h"></span>Admin</div><div class="card-name">Create Event</div></div>
+      <p class="card-desc">3-step event creation — basic info, add products/items, closing and collection settings.</p>
+      <div class="card-footer"><span class="card-filename">hosting.html</span><div class="card-actions"><a href="hosting.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('hosting.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+
+    <div class="page-card">
+      <div class="card-icon ic-honey"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>
+      <div><div class="card-tag"><span class="td h"></span>Admin</div><div class="card-name">Order Management</div></div>
+      <p class="card-desc">Full-width orders table — filter, search, manage payment status and fulfilment.</p>
+      <div class="card-footer"><span class="card-filename">order-management.html</span><div class="card-actions"><a href="order-management.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('order-management.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+
+    <div class="page-card">
+      <div class="card-icon ic-honey"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg></div>
+      <div><div class="card-tag"><span class="td h"></span>Admin</div><div class="card-name">Products / Items</div></div>
+      <p class="card-desc">Full-width product catalogue — manage items, pricing, options, and stock.</p>
+      <div class="card-footer"><span class="card-filename">products-items.html</span><div class="card-actions"><a href="products-items.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('products-items.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+
+    <div class="page-card">
+      <div class="card-icon ic-honey"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+      <div><div class="card-tag"><span class="td h"></span>Admin</div><div class="card-name">Packing List</div></div>
+      <p class="card-desc">Create and manage packing lists per event. Track items packed per buyer.</p>
+      <div class="card-footer"><span class="card-filename">packing-list.html</span><div class="card-actions"><a href="packing-list.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('packing-list.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+
+    <div class="page-card">
+      <div class="card-icon ic-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+      <div><div class="card-tag"><span class="td g"></span>Admin</div><div class="card-name">Fulfilment</div></div>
+      <p class="card-desc">Map with P/numbered delivery markers, drag-to-reorder sequence, expandable map view, Mark Collected.</p>
+      <div class="card-footer"><span class="card-filename">fulfilment.html</span><div class="card-actions"><a href="fulfilment.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('fulfilment.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+
+    <div class="page-card">
+      <div class="card-icon ic-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7F77DD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div><div class="card-tag"><span class="td p"></span>Admin</div><div class="card-name">Members</div></div>
+      <p class="card-desc">Member table — view, filter, edit permissions, remove members, track activity.</p>
+      <div class="card-footer"><span class="card-filename">members.html</span><div class="card-actions"><a href="members.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('members.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+
+    <div class="page-card">
+      <div class="card-icon ic-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7F77DD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+      <div><div class="card-tag"><span class="td p"></span>Admin</div><div class="card-name">Settings</div></div>
+      <p class="card-desc">Group profile, appearance, color scheme, group settings, default options, and payment methods.</p>
+      <div class="card-footer"><span class="card-filename">settings.html</span><div class="card-actions"><a href="settings.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('settings.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
 
   </div>
-</main>
 
+  <!-- TEMPLATE -->
+  <div class="section-label">Design System</div>
+  <div class="cards">
+    <div class="page-card">
+      <div class="card-icon ic-teal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+      <div><div class="card-tag"><span class="td"></span>Reference</div><div class="card-name">Design Template</div></div>
+      <p class="card-desc">Base shell with all CSS variables, component styles, and sidebar structure. Starting point for new pages.</p>
+      <div class="card-footer"><span class="card-filename">cobee-template.html</span><div class="card-actions"><a href="cobee-template.html" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><button class="btn-dl" onclick="dlFile('cobee-template.html')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></div>
+    </div>
+  </div>
+
+</main>
 <footer>
   <div class="footer-logo">co<span class="dot">·</span>bee</div>
-  <div class="footer-note">Design preview — for developer reference only</div>
+  <div class="footer-note">Design preview — for developer reference</div>
   <div class="footer-badge">geraldpang/co-bee</div>
 </footer>
 
+<script>
+const ALL_FILES = ['cobee.html','member.html','profile.html','dashboard.html','hosted-events.html','hosting.html','order-management.html','products-items.html','packing-list.html','fulfilment.html','members.html','settings.html','cobee-template.html','index.html'];
+
+function dlFile(f) {
+  var a = document.createElement('a');
+  a.href = f; a.download = f;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+async function downloadAll() {
+  var btn = document.getElementById('dl-btn');
+  var prog = document.getElementById('dl-prog');
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.1-8.6L23 10"/></svg> Preparing…';
+  try {
+    var zip = new JSZip();
+    for (var i = 0; i < ALL_FILES.length; i++) {
+      var f = ALL_FILES[i];
+      prog.textContent = 'Fetching ' + f + ' (' + (i+1) + '/' + ALL_FILES.length + ')';
+      try { var text = await (await fetch(f)).text(); zip.file(f, text); } catch(e) {}
+    }
+    prog.textContent = 'Generating ZIP…';
+    var blob = await zip.generateAsync({type:'blob',compression:'DEFLATE'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'cobee-design-pages.zip';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    prog.textContent = '✓ ' + ALL_FILES.length + ' files downloaded';
+  } catch(e) { prog.textContent = 'Error: ' + e.message; }
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download All Pages';
+  setTimeout(function(){ prog.textContent=''; }, 4000);
+}
+</script>
 </body>
 </html>
