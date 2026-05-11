@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>co·bee — Plans</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F4F6F8;color:#1a1a18;font-size:13px;}
+
+.page{padding:14px 10px 40px;max-width:100%;margin:0 auto;}
+.page-header{text-align:center;margin-bottom:32px;}
+.page-title{font-size:26px;font-weight:700;color:#1a1a18;letter-spacing:-0.5px;margin-bottom:8px;}
+.page-sub{font-size:14px;color:#888780;line-height:1.6;max-width:480px;margin:0 auto;}
+
+/* Billing toggle */
+.billing-toggle{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:32px;}
+.billing-label{font-size:13px;color:#888780;font-weight:500;}
+.billing-label.active{color:#1a1a18;font-weight:600;}
+.toggle-track{width:48px;height:26px;background:#D3D1C7;border-radius:99px;cursor:pointer;position:relative;transition:background 0.2s;border:none;}
+.toggle-track.on{background:#009A97;}
+.toggle-track::after{content:'';position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;left:3px;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.toggle-track.on::after{left:25px;}
+.saving-badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;color:#27AE60;background:#E8F8EF;padding:2px 8px;border-radius:99px;border:0.5px solid #27AE60;}
+
+/* Cards grid */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:stretch;}
+
+.plan-card{background:white;border:0.5px solid #E0DFD8;border-radius:12px;padding:14px;position:relative;transition:box-shadow 0.2s;}
+.plan-card.popular{border:2px solid #009A97;box-shadow:0 4px 24px rgba(0,154,151,0.12);}
+.plan-card.founders{border:2px solid #7F55D4;box-shadow:0 4px 24px rgba(127,85,212,0.12);}
+
+.plan-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:4px 10px;border-radius:99px;margin-bottom:14px;}
+.badge-current{background:#F4F6F8;color:#888780;border:0.5px solid #D3D1C7;}
+.badge-popular{background:#009A97;color:white;}
+.badge-founders{background:linear-gradient(135deg,#7F55D4,#9B59B6);color:white;}
+
+.plan-name{font-size:18px;font-weight:700;color:#1a1a18;margin-bottom:4px;}
+.plan-desc{font-size:11px;color:#888780;line-height:1.4;margin-bottom:14px;}
+
+.plan-price{margin-bottom:20px;}
+.price-amount{font-size:30px;font-weight:800;color:#1a1a18;letter-spacing:-1px;line-height:1;}
+.price-amount span{font-size:16px;font-weight:500;color:#888780;letter-spacing:0;}
+.price-original{font-size:12px;color:#B4B2A9;text-decoration:line-through;margin-top:2px;}
+.price-note{font-size:11px;color:#888780;margin-top:4px;}
+.price-locked{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#7F55D4;background:#F3EEFF;padding:3px 8px;border-radius:6px;margin-top:6px;}
+
+/* CTA buttons */
+.plan-btn{width:100%;height:38px;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;border:none;margin-bottom:20px;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.btn-current{background:#F4F6F8;color:#888780;cursor:default;}
+.btn-upgrade{background:#009A97;color:white;}
+.btn-upgrade:hover{background:#007A77;}
+.btn-founders{background:linear-gradient(135deg,#7F55D4,#9B59B6);color:white;}
+.btn-founders:hover{opacity:0.9;}
+.btn-soldout{background:#F4F6F8;color:#888780;cursor:not-allowed;}
+
+/* Founders countdown */
+.founders-meter{margin-bottom:18px;}
+.founders-meter-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.founders-meter-label{font-size:11px;font-weight:600;color:#7F55D4;}
+.founders-meter-count{font-size:11px;font-weight:700;color:#7F55D4;}
+.founders-bar{height:6px;background:#F3EEFF;border-radius:99px;overflow:hidden;}
+.founders-bar-fill{height:100%;background:linear-gradient(90deg,#7F55D4,#9B59B6);border-radius:99px;transition:width 0.5s;}
+.founders-spots{font-size:11px;color:#7F55D4;font-weight:600;margin-top:5px;}
+
+/* Feature list */
+.feature-group{margin-bottom:14px;}
+.feature-group-label{font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:#B4B2A9;margin-bottom:7px;}
+.feature-item{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:#1a1a18;margin-bottom:5px;line-height:1.4;}
+.feature-item.faint{color:#888780;}
+.fi-check{width:14px;height:14px;border-radius:50%;background:#E0F5F5;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fi-check.purple{background:#F3EEFF;}
+.fi-check svg{flex-shrink:0;}
+.fi-dash{width:14px;height:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#D3D1C7;}
+.feature-divider{height:0.5px;background:#f0f0f0;margin:12px 0;}
+
+/* Telegram badge */
+.tg-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#0088CC;background:#E8F4FF;padding:3px 8px;border-radius:6px;margin-top:2px;}
+
+/* Yearly toggle adjustment */
+.price-yearly{display:none;}
+.price-monthly{display:block;}
+body.yearly .price-yearly{display:block;}
+body.yearly .price-monthly{display:none;}
+body.yearly .saving-badge{opacity:1;}
+
+/* Comparison note */
+.compare-note{text-align:center;margin-top:24px;font-size:12px;color:#888780;}
+
+/* Sold out state */
+.founders-soldout{background:#FEF2F2;border-radius:8px;padding:10px 12px;margin-bottom:16px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <h1 class="page-title">Choose your plan</h1>
+    <p class="page-sub">Start free and upgrade when you're ready to grow your group buy hosting.</p>
+  </div>
+
+  <!-- Billing toggle -->
+  <div class="billing-toggle">
+    <span class="billing-label active" id="lbl-monthly">Monthly</span>
+    <button class="toggle-track" id="billing-toggle" onclick="toggleBilling()"></button>
+    <span class="billing-label" id="lbl-yearly">Yearly <span class="saving-badge" style="margin-left:5px;">Save 20%</span></span>
+  </div>
+
+  <!-- Cards -->
+  <div class="cards">
+
+    <!-- ── BASIC ── -->
+    <div class="plan-card">
+      <div class="plan-badge badge-current">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Your current plan
+      </div>
+      <div class="plan-name">Basic</div>
+      <div class="plan-desc">Everything you need to participate in and start hosting group buys.</div>
+      <div class="plan-price">
+        <div class="price-amount">Free<span></span></div>
+        <div class="price-note">No credit card needed</div>
+      </div>
+      <button class="plan-btn btn-current" disabled>Current Plan</button>
+
+      <div class="feature-group">
+        <div class="feature-group-label">Member</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Browse & join group buys</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Place orders & pay online</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Track purchases & history</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Join multiple groups</div>
+      </div>
+      <div class="feature-divider"></div>
+      <div class="feature-group">
+        <div class="feature-group-label">Hosting</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Create & manage events</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Add products & options</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>View hosted events list</div>
+      </div>
+      </div>
+    </div>
+
+    <!-- ── HOST PRO ── -->
+    <div class="plan-card popular">
+      <div class="plan-badge badge-popular">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Most Popular
+      </div>
+      <div class="plan-name">Host Pro</div>
+      <div class="plan-desc">The full toolkit for serious group buy hosts who want total control.</div>
+      <div class="plan-price">
+        <div class="price-monthly">
+          <div class="price-amount">$45<span>/mo</span></div>
+          <div class="price-note">Billed monthly · cancel anytime</div>
+        </div>
+        <div class="price-yearly">
+          <div class="price-amount">$36<span>/mo</span></div>
+          <div class="price-original">$45/mo</div>
+          <div class="price-note">$432/year · save $108 annually</div>
+        </div>
+      </div>
+      <button class="plan-btn btn-upgrade" onclick="upgrade('pro')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+        Upgrade to Host Pro
+      </button>
+
+      <div class="feature-group">
+        <div class="feature-group-label" style="color:#009A97;font-size:11px;">🔓 Unlocks everything Basic lacks</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Dashboard & analytics</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Full order management</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Fulfilment & delivery map</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Packing lists</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Member management</div>
+      </div>
+      <div class="feature-divider"></div>
+      <div class="feature-group">
+        <div class="feature-group-label">Customisation</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Custom group URL</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Branding & color scheme</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Banner images</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Default item view control</div>
+      </div>
+      <div class="feature-divider"></div>
+      <div class="feature-group">
+        <div class="feature-group-label">Support</div>
+        <div class="feature-item"><div class="fi-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Priority email support</div>
+      </div>
+    </div>
+
+    <!-- ── INNER CIRCLE ── -->
+    <div class="plan-card founders" id="founders-card">
+      <div class="plan-badge badge-founders">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Inner Circle
+      </div>
+      <div class="plan-name">Inner Circle</div>
+      <div class="plan-desc">Founding hosts who believed early. Lock in the best rate — forever.</div>
+
+      <!-- Spot counter -->
+      <div class="founders-meter" id="founders-meter">
+        <div class="founders-meter-top">
+          <span class="founders-meter-label">Founding spots</span>
+          <span class="founders-meter-count" id="spots-count">3 of 20 remaining</span>
+        </div>
+        <div class="founders-bar">
+          <div class="founders-bar-fill" id="spots-bar" style="width:85%;"></div>
+        </div>
+        <div class="founders-spots" id="spots-urgency">⚡ Only 3 spots left — don't miss out</div>
+      </div>
+
+      <div class="plan-price">
+        <div class="price-monthly">
+          <div class="price-amount">$25<span>/mo</span></div>
+          <div class="price-original">$45/mo after Inner Circle closes</div>
+        </div>
+        <div class="price-yearly">
+          <div class="price-amount">$20<span>/mo</span></div>
+          <div class="price-original">$25/mo monthly · $45/mo after</div>
+          <div class="price-note">$240/year · maximum savings</div>
+        </div>
+        <div class="price-locked">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Rate locked for life
+        </div>
+      </div>
+
+      <button class="plan-btn btn-founders" id="founders-btn" onclick="upgrade('founders')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Claim My Inner Circle Spot
+      </button>
+
+      <div class="feature-group">
+        <div class="feature-group-label">Everything in Host Pro, plus</div>
+        <div class="feature-item"><div class="fi-check purple"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#7F55D4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Rate locked forever at $25/mo</div>
+        <div class="feature-item"><div class="fi-check purple"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#7F55D4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div>
+            Direct access to co-bee team
+            <div class="tg-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Telegram · friends@co-bee
+            </div>
+          </div>
+        </div>
+        <div class="feature-item"><div class="fi-check purple"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#7F55D4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Shape the product roadmap</div>
+        <div class="feature-item"><div class="fi-check purple"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#7F55D4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Early access to new features</div>
+        <div class="feature-item"><div class="fi-check purple"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#7F55D4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Inner Circle badge on profile</div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="compare-note">All plans include SSL, unlimited events, unlimited orders, and free updates. No hidden fees.</p>
+
+</div>
+
+<script>
+var isYearly = false;
+var spotsLeft = 3;
+var totalSpots = 20;
+
+function toggleBilling() {
+  isYearly = !isYearly;
+  var toggle = document.getElementById('billing-toggle');
+  var lblM = document.getElementById('lbl-monthly');
+  var lblY = document.getElementById('lbl-yearly');
+  toggle.classList.toggle('on', isYearly);
+  lblM.classList.toggle('active', !isYearly);
+  lblY.classList.toggle('active', isYearly);
+  document.body.classList.toggle('yearly', isYearly);
+}
+
+function upgrade(tier) {
+  if (tier === 'founders' && spotsLeft <= 0) return;
+  var msg = tier === 'founders'
+    ? 'Claiming your Inner Circle spot...'
+    : 'Upgrading to Host Pro...';
+  alert(msg + '\n\nIn production this opens the payment flow.');
+}
+
+// Initialise spot bar
+(function() {
+  var taken = totalSpots - spotsLeft;
+  var pct = (taken / totalSpots) * 100;
+  document.getElementById('spots-bar').style.width = pct + '%';
+  document.getElementById('spots-count').textContent = spotsLeft + ' of ' + totalSpots + ' remaining';
+  if (spotsLeft <= 5) {
+    document.getElementById('spots-urgency').textContent = '⚡ Only ' + spotsLeft + ' spot' + (spotsLeft === 1 ? '' : 's') + ' left — don\'t miss out';
+  }
+  if (spotsLeft <= 0) {
+    document.getElementById('founders-btn').className = 'plan-btn btn-soldout';
+    document.getElementById('founders-btn').textContent = 'Inner Circle is Full';
+    document.getElementById('founders-btn').disabled = true;
+    document.getElementById('spots-urgency').textContent = '🔒 All 20 founding spots have been claimed';
+    document.getElementById('spots-urgency').style.color = '#888780';
+  }
+})();
+</script>
+</body>
+</html>
