@@ -1197,6 +1197,35 @@ select:focus { border-color: #009A97; }
 .add-item-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border: 0.5px dashed #80CCCB; border-radius: 10px; cursor: pointer; background: #FAFAF8; font-size: 13px; font-weight: 600; color: #009A97; transition: background 0.12s; }
 .add-item-btn:hover { background: #E0F5F5; }
 
+
+/* ── ITEM VIEW TOGGLE ── */
+.view-toggle-btn { width:30px;height:30px;border-radius:7px;border:0.5px solid #D3D1C7;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888780;transition:all 0.12s;flex-shrink:0; }
+.view-toggle-btn.active { background:#009A97;border-color:#009A97;color:white; }
+.view-toggle-btn:hover:not(.active) { border-color:#009A97;color:#009A97; }
+
+/* TILE view grid */
+.items-tile-grid { display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 14px; }
+.item-tile { background:white;border:0.5px solid #E0DFD8;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:border-color 0.15s; }
+.item-tile:hover { border-color:#009A97; }
+.tile-img { width:100%;aspect-ratio:1;background:#E0F5F5;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.tile-body { padding:10px;display:flex;flex-direction:column;gap:5px;flex:1; }
+.tile-name { font-size:12px;font-weight:600;color:#1a1a18;line-height:1.3; }
+.tile-price { font-size:13px;font-weight:700;color:#009A97; }
+.tile-desc { font-size:10px;color:#888780;line-height:1.4; }
+.tile-options { display:flex;flex-direction:column;gap:4px;margin-top:2px; }
+.tile-opt-label { font-size:9px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase; }
+.tile-opt-pills { display:flex;gap:4px;flex-wrap:wrap; }
+.tile-opt-pill { font-size:10px;padding:2px 7px;border-radius:99px;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-family:inherit;transition:all 0.1s; }
+.tile-opt-pill:hover,.tile-opt-pill.sel { background:#009A97;border-color:#009A97;color:white; }
+.tile-req { font-size:9px;color:#E24B4A;font-weight:500; }
+.tile-footer { padding:8px 10px;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;gap:6px; }
+.tile-orders { font-size:10px;color:#B4B2A9; }
+.tile-stepper { display:flex;align-items:center;gap:6px; }
+.tile-stepper button { width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1;font-family:inherit;display:flex;align-items:center;justify-content:center; }
+.tile-stepper .btn-minus { border:0.5px solid #D3D1C7;background:white;color:#1a1a18; }
+.tile-stepper .btn-plus { border:none;background:#009A97;color:white; }
+.tile-stepper span { font-size:13px;font-weight:700;min-width:16px;text-align:center;color:#1a1a18; }
+
 </style>
 </head>
 <body>
@@ -1249,9 +1278,105 @@ select:focus { border-color: #009A97; }
 
       <!-- All items in one card -->
       <div style="background:white;border-radius:14px;border:0.5px solid #e0dfd8;margin:10px 14px 0;overflow:hidden;">
-        <div style="padding:12px 14px 8px;border-bottom:0.5px solid #f0f0f0;">
+        <div style="padding:10px 14px;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;">
           <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;">ITEMS</div>
+          <div style="display:flex;gap:5px;">
+            <button class="view-toggle-btn active" id="btn-list-view" onclick="setItemView('list')" title="List view">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            </button>
+            <button class="view-toggle-btn" id="btn-tile-view" onclick="setItemView('tile')" title="Tile view">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </button>
+          </div>
         </div>
+        <!-- TILE VIEW (hidden by default) -->
+        <div id="items-tile-view" style="display:none;">
+          <div class="items-tile-grid">
+
+            <!-- Tile: Spec -->
+            <div class="item-tile">
+              <div class="tile-img"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+              <div class="tile-body">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;flex-wrap:wrap;">
+                  <div class="tile-name">Spec</div>
+                  <div class="tile-price">$20.00</div>
+                </div>
+                <div class="tile-desc">Good Spec from Vietnam</div>
+                <div class="tile-options">
+                  <div class="tile-opt-label">Frame <span style="color:#009A97;">+$10</span> <span class="tile-req">*</span></div>
+                  <div class="tile-opt-pills">
+                    <button class="tile-opt-pill" onclick="tilePill(this,'t-spec-frame')">Blue</button>
+                    <button class="tile-opt-pill" onclick="tilePill(this,'t-spec-frame')">Red</button>
+                    <button class="tile-opt-pill" onclick="tilePill(this,'t-spec-frame')">Green</button>
+                  </div>
+                  <div class="tile-opt-label">Lens <span style="color:#009A97;">+$5</span> <span class="tile-req">*</span></div>
+                  <div class="tile-opt-pills">
+                    <button class="tile-opt-pill" onclick="tilePill(this,'t-spec-lens')">Clear</button>
+                    <button class="tile-opt-pill" onclick="tilePill(this,'t-spec-lens')">Tinted</button>
+                  </div>
+                </div>
+              </div>
+              <div class="tile-footer">
+                <span class="tile-orders">0 ordered</span>
+                <div class="tile-stepper">
+                  <button class="btn-minus" onclick="changeQty2('tp1',-1)">−</button>
+                  <span id="tp1">0</span>
+                  <button class="btn-plus" onclick="changeQty2('tp1',1)">+</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tile: Chestnut -->
+            <div class="item-tile">
+              <div class="tile-img" style="background:#FEF2DC;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+              <div class="tile-body">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;flex-wrap:wrap;">
+                  <div class="tile-name">Chestnut</div>
+                  <div class="tile-price">$10.00</div>
+                </div>
+                <div class="tile-desc">Fresh chestnuts, per pack</div>
+                <div class="tile-options">
+                  <div class="tile-opt-label">Size</div>
+                  <div class="tile-opt-pills">
+                    <button class="tile-opt-pill" onclick="tilePill(this,'t-chest-size')">Small</button>
+                    <button class="tile-opt-pill" onclick="tilePill(this,'t-chest-size')">Large</button>
+                  </div>
+                </div>
+              </div>
+              <div class="tile-footer">
+                <span class="tile-orders">3 ordered</span>
+                <div class="tile-stepper">
+                  <button class="btn-minus" onclick="changeQty2('tp2',-1)">−</button>
+                  <span id="tp2">0</span>
+                  <button class="btn-plus" onclick="changeQty2('tp2',1)">+</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tile: Toothpaste -->
+            <div class="item-tile">
+              <div class="tile-img" style="background:#E8F8EF;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+              <div class="tile-body">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;flex-wrap:wrap;">
+                  <div class="tile-name">Toothpaste</div>
+                  <div class="tile-price">$2.00</div>
+                </div>
+                <div class="tile-desc">Whitening toothpaste</div>
+              </div>
+              <div class="tile-footer">
+                <span class="tile-orders">5 ordered</span>
+                <div class="tile-stepper">
+                  <button class="btn-minus" onclick="changeQty2('tp3',-1)">−</button>
+                  <span id="tp3">0</span>
+                  <button class="btn-plus" onclick="changeQty2('tp3',1)">+</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- LIST VIEW (original, shown by default) -->
+        <div id="items-list-view">
 
         <!-- Item 1: Spec with 2 options -->
         <div id="spec-entries" style="border-bottom:0.5px solid #f0f0f0;">
@@ -3737,6 +3862,30 @@ function showPaymentFlow() {
 
 
 
+
+
+function setItemView(mode) {
+  var listView = document.getElementById('items-list-view');
+  var tileView = document.getElementById('items-tile-view');
+  var btnList = document.getElementById('btn-list-view');
+  var btnTile = document.getElementById('btn-tile-view');
+  if (!listView || !tileView) return;
+  if (mode === 'tile') {
+    listView.style.display = 'none';
+    tileView.style.display = 'block';
+    btnList.classList.remove('active');
+    btnTile.classList.add('active');
+  } else {
+    listView.style.display = 'block';
+    tileView.style.display = 'none';
+    btnList.classList.add('active');
+    btnTile.classList.remove('active');
+  }
+}
+function tilePill(btn, group) {
+  btn.closest('.tile-opt-pills').querySelectorAll('.tile-opt-pill').forEach(function(p){ p.classList.remove('sel'); });
+  btn.classList.add('sel');
+}
 
 function showGroupDetail(groupName) {
   // Hide all views
