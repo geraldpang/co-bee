@@ -201,6 +201,7 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
 <!-- ═══════════ APPEARANCE ═══════════ -->
 <div id="tab-appearance" class="tab-content">
 
+
   <!-- Banner -->
   <div class="section">
     <div class="section-header"><span class="section-title">Banner Images</span></div>
@@ -317,6 +318,52 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
         Reset to Default
       </button>
+    </div>
+  </div>
+
+
+  <!-- Default Item View -->
+  <div class="section">
+    <div class="section-header"><span class="section-title">Default Item View</span></div>
+    <div class="section-body" style="padding:14px 18px;">
+      <div style="font-size:11px;color:#888780;margin-bottom:12px;">How products appear by default when members open an event. Members can still switch while browsing.</div>
+      <div style="display:flex;gap:10px;">
+
+        <div class="setting-card selected" id="view-opt-list" onclick="selectViewDefault('list')" style="flex:1;padding:10px;">
+          <div class="setting-card-check on"></div>
+          <div style="flex:1;">
+            <div class="setting-card-title" style="font-size:12px;">List</div>
+            <div style="margin-top:7px;display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;align-items:center;gap:4px;background:#F4F6F8;border-radius:4px;padding:4px 5px;">
+                <div style="width:16px;height:16px;border-radius:3px;background:#E0F5F5;flex-shrink:0;"></div>
+                <div style="flex:1;"><div style="height:4px;background:#D3D1C7;border-radius:2px;width:70%;"></div></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:4px;background:#F4F6F8;border-radius:4px;padding:4px 5px;">
+                <div style="width:16px;height:16px;border-radius:3px;background:#FEF2DC;flex-shrink:0;"></div>
+                <div style="flex:1;"><div style="height:4px;background:#D3D1C7;border-radius:2px;width:55%;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="setting-card" id="view-opt-tile" onclick="selectViewDefault('tile')" style="flex:1;padding:10px;">
+          <div class="setting-card-check"></div>
+          <div style="flex:1;">
+            <div class="setting-card-title" style="font-size:12px;">Tile</div>
+            <div style="margin-top:7px;display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+              <div style="background:#F4F6F8;border-radius:4px;overflow:hidden;">
+                <div style="height:18px;background:#E0F5F5;"></div>
+                <div style="padding:3px;"><div style="height:4px;background:#D3D1C7;border-radius:2px;"></div></div>
+              </div>
+              <div style="background:#F4F6F8;border-radius:4px;overflow:hidden;">
+                <div style="height:18px;background:#FEF2DC;"></div>
+                <div style="padding:3px;"><div style="height:4px;background:#D3D1C7;border-radius:2px;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -666,6 +713,16 @@ function updateTitlePreview(id, val) {
   if (!box || !text) return;
   if (id === 'topbar') box.style.background = val;
   if (id === 'header') text.style.color = val;
+}
+function selectViewDefault(mode) {
+  var listCard = document.getElementById('view-opt-list');
+  var tileCard = document.getElementById('view-opt-tile');
+  if (!listCard || !tileCard) return;
+  var isList = mode === 'list';
+  listCard.classList.toggle('selected', isList);
+  listCard.querySelector('.setting-card-check').classList.toggle('on', isList);
+  tileCard.classList.toggle('selected', !isList);
+  tileCard.querySelector('.setting-card-check').classList.toggle('on', !isList);
 }
 function previewTitle(val) {
   document.getElementById('site-title-preview').textContent = val || 'co·bee';
