@@ -138,6 +138,10 @@ select:focus { border-color: #009A97; }
 
 /* Toggle items */
 .toggle-item { border: 0.5px solid #e0dfd8; border-radius: 8px; overflow: hidden; }
+.toggle-item + .toggle-item { border-top: none; border-radius: 0; }
+.toggle-item:first-child { border-radius: 8px 8px 0 0; }
+.toggle-item:last-child { border-radius: 0 0 8px 8px; }
+.toggle-item:only-child { border-radius: 8px; }
 .toggle-row { display: flex; align-items: center; gap: 10px; padding: 11px 12px; cursor: pointer; }
 .toggle-lbl { font-size: 13px; font-weight: 500; color: #1a1a18; flex: 1; }
 .toggle-sw { width: 34px; height: 20px; border-radius: 99px; background: #D3D1C7; position: relative; transition: background 0.2s; flex-shrink: 0; pointer-events: none; }
@@ -493,49 +497,62 @@ select:focus { border-color: #009A97; }
       <div class="form-card" style="padding:0;gap:0;">
         <div class="section-collapse-hd" onclick="toggleSection(this)">
           <span class="form-card-title" style="margin:0;">Payment options</span>
-          <svg class="collapse-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="collapse-chevron open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="section-collapse-body">
-          <div style="padding:0 14px 12px;display:flex;flex-direction:column;gap:10px;">
+        <div class="section-collapse-body open">
+          <div style="padding:0 14px 12px;display:flex;flex-direction:column;gap:0;">
 
-            <div class="check-option" onclick="toggleCheck(this)">
-              <div class="check-top">
-                <div class="check-box"></div>
-                <span class="check-lbl">Payment after closing date</span>
-              </div>
-              <div class="check-desc">Host distributes delivery cost and consolidates discount at event close. Set amounts in Host Dashboard.</div>
-            </div>
-
-            <div class="check-option on" onclick="toggleCheck(this)">
-              <div class="check-top">
-                <div class="check-box on">
-                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            <!-- Payment after closing date -->
+            <div class="toggle-item">
+              <div class="toggle-row" onclick="toggleSwitch(this)">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Payment after closing date</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Host distributes delivery cost and consolidates discount at event close.</div>
                 </div>
-                <span class="check-lbl">Pay together</span>
-              </div>
-              <div class="check-desc">Members can pay for multiple events at once via Pay Together.</div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Admin fee per order</label>
-              <div class="fee-row">
-                <span class="fee-prefix">$</span>
-                <input type="number" value="0.00" step="0.50" min="0" style="width:90px;text-align:right;" />
-                <span style="font-size:13px;color:#888780;">per order</span>
+                <div class="toggle-sw"></div>
               </div>
             </div>
 
-            <!-- DISCOUNT TIERS -->
-            <div style="border-top:0.5px solid #f0f0f0;padding-top:10px;">
-              <div class="discount-toggle-row">
-                <div>
-                  <div class="discount-toggle-lbl">Order discounts</div>
-                  <div style="font-size:11px;color:#888780;margin-top:2px;">Auto-applied per order based on individual spend</div>
+            <!-- Pay together -->
+            <div class="toggle-item" style="border-top:none;">
+              <div class="toggle-row" onclick="toggleSwitch(this)">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Pay together</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Members can pay for multiple events at once via Pay Together.</div>
                 </div>
-                <div class="toggle-sw" id="discount-toggle-sw" onclick="toggleDiscountSection()" style="cursor:pointer;"></div>
+                <div class="toggle-sw on"></div>
               </div>
-              <div id="discount-section" style="display:none;">
-                <div class="discount-body">
+            </div>
+
+            <!-- Admin fee per order -->
+            <div class="toggle-item" style="border-top:none;">
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="admin-fee-toggle-row">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Admin fee per order</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Charge a fixed fee on each member's order.</div>
+                </div>
+                <div class="toggle-sw"></div>
+              </div>
+              <div class="toggle-body">
+                <div class="fee-row" style="margin-top:4px;">
+                  <span class="fee-prefix">$</span>
+                  <input type="number" id="admin-fee-input" value="0.00" step="0.50" min="0" style="width:90px;text-align:right;" />
+                  <span style="font-size:13px;color:#888780;">per order</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Order discounts -->
+            <div class="toggle-item" style="border-top:none;">
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="discount-toggle-row">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Order discounts</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Auto-applied per order based on individual spend or quantity.</div>
+                </div>
+                <div class="toggle-sw" id="discount-toggle-sw"></div>
+              </div>
+              <div class="toggle-body" id="discount-section">
+                <div class="discount-body" style="margin-top:4px;">
                   <div id="tiers-list"></div>
                   <div id="add-tier-wrap">
                     <div class="add-tier-link" onclick="openNewTierForm()">
@@ -548,20 +565,19 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
 
-            <!-- GROUP MILESTONE DISCOUNT -->
-            <div style="border-top:0.5px solid #f0f0f0;padding-top:10px;">
-              <div class="discount-toggle-row">
-                <div>
-                  <div class="discount-toggle-lbl">Group milestone discount</div>
-                  <div style="font-size:11px;color:#888780;margin-top:2px;">Unlocks for everyone when the group hits a target</div>
+            <!-- Group milestone discount -->
+            <div class="toggle-item" style="border-top:none;">
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="milestone-toggle-row">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Group milestone discount</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Unlocks for everyone when the group hits a target.</div>
                 </div>
-                <div class="toggle-sw" id="milestone-toggle-sw" onclick="toggleMilestoneSection()" style="cursor:pointer;"></div>
+                <div class="toggle-sw" id="milestone-toggle-sw"></div>
               </div>
+              <div class="toggle-body" id="milestone-section">
+                <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
 
-              <div id="milestone-section" style="display:none;">
-                <div style="display:flex;flex-direction:column;gap:10px;margin-top:2px;">
-
-                  <!-- Condition row -->
+                  <!-- Condition -->
                   <div>
                     <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Unlock when</div>
                     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
@@ -571,12 +587,12 @@ select:focus { border-color: #009A97; }
                       </div>
                       <span style="font-size:12px;color:#888780;">reaches</span>
                       <span class="tier-prefix" id="ms-cond-prefix">$</span>
-                      <input class="tier-amt-input" type="number" id="ms-condVal" min="1" step="50" placeholder="500" oninput="validateMilestone();updateMilestonePreview()" style="width:90px;" />
+                      <input class="tier-amt-input" type="number" id="ms-condVal" min="1" step="50" placeholder="500" oninput="updateMilestonePreview()" style="width:90px;" />
                       <span style="font-size:12px;color:#888780;" id="ms-cond-suffix"></span>
                     </div>
                   </div>
 
-                  <!-- Discount row -->
+                  <!-- Reward -->
                   <div>
                     <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Reward (applied to all orders)</div>
                     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
@@ -585,12 +601,12 @@ select:focus { border-color: #009A97; }
                         <button class="type-pill" id="ms-pill-pct" onclick="setMilestoneDiscType('pct')">% Percentage</button>
                       </div>
                       <span class="tier-prefix" id="ms-disc-prefix">$</span>
-                      <input class="tier-amt-input" type="number" id="ms-discAmt" min="0" step="0.5" placeholder="5.00" oninput="validateMilestone();updateMilestonePreview()" style="width:80px;" />
+                      <input class="tier-amt-input" type="number" id="ms-discAmt" min="0" step="0.5" placeholder="5.00" oninput="updateMilestonePreview()" style="width:80px;" />
                       <span style="font-size:12px;color:#888780;" id="ms-disc-suffix"></span>
                     </div>
                   </div>
 
-                  <!-- Cap row (% only) -->
+                  <!-- Cap (% only) -->
                   <div id="ms-cap-row" style="display:none;">
                     <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Cap (optional)</div>
                     <div class="cap-row">
@@ -607,7 +623,6 @@ select:focus { border-color: #009A97; }
                   <div id="ms-preview-wrap" style="display:none;">
                     <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;">Preview — how members see this</div>
                     <div class="ms-preview-card">
-                      <!-- In-progress state -->
                       <div id="ms-preview-progress">
                         <div class="ms-preview-header">
                           <span class="ms-preview-icon">🎯</span>
@@ -627,12 +642,10 @@ select:focus { border-color: #009A97; }
                         </div>
                         <div style="font-size:11px;color:#888780;margin-top:4px;" id="ms-prev-reward-line">Reward: 10% off for everyone once unlocked</div>
                       </div>
-                      <!-- Unlocked state toggle for preview -->
-                      <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid #e0f5f5;display:flex;align-items:center;gap:6px;">
+                      <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid #c8e8e8;display:flex;align-items:center;gap:6px;">
                         <span style="font-size:10px;color:#888780;">Preview unlocked state:</span>
-                        <div class="toggle-sw" id="ms-unlock-demo-sw" onclick="toggleMilestoneUnlockDemo()" style="cursor:pointer;width:28px;height:16px;"></div>
+                        <div class="toggle-sw" id="ms-unlock-demo-sw" onclick="toggleMilestoneUnlockDemo()" style="cursor:pointer;width:28px;height:16px;flex-shrink:0;"></div>
                       </div>
-                      <!-- Unlocked banner (hidden by default in preview) -->
                       <div id="ms-preview-unlocked" style="display:none;margin-top:10px;">
                         <div class="ms-unlocked-banner">
                           <div style="font-size:18px;text-align:center;margin-bottom:4px;">🎉</div>
@@ -1444,18 +1457,7 @@ var discountTiers = [];   // [{id, condType, condVal, discType, discAmt, capAmt,
 var tierIdSeq = 0;
 var editingTierId = null; // null = new, number = editing existing
 
-/* Toggle the discount section on/off */
-function toggleDiscountSection() {
-  var sw = document.getElementById('discount-toggle-sw');
-  var section = document.getElementById('discount-section');
-  sw.classList.toggle('on');
-  var isOn = sw.classList.contains('on');
-  section.style.display = isOn ? 'block' : 'none';
-  if (!isOn) {
-    // Close any open form without saving
-    closeTierForm();
-  }
-}
+/* toggleDiscountSection now handled by toggleSwitch via toggle-item pattern */
 
 /* ── Render all tier summaries ── */
 function renderTiers() {
@@ -1484,7 +1486,7 @@ function renderTiers() {
   checkTierWarnings();
 
   // Hide "Add tier" link if 4 tiers or form is open
-  var formOpen = document.getElementById('tier-form-wrap').style.display !== 'none';
+  var formOpen = document.getElementById('tier-form-wrap').innerHTML.trim() !== '';
   if (discountTiers.length >= 4 || formOpen) {
     addWrap.innerHTML = discountTiers.length >= 4
       ? '<div class="add-tier-limit">Maximum 4 tiers reached.</div>'
@@ -1722,27 +1724,41 @@ function generateDiscountNote() {
 
 function capitalise(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
-/* ── Write generated note into the Additional Notes textarea ── */
+function getNotesTextarea() {
+  // Find the "Important notes to buyers" textarea in Additional Options
+  var tas = document.querySelectorAll('#step-1 textarea');
+  for (var i = 0; i < tas.length; i++) {
+    if (tas[i].placeholder && tas[i].placeholder.indexOf('Notes buyers') > -1) return tas[i];
+  }
+  return null;
+}
+
+function getNotesToggleRow() {
+  var tas = document.querySelectorAll('#step-1 .toggle-item');
+  for (var i = 0; i < tas.length; i++) {
+    var lbl = tas[i].querySelector('.toggle-lbl');
+    if (lbl && lbl.textContent.indexOf('Important notes') > -1) return tas[i];
+  }
+  return null;
+}
 function syncDiscountToNotes() {
-  // Enable the "Important notes to buyers" toggle if it isn't already
-  var notesToggle = document.querySelector('#step-1 .toggle-item .toggle-sw');
-  var notesBody = document.querySelector('#step-1 .toggle-item .toggle-body');
-  var notesTA = notesBody ? notesBody.querySelector('textarea') : null;
-  if (!notesTA) return;
+  var notesItem = getNotesToggleRow();
+  var notesTA   = getNotesTextarea();
+  if (!notesTA || !notesItem) return;
 
   var generatedNote = generateDiscountNote();
 
-  // If there are tiers, ensure the notes toggle is ON
-  if (discountTiers.length > 0 && notesBody && !notesBody.classList.contains('open')) {
-    notesToggle.classList.add('on');
-    notesBody.classList.add('open');
+  if (discountTiers.length > 0) {
+    var sw   = notesItem.querySelector('.toggle-sw');
+    var body = notesItem.querySelector('.toggle-body');
+    if (sw && body && !body.classList.contains('open')) {
+      sw.classList.add('on');
+      body.classList.add('open');
+    }
   }
 
-  // Replace or prepend the discount line (preserve any manual edits below it)
   var existing = notesTA.value;
   var discMarker = '<!-- discount -->';
-
-  // We prepend the discount sentence with a marker so we can replace it cleanly
   if (existing.startsWith(discMarker)) {
     var afterMarker = existing.indexOf('\n', discMarker.length);
     var rest = afterMarker > -1 ? existing.slice(afterMarker + 1) : '';
@@ -1765,15 +1781,7 @@ function syncDiscountToNotes() {
 var milestoneCondType = 'revenue'; // 'revenue' | 'orders'
 var milestoneDiscType = 'fixed';   // 'fixed' | 'pct'
 
-function toggleMilestoneSection() {
-  var sw = document.getElementById('milestone-toggle-sw');
-  var section = document.getElementById('milestone-section');
-  sw.classList.toggle('on');
-  section.style.display = sw.classList.contains('on') ? 'block' : 'none';
-  if (!sw.classList.contains('on')) {
-    document.getElementById('ms-preview-wrap').style.display = 'none';
-  }
-}
+/* toggleMilestoneSection now handled by toggleSwitch via toggle-item pattern */
 
 function setMilestoneCondType(type) {
   milestoneCondType = type;
@@ -1896,14 +1904,15 @@ function syncMilestoneToNotes() {
 
   var sentence = 'Group milestone: When ' + targetLabel + ', everyone gets ' + rewardLabel + ' automatically!';
 
-  var notesToggle = document.querySelector('#step-1 .toggle-item .toggle-sw');
-  var notesBody   = document.querySelector('#step-1 .toggle-item .toggle-body');
-  var notesTA     = notesBody ? notesBody.querySelector('textarea') : null;
-  if (!notesTA) return;
+  var notesItem = getNotesToggleRow();
+  var notesTA   = getNotesTextarea();
+  if (!notesTA || !notesItem) return;
 
-  if (notesBody && !notesBody.classList.contains('open')) {
-    notesToggle.classList.add('on');
-    notesBody.classList.add('open');
+  var sw   = notesItem.querySelector('.toggle-sw');
+  var body = notesItem.querySelector('.toggle-body');
+  if (sw && body && !body.classList.contains('open')) {
+    sw.classList.add('on');
+    body.classList.add('open');
   }
 
   var marker  = '<!-- milestone -->';
