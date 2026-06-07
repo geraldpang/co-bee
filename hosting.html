@@ -563,13 +563,13 @@ select:focus { border-color: #009A97; }
               <div class="toggle-body" id="discount-section">
                 <div class="discount-body" style="margin-top:4px;">
                   <div id="tiers-list"></div>
+                  <div id="tier-form-wrap" style="display:none;"></div>
                   <div id="add-tier-wrap">
                     <div class="add-tier-link" onclick="openNewTierForm()">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
                       Add discount tier
                     </div>
                   </div>
-                  <div id="tier-form-wrap" style="display:none;"></div>
                 </div>
               </div>
             </div>
@@ -1386,6 +1386,10 @@ function toggleSwitch(row) {
   if (row.id === 'discount-toggle-row' && sw.classList.contains('on')) {
     if (discountTiers.length === 0) openNewTierForm();
   }
+  // Refresh milestone preview when milestone toggle is switched on
+  if (row.id === 'milestone-toggle-row' && sw.classList.contains('on')) {
+    updateMilestonePreview();
+  }
 }
 
 /* ── CHECKBOX ── */
@@ -1503,17 +1507,13 @@ function renderTiers() {
   // Show tier warning if needed
   checkTierWarnings();
 
-  // Hide "Add tier" link if 4 tiers or form is open
-  var formOpen = document.getElementById('tier-form-wrap').innerHTML.trim() !== '';
-  if (discountTiers.length >= 4 || formOpen) {
-    addWrap.innerHTML = discountTiers.length >= 4
-      ? '<div class="add-tier-limit">Maximum 4 tiers reached.</div>'
-      : '';
-  } else {
-    addWrap.innerHTML = '<div class="add-tier-link" onclick="openNewTierForm()">'
+  // Update add-tier-wrap: show link, grey it out at cap
+  var atCap = discountTiers.length >= 4;
+  addWrap.innerHTML = atCap
+    ? '<div class="add-tier-limit">Maximum 4 tiers reached.</div>'
+    : '<div class="add-tier-link" onclick="openNewTierForm()">'
       + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>'
       + ' Add discount tier</div>';
-  }
 }
 
 /* Human-readable summary for a tier */
@@ -1646,7 +1646,6 @@ function renderTierForm(defaults) {
     + '</div>'
     + '</div>';
 
-  document.getElementById('add-tier-wrap').innerHTML = '';
   validateTierForm();
 }
 
