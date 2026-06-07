@@ -267,6 +267,135 @@ select:focus { border-color: #009A97; }
 .cat-add-btn:hover { background:#007A77; }
 .cat-add-btn:disabled { background:#D3D1C7;cursor:not-allowed; }
 
+/* ── DISCOUNT TIERS ── */
+.discount-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0 6px;
+}
+.discount-toggle-lbl { font-size: 13px; font-weight: 600; color: #1a1a18; }
+.discount-body { display: flex; flex-direction: column; gap: 8px; }
+
+/* Tier summary pill */
+.tier-summary {
+  display: flex; align-items: center; gap: 8px;
+  background: #E0F5F5; border: 0.5px solid #80CCCB;
+  border-radius: 8px; padding: 8px 10px;
+  animation: tierFadeIn 0.18s ease;
+}
+@keyframes tierFadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+.tier-tag { font-size: 13px; }
+.tier-text { flex: 1; font-size: 12px; font-weight: 500; color: #007A77; line-height: 1.4; }
+.tier-action-btns { display: flex; gap: 4px; flex-shrink: 0; }
+.tier-edit-btn, .tier-del-btn {
+  width: 24px; height: 24px; border-radius: 6px; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background 0.12s;
+}
+.tier-edit-btn { background: white; color: #009A97; border: 0.5px solid #80CCCB; }
+.tier-edit-btn:hover { background: #f0fafa; }
+.tier-del-btn { background: white; color: #B4B2A9; border: 0.5px solid #e0dfd8; }
+.tier-del-btn:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
+
+/* Tier edit form (inline) */
+.tier-form {
+  background: #FAFAF8; border: 0.5px solid #D3D1C7; border-radius: 10px;
+  padding: 12px; display: flex; flex-direction: column; gap: 10px;
+  animation: tierFadeIn 0.18s ease;
+}
+.tier-form-title { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; }
+.tier-field-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.tier-field-lbl { font-size: 12px; color: #888780; white-space: nowrap; }
+.tier-select {
+  height: 32px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 24px 0 8px; font-size: 12px; font-family: inherit;
+  color: #1a1a18; outline: none; background: white;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 8px center;
+  transition: border-color 0.15s; cursor: pointer;
+}
+.tier-select:focus { border-color: #009A97; }
+.tier-amt-input {
+  height: 32px; width: 80px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 8px; font-size: 13px; font-family: inherit; font-weight: 600;
+  color: #1a1a18; outline: none; background: white; text-align: right;
+  transition: border-color 0.15s;
+}
+.tier-amt-input:focus { border-color: #009A97; }
+.tier-prefix { font-size: 13px; font-weight: 600; color: #888780; }
+
+/* Type toggle pills */
+.type-toggle { display: flex; gap: 0; border: 0.5px solid #D3D1C7; border-radius: 6px; overflow: hidden; }
+.type-pill {
+  flex: 1; height: 32px; border: none; font-size: 12px; font-weight: 600;
+  font-family: inherit; cursor: pointer; background: white; color: #888780;
+  transition: background 0.12s, color 0.12s;
+}
+.type-pill.active { background: #009A97; color: white; }
+.type-pill:first-child { border-right: 0.5px solid #D3D1C7; }
+
+/* Cap row */
+.cap-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cap-check-lbl { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #888780; cursor: pointer; }
+.cap-check-lbl input[type="checkbox"] { accent-color: #009A97; width: 13px; height: 13px; }
+
+/* Tier form footer */
+.tier-form-footer { display: flex; justify-content: flex-end; gap: 8px; border-top: 0.5px solid #e0dfd8; padding-top: 10px; margin-top: 2px; }
+.tier-cancel-btn {
+  height: 32px; padding: 0 14px; background: white; border: 0.5px solid #D3D1C7;
+  border-radius: 8px; font-size: 12px; font-weight: 600; color: #888780;
+  cursor: pointer; font-family: inherit; transition: background 0.12s;
+}
+.tier-cancel-btn:hover { background: #f4f4f4; }
+.tier-save-btn {
+  height: 32px; padding: 0 16px; background: #009A97; border: none;
+  border-radius: 8px; font-size: 12px; font-weight: 600; color: white;
+  cursor: pointer; font-family: inherit; transition: background 0.12s;
+}
+.tier-save-btn:hover { background: #007A77; }
+.tier-save-btn:disabled { background: #D3D1C7; cursor: not-allowed; }
+
+/* Add tier link */
+.add-tier-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; color: #009A97; cursor: pointer;
+  padding: 4px 0;
+}
+.add-tier-link:hover { color: #007A77; }
+.add-tier-limit { font-size: 11px; color: #B4B2A9; }
+
+/* Warning */
+.tier-warning { font-size: 11px; color: #E8971A; background: #FEF2DC; border-radius: 6px; padding: 6px 10px; line-height: 1.5; }
+
+/* ── GROUP MILESTONE PREVIEW ── */
+.ms-preview-card {
+  background: #E0F5F5; border: 0.5px solid #80CCCB;
+  border-radius: 10px; padding: 12px 12px 10px;
+}
+.ms-preview-header { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+.ms-preview-icon { font-size: 18px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+.ms-preview-title { font-size: 13px; font-weight: 700; color: #007A77; line-height: 1.3; }
+.ms-preview-sub { font-size: 11px; color: #009A97; margin-top: 2px; }
+.ms-bar-wrap { display: flex; flex-direction: column; gap: 4px; }
+.ms-bar-track {
+  height: 7px; background: rgba(0,154,151,0.18); border-radius: 99px; overflow: hidden;
+}
+.ms-bar-fill {
+  height: 100%; background: #009A97; border-radius: 99px;
+  transition: width 0.4s ease;
+}
+.ms-bar-labels { display: flex; justify-content: space-between; }
+.ms-bar-current { font-size: 11px; font-weight: 600; color: #007A77; }
+.ms-bar-target { font-size: 11px; color: #80CCCB; }
+
+/* Unlocked banner */
+.ms-unlocked-banner {
+  background: linear-gradient(135deg, #009A97 0%, #007A77 100%);
+  border-radius: 8px; padding: 14px 14px 12px; text-align: center;
+  animation: msUnlock 0.3s ease;
+}
+@keyframes msUnlock { from { opacity:0; transform:scale(0.96); } to { opacity:1; transform:scale(1); } }
+.ms-unlocked-title { font-size: 14px; font-weight: 700; color: white; margin-bottom: 3px; }
+.ms-unlocked-sub { font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.4; }
 
 </style>
 </head>
@@ -393,6 +522,128 @@ select:focus { border-color: #009A97; }
                 <span class="fee-prefix">$</span>
                 <input type="number" value="0.00" step="0.50" min="0" style="width:90px;text-align:right;" />
                 <span style="font-size:13px;color:#888780;">per order</span>
+              </div>
+            </div>
+
+            <!-- DISCOUNT TIERS -->
+            <div style="border-top:0.5px solid #f0f0f0;padding-top:10px;">
+              <div class="discount-toggle-row">
+                <div>
+                  <div class="discount-toggle-lbl">Order discounts</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;">Auto-applied per order based on individual spend</div>
+                </div>
+                <div class="toggle-sw" id="discount-toggle-sw" onclick="toggleDiscountSection()" style="cursor:pointer;"></div>
+              </div>
+              <div id="discount-section" style="display:none;">
+                <div class="discount-body">
+                  <div id="tiers-list"></div>
+                  <div id="add-tier-wrap">
+                    <div class="add-tier-link" onclick="openNewTierForm()">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+                      Add discount tier
+                    </div>
+                  </div>
+                  <div id="tier-form-wrap" style="display:none;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- GROUP MILESTONE DISCOUNT -->
+            <div style="border-top:0.5px solid #f0f0f0;padding-top:10px;">
+              <div class="discount-toggle-row">
+                <div>
+                  <div class="discount-toggle-lbl">Group milestone discount</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;">Unlocks for everyone when the group hits a target</div>
+                </div>
+                <div class="toggle-sw" id="milestone-toggle-sw" onclick="toggleMilestoneSection()" style="cursor:pointer;"></div>
+              </div>
+
+              <div id="milestone-section" style="display:none;">
+                <div style="display:flex;flex-direction:column;gap:10px;margin-top:2px;">
+
+                  <!-- Condition row -->
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Unlock when</div>
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                      <div class="type-toggle" style="flex:none;">
+                        <button class="type-pill active" id="ms-pill-revenue" onclick="setMilestoneCondType('revenue')">$ Revenue</button>
+                        <button class="type-pill" id="ms-pill-orders" onclick="setMilestoneCondType('orders')"># Orders</button>
+                      </div>
+                      <span style="font-size:12px;color:#888780;">reaches</span>
+                      <span class="tier-prefix" id="ms-cond-prefix">$</span>
+                      <input class="tier-amt-input" type="number" id="ms-condVal" min="1" step="50" placeholder="500" oninput="validateMilestone();updateMilestonePreview()" style="width:90px;" />
+                      <span style="font-size:12px;color:#888780;" id="ms-cond-suffix"></span>
+                    </div>
+                  </div>
+
+                  <!-- Discount row -->
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Reward (applied to all orders)</div>
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                      <div class="type-toggle" style="flex:none;">
+                        <button class="type-pill active" id="ms-pill-fixed" onclick="setMilestoneDiscType('fixed')">$ Fixed</button>
+                        <button class="type-pill" id="ms-pill-pct" onclick="setMilestoneDiscType('pct')">% Percentage</button>
+                      </div>
+                      <span class="tier-prefix" id="ms-disc-prefix">$</span>
+                      <input class="tier-amt-input" type="number" id="ms-discAmt" min="0" step="0.5" placeholder="5.00" oninput="validateMilestone();updateMilestonePreview()" style="width:80px;" />
+                      <span style="font-size:12px;color:#888780;" id="ms-disc-suffix"></span>
+                    </div>
+                  </div>
+
+                  <!-- Cap row (% only) -->
+                  <div id="ms-cap-row" style="display:none;">
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Cap (optional)</div>
+                    <div class="cap-row">
+                      <span class="tier-prefix">$</span>
+                      <input class="tier-amt-input" type="number" id="ms-capAmt" min="0" step="0.50" placeholder="20.00" oninput="updateMilestonePreview()" style="width:80px;" />
+                      <label class="cap-check-lbl">
+                        <input type="checkbox" id="ms-noCap" onchange="toggleMilestoneNoCap(this);updateMilestonePreview()" />
+                        No cap
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Member-facing preview -->
+                  <div id="ms-preview-wrap" style="display:none;">
+                    <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;">Preview — how members see this</div>
+                    <div class="ms-preview-card">
+                      <!-- In-progress state -->
+                      <div id="ms-preview-progress">
+                        <div class="ms-preview-header">
+                          <span class="ms-preview-icon">🎯</span>
+                          <div style="flex:1;min-width:0;">
+                            <div class="ms-preview-title" id="ms-prev-title">Group discount unlocks at $500</div>
+                            <div class="ms-preview-sub" id="ms-prev-sub">Invite friends to hit the target!</div>
+                          </div>
+                        </div>
+                        <div class="ms-bar-wrap">
+                          <div class="ms-bar-track">
+                            <div class="ms-bar-fill" id="ms-bar-fill" style="width:64%"></div>
+                          </div>
+                          <div class="ms-bar-labels">
+                            <span class="ms-bar-current" id="ms-bar-current">$320 raised</span>
+                            <span class="ms-bar-target" id="ms-bar-target">$500 target</span>
+                          </div>
+                        </div>
+                        <div style="font-size:11px;color:#888780;margin-top:4px;" id="ms-prev-reward-line">Reward: 10% off for everyone once unlocked</div>
+                      </div>
+                      <!-- Unlocked state toggle for preview -->
+                      <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid #e0f5f5;display:flex;align-items:center;gap:6px;">
+                        <span style="font-size:10px;color:#888780;">Preview unlocked state:</span>
+                        <div class="toggle-sw" id="ms-unlock-demo-sw" onclick="toggleMilestoneUnlockDemo()" style="cursor:pointer;width:28px;height:16px;"></div>
+                      </div>
+                      <!-- Unlocked banner (hidden by default in preview) -->
+                      <div id="ms-preview-unlocked" style="display:none;margin-top:10px;">
+                        <div class="ms-unlocked-banner">
+                          <div style="font-size:18px;text-align:center;margin-bottom:4px;">🎉</div>
+                          <div class="ms-unlocked-title" id="ms-unlocked-title">Milestone reached!</div>
+                          <div class="ms-unlocked-sub" id="ms-unlocked-sub">Everyone gets 10% off this order.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
 
@@ -547,6 +798,8 @@ select:focus { border-color: #009A97; }
           <div class="preview-section-lbl" style="margin-top:0;">Payment</div>
           <div style="font-size:13px;color:#888780;" id="preview-payment">Pay together</div>
         </div>
+
+        <div id="preview-discount-wrap" style="display:none;"></div>
 
         <div>
           <div class="preview-section-lbl">Products</div>
@@ -1167,7 +1420,528 @@ function populatePreview() {
     : 'No products added yet.';
   const checkedPayments = [...document.querySelectorAll('#step-1 .check-option.on .check-lbl')].map(l => l.textContent);
   document.getElementById('preview-payment').textContent = checkedPayments.length ? checkedPayments.join(' · ') : 'None selected';
+
+  // Discount summary in preview
+  var discPreview = document.getElementById('preview-discount-wrap');
+  if (discountTiers.length > 0) {
+    var html = '<div class="preview-section-lbl">Discounts</div>'
+      + '<div style="display:flex;flex-direction:column;gap:4px;">'
+      + discountTiers.map(function(t){
+          return '<div style="font-size:12px;color:#007A77;background:#E0F5F5;border-radius:6px;padding:5px 8px;">🏷 ' + tierSummaryText(t) + '</div>';
+        }).join('')
+      + '</div>';
+    if (discPreview) { discPreview.style.display='block'; discPreview.innerHTML=html; }
+  } else {
+    if (discPreview) { discPreview.style.display='none'; discPreview.innerHTML=''; }
+  }
 }
+
+/* ══════════════════════════════════════════
+   DISCOUNT TIERS
+══════════════════════════════════════════ */
+
+var discountTiers = [];   // [{id, condType, condVal, discType, discAmt, capAmt, noCap}]
+var tierIdSeq = 0;
+var editingTierId = null; // null = new, number = editing existing
+
+/* Toggle the discount section on/off */
+function toggleDiscountSection() {
+  var sw = document.getElementById('discount-toggle-sw');
+  var section = document.getElementById('discount-section');
+  sw.classList.toggle('on');
+  var isOn = sw.classList.contains('on');
+  section.style.display = isOn ? 'block' : 'none';
+  if (!isOn) {
+    // Close any open form without saving
+    closeTierForm();
+  }
+}
+
+/* ── Render all tier summaries ── */
+function renderTiers() {
+  var list = document.getElementById('tiers-list');
+  var addWrap = document.getElementById('add-tier-wrap');
+
+  if (discountTiers.length === 0) {
+    list.innerHTML = '';
+  } else {
+    list.innerHTML = discountTiers.map(function(t) {
+      return '<div class="tier-summary" id="tier-sum-' + t.id + '">'
+        + '<span class="tier-tag">🏷</span>'
+        + '<span class="tier-text">' + tierSummaryText(t) + '</span>'
+        + '<div class="tier-action-btns">'
+        + '<button class="tier-edit-btn" onclick="openEditTierForm(' + t.id + ')" title="Edit">'
+        + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+        + '</button>'
+        + '<button class="tier-del-btn" onclick="deleteTier(' + t.id + ')" title="Remove">'
+        + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+        + '</button>'
+        + '</div></div>';
+    }).join('');
+  }
+
+  // Show tier warning if needed
+  checkTierWarnings();
+
+  // Hide "Add tier" link if 4 tiers or form is open
+  var formOpen = document.getElementById('tier-form-wrap').style.display !== 'none';
+  if (discountTiers.length >= 4 || formOpen) {
+    addWrap.innerHTML = discountTiers.length >= 4
+      ? '<div class="add-tier-limit">Maximum 4 tiers reached.</div>'
+      : '';
+  } else {
+    addWrap.innerHTML = '<div class="add-tier-link" onclick="openNewTierForm()">'
+      + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>'
+      + ' Add discount tier</div>';
+  }
+}
+
+/* Human-readable summary for a tier */
+function tierSummaryText(t) {
+  var condLabel = t.condType === 'spend'
+    ? 'Spend $' + parseFloat(t.condVal).toFixed(2) + '+'
+    : 'Order ' + t.condVal + '+ items';
+  var discLabel = t.discType === 'fixed'
+    ? '$' + parseFloat(t.discAmt).toFixed(2) + ' off'
+    : t.discAmt + '% off';
+  var capLabel = '';
+  if (t.discType === 'pct' && !t.noCap && t.capAmt) {
+    capLabel = ' (capped at $' + parseFloat(t.capAmt).toFixed(2) + ')';
+  }
+  return condLabel + ' → ' + discLabel + capLabel;
+}
+
+/* Check and show overlap / order warnings */
+function checkTierWarnings() {
+  var warn = document.getElementById('tier-warning-msg');
+  if (warn) warn.remove();
+  if (discountTiers.length < 2) return;
+
+  // Check if a lower threshold gives a higher $ value than a higher threshold
+  // (approximate check for fixed tiers)
+  var sorted = discountTiers.slice().sort(function(a,b){ return parseFloat(a.condVal)-parseFloat(b.condVal); });
+  var hasIssue = false;
+  for (var i = 1; i < sorted.length; i++) {
+    if (sorted[i].discType === 'fixed' && sorted[i-1].discType === 'fixed') {
+      if (parseFloat(sorted[i].discAmt) <= parseFloat(sorted[i-1].discAmt)) {
+        hasIssue = true; break;
+      }
+    }
+  }
+  if (hasIssue) {
+    var w = document.createElement('div');
+    w.id = 'tier-warning-msg';
+    w.className = 'tier-warning';
+    w.textContent = '⚠ A higher-spend tier should give a larger discount than a lower one.';
+    document.getElementById('tiers-list').after(w);
+  }
+}
+
+/* ── Open inline form for a NEW tier ── */
+function openNewTierForm() {
+  if (discountTiers.length >= 4) return;
+  editingTierId = null;
+  renderTierForm({ condType:'spend', condVal:'', discType:'fixed', discAmt:'', capAmt:'', noCap:false });
+}
+
+/* ── Open inline form to EDIT existing tier ── */
+function openEditTierForm(id) {
+  var t = discountTiers.find(function(x){ return x.id === id; });
+  if (!t) return;
+  editingTierId = id;
+  renderTierForm(t);
+}
+
+/* ── Render the inline tier form ── */
+function renderTierForm(defaults) {
+  var wrap = document.getElementById('tier-form-wrap');
+  wrap.style.display = 'block';
+
+  var isEdit = editingTierId !== null;
+  var isPct = defaults.discType === 'pct';
+
+  wrap.innerHTML = ''
+    + '<div class="tier-form">'
+    + '<div class="tier-form-title">' + (isEdit ? 'Edit discount tier' : 'New discount tier') + '</div>'
+
+    // Condition row
+    + '<div>'
+    + '<div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Condition</div>'
+    + '<div class="tier-field-row">'
+    + '<span class="tier-field-lbl">When order is</span>'
+    + '<select class="tier-select" id="tf-condType" onchange="onCondTypeChange()">'
+    + '<option value="spend"' + (defaults.condType==='spend'?' selected':'') + '>Min. spend</option>'
+    + '<option value="qty"' + (defaults.condType==='qty'?' selected':'') + '>Min. quantity</option>'
+    + '</select>'
+    + '<span class="tier-field-lbl">over</span>'
+    + '<span class="tier-prefix" id="tf-cond-prefix">' + (defaults.condType==='spend' ? '$' : '') + '</span>'
+    + '<input class="tier-amt-input" type="number" id="tf-condVal" min="0" step="' + (defaults.condType==='spend'?'0.50':'1') + '" placeholder="' + (defaults.condType==='spend'?'20.00':'3') + '" value="' + (defaults.condVal||'') + '" oninput="validateTierForm()" />'
+    + '<span class="tier-field-lbl" id="tf-cond-suffix">' + (defaults.condType==='qty' ? 'items' : '') + '</span>'
+    + '</div>'
+    + '</div>'
+
+    // Discount type toggle
+    + '<div>'
+    + '<div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Discount</div>'
+    + '<div class="tier-field-row" style="margin-bottom:8px;">'
+    + '<div class="type-toggle">'
+    + '<button class="type-pill' + (!isPct?' active':'') + '" id="pill-fixed" onclick="setDiscType(\'fixed\')">$ Fixed</button>'
+    + '<button class="type-pill' + (isPct?' active':'') + '" id="pill-pct" onclick="setDiscType(\'pct\')">% Percentage</button>'
+    + '</div>'
+    + '</div>'
+    + '<div class="tier-field-row">'
+    + '<span class="tier-prefix" id="tf-disc-prefix">' + (!isPct ? '$' : '') + '</span>'
+    + '<input class="tier-amt-input" type="number" id="tf-discAmt" min="0" step="' + (!isPct?'0.50':'0.5') + '" placeholder="' + (!isPct?'3.00':'10') + '" value="' + (defaults.discAmt||'') + '" oninput="validateTierForm()" />'
+    + '<span class="tier-prefix" id="tf-disc-suffix">' + (isPct ? '%' : '') + '</span>'
+    + '</div>'
+    + '</div>'
+
+    // Cap row (pct only)
+    + '<div id="tf-cap-row" style="display:' + (isPct?'block':'none') + ';">'
+    + '<div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Cap (optional)</div>'
+    + '<div class="cap-row">'
+    + '<span class="tier-prefix">$</span>'
+    + '<input class="tier-amt-input" type="number" id="tf-capAmt" min="0" step="0.50" placeholder="15.00" value="' + (defaults.capAmt||'') + '" ' + (defaults.noCap?'disabled':'') + ' />'
+    + '<label class="cap-check-lbl"><input type="checkbox" id="tf-noCap" ' + (defaults.noCap?'checked':'') + ' onchange="toggleNoCap(this)" /> No cap</label>'
+    + '</div>'
+    + '</div>'
+
+    // Footer
+    + '<div class="tier-form-footer">'
+    + '<button class="tier-cancel-btn" onclick="closeTierForm()">Cancel</button>'
+    + '<button class="tier-save-btn" id="tf-save-btn" onclick="saveTier()" disabled>' + (isEdit ? 'Update tier' : 'Save tier →') + '</button>'
+    + '</div>'
+    + '</div>';
+
+  // Hide add-tier link while form is open
+  document.getElementById('add-tier-wrap').innerHTML = '';
+  validateTierForm();
+}
+
+/* ── Condition type change ── */
+function onCondTypeChange() {
+  var type = document.getElementById('tf-condType').value;
+  document.getElementById('tf-cond-prefix').textContent = type === 'spend' ? '$' : '';
+  document.getElementById('tf-cond-suffix').textContent = type === 'qty' ? 'items' : '';
+  var inp = document.getElementById('tf-condVal');
+  inp.step = type === 'spend' ? '0.50' : '1';
+  inp.placeholder = type === 'spend' ? '20.00' : '3';
+  validateTierForm();
+}
+
+/* ── Switch $ / % ── */
+function setDiscType(type) {
+  document.getElementById('pill-fixed').classList.toggle('active', type === 'fixed');
+  document.getElementById('pill-pct').classList.toggle('active', type === 'pct');
+  document.getElementById('tf-disc-prefix').textContent = type === 'fixed' ? '$' : '';
+  document.getElementById('tf-disc-suffix').textContent = type === 'pct' ? '%' : '';
+  document.getElementById('tf-cap-row').style.display = type === 'pct' ? 'block' : 'none';
+  var inp = document.getElementById('tf-discAmt');
+  inp.step = type === 'fixed' ? '0.50' : '0.5';
+  inp.placeholder = type === 'fixed' ? '3.00' : '10';
+  validateTierForm();
+}
+
+/* ── No-cap checkbox ── */
+function toggleNoCap(cb) {
+  document.getElementById('tf-capAmt').disabled = cb.checked;
+  if (cb.checked) document.getElementById('tf-capAmt').value = '';
+}
+
+/* ── Form validation ── */
+function validateTierForm() {
+  var condVal = parseFloat(document.getElementById('tf-condVal').value);
+  var discAmt = parseFloat(document.getElementById('tf-discAmt').value);
+  var ok = !isNaN(condVal) && condVal > 0 && !isNaN(discAmt) && discAmt > 0;
+  var btn = document.getElementById('tf-save-btn');
+  if (btn) btn.disabled = !ok;
+}
+
+/* ── Save / update tier ── */
+function saveTier() {
+  var condType = document.getElementById('tf-condType').value;
+  var condVal  = document.getElementById('tf-condVal').value;
+  var discType = document.getElementById('pill-pct').classList.contains('active') ? 'pct' : 'fixed';
+  var discAmt  = document.getElementById('tf-discAmt').value;
+  var noCap    = document.getElementById('tf-noCap') ? document.getElementById('tf-noCap').checked : false;
+  var capAmt   = (!noCap && document.getElementById('tf-capAmt')) ? document.getElementById('tf-capAmt').value : '';
+
+  if (editingTierId !== null) {
+    var t = discountTiers.find(function(x){ return x.id === editingTierId; });
+    if (t) { t.condType=condType; t.condVal=condVal; t.discType=discType; t.discAmt=discAmt; t.capAmt=capAmt; t.noCap=noCap; }
+  } else {
+    tierIdSeq++;
+    discountTiers.push({ id:tierIdSeq, condType:condType, condVal:condVal, discType:discType, discAmt:discAmt, capAmt:capAmt, noCap:noCap });
+  }
+
+  // Sort tiers by condition value ascending
+  discountTiers.sort(function(a,b){ return parseFloat(a.condVal)-parseFloat(b.condVal); });
+
+  closeTierForm();
+  renderTiers();
+  syncDiscountToNotes();
+}
+
+/* ── Delete a tier ── */
+function deleteTier(id) {
+  discountTiers = discountTiers.filter(function(t){ return t.id !== id; });
+  renderTiers();
+  syncDiscountToNotes();
+}
+
+/* ── Close the inline form ── */
+function closeTierForm() {
+  var wrap = document.getElementById('tier-form-wrap');
+  wrap.style.display = 'none';
+  wrap.innerHTML = '';
+  editingTierId = null;
+  renderTiers();
+}
+
+/* ── Generate note text from tiers ── */
+function generateDiscountNote() {
+  if (discountTiers.length === 0) return '';
+  var parts = discountTiers.map(function(t) {
+    var condPart = t.condType === 'spend'
+      ? 'spend $' + parseFloat(t.condVal).toFixed(2) + ' or more'
+      : 'order ' + t.condVal + ' or more items';
+    var discPart = t.discType === 'fixed'
+      ? '$' + parseFloat(t.discAmt).toFixed(2) + ' off your order'
+      : t.discAmt + '% off your order';
+    var capPart = '';
+    if (t.discType === 'pct' && !t.noCap && t.capAmt) {
+      capPart = ' (capped at $' + parseFloat(t.capAmt).toFixed(2) + ')';
+    }
+    return condPart + ' and get ' + discPart + capPart;
+  });
+
+  if (parts.length === 1) return 'Discount: ' + capitalise(parts[0]) + '!';
+  var last = parts.pop();
+  return 'Discounts: ' + parts.map(capitalise).join('. ') + '. ' + capitalise(last) + '!';
+}
+
+function capitalise(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+/* ── Write generated note into the Additional Notes textarea ── */
+function syncDiscountToNotes() {
+  // Enable the "Important notes to buyers" toggle if it isn't already
+  var notesToggle = document.querySelector('#step-1 .toggle-item .toggle-sw');
+  var notesBody = document.querySelector('#step-1 .toggle-item .toggle-body');
+  var notesTA = notesBody ? notesBody.querySelector('textarea') : null;
+  if (!notesTA) return;
+
+  var generatedNote = generateDiscountNote();
+
+  // If there are tiers, ensure the notes toggle is ON
+  if (discountTiers.length > 0 && notesBody && !notesBody.classList.contains('open')) {
+    notesToggle.classList.add('on');
+    notesBody.classList.add('open');
+  }
+
+  // Replace or prepend the discount line (preserve any manual edits below it)
+  var existing = notesTA.value;
+  var discMarker = '<!-- discount -->';
+
+  // We prepend the discount sentence with a marker so we can replace it cleanly
+  if (existing.startsWith(discMarker)) {
+    var afterMarker = existing.indexOf('\n', discMarker.length);
+    var rest = afterMarker > -1 ? existing.slice(afterMarker + 1) : '';
+    notesTA.value = generatedNote
+      ? discMarker + generatedNote + (rest ? '\n' + rest : '')
+      : rest;
+  } else {
+    notesTA.value = generatedNote
+      ? discMarker + generatedNote + (existing ? '\n' + existing : '')
+      : existing;
+  }
+}
+
+/* ── Hook preview to include discount summary ── */
+
+/* ══════════════════════════════════════════
+   GROUP MILESTONE DISCOUNT
+══════════════════════════════════════════ */
+
+var milestoneCondType = 'revenue'; // 'revenue' | 'orders'
+var milestoneDiscType = 'fixed';   // 'fixed' | 'pct'
+
+function toggleMilestoneSection() {
+  var sw = document.getElementById('milestone-toggle-sw');
+  var section = document.getElementById('milestone-section');
+  sw.classList.toggle('on');
+  section.style.display = sw.classList.contains('on') ? 'block' : 'none';
+  if (!sw.classList.contains('on')) {
+    document.getElementById('ms-preview-wrap').style.display = 'none';
+  }
+}
+
+function setMilestoneCondType(type) {
+  milestoneCondType = type;
+  document.getElementById('ms-pill-revenue').classList.toggle('active', type === 'revenue');
+  document.getElementById('ms-pill-orders').classList.toggle('active', type === 'orders');
+  document.getElementById('ms-cond-prefix').textContent = type === 'revenue' ? '$' : '';
+  document.getElementById('ms-cond-suffix').textContent = type === 'orders' ? 'orders' : '';
+  var inp = document.getElementById('ms-condVal');
+  inp.step = type === 'revenue' ? '50' : '1';
+  inp.placeholder = type === 'revenue' ? '500' : '20';
+  validateMilestone();
+  updateMilestonePreview();
+}
+
+function setMilestoneDiscType(type) {
+  milestoneDiscType = type;
+  document.getElementById('ms-pill-fixed').classList.toggle('active', type === 'fixed');
+  document.getElementById('ms-pill-pct').classList.toggle('active', type === 'pct');
+  document.getElementById('ms-disc-prefix').textContent = type === 'fixed' ? '$' : '';
+  document.getElementById('ms-disc-suffix').textContent = type === 'pct' ? '%' : '';
+  document.getElementById('ms-cap-row').style.display = type === 'pct' ? 'block' : 'none';
+  var inp = document.getElementById('ms-discAmt');
+  inp.step = type === 'fixed' ? '0.50' : '1';
+  inp.placeholder = type === 'fixed' ? '5.00' : '10';
+  validateMilestone();
+  updateMilestonePreview();
+}
+
+function toggleMilestoneNoCap(cb) {
+  var capInp = document.getElementById('ms-capAmt');
+  capInp.disabled = cb.checked;
+  if (cb.checked) capInp.value = '';
+}
+
+function validateMilestone() {
+  // Just keeps the preview live — no save button needed (it's always-on when toggled)
+}
+
+/* ── Build milestone preview card ── */
+function updateMilestonePreview() {
+  var condVal  = parseFloat(document.getElementById('ms-condVal').value);
+  var discAmt  = parseFloat(document.getElementById('ms-discAmt').value);
+  if (isNaN(condVal) || condVal <= 0 || isNaN(discAmt) || discAmt <= 0) {
+    document.getElementById('ms-preview-wrap').style.display = 'none';
+    return;
+  }
+
+  var noCap  = document.getElementById('ms-noCap').checked;
+  var capAmt = parseFloat(document.getElementById('ms-capAmt').value);
+
+  // Unlock target label
+  var targetLabel = milestoneCondType === 'revenue'
+    ? '$' + condVal.toFixed(2)
+    : condVal + ' orders';
+
+  // Reward label
+  var rewardLabel = milestoneDiscType === 'fixed'
+    ? '$' + discAmt.toFixed(2) + ' off'
+    : discAmt + '% off';
+  if (milestoneDiscType === 'pct' && !noCap && !isNaN(capAmt) && capAmt > 0) {
+    rewardLabel += ' (capped at $' + capAmt.toFixed(2) + ')';
+  }
+
+  // Simulated progress (64% of target for demo)
+  var simCurrent, simCurrentLabel;
+  if (milestoneCondType === 'revenue') {
+    simCurrent = Math.round(condVal * 0.64 * 100) / 100;
+    simCurrentLabel = '$' + simCurrent.toFixed(2) + ' raised';
+  } else {
+    simCurrent = Math.max(1, Math.floor(condVal * 0.64));
+    simCurrentLabel = simCurrent + ' orders placed';
+  }
+  var pct = Math.min(100, Math.round((simCurrent / condVal) * 100));
+
+  // Update DOM
+  document.getElementById('ms-prev-title').textContent   = 'Group discount unlocks at ' + targetLabel;
+  document.getElementById('ms-prev-sub').textContent     = 'Invite friends to hit the target!';
+  document.getElementById('ms-bar-fill').style.width     = pct + '%';
+  document.getElementById('ms-bar-current').textContent  = simCurrentLabel;
+  document.getElementById('ms-bar-target').textContent   = targetLabel + ' target';
+  document.getElementById('ms-prev-reward-line').textContent = 'Reward: ' + rewardLabel + ' for everyone once unlocked';
+
+  // Unlocked banner text
+  document.getElementById('ms-unlocked-title').textContent = 'Milestone reached! 🎉';
+  document.getElementById('ms-unlocked-sub').textContent   = 'Everyone gets ' + rewardLabel + ' on this order.';
+
+  document.getElementById('ms-preview-wrap').style.display = 'block';
+
+  // Also sync to notes
+  syncMilestoneToNotes();
+}
+
+/* ── Toggle the unlock demo switch inside the preview ── */
+function toggleMilestoneUnlockDemo() {
+  var sw = document.getElementById('ms-unlock-demo-sw');
+  sw.classList.toggle('on');
+  var isUnlocked = sw.classList.contains('on');
+  document.getElementById('ms-preview-progress').style.display  = isUnlocked ? 'none' : 'block';
+  document.getElementById('ms-preview-unlocked').style.display  = isUnlocked ? 'block' : 'none';
+}
+
+/* ── Write milestone into Additional Notes ── */
+function syncMilestoneToNotes() {
+  var condVal = parseFloat(document.getElementById('ms-condVal').value);
+  var discAmt = parseFloat(document.getElementById('ms-discAmt').value);
+  if (isNaN(condVal) || isNaN(discAmt)) return;
+
+  var noCap  = document.getElementById('ms-noCap').checked;
+  var capAmt = parseFloat(document.getElementById('ms-capAmt').value);
+
+  var targetLabel = milestoneCondType === 'revenue'
+    ? 'total group orders reach $' + condVal.toFixed(2)
+    : 'the group places ' + condVal + ' orders';
+  var rewardLabel = milestoneDiscType === 'fixed'
+    ? '$' + discAmt.toFixed(2) + ' off'
+    : discAmt + '% off';
+  if (milestoneDiscType === 'pct' && !noCap && !isNaN(capAmt) && capAmt > 0) {
+    rewardLabel += ' (capped at $' + capAmt.toFixed(2) + ')';
+  }
+
+  var sentence = 'Group milestone: When ' + targetLabel + ', everyone gets ' + rewardLabel + ' automatically!';
+
+  var notesToggle = document.querySelector('#step-1 .toggle-item .toggle-sw');
+  var notesBody   = document.querySelector('#step-1 .toggle-item .toggle-body');
+  var notesTA     = notesBody ? notesBody.querySelector('textarea') : null;
+  if (!notesTA) return;
+
+  if (notesBody && !notesBody.classList.contains('open')) {
+    notesToggle.classList.add('on');
+    notesBody.classList.add('open');
+  }
+
+  var marker  = '<!-- milestone -->';
+  var existing = notesTA.value;
+  if (existing.includes(marker)) {
+    notesTA.value = existing.replace(/<!-- milestone -->.*?(\n|$)/, marker + sentence + '\n');
+  } else {
+    notesTA.value = (existing ? existing + '\n' : '') + marker + sentence;
+  }
+}
+
+/* Update populatePreview to include milestone */
+var _origPopulatePreview = populatePreview;
+populatePreview = function() {
+  _origPopulatePreview();
+  var discPreview = document.getElementById('preview-discount-wrap');
+  if (!discPreview) return;
+
+  // Append milestone summary if set
+  var condVal = parseFloat(document.getElementById('ms-condVal') ? document.getElementById('ms-condVal').value : '');
+  var discAmt = parseFloat(document.getElementById('ms-discAmt') ? document.getElementById('ms-discAmt').value : '');
+  var msOn    = document.getElementById('milestone-toggle-sw').classList.contains('on');
+
+  if (msOn && !isNaN(condVal) && condVal > 0 && !isNaN(discAmt) && discAmt > 0) {
+    var targetLabel = milestoneCondType === 'revenue' ? '$' + condVal.toFixed(2) + ' revenue' : condVal + ' orders';
+    var rewardLabel = milestoneDiscType === 'fixed' ? '$' + discAmt.toFixed(2) + ' off' : discAmt + '% off';
+    var msHtml = '<div style="margin-top:8px;background:#E0F5F5;border-radius:6px;padding:7px 10px;display:flex;align-items:center;gap:7px;">'
+      + '<span style="font-size:14px;">🎯</span>'
+      + '<span style="font-size:12px;font-weight:500;color:#007A77;">Group milestone: ' + targetLabel + ' → ' + rewardLabel + ' for all</span>'
+      + '</div>';
+    discPreview.style.display = 'block';
+    discPreview.innerHTML = (discPreview.innerHTML || '') + msHtml;
+  }
+};
+
+/* ══════════════════════════════════════════
+   END GROUP MILESTONE
+══════════════════════════════════════════ */
 
 /* ── PUBLISH ── */
 function publishEvent() {
