@@ -302,57 +302,66 @@ select:focus { border-color: #009A97; }
 /* Tier edit form (inline) */
 .tier-form {
   background: #FAFAF8; border: 0.5px solid #D3D1C7; border-radius: 10px;
-  padding: 12px; display: flex; flex-direction: column; gap: 10px;
+  padding: 10px 12px; display: flex; flex-direction: column; gap: 7px;
   animation: tierFadeIn 0.18s ease;
 }
-.tier-form-title { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; }
-.tier-field-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.tier-field-lbl { font-size: 12px; color: #888780; white-space: nowrap; }
+.tier-form-title { font-size: 10px; font-weight: 600; color: #B4B2A9; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 1px; }
+
+/* Compact 3-col grid rows */
+.tf-row { display: grid; grid-template-columns: 72px 1fr 1fr; align-items: center; gap: 6px; }
+.tf-row.two-col { grid-template-columns: 72px 1fr; }
+.tf-row.three-col-even { grid-template-columns: 1fr 1fr 1fr; }
+.tf-lbl { font-size: 11px; color: #888780; font-weight: 500; }
+
+/* Compact select */
 .tier-select {
-  height: 32px; border: 0.5px solid #D3D1C7; border-radius: 6px;
-  padding: 0 24px 0 8px; font-size: 12px; font-family: inherit;
-  color: #1a1a18; outline: none; background: white;
+  height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 22px 0 8px; font-size: 12px; font-family: inherit;
+  color: #1a1a18; outline: none; background: white; width: 100%;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 8px center;
   transition: border-color 0.15s; cursor: pointer;
 }
 .tier-select:focus { border-color: #009A97; }
+
+/* Amount input with inline prefix */
+.tf-amt-wrap { display: flex; align-items: center; gap: 4px; }
+.tf-pfx { font-size: 12px; font-weight: 600; color: #888780; flex-shrink: 0; }
 .tier-amt-input {
-  height: 32px; width: 80px; border: 0.5px solid #D3D1C7; border-radius: 6px;
-  padding: 0 8px; font-size: 13px; font-family: inherit; font-weight: 600;
+  height: 30px; flex: 1; min-width: 0; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 8px; font-size: 12px; font-family: inherit; font-weight: 600;
   color: #1a1a18; outline: none; background: white; text-align: right;
   transition: border-color 0.15s;
 }
 .tier-amt-input:focus { border-color: #009A97; }
-.tier-prefix { font-size: 13px; font-weight: 600; color: #888780; }
 
 /* Type toggle pills */
-.type-toggle { display: flex; gap: 0; border: 0.5px solid #D3D1C7; border-radius: 6px; overflow: hidden; }
+.type-toggle { display: flex; border: 0.5px solid #D3D1C7; border-radius: 6px; overflow: hidden; }
 .type-pill {
-  flex: 1; height: 32px; border: none; font-size: 12px; font-weight: 600;
+  flex: 1; height: 30px; border: none; font-size: 11px; font-weight: 600;
+  padding: 0 6px; white-space: nowrap;
   font-family: inherit; cursor: pointer; background: white; color: #888780;
   transition: background 0.12s, color 0.12s;
 }
 .type-pill.active { background: #009A97; color: white; }
-.type-pill:first-child { border-right: 0.5px solid #D3D1C7; }
+.type-pill:not(:last-child) { border-right: 0.5px solid #D3D1C7; }
 
 /* Cap row */
-.cap-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.cap-check-lbl { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #888780; cursor: pointer; }
-.cap-check-lbl input[type="checkbox"] { accent-color: #009A97; width: 13px; height: 13px; }
+.cap-check-lbl { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #888780; cursor: pointer; white-space: nowrap; }
+.cap-check-lbl input[type="checkbox"] { accent-color: #009A97; width: 13px; height: 13px; flex-shrink: 0; }
 
 /* Tier form footer */
-.tier-form-footer { display: flex; justify-content: flex-end; gap: 8px; border-top: 0.5px solid #e0dfd8; padding-top: 10px; margin-top: 2px; }
+.tier-form-footer { display: flex; justify-content: flex-end; gap: 6px; border-top: 0.5px solid #e0dfd8; padding-top: 8px; margin-top: 1px; }
 .tier-cancel-btn {
-  height: 32px; padding: 0 14px; background: white; border: 0.5px solid #D3D1C7;
-  border-radius: 8px; font-size: 12px; font-weight: 600; color: #888780;
+  height: 28px; padding: 0 12px; background: white; border: 0.5px solid #D3D1C7;
+  border-radius: 6px; font-size: 11px; font-weight: 600; color: #888780;
   cursor: pointer; font-family: inherit; transition: background 0.12s;
 }
 .tier-cancel-btn:hover { background: #f4f4f4; }
 .tier-save-btn {
-  height: 32px; padding: 0 16px; background: #009A97; border: none;
-  border-radius: 8px; font-size: 12px; font-weight: 600; color: white;
+  height: 28px; padding: 0 14px; background: #009A97; border: none;
+  border-radius: 6px; font-size: 11px; font-weight: 600; color: white;
   cursor: pointer; font-family: inherit; transition: background 0.12s;
 }
 .tier-save-btn:hover { background: #007A77; }
@@ -578,48 +587,50 @@ select:focus { border-color: #009A97; }
                 <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
 
                   <!-- Condition -->
-                  <div>
-                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Unlock when</div>
-                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                      <div class="type-toggle" style="flex:none;">
+                  <div class="tier-form" style="margin-top:2px;">
+                    <div class="tf-row">
+                      <span class="tf-lbl">Unlock when</span>
+                      <div class="type-toggle">
                         <button class="type-pill active" id="ms-pill-revenue" onclick="setMilestoneCondType('revenue')">$ Revenue</button>
                         <button class="type-pill" id="ms-pill-orders" onclick="setMilestoneCondType('orders')"># Orders</button>
                       </div>
-                      <span style="font-size:12px;color:#888780;">reaches</span>
-                      <span class="tier-prefix" id="ms-cond-prefix">$</span>
-                      <input class="tier-amt-input" type="number" id="ms-condVal" min="1" step="50" placeholder="500" oninput="updateMilestonePreview()" style="width:90px;" />
-                      <span style="font-size:12px;color:#888780;" id="ms-cond-suffix"></span>
-                    </div>
-                  </div>
-
-                  <!-- Reward -->
-                  <div>
-                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Reward (applied to all orders)</div>
-                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                      <div class="type-toggle" style="flex:none;">
-                        <button class="type-pill active" id="ms-pill-fixed" onclick="setMilestoneDiscType('fixed')">$ Fixed</button>
-                        <button class="type-pill" id="ms-pill-pct" onclick="setMilestoneDiscType('pct')">% Percentage</button>
+                      <div class="tf-amt-wrap">
+                        <span class="tf-pfx" id="ms-cond-prefix">$</span>
+                        <input class="tier-amt-input" type="number" id="ms-condVal" min="1" step="50" placeholder="500" oninput="updateMilestonePreview()" />
+                        <span class="tf-pfx" id="ms-cond-suffix" style="margin-left:2px;"></span>
                       </div>
-                      <span class="tier-prefix" id="ms-disc-prefix">$</span>
-                      <input class="tier-amt-input" type="number" id="ms-discAmt" min="0" step="0.5" placeholder="5.00" oninput="updateMilestonePreview()" style="width:80px;" />
-                      <span style="font-size:12px;color:#888780;" id="ms-disc-suffix"></span>
                     </div>
-                  </div>
 
-                  <!-- Cap (% only) -->
-                  <div id="ms-cap-row" style="display:none;">
-                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Cap (optional)</div>
-                    <div class="cap-row">
-                      <span class="tier-prefix">$</span>
-                      <input class="tier-amt-input" type="number" id="ms-capAmt" min="0" step="0.50" placeholder="20.00" oninput="updateMilestonePreview()" style="width:80px;" />
+                    <div style="height:0.5px;background:#e0dfd8;"></div>
+
+                    <!-- Reward -->
+                    <div class="tf-row">
+                      <span class="tf-lbl">Reward</span>
+                      <div class="type-toggle">
+                        <button class="type-pill active" id="ms-pill-fixed" onclick="setMilestoneDiscType('fixed')">$ Fixed</button>
+                        <button class="type-pill" id="ms-pill-pct" onclick="setMilestoneDiscType('pct')">%</button>
+                      </div>
+                      <div class="tf-amt-wrap">
+                        <span class="tf-pfx" id="ms-disc-prefix">$</span>
+                        <input class="tier-amt-input" type="number" id="ms-discAmt" min="0" step="0.5" placeholder="5.00" oninput="updateMilestonePreview()" />
+                        <span class="tf-pfx" id="ms-disc-suffix" style="margin-left:2px;"></span>
+                      </div>
+                    </div>
+
+                    <!-- Cap (% only) -->
+                    <div class="tf-row" id="ms-cap-row" style="display:none;">
+                      <span class="tf-lbl">Cap</span>
+                      <div class="tf-amt-wrap">
+                        <span class="tf-pfx">$</span>
+                        <input class="tier-amt-input" type="number" id="ms-capAmt" min="0" step="0.50" placeholder="20.00" oninput="updateMilestonePreview()" />
+                      </div>
                       <label class="cap-check-lbl">
-                        <input type="checkbox" id="ms-noCap" onchange="toggleMilestoneNoCap(this);updateMilestonePreview()" />
-                        No cap
+                        <input type="checkbox" id="ms-noCap" onchange="toggleMilestoneNoCap(this);updateMilestonePreview()" /> No cap
                       </label>
                     </div>
                   </div>
 
-                  <!-- Member-facing preview -->
+                                    <!-- Member-facing preview -->
                   <div id="ms-preview-wrap" style="display:none;">
                     <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;">Preview — how members see this</div>
                     <div class="ms-preview-card">
@@ -1558,64 +1569,76 @@ function openEditTierForm(id) {
 function renderTierForm(defaults) {
   var wrap = document.getElementById('tier-form-wrap');
   wrap.style.display = 'block';
-
   var isEdit = editingTierId !== null;
-  var isPct = defaults.discType === 'pct';
+  var isPct  = defaults.discType === 'pct';
+  var isQty  = defaults.condType === 'qty';
 
-  wrap.innerHTML = ''
-    + '<div class="tier-form">'
-    + '<div class="tier-form-title">' + (isEdit ? 'Edit discount tier' : 'New discount tier') + '</div>'
+  wrap.innerHTML =
+    '<div class="tier-form">'
+    + '<div class="tier-form-title">' + (isEdit ? 'Edit tier' : 'New discount tier') + '</div>'
 
-    // Condition row
-    + '<div>'
-    + '<div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Condition</div>'
-    + '<div class="tier-field-row">'
-    + '<span class="tier-field-lbl">When order is</span>'
-    + '<select class="tier-select" id="tf-condType" onchange="onCondTypeChange()">'
-    + '<option value="spend"' + (defaults.condType==='spend'?' selected':'') + '>Min. spend</option>'
-    + '<option value="qty"' + (defaults.condType==='qty'?' selected':'') + '>Min. quantity</option>'
-    + '</select>'
-    + '<span class="tier-field-lbl">over</span>'
-    + '<span class="tier-prefix" id="tf-cond-prefix">' + (defaults.condType==='spend' ? '$' : '') + '</span>'
-    + '<input class="tier-amt-input" type="number" id="tf-condVal" min="0" step="' + (defaults.condType==='spend'?'0.50':'1') + '" placeholder="' + (defaults.condType==='spend'?'20.00':'3') + '" value="' + (defaults.condVal||'') + '" oninput="validateTierForm()" />'
-    + '<span class="tier-field-lbl" id="tf-cond-suffix">' + (defaults.condType==='qty' ? 'items' : '') + '</span>'
-    + '</div>'
+    // Row: Condition type
+    + '<div class="tf-row">'
+    +   '<span class="tf-lbl">Condition</span>'
+    +   '<select class="tier-select" id="tf-condType" onchange="onCondTypeChange()" style="grid-column:span 2;">'
+    +     '<option value="spend"' + (!isQty ? ' selected' : '') + '>Min. spend</option>'
+    +     '<option value="qty"'   + ( isQty ? ' selected' : '') + '>Min. quantity</option>'
+    +   '</select>'
     + '</div>'
 
-    // Discount type toggle
-    + '<div>'
-    + '<div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Discount</div>'
-    + '<div class="tier-field-row" style="margin-bottom:8px;">'
-    + '<div class="type-toggle">'
-    + '<button class="type-pill' + (!isPct?' active':'') + '" id="pill-fixed" onclick="setDiscType(\'fixed\')">$ Fixed</button>'
-    + '<button class="type-pill' + (isPct?' active':'') + '" id="pill-pct" onclick="setDiscType(\'pct\')">% Percentage</button>'
-    + '</div>'
-    + '</div>'
-    + '<div class="tier-field-row">'
-    + '<span class="tier-prefix" id="tf-disc-prefix">' + (!isPct ? '$' : '') + '</span>'
-    + '<input class="tier-amt-input" type="number" id="tf-discAmt" min="0" step="' + (!isPct?'0.50':'0.5') + '" placeholder="' + (!isPct?'3.00':'10') + '" value="' + (defaults.discAmt||'') + '" oninput="validateTierForm()" />'
-    + '<span class="tier-prefix" id="tf-disc-suffix">' + (isPct ? '%' : '') + '</span>'
-    + '</div>'
+    // Row: Threshold value
+    + '<div class="tf-row">'
+    +   '<span class="tf-lbl" style="color:#B4B2A9;">over</span>'
+    +   '<div class="tf-amt-wrap" style="grid-column:span 2;">'
+    +     '<span class="tf-pfx" id="tf-cond-prefix">' + (!isQty ? '$' : '') + '</span>'
+    +     '<input class="tier-amt-input" type="number" id="tf-condVal" min="0"'
+    +       ' step="' + (!isQty ? '0.50' : '1') + '"'
+    +       ' placeholder="' + (!isQty ? '20.00' : '3') + '"'
+    +       ' value="' + (defaults.condVal || '') + '"'
+    +       ' oninput="validateTierForm()" />'
+    +     '<span class="tf-pfx" id="tf-cond-suffix" style="margin-left:2px;">' + (isQty ? 'items' : '') + '</span>'
+    +   '</div>'
     + '</div>'
 
-    // Cap row (pct only)
-    + '<div id="tf-cap-row" style="display:' + (isPct?'block':'none') + ';">'
-    + '<div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Cap (optional)</div>'
-    + '<div class="cap-row">'
-    + '<span class="tier-prefix">$</span>'
-    + '<input class="tier-amt-input" type="number" id="tf-capAmt" min="0" step="0.50" placeholder="15.00" value="' + (defaults.capAmt||'') + '" ' + (defaults.noCap?'disabled':'') + ' />'
-    + '<label class="cap-check-lbl"><input type="checkbox" id="tf-noCap" ' + (defaults.noCap?'checked':'') + ' onchange="toggleNoCap(this)" /> No cap</label>'
-    + '</div>'
+    + '<div style="height:0.5px;background:#e0dfd8;"></div>'
+
+    // Row: Discount type + amount
+    + '<div class="tf-row">'
+    +   '<span class="tf-lbl">Discount</span>'
+    +   '<div class="type-toggle">'
+    +     '<button class="type-pill' + (!isPct ? ' active' : '') + '" id="pill-fixed" onclick="setDiscType('fixed')">$ Fixed</button>'
+    +     '<button class="type-pill' + ( isPct ? ' active' : '') + '" id="pill-pct"   onclick="setDiscType('pct')">%</button>'
+    +   '</div>'
+    +   '<div class="tf-amt-wrap">'
+    +     '<span class="tf-pfx" id="tf-disc-prefix">' + (!isPct ? '$' : '') + '</span>'
+    +     '<input class="tier-amt-input" type="number" id="tf-discAmt" min="0"'
+    +       ' step="' + (!isPct ? '0.50' : '0.5') + '"'
+    +       ' placeholder="' + (!isPct ? '3.00' : '10') + '"'
+    +       ' value="' + (defaults.discAmt || '') + '"'
+    +       ' oninput="validateTierForm()" />'
+    +     '<span class="tf-pfx" id="tf-disc-suffix" style="margin-left:2px;">' + (isPct ? '%' : '') + '</span>'
+    +   '</div>'
     + '</div>'
 
-    // Footer
+    // Row: Cap (% only)
+    + '<div class="tf-row" id="tf-cap-row" style="display:' + (isPct ? 'grid' : 'none') + ';">'
+    +   '<span class="tf-lbl">Cap</span>'
+    +   '<div class="tf-amt-wrap">'
+    +     '<span class="tf-pfx">$</span>'
+    +     '<input class="tier-amt-input" type="number" id="tf-capAmt" min="0" step="0.50" placeholder="15.00"'
+    +       ' value="' + (defaults.capAmt || '') + '"' + (defaults.noCap ? ' disabled' : '') + ' />'
+    +   '</div>'
+    +   '<label class="cap-check-lbl">'
+    +     '<input type="checkbox" id="tf-noCap"' + (defaults.noCap ? ' checked' : '') + ' onchange="toggleNoCap(this)" /> No cap'
+    +   '</label>'
+    + '</div>'
+
     + '<div class="tier-form-footer">'
-    + '<button class="tier-cancel-btn" onclick="closeTierForm()">Cancel</button>'
-    + '<button class="tier-save-btn" id="tf-save-btn" onclick="saveTier()" disabled>' + (isEdit ? 'Update tier' : 'Save tier →') + '</button>'
+    +   '<button class="tier-cancel-btn" onclick="closeTierForm()">Cancel</button>'
+    +   '<button class="tier-save-btn" id="tf-save-btn" onclick="saveTier()" disabled>' + (isEdit ? 'Update' : 'Save →') + '</button>'
     + '</div>'
     + '</div>';
 
-  // Hide add-tier link while form is open
   document.getElementById('add-tier-wrap').innerHTML = '';
   validateTierForm();
 }
@@ -1637,7 +1660,7 @@ function setDiscType(type) {
   document.getElementById('pill-pct').classList.toggle('active', type === 'pct');
   document.getElementById('tf-disc-prefix').textContent = type === 'fixed' ? '$' : '';
   document.getElementById('tf-disc-suffix').textContent = type === 'pct' ? '%' : '';
-  document.getElementById('tf-cap-row').style.display = type === 'pct' ? 'block' : 'none';
+  document.getElementById('tf-cap-row').style.display = type === 'pct' ? 'grid' : 'none';
   var inp = document.getElementById('tf-discAmt');
   inp.step = type === 'fixed' ? '0.50' : '0.5';
   inp.placeholder = type === 'fixed' ? '3.00' : '10';
@@ -1802,7 +1825,7 @@ function setMilestoneDiscType(type) {
   document.getElementById('ms-pill-pct').classList.toggle('active', type === 'pct');
   document.getElementById('ms-disc-prefix').textContent = type === 'fixed' ? '$' : '';
   document.getElementById('ms-disc-suffix').textContent = type === 'pct' ? '%' : '';
-  document.getElementById('ms-cap-row').style.display = type === 'pct' ? 'block' : 'none';
+  document.getElementById('ms-cap-row').style.display = type === 'pct' ? 'grid' : 'none';
   var inp = document.getElementById('ms-discAmt');
   inp.step = type === 'fixed' ? '0.50' : '1';
   inp.placeholder = type === 'fixed' ? '5.00' : '10';
