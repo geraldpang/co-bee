@@ -647,21 +647,20 @@ select:focus { border-color: #009A97; }
                             <div class="ms-bar-fill" id="ms-bar-fill" style="width:64%"></div>
                           </div>
                           <div class="ms-bar-labels">
-                            <span class="ms-bar-current" id="ms-bar-current">$320 raised</span>
+                            <span class="ms-bar-current" id="ms-bar-current">$320 ordered</span>
                             <span class="ms-bar-target" id="ms-bar-target">$500 target</span>
                           </div>
                         </div>
                         <div style="font-size:11px;color:#888780;margin-top:4px;" id="ms-prev-reward-line">Reward: 10% off for everyone once unlocked</div>
                       </div>
-                      <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid #c8e8e8;display:flex;align-items:center;gap:6px;">
-                        <span style="font-size:10px;color:#888780;">Preview unlocked state:</span>
-                        <div class="toggle-sw" id="ms-unlock-demo-sw" onclick="toggleMilestoneUnlockDemo()" style="cursor:pointer;width:28px;height:16px;flex-shrink:0;"></div>
-                      </div>
-                      <div id="ms-preview-unlocked" style="display:none;margin-top:10px;">
-                        <div class="ms-unlocked-banner">
-                          <div style="font-size:18px;text-align:center;margin-bottom:4px;">🎉</div>
-                          <div class="ms-unlocked-title" id="ms-unlocked-title">Milestone reached!</div>
-                          <div class="ms-unlocked-sub" id="ms-unlocked-sub">Everyone gets 10% off this order.</div>
+                      <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid #c8e8e8;">
+                        <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;">Unlocked state (members see this when milestone is hit)</div>
+                        <div id="ms-preview-unlocked">
+                          <div class="ms-unlocked-banner">
+                            <div style="font-size:18px;text-align:center;margin-bottom:4px;">🎉</div>
+                            <div class="ms-unlocked-title" id="ms-unlocked-title">Milestone reached!</div>
+                            <div class="ms-unlocked-sub" id="ms-unlocked-sub">Everyone gets 10% off this order.</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1378,11 +1377,14 @@ function goToStep(n) {
 function toggleSwitch(row) {
   const sw = row.querySelector('.toggle-sw');
   sw.classList.toggle('on');
-  // Body is a sibling inside the parent toggle-item (may not exist for simple toggles)
   const item = row.closest('.toggle-item');
   if (item) {
     const body = item.querySelector('.toggle-body');
     if (body) body.classList.toggle('open');
+  }
+  // Auto-open new tier form when Order discounts is switched on
+  if (row.id === 'discount-toggle-row' && sw.classList.contains('on')) {
+    if (discountTiers.length === 0) openNewTierForm();
   }
 }
 
@@ -1877,7 +1879,7 @@ function updateMilestonePreview() {
   var simCurrent, simCurrentLabel;
   if (milestoneCondType === 'revenue') {
     simCurrent = Math.round(condVal * 0.64 * 100) / 100;
-    simCurrentLabel = '$' + simCurrent.toFixed(2) + ' raised';
+    simCurrentLabel = '$' + simCurrent.toFixed(2) + ' ordered';
   } else {
     simCurrent = Math.max(1, Math.floor(condVal * 0.64));
     simCurrentLabel = simCurrent + ' orders placed';
@@ -1902,14 +1904,6 @@ function updateMilestonePreview() {
   syncMilestoneToNotes();
 }
 
-/* ── Toggle the unlock demo switch inside the preview ── */
-function toggleMilestoneUnlockDemo() {
-  var sw = document.getElementById('ms-unlock-demo-sw');
-  sw.classList.toggle('on');
-  var isUnlocked = sw.classList.contains('on');
-  document.getElementById('ms-preview-progress').style.display  = isUnlocked ? 'none' : 'block';
-  document.getElementById('ms-preview-unlocked').style.display  = isUnlocked ? 'block' : 'none';
-}
 
 /* ── Write milestone into Additional Notes ── */
 function syncMilestoneToNotes() {
