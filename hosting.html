@@ -506,9 +506,9 @@ select:focus { border-color: #009A97; }
       <div class="form-card" style="padding:0;gap:0;">
         <div class="section-collapse-hd" onclick="toggleSection(this)">
           <span class="form-card-title" style="margin:0;">Payment options</span>
-          <svg class="collapse-chevron open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="collapse-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="section-collapse-body open">
+        <div class="section-collapse-body">
           <div style="padding:0 14px 12px;display:flex;flex-direction:column;gap:0;">
 
             <!-- Payment after closing date -->
@@ -1378,7 +1378,12 @@ function goToStep(n) {
 function toggleSwitch(row) {
   const sw = row.querySelector('.toggle-sw');
   sw.classList.toggle('on');
-  row.nextElementSibling.classList.toggle('open');
+  // Body is a sibling inside the parent toggle-item (may not exist for simple toggles)
+  const item = row.closest('.toggle-item');
+  if (item) {
+    const body = item.querySelector('.toggle-body');
+    if (body) body.classList.toggle('open');
+  }
 }
 
 /* ── CHECKBOX ── */
