@@ -835,6 +835,61 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
+      <!-- Member view sample -->
+      <div id="member-view-sample" style="display:none;">
+        <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;text-align:center;margin:4px 0 8px;">How members see discounts on the event</div>
+
+        <!-- Order Total box sample -->
+        <div style="border-radius:12px;overflow:hidden;border:0.5px solid #e0dfd8;background:white;">
+          <div style="background:#E0F5F5;padding:12px 14px;border-bottom:0.5px solid #80CCCB;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <span style="font-size:13px;font-weight:600;color:#007A77;">Order Total</span>
+              <span style="font-size:17px;font-weight:700;color:#007A77;" id="sample-total">$25.00</span>
+            </div>
+            <!-- Order discount line — shown when order discounts configured -->
+            <div id="sample-order-disc-line" style="display:none;font-size:11px;color:#009A97;background:white;border-radius:6px;padding:5px 9px;margin-top:4px;display:flex;align-items:center;gap:5px;">
+              <span style="font-size:12px;">🏷</span>
+              <span id="sample-order-disc-text">Spend $20+ → $3.00 off applied</span>
+            </div>
+          </div>
+          <div style="padding:8px 14px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:12px;color:#B4B2A9;">Purchase-on-Behalf</span>
+            <span style="font-size:11px;color:#009A97;font-weight:600;" id="sample-admin-fee">Admin fee included: $0.00</span>
+          </div>
+        </div>
+
+        <!-- Group milestone block — shown when milestone configured -->
+        <div id="sample-milestone-block" style="display:none;margin-top:8px;">
+          <!-- In-progress state -->
+          <div id="sample-ms-progress" class="ms-preview-card">
+            <div class="ms-preview-header">
+              <span class="ms-preview-icon">🎯</span>
+              <div style="flex:1;min-width:0;">
+                <div class="ms-preview-title" id="sample-ms-title">Group discount unlocks at $500</div>
+                <div class="ms-preview-sub">Invite friends to hit the target!</div>
+              </div>
+            </div>
+            <div class="ms-bar-wrap">
+              <div class="ms-bar-track"><div class="ms-bar-fill" style="width:52%"></div></div>
+              <div class="ms-bar-labels">
+                <span class="ms-bar-current" id="sample-ms-current">$260 ordered</span>
+                <span class="ms-bar-target" id="sample-ms-target">$500 target</span>
+              </div>
+            </div>
+            <div style="font-size:11px;color:#888780;margin-top:4px;" id="sample-ms-reward">Reward: 10% off for everyone once unlocked</div>
+          </div>
+          <!-- Unlocked state -->
+          <div style="margin-top:6px;">
+            <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:5px;">Once unlocked →</div>
+            <div class="ms-unlocked-banner">
+              <div style="font-size:16px;text-align:center;margin-bottom:3px;">🎉</div>
+              <div class="ms-unlocked-title" id="sample-ms-unlocked-title">Milestone reached!</div>
+              <div class="ms-unlocked-sub" id="sample-ms-unlocked-sub">Everyone gets 10% off this order.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="action-bar">
         <button class="btn-back" onclick="goToStep(2)">← Back</button>
         <button class="btn-next" onclick="publishEvent()">Publish →</button>
@@ -1468,6 +1523,57 @@ function populatePreview() {
     if (discPreview) { discPreview.style.display='block'; discPreview.innerHTML=html; }
   } else {
     if (discPreview) { discPreview.style.display='none'; discPreview.innerHTML=''; }
+  }
+
+  // ── Member view sample ──
+  var hasOrderDisc = discountTiers.length > 0;
+  var msOn = document.getElementById('milestone-toggle-sw').classList.contains('on');
+  var msCondVal = parseFloat(document.getElementById('ms-condVal').value);
+  var msDiscAmt = parseFloat(document.getElementById('ms-discAmt').value);
+  var hasMilestone = msOn && !isNaN(msCondVal) && msCondVal > 0 && !isNaN(msDiscAmt) && msDiscAmt > 0;
+
+  var sampleWrap = document.getElementById('member-view-sample');
+  if (!hasOrderDisc && !hasMilestone) {
+    sampleWrap.style.display = 'none';
+    return;
+  }
+  sampleWrap.style.display = 'block';
+
+  // Order discount line
+  var discLine = document.getElementById('sample-order-disc-line');
+  if (hasOrderDisc) {
+    // Show the first tier as example
+    var t = discountTiers[0];
+    var condStr = t.condType === 'spend' ? 'Spend $' + parseFloat(t.condVal).toFixed(2) + '+' : 'Order ' + t.condVal + '+ items';
+    var discStr = t.discType === 'fixed' ? '$' + parseFloat(t.discAmt).toFixed(2) + ' off' : t.discAmt + '% off';
+    document.getElementById('sample-order-disc-text').textContent = condStr + ' → ' + discStr + ' applied';
+    discLine.style.display = 'flex';
+  } else {
+    discLine.style.display = 'none';
+  }
+
+  // Milestone block
+  var msBlock = document.getElementById('sample-milestone-block');
+  if (hasMilestone) {
+    var noCap = document.getElementById('ms-noCap').checked;
+    var capAmt = parseFloat(document.getElementById('ms-capAmt').value);
+    var targetLabel = milestoneCondType === 'revenue' ? '$' + msCondVal.toFixed(2) : msCondVal + ' orders';
+    var rewardLabel = milestoneDiscType === 'fixed' ? '$' + msDiscAmt.toFixed(2) + ' off' : msDiscAmt + '% off';
+    if (milestoneDiscType === 'pct' && !noCap && !isNaN(capAmt) && capAmt > 0) rewardLabel += ' (max $' + capAmt.toFixed(2) + ')';
+
+    var simCurrent = milestoneCondType === 'revenue'
+      ? '$' + (msCondVal * 0.52).toFixed(2) + ' ordered'
+      : Math.floor(msCondVal * 0.52) + ' orders placed';
+
+    document.getElementById('sample-ms-title').textContent = 'Group discount unlocks at ' + targetLabel;
+    document.getElementById('sample-ms-current').textContent = simCurrent;
+    document.getElementById('sample-ms-target').textContent = targetLabel + ' target';
+    document.getElementById('sample-ms-reward').textContent = 'Reward: ' + rewardLabel + ' for everyone once unlocked';
+    document.getElementById('sample-ms-unlocked-sub').textContent = 'Everyone gets ' + rewardLabel + ' on this order.';
+    document.getElementById('sample-ms-unlocked-title').textContent = 'Milestone reached!';
+    msBlock.style.display = 'block';
+  } else {
+    msBlock.style.display = 'none';
   }
 }
 
