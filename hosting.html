@@ -794,18 +794,17 @@ select:focus { border-color: #009A97; }
                     </div>
                   </div>
 
-                  <!-- Request delivery details -->
-                  <div style="border-top:0.5px solid #e0dfd8;padding-top:10px;">
-                    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
-                      <input type="checkbox" id="del-request-details" style="margin-top:2px;accent-color:#009A97;width:14px;height:14px;flex-shrink:0;" />
-                      <div>
-                        <div style="font-size:12px;font-weight:600;color:#1a1a18;">Request delivery details from buyers</div>
-                        <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Buyers will be asked to provide their delivery address when ordering.</div>
-                      </div>
-                    </label>
-                  </div>
-
                 </div>
+              </div>
+            </div>
+
+            <div class="toggle-item">
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="req-delivery-toggle-row">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Request delivery details from buyers</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Buyers will be asked to provide their delivery address when ordering.</div>
+                </div>
+                <div class="toggle-sw" id="req-delivery-toggle-sw"></div>
               </div>
             </div>
 
@@ -1665,8 +1664,12 @@ function toggleSwitch(row) {
   if (row.id === 'delivery-toggle-row') {
     var isOn = sw.classList.contains('on');
     if (isOn && document.getElementById('del-dates-list').children.length === 0) addDeliveryDate();
-    var reqCb = document.getElementById('del-request-details');
-    if (reqCb) reqCb.checked = isOn;
+    // Auto-enable "Request delivery details" toggle
+    var reqRow = document.getElementById('req-delivery-toggle-row');
+    if (reqRow) {
+      var reqSw = document.getElementById('req-delivery-toggle-sw');
+      if (isOn && reqSw && !reqSw.classList.contains('on')) reqSw.classList.add('on');
+    }
   }
 }
 
