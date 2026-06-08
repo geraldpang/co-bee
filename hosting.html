@@ -596,7 +596,7 @@ select:focus { border-color: #009A97; }
                       </div>
                       <div class="tf-amt-wrap">
                         <span class="tf-pfx" id="ms-cond-prefix">$</span>
-                        <input class="tier-amt-input" type="number" id="ms-condVal" min="1" step="50" placeholder="500" oninput="updateMilestonePreview()" />
+                        <input class="tier-amt-input" type="number" id="ms-condVal" min="1" step="50" placeholder="0" oninput="updateMilestonePreview()" />
                         <span class="tf-pfx" id="ms-cond-suffix" style="margin-left:2px;"></span>
                       </div>
                     </div>
@@ -612,7 +612,7 @@ select:focus { border-color: #009A97; }
                       </div>
                       <div class="tf-amt-wrap">
                         <span class="tf-pfx" id="ms-disc-prefix">$</span>
-                        <input class="tier-amt-input" type="number" id="ms-discAmt" min="0" step="0.5" placeholder="5.00" oninput="updateMilestonePreview()" />
+                        <input class="tier-amt-input" type="number" id="ms-discAmt" min="0" step="0.5" placeholder="0" oninput="updateMilestonePreview()" />
                         <span class="tf-pfx" id="ms-disc-suffix" style="margin-left:2px;"></span>
                       </div>
                     </div>
@@ -622,7 +622,7 @@ select:focus { border-color: #009A97; }
                       <span class="tf-lbl">Cap</span>
                       <div class="tf-amt-wrap">
                         <span class="tf-pfx">$</span>
-                        <input class="tier-amt-input" type="number" id="ms-capAmt" min="0" step="0.50" placeholder="20.00" oninput="updateMilestonePreview()" />
+                        <input class="tier-amt-input" type="number" id="ms-capAmt" min="0" step="0.50" placeholder="0" oninput="updateMilestonePreview()" />
                       </div>
                       <label class="cap-check-lbl">
                         <input type="checkbox" id="ms-noCap" onchange="toggleMilestoneNoCap(this);updateMilestonePreview()" /> No cap
@@ -656,10 +656,10 @@ select:focus { border-color: #009A97; }
                       <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid #c8e8e8;">
                         <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;">Unlocked state (members see this when milestone is hit)</div>
                         <div id="ms-preview-unlocked">
-                          <div class="ms-unlocked-banner">
+                          <div style="border-radius:10px;border:0.5px solid #80CCCB;background:#E0F5F5;padding:14px 12px;text-align:center;">
                             <div style="font-size:18px;text-align:center;margin-bottom:4px;">🎉</div>
-                            <div class="ms-unlocked-title" id="ms-unlocked-title">Milestone reached!</div>
-                            <div class="ms-unlocked-sub" id="ms-unlocked-sub">Everyone gets 10% off this order.</div>
+                            <div style="font-size:14px;font-weight:700;color:#007A77;margin-bottom:3px;" id="ms-unlocked-title">Milestone reached!</div>
+                            <div style="font-size:12px;color:#009A97;line-height:1.4;" id="ms-unlocked-sub">Everyone gets 10% off this order.</div>
                           </div>
                         </div>
                       </div>
@@ -1906,7 +1906,7 @@ function renderTierForm(defaults) {
     +     '<span class="tf-pfx" id="tf-cond-prefix">' + (!isQty ? '$' : '') + '</span>'
     +     '<input class="tier-amt-input" type="number" id="tf-condVal" min="0"'
     +       ' step="' + (!isQty ? '0.50' : '1') + '"'
-    +       ' placeholder="' + (!isQty ? '20.00' : '3') + '"'
+    +       ' placeholder="0"'
     +       ' value="' + (defaults.condVal || '') + '"'
     +       ' oninput="validateTierForm()" />'
     +     '<span class="tf-pfx" id="tf-cond-suffix" style="margin-left:2px;">' + (isQty ? 'items' : '') + '</span>'
@@ -1926,7 +1926,7 @@ function renderTierForm(defaults) {
     +     '<span class="tf-pfx" id="tf-disc-prefix">' + (!isPct ? '$' : '') + '</span>'
     +     '<input class="tier-amt-input" type="number" id="tf-discAmt" min="0"'
     +       ' step="' + (!isPct ? '0.50' : '0.5') + '"'
-    +       ' placeholder="' + (!isPct ? '3.00' : '10') + '"'
+    +       ' placeholder="0"'
     +       ' value="' + (defaults.discAmt || '') + '"'
     +       ' oninput="validateTierForm()" />'
     +     '<span class="tf-pfx" id="tf-disc-suffix" style="margin-left:2px;">' + (isPct ? '%' : '') + '</span>'
@@ -1938,7 +1938,7 @@ function renderTierForm(defaults) {
     +   '<span class="tf-lbl">Cap</span>'
     +   '<div class="tf-amt-wrap">'
     +     '<span class="tf-pfx">$</span>'
-    +     '<input class="tier-amt-input" type="number" id="tf-capAmt" min="0" step="0.50" placeholder="15.00"'
+    +     '<input class="tier-amt-input" type="number" id="tf-capAmt" min="0" step="0.50" placeholder="0"'
     +       ' value="' + (defaults.capAmt || '') + '"' + (defaults.noCap ? ' disabled' : '') + ' />'
     +   '</div>'
     +   '<label class="cap-check-lbl">'
@@ -1962,7 +1962,7 @@ function onCondTypeChange() {
   document.getElementById('tf-cond-suffix').textContent = type === 'qty' ? 'items' : '';
   var inp = document.getElementById('tf-condVal');
   inp.step = type === 'spend' ? '0.50' : '1';
-  inp.placeholder = type === 'spend' ? '20.00' : '3';
+  inp.placeholder = '0';
   validateTierForm();
 }
 
@@ -1975,7 +1975,7 @@ function setDiscType(type) {
   document.getElementById('tf-cap-row').style.display = type === 'pct' ? 'grid' : 'none';
   var inp = document.getElementById('tf-discAmt');
   inp.step = type === 'fixed' ? '0.50' : '0.5';
-  inp.placeholder = type === 'fixed' ? '3.00' : '10';
+  inp.placeholder = '0';
   validateTierForm();
 }
 
@@ -2122,7 +2122,7 @@ function setMilestoneCondType(type) {
   document.getElementById('ms-cond-suffix').textContent = type === 'orders' ? 'orders' : '';
   var inp = document.getElementById('ms-condVal');
   inp.step = type === 'revenue' ? '50' : '1';
-  inp.placeholder = type === 'revenue' ? '500' : '20';
+  inp.placeholder = '0';
   validateMilestone();
   updateMilestonePreview();
 }
@@ -2136,7 +2136,7 @@ function setMilestoneDiscType(type) {
   document.getElementById('ms-cap-row').style.display = type === 'pct' ? 'grid' : 'none';
   var inp = document.getElementById('ms-discAmt');
   inp.step = type === 'fixed' ? '0.50' : '1';
-  inp.placeholder = type === 'fixed' ? '5.00' : '10';
+  inp.placeholder = '0';
   validateMilestone();
   updateMilestonePreview();
 }
