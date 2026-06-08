@@ -201,6 +201,9 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
             Clear
           </button>
         </div>
+        <div id="date-range-label" style="font-size:11px;color:#888780;padding:2px 2px 6px;display:none;">
+          Showing: <span id="date-range-text" style="font-weight:600;color:#1a1a18;"></span>
+        </div>
 
         <!-- KPI CARDS -->
         <div class="kpi-grid">
@@ -761,11 +764,33 @@ function filterInactive(days, btn) {
 }
 
 
+function setDateFilter(btn, period) {
   document.querySelectorAll('.filter-bar .filter-chip').forEach(b => {
     if (['All Time','This Month','This Week'].includes(b.textContent.trim())) b.classList.remove('active');
   });
   btn.classList.add('active');
-  // In a real app, re-fetch/filter data here
+
+  var label = document.getElementById('date-range-label');
+  var text  = document.getElementById('date-range-text');
+  var today = new Date();
+
+  function fmt(d) { return d.toLocaleDateString('en-AU'); }
+
+  if (period === 'week') {
+    var start = new Date(today);
+    start.setDate(today.getDate() - today.getDay() + 1); // Mon
+    var end = new Date(start);
+    end.setDate(start.getDate() + 6); // Sun
+    text.textContent = fmt(start) + ' – ' + fmt(end);
+    label.style.display = 'block';
+  } else if (period === 'month') {
+    var start = new Date(today.getFullYear(), today.getMonth(), 1);
+    var end   = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    text.textContent = fmt(start) + ' – ' + fmt(end);
+    label.style.display = 'block';
+  } else {
+    label.style.display = 'none';
+  }
 }
 function setEventFilter(val) { /* filter data by event */ }
 function setStatusFilter(val) { /* filter data by status */ }
@@ -773,6 +798,7 @@ function clearFilters(btn) {
   document.querySelectorAll('.filter-bar .filter-chip').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.filter-bar .filter-chip')[0].classList.add('active');
   document.querySelectorAll('.filter-select').forEach(s => s.selectedIndex = 0);
+  document.getElementById('date-range-label').style.display = 'none';
 }
 
 function setPeriod(el, period) {
