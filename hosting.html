@@ -782,118 +782,244 @@ select:focus { border-color: #009A97; }
       <div class="step"><div class="step-circle active">3</div><div class="step-lbl active">Preview &amp; Publish</div></div>
     </div>
 
-    <div class="page-inner">
+    <div class="page-inner" style="gap:0;padding-bottom:0;">
 
-      <p style="font-size:12px;color:#888780;text-align:center;padding:2px 0 4px;">This is how your event will appear to members.</p>
-
-      <!-- Preview card — same format as member feed -->
-      <div class="preview-card">
-        <div style="padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #f0f0f0;">
-          <div style="display:flex;align-items:center;gap:9px;">
-            <div style="width:32px;height:32px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">M6</div>
-            <div>
-              <div style="font-size:13px;font-weight:600;color:#1a1a18;">M6 group</div>
-              <div style="font-size:11px;color:#888780;">Minh Cong</div>
+      <!-- Settings summary strip (host-only, collapsible) -->
+      <div style="background:white;border-radius:12px;border:0.5px solid #e0dfd8;margin-bottom:10px;overflow:hidden;">
+        <div style="padding:10px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleSection(this)">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+            <span style="font-size:11px;font-weight:600;color:#009A97;letter-spacing:0.05em;text-transform:uppercase;">Your settings</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:11px;font-weight:600;color:#009A97;cursor:pointer;" onclick="event.stopPropagation();goToStep(1)">Edit</span>
+            <svg class="collapse-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="section-collapse-body" style="border-top:0.5px solid #f0f0f0;">
+          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:10px;">
+              <span style="font-size:11px;font-weight:600;color:#888780;width:72px;flex-shrink:0;">Payment</span>
+              <span style="font-size:11px;color:#1a1a18;" id="preview-payment">Pay together</span>
             </div>
+            <div id="preview-discount-wrap" style="display:none;"></div>
+            <div style="display:flex;gap:10px;">
+              <span style="font-size:11px;font-weight:600;color:#888780;width:72px;flex-shrink:0;">Products</span>
+              <div style="font-size:11px;color:#1a1a18;flex:1;" id="preview-products">No products added yet.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MEMBER VIEW — exact mirror of member.html ev-screen-1 ── -->
+      <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;text-align:center;margin-bottom:8px;">Member view</div>
+
+      <!-- Event header card -->
+      <div style="background:white;border-radius:14px;overflow:hidden;border:0.5px solid #e0dfd8;box-shadow:0 1px 8px rgba(0,0,0,0.05);">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 10px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;">M6</div>
+            <div><div style="font-size:13px;font-weight:600;color:#1a1a18;">M6 group</div><div style="font-size:11px;color:#888780;">Minh Cong</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;font-weight:600;color:#E8971A;" id="preview-days">Closing in — days</span>
+            <span style="background:#D3D1C7;color:#5F5E5A;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;">0 BUY</span>
+          </div>
+        </div>
+        <div style="height:190px;background:#E0F5F5;display:flex;align-items:center;justify-content:center;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div style="padding:14px;">
+          <div id="preview-title" style="font-size:17px;font-weight:700;color:#1a1a18;margin-bottom:4px;">Your event title</div>
+          <div id="preview-desc" style="font-size:13px;color:#888780;margin-bottom:10px;">Your event description will appear here.</div>
+          <div style="display:grid;grid-template-columns:80px 1fr;gap:5px 0;font-size:12px;margin-bottom:12px;">
+            <span style="color:#888780;">Closing:</span><span style="color:#1a1a18;" id="preview-closing">—</span>
+            <span style="color:#888780;">Collection:</span><span style="color:#1a1a18;" id="preview-collection">—</span>
+            <span style="color:#888780;">Address:</span><span style="color:#1a1a18;" id="preview-location">—</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;">
-            <span style="font-size:11px;color:#E8971A;font-weight:500;" id="preview-days">Closing in — days</span>
-            <span style="background:#D3D1C7;color:#5F5E5A;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600;">0 BUY</span>
+            <span style="color:#E8971A;font-size:14px;">★★★★</span><span style="color:#D3D1C7;font-size:14px;">★</span>
+            <span style="font-size:12px;font-weight:600;color:#1a1a18;">4.0</span>
+            <span style="font-size:11px;color:#888780;">(3 reviews)</span>
           </div>
-        </div>
-        <div class="preview-banner">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        </div>
-        <div class="preview-body">
-          <div class="preview-title" id="preview-title">Your event title</div>
-          <div class="preview-desc" id="preview-desc">Your event description will appear here.</div>
-          <div class="preview-info-row"><span class="preview-info-lbl">Closing</span><span class="preview-info-val" id="preview-closing">—</span></div>
-          <div class="preview-info-row"><span class="preview-info-lbl">Collection</span><span class="preview-info-val" id="preview-collection">—</span></div>
-          <div class="preview-info-row"><span class="preview-info-lbl">Address</span><span class="preview-info-val" id="preview-location">—</span></div>
+          <div style="font-size:12px;color:#888780;font-style:italic;margin-top:6px;"><strong style="color:#1a1a18;font-style:normal;">Janet:</strong> "Great quality, will order again next round!"</div>
         </div>
       </div>
 
-      <!-- Review summary -->
-      <div class="form-card">
-        <div class="form-card-title">Review summary</div>
+      <!-- Search bar -->
+      <div style="margin:10px 0 0;position:relative;">
+        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#B4B2A9;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input placeholder="Search product" style="width:100%;height:38px;border:0.5px solid #D3D1C7;border-radius:20px;padding:0 12px 0 32px;font-size:12px;font-family:inherit;outline:none;background:white;" disabled />
+      </div>
 
-        <div>
-          <div class="preview-section-lbl" style="margin-top:0;">Payment</div>
-          <div style="font-size:13px;color:#888780;" id="preview-payment">Pay together</div>
+      <!-- Items card -->
+      <div style="background:white;border-radius:14px;border:0.5px solid #e0dfd8;margin-top:10px;overflow:hidden;">
+        <div style="padding:10px 14px;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;">ITEMS</span>
+          <span style="font-size:10px;color:#B4B2A9;">Sample products</span>
         </div>
 
-        <div id="preview-discount-wrap" style="display:none;"></div>
+        <!-- Item 1: Spec -->
+        <div id="preview-items-list" style="display:flex;flex-direction:column;gap:0;">
+          <div style="padding:16px 14px;border-bottom:0.5px solid #f0f0f0;">
+            <div style="display:flex;gap:16px;align-items:flex-start;">
+              <div style="width:88px;height:88px;border-radius:10px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                  <div style="font-size:13px;font-weight:600;color:#1a1a18;">Spec (Glasses)</div>
+                  <div style="font-size:14px;font-weight:700;color:#009A97;">$20.00</div>
+                </div>
+                <div style="font-size:11px;color:#888780;margin-top:1px;">Good Spec from Vietnam</div>
+                <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:5px;">
+                  <span style="padding:3px 10px;border-radius:99px;font-size:11px;border:0.5px solid #D3D1C7;color:#888780;">Blue</span>
+                  <span style="padding:3px 10px;border-radius:99px;font-size:11px;border:0.5px solid #D3D1C7;color:#888780;">Red</span>
+                  <span style="padding:3px 10px;border-radius:99px;font-size:11px;border:0.5px solid #D3D1C7;color:#888780;">Green</span>
+                  <span style="font-size:11px;color:#E24B4A;font-weight:600;padding:3px 0;">Required</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                  <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <button style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.5;">−</button>
+                    <span style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                    <button style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.6;">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <div>
-          <div class="preview-section-lbl">Products</div>
-          <div id="preview-products" style="font-size:13px;color:#888780;">No products added yet.</div>
-        </div>
+          <!-- Item 2: Toothpaste -->
+          <div style="padding:16px 14px;border-bottom:0.5px solid #f0f0f0;">
+            <div style="display:flex;gap:16px;align-items:center;">
+              <div style="width:88px;height:88px;border-radius:10px;background:#E8F8EF;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                  <div style="font-size:13px;font-weight:600;color:#1a1a18;">Toothpaste</div>
+                  <div style="font-size:14px;font-weight:700;color:#009A97;">$2.00</div>
+                </div>
+                <div style="font-size:11px;color:#888780;margin-top:1px;">Whitening toothpaste, pack of 3</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                  <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <button style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.5;">−</button>
+                    <span style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                    <button style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.6;">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <div style="border-top:0.5px solid #f0f0f0;padding-top:10px;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:12px;color:#888780;">Ready to publish?</span>
-          <span style="font-size:12px;font-weight:600;color:#009A97;cursor:pointer;" onclick="goToStep(1)">Edit details</span>
+          <!-- Item 3: Chestnut -->
+          <div style="padding:16px 14px;">
+            <div style="display:flex;gap:16px;align-items:center;">
+              <div style="width:88px;height:88px;border-radius:10px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                  <div style="font-size:13px;font-weight:600;color:#1a1a18;">Chestnut (Case)</div>
+                  <div style="font-size:14px;font-weight:700;color:#009A97;">$10.00</div>
+                </div>
+                <div style="font-size:11px;color:#888780;margin-top:1px;">Fresh chestnuts, per case</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                  <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <button style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.5;">−</button>
+                    <span style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                    <button style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.6;">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Member view sample — mirrors exact member.html structure -->
-      <div id="member-view-sample" style="display:none;">
-        <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;text-align:center;margin:4px 0 8px;">How members see this on the event page</div>
-
-        <!-- Order Total — exact match to member.html -->
-        <div style="border-radius:12px;overflow:hidden;border:0.5px solid #e0dfd8;">
-          <div style="background:#E0F5F5;padding:12px 14px;border-bottom:0.5px solid #80CCCB;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:13px;font-weight:600;color:#007A77;">Order Total</span>
-              <span style="font-size:18px;font-weight:700;color:#007A77;">$25.00 <span style="font-size:12px;font-weight:400;">SGD</span></span>
-            </div>
-            <!-- Discount chip — same as .disc-chip in member.html -->
-            <div id="sample-order-disc-line" style="display:none;align-items:center;gap:6px;background:white;border:0.5px solid #80CCCB;border-radius:6px;padding:5px 10px;margin-top:6px;">
-              <span style="font-size:12px;flex-shrink:0;">🏷</span>
-              <span style="font-size:11px;font-weight:500;color:#007A77;flex:1;" id="sample-order-disc-text">Spend $20+ discount applied</span>
-              <span style="font-size:12px;font-weight:700;color:#007A77;" id="sample-order-disc-amt">−$3.00</span>
-            </div>
+      <!-- Order Total box — exact match to member.html -->
+      <div style="margin-top:10px;border-radius:12px;overflow:hidden;border:0.5px solid #e0dfd8;">
+        <div style="background:#E0F5F5;padding:12px 14px;border-bottom:0.5px solid #80CCCB;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;font-weight:600;color:#007A77;">Order Total</span>
+            <span style="font-size:18px;font-weight:700;color:#007A77;">$0.00 SGD</span>
           </div>
-          <div style="background:white;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;">
-            <span style="font-size:12px;color:#B4B2A9;cursor:pointer;">Purchase-on-Behalf</span>
-            <span style="font-size:11px;color:#009A97;font-weight:600;">Admin fee included: $0.00</span>
+          <!-- Discount chip — visible when order discounts configured -->
+          <div id="sample-order-disc-line" style="display:none;align-items:center;gap:6px;background:white;border:0.5px solid #80CCCB;border-radius:6px;padding:5px 10px;margin-top:6px;">
+            <span style="font-size:12px;flex-shrink:0;">&#127991;</span>
+            <span style="font-size:11px;font-weight:500;color:#007A77;flex:1;" id="sample-order-disc-text">Spend $20+ discount applied</span>
+            <span style="font-size:12px;font-weight:700;color:#007A77;" id="sample-order-disc-amt">−$3.00</span>
           </div>
         </div>
-
-        <!-- Milestone in-progress — exact match to .milestone-wrap in member.html -->
-        <div id="sample-milestone-block" style="display:none;margin-top:8px;border-radius:10px;overflow:hidden;border:0.5px solid #80CCCB;background:#E0F5F5;">
-          <div style="padding:10px 12px 6px;display:flex;align-items:flex-start;gap:8px;">
-            <span style="font-size:18px;flex-shrink:0;">🎯</span>
-            <div>
-              <div style="font-size:13px;font-weight:700;color:#007A77;line-height:1.3;" id="sample-ms-title">Group discount unlocks at $500</div>
-              <div style="font-size:11px;color:#009A97;margin-top:1px;">Invite friends to hit the target!</div>
-            </div>
-          </div>
-          <div style="padding:0 12px 4px;">
-            <div style="height:6px;background:rgba(0,154,151,0.18);border-radius:99px;overflow:hidden;">
-              <div style="height:100%;background:#009A97;border-radius:99px;width:52%;" id="sample-ms-bar"></div>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-top:4px;">
-              <span style="font-size:11px;font-weight:600;color:#007A77;" id="sample-ms-current">$260 ordered</span>
-              <span style="font-size:11px;color:#80CCCB;" id="sample-ms-target">$500 target</span>
-            </div>
-          </div>
-          <div style="font-size:11px;color:#888780;padding:4px 12px 10px;" id="sample-ms-reward">Reward: 10% off for everyone once unlocked</div>
-        </div>
-
-        <!-- Milestone unlocked — exact match to .milestone-unlocked in member.html -->
-        <div id="sample-milestone-unlocked" style="display:none;margin-top:8px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#009A97,#007A77);padding:14px;text-align:center;">
-          <div style="font-size:20px;margin-bottom:4px;">🎉</div>
-          <div style="font-size:14px;font-weight:700;color:white;margin-bottom:2px;">Milestone reached!</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.85);" id="sample-ms-unlocked-sub">Everyone gets 10% off this order.</div>
+        <div style="background:white;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;color:#B4B2A9;">Purchase-on-Behalf</span>
+          <span style="font-size:11px;color:#009A97;font-weight:600;">Admin fee included: $0.00</span>
         </div>
       </div>
 
-      <div class="action-bar">
-        <button class="btn-back" onclick="goToStep(2)">← Back</button>
-        <button class="btn-next" onclick="publishEvent()">Publish →</button>
+      <!-- Milestone in-progress -->
+      <div id="sample-milestone-block" style="display:none;margin-top:8px;border-radius:10px;overflow:hidden;border:0.5px solid #80CCCB;background:#E0F5F5;">
+        <div style="padding:10px 12px 6px;display:flex;align-items:flex-start;gap:8px;">
+          <span style="font-size:18px;flex-shrink:0;">&#127919;</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#007A77;line-height:1.3;" id="sample-ms-title">Group discount unlocks at $500</div>
+            <div style="font-size:11px;color:#009A97;margin-top:1px;">Invite friends to hit the target!</div>
+          </div>
+        </div>
+        <div style="padding:0 12px 4px;">
+          <div style="height:6px;background:rgba(0,154,151,0.18);border-radius:99px;overflow:hidden;">
+            <div style="height:100%;background:#009A97;border-radius:99px;width:52%;" id="sample-ms-bar"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;">
+            <span style="font-size:11px;font-weight:600;color:#007A77;" id="sample-ms-current">$260 ordered</span>
+            <span style="font-size:11px;color:#80CCCB;" id="sample-ms-target">$500 target</span>
+          </div>
+        </div>
+        <div style="font-size:11px;color:#888780;padding:4px 12px 10px;" id="sample-ms-reward">Reward: 10% off for everyone once unlocked</div>
       </div>
-      <div style="max-width:600px;margin:0 auto;padding:0 10px 16px;">
-        <button class="btn-back" style="width:100%;height:36px;" onclick="saveDraft()">Save as draft</button>
+
+      <!-- Milestone unlocked -->
+      <div id="sample-milestone-unlocked" style="display:none;margin-top:8px;border-radius:10px;overflow:hidden;background:#009A97;padding:14px;text-align:center;">
+        <div style="font-size:20px;margin-bottom:4px;">&#127881;</div>
+        <div style="font-size:14px;font-weight:700;color:white;margin-bottom:2px;">Milestone reached!</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.85);" id="sample-ms-unlocked-sub">Everyone gets 10% off this order.</div>
+      </div>
+
+      <!-- Please note + Notes to host -->
+      <div style="background:white;border-radius:12px;border:0.5px solid #e0dfd8;margin-top:10px;overflow:hidden;">
+        <div style="padding:12px 14px 10px;border-bottom:0.5px solid #f0f0f0;">
+          <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:8px;">PLEASE NOTE</div>
+          <div id="preview-please-note" style="display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;gap:7px;font-size:12px;color:#888780;align-items:flex-start;">
+              <span style="color:#009A97;font-weight:700;flex-shrink:0;font-size:14px;line-height:1.2;">•</span>
+              <span style="font-style:italic;color:#B4B2A9;">Additional notes from the host will appear here.</span>
+            </div>
+          </div>
+        </div>
+        <div style="padding:12px 14px;">
+          <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:6px;">NOTES TO THE HOST</div>
+          <textarea placeholder="Optional message to the host..." style="width:100%;height:64px;border:0.5px solid #D3D1C7;border-radius:8px;padding:8px 10px;font-size:12px;font-family:inherit;outline:none;resize:none;background:#FAFAF8;" disabled></textarea>
+        </div>
+      </div>
+
+      <!-- Action buttons — read only -->
+      <div style="display:flex;gap:10px;margin-top:12px;">
+        <button style="flex:1;height:48px;border:0.5px solid #D3D1C7;border-radius:10px;background:white;font-size:14px;font-weight:600;color:#888780;cursor:not-allowed;font-family:inherit;opacity:0.6;">Cancel</button>
+        <button style="flex:2;height:48px;background:#009A97;border:none;border-radius:10px;font-size:14px;font-weight:700;color:white;cursor:not-allowed;font-family:inherit;opacity:0.7;">Place Order</button>
+      </div>
+
+      <!-- Divider before publish controls -->
+      <div style="margin-top:20px;border-top:0.5px solid #e0dfd8;padding-top:16px;">
+        <div class="action-bar" style="padding:0 0 8px;">
+          <button class="btn-back" onclick="goToStep(2)">&#8592; Back</button>
+          <button class="btn-next" onclick="publishEvent()">Publish &#8594;</button>
+        </div>
+        <div style="max-width:600px;margin:0 auto;padding:0 0 20px;">
+          <button class="btn-back" style="width:100%;height:36px;" onclick="saveDraft()">Save as draft</button>
+        </div>
       </div>
 
     </div>
@@ -1489,89 +1615,116 @@ function removeProduct(i) {
 
 /* ── PREVIEW ── */
 function populatePreview() {
-  const title    = document.getElementById('ev-title').value || 'Your event title';
-  const desc     = document.getElementById('ev-desc').value  || 'Your event description will appear here.';
-  const location = document.getElementById('ev-location').value || '—';
-  const closing  = document.getElementById('ev-closing').value;
-  const collect  = document.getElementById('ev-collection').value;
-  document.getElementById('preview-title').textContent    = title;
-  document.getElementById('preview-desc').textContent     = desc;
-  document.getElementById('preview-location').textContent = location;
-  document.getElementById('preview-closing').textContent  = closing  || '—';
+  // ── Event card fields ──
+  var title    = document.getElementById('ev-title').value    || 'Your event title';
+  var desc     = document.getElementById('ev-desc').value     || 'Your event description will appear here.';
+  var location = document.getElementById('ev-location').value || '—';
+  var closing  = document.getElementById('ev-closing').value;
+  var collect  = document.getElementById('ev-collection').value;
+  document.getElementById('preview-title').textContent      = title;
+  document.getElementById('preview-desc').textContent       = desc;
+  document.getElementById('preview-location').textContent   = location;
+  document.getElementById('preview-closing').textContent    = closing || '—';
   document.getElementById('preview-collection').textContent = collect || '—';
   if (closing) {
-    const days = Math.ceil((new Date(closing) - new Date()) / 86400000);
+    var days = Math.ceil((new Date(closing) - new Date()) / 86400000);
     document.getElementById('preview-days').textContent = days > 0 ? 'Closing in ' + days + ' days' : 'Closed';
   }
-  document.getElementById('preview-products').innerHTML = products.length
-    ? products.map(p => `<div class="preview-product-row"><span>${p.name}</span><span style="font-weight:600;">$${parseFloat(p.price||0).toFixed(2)}</span></div>`).join('')
-    : 'No products added yet.';
-  const checkedPayments = [...document.querySelectorAll('#step-1 .check-option.on .check-lbl')].map(l => l.textContent);
-  document.getElementById('preview-payment').textContent = checkedPayments.length ? checkedPayments.join(' · ') : 'None selected';
 
-  // Discount summary in preview
+  // ── Settings strip (payment toggles) ──
+  var payOn = [];
+  document.querySelectorAll('#step-1 .toggle-item').forEach(function(item) {
+    var sw  = item.querySelector('.toggle-sw');
+    var lbl = item.querySelector('.toggle-lbl');
+    if (sw && sw.classList.contains('on') && lbl) payOn.push(lbl.textContent.trim());
+  });
+  document.getElementById('preview-payment').textContent = payOn.length ? payOn.join(' · ') : 'None selected';
+
+  // Products in settings strip
+  var prodEl = document.getElementById('preview-products');
+  if (prodEl) {
+    prodEl.innerHTML = products.length
+      ? products.map(function(p){ return '<span style="display:inline-block;margin-right:6px;">'+p.name+' <strong>$'+parseFloat(p.price||0).toFixed(2)+'</strong></span>'; }).join('')
+      : 'No products added yet.';
+  }
+
+  // Discounts in settings strip
   var discPreview = document.getElementById('preview-discount-wrap');
-  if (discountTiers.length > 0) {
-    var html = '<div class="preview-section-lbl">Discounts</div>'
-      + '<div style="display:flex;flex-direction:column;gap:4px;">'
-      + discountTiers.map(function(t){
-          return '<div style="font-size:12px;color:#007A77;background:#E0F5F5;border-radius:6px;padding:5px 8px;">🏷 ' + tierSummaryText(t) + '</div>';
-        }).join('')
-      + '</div>';
-    if (discPreview) { discPreview.style.display='block'; discPreview.innerHTML=html; }
-  } else {
-    if (discPreview) { discPreview.style.display='none'; discPreview.innerHTML=''; }
+  if (discPreview) {
+    if (discountTiers.length > 0) {
+      discPreview.style.display = 'block';
+      discPreview.innerHTML = '<div style="display:flex;gap:10px;"><span style="font-size:11px;font-weight:600;color:#888780;width:72px;flex-shrink:0;">Discounts</span>'
+        + '<div style="display:flex;flex-direction:column;gap:3px;">'
+        + discountTiers.map(function(t){
+            return '<span style="font-size:11px;color:#007A77;">&#127991; ' + tierSummaryText(t) + '</span>';
+          }).join('')
+        + '</div></div>';
+    } else {
+      discPreview.style.display = 'none';
+    }
   }
 
-  // ── Member view sample ──
+  // ── Please Note card — pull from Additional Notes textarea ──
+  var notesTA = getNotesTextarea();
+  var noteWrap = document.getElementById('preview-please-note');
+  if (noteWrap && notesTA && notesTA.value.trim()) {
+    var lines = notesTA.value.replace(/<!--[^>]*-->/g, '').trim().split('\n').filter(function(l){ return l.trim(); });
+    noteWrap.innerHTML = lines.map(function(line){
+      return '<div style="display:flex;gap:7px;font-size:12px;color:#888780;align-items:flex-start;">'
+        + '<span style="color:#009A97;font-weight:700;flex-shrink:0;font-size:14px;line-height:1.2;">•</span>'
+        + '<span>' + line.trim() + '</span></div>';
+    }).join('');
+  }
+
+  // ── Order discount chip ──
   var hasOrderDisc = discountTiers.length > 0;
-  var msOn = document.getElementById('milestone-toggle-sw').classList.contains('on');
-  var msCondVal = parseFloat(document.getElementById('ms-condVal').value);
-  var msDiscAmt = parseFloat(document.getElementById('ms-discAmt').value);
-  var hasMilestone = msOn && !isNaN(msCondVal) && msCondVal > 0 && !isNaN(msDiscAmt) && msDiscAmt > 0;
-
-  var sampleWrap = document.getElementById('member-view-sample');
-  if (!hasOrderDisc && !hasMilestone) {
-    sampleWrap.style.display = 'none';
-    return;
-  }
-  sampleWrap.style.display = 'block';
-
-  // Order discount line
   var discLine = document.getElementById('sample-order-disc-line');
-  if (hasOrderDisc) {
-    // Show the first tier as example
+  if (hasOrderDisc && discLine) {
     var t = discountTiers[0];
-    var condStr = t.condType === 'spend' ? 'Spend $' + parseFloat(t.condVal).toFixed(2) + '+' : 'Order ' + t.condVal + '+ items';
-    var discStr = t.discType === 'fixed' ? '$' + parseFloat(t.discAmt).toFixed(2) + ' off' : t.discAmt + '% off';
-    document.getElementById('sample-order-disc-text').textContent = condStr + ' → ' + discStr + ' applied';
+    var condStr = t.condType === 'spend'
+      ? 'Spend $' + parseFloat(t.condVal).toFixed(2) + '+'
+      : 'Order ' + t.condVal + '+ items';
+    var discAmt = t.discType === 'fixed'
+      ? '−$' + parseFloat(t.discAmt).toFixed(2)
+      : '−' + t.discAmt + '%';
+    document.getElementById('sample-order-disc-text').textContent = condStr + ' discount applied';
+    document.getElementById('sample-order-disc-amt').textContent  = discAmt;
     discLine.style.display = 'flex';
-  } else {
+  } else if (discLine) {
     discLine.style.display = 'none';
   }
 
-  // Milestone block
-  var msBlock = document.getElementById('sample-milestone-block');
-  if (hasMilestone) {
-    var noCap = document.getElementById('ms-noCap').checked;
-    var capAmt = parseFloat(document.getElementById('ms-capAmt').value);
-    var targetLabel = milestoneCondType === 'revenue' ? '$' + msCondVal.toFixed(2) : msCondVal + ' orders';
-    var rewardLabel = milestoneDiscType === 'fixed' ? '$' + msDiscAmt.toFixed(2) + ' off' : msDiscAmt + '% off';
-    if (milestoneDiscType === 'pct' && !noCap && !isNaN(capAmt) && capAmt > 0) rewardLabel += ' (max $' + capAmt.toFixed(2) + ')';
+  // ── Milestone blocks ──
+  var msOn      = document.getElementById('milestone-toggle-sw').classList.contains('on');
+  var msCondVal = parseFloat(document.getElementById('ms-condVal').value);
+  var msDiscAmt = parseFloat(document.getElementById('ms-discAmt').value);
+  var hasMilestone = msOn && !isNaN(msCondVal) && msCondVal > 0 && !isNaN(msDiscAmt) && msDiscAmt > 0;
+  var msBlock    = document.getElementById('sample-milestone-block');
+  var msUnlocked = document.getElementById('sample-milestone-unlocked');
 
+  if (hasMilestone && msBlock && msUnlocked) {
+    var noCap      = document.getElementById('ms-noCap').checked;
+    var capAmt     = parseFloat(document.getElementById('ms-capAmt').value);
+    var targetLabel = milestoneCondType === 'revenue' ? '$' + msCondVal.toFixed(2) : msCondVal + ' orders';
+    var rewardLabel = milestoneDiscType === 'fixed'
+      ? '$' + msDiscAmt.toFixed(2) + ' off'
+      : msDiscAmt + '% off';
+    if (milestoneDiscType === 'pct' && !noCap && !isNaN(capAmt) && capAmt > 0) rewardLabel += ' (max $' + capAmt.toFixed(2) + ')';
     var simCurrent = milestoneCondType === 'revenue'
       ? '$' + (msCondVal * 0.52).toFixed(2) + ' ordered'
       : Math.floor(msCondVal * 0.52) + ' orders placed';
 
-    document.getElementById('sample-ms-title').textContent = 'Group discount unlocks at ' + targetLabel;
-    document.getElementById('sample-ms-current').textContent = simCurrent;
-    document.getElementById('sample-ms-target').textContent = targetLabel + ' target';
-    document.getElementById('sample-ms-reward').textContent = 'Reward: ' + rewardLabel + ' for everyone once unlocked';
+    document.getElementById('sample-ms-title').textContent        = 'Group discount unlocks at ' + targetLabel;
+    document.getElementById('sample-ms-current').textContent      = simCurrent;
+    document.getElementById('sample-ms-target').textContent       = targetLabel + ' target';
+    document.getElementById('sample-ms-bar').style.width          = '52%';
+    document.getElementById('sample-ms-reward').textContent       = 'Reward: ' + rewardLabel + ' for everyone once unlocked';
     document.getElementById('sample-ms-unlocked-sub').textContent = 'Everyone gets ' + rewardLabel + ' on this order.';
-    document.getElementById('sample-ms-unlocked-title').textContent = 'Milestone reached!';
-    msBlock.style.display = 'block';
-  } else {
-    msBlock.style.display = 'none';
+    msBlock.style.display    = 'block';
+    msUnlocked.style.display = 'block';
+  } else if (msBlock && msUnlocked) {
+    msBlock.style.display    = 'none';
+    msUnlocked.style.display = 'none';
   }
 }
 
