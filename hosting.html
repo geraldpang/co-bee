@@ -379,7 +379,50 @@ select:focus { border-color: #009A97; }
 /* Warning */
 .tier-warning { font-size: 11px; color: #E8971A; background: #FEF2DC; border-radius: 6px; padding: 6px 10px; line-height: 1.5; }
 
-/* ── GROUP MILESTONE PREVIEW ── */
+/* ── DELIVERY ── */
+.del-choice-pill {
+  height: 28px; padding: 0 10px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  background: white; font-size: 11px; font-weight: 600; color: #888780;
+  cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.12s;
+}
+.del-choice-pill.active { background: #009A97; color: white; border-color: #009A97; }
+
+.del-area-row {
+  display: grid; grid-template-columns: 1fr 90px 28px;
+  align-items: center; gap: 6px;
+}
+.del-area-name {
+  height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 8px; font-size: 12px; font-family: inherit; color: #1a1a18;
+  outline: none; background: white; transition: border-color 0.15s;
+}
+.del-area-name:focus { border-color: #009A97; }
+.del-date-row {
+  background: #FAFAF8; border: 0.5px solid #D3D1C7; border-radius: 8px;
+  padding: 8px 10px; display: flex; flex-direction: column; gap: 7px;
+}
+.del-date-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.del-date-input {
+  flex: 1; height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 8px; font-size: 12px; font-family: inherit; color: #1a1a18;
+  outline: none; background: white; transition: border-color 0.15s;
+}
+.del-date-input:focus { border-color: #009A97; }
+.del-time-row { display: flex; align-items: center; gap: 6px; }
+.del-time-input {
+  width: 72px; height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 6px; font-size: 12px; font-family: inherit; color: #1a1a18;
+  outline: none; background: white; transition: border-color 0.15s;
+}
+.del-time-input:focus { border-color: #009A97; }
+.del-del-btn {
+  width: 28px; height: 28px; border: 0.5px solid #e0dfd8; border-radius: 6px;
+  background: white; cursor: pointer; display: flex; align-items: center;
+  justify-content: center; color: #B4B2A9; flex-shrink: 0; transition: all 0.12s;
+}
+.del-del-btn:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
+
+</style>
 .ms-preview-card {
   background: #E0F5F5; border: 0.5px solid #80CCCB;
   border-radius: 10px; padding: 12px 12px 10px;
@@ -662,6 +705,75 @@ select:focus { border-color: #009A97; }
                             <div style="font-size:12px;color:#009A97;line-height:1.4;" id="ms-unlocked-sub">Everyone gets 10% off this order.</div>
                           </div>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Delivery -->
+            <div class="toggle-item" style="border-top:none;">
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="delivery-toggle-row">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Delivery</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Host delivers to member's address. Fee added as a line item.</div>
+                </div>
+                <div class="toggle-sw" id="delivery-toggle-sw"></div>
+              </div>
+              <div class="toggle-body" id="delivery-section">
+                <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+
+                  <!-- Member choice -->
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Members can</div>
+                    <div style="display:flex;gap:6px;">
+                      <button class="del-choice-pill active" id="del-choice-choose"   onclick="setDeliveryChoice('choose')">Choose</button>
+                      <button class="del-choice-pill"        id="del-choice-delivery" onclick="setDeliveryChoice('delivery')">Delivery only</button>
+                      <button class="del-choice-pill"        id="del-choice-collect"  onclick="setDeliveryChoice('collect')">Self-collect only</button>
+                    </div>
+                  </div>
+
+                  <!-- Fee type -->
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Fee type</div>
+                    <div class="type-toggle" style="max-width:200px;">
+                      <button class="type-pill active" id="del-fee-flat" onclick="setDeliveryFeeType('flat')">Flat fee</button>
+                      <button class="type-pill"        id="del-fee-area" onclick="setDeliveryFeeType('area')">By area</button>
+                    </div>
+                  </div>
+
+                  <!-- Flat fee input -->
+                  <div id="del-flat-wrap">
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Delivery fee</div>
+                    <div class="tf-amt-wrap">
+                      <span class="tf-pfx">$</span>
+                      <input class="tier-amt-input" type="number" id="del-flat-amt" min="0" step="0.50" placeholder="0" style="width:90px;" oninput="syncDeliveryToNotes()" />
+                      <span style="font-size:11px;color:#888780;margin-left:6px;">per order</span>
+                    </div>
+                  </div>
+
+                  <!-- By area -->
+                  <div id="del-area-wrap" style="display:none;">
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Delivery areas</div>
+                    <div id="del-areas-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+                    <div id="del-add-area-wrap" style="margin-top:6px;">
+                      <div class="add-tier-link" onclick="addDeliveryArea()">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+                        Add area
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Delivery dates -->
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Delivery dates</div>
+                    <div id="del-dates-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+                    <div style="margin-top:6px;">
+                      <div class="add-tier-link" onclick="addDeliveryDate()">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+                        Add date
                       </div>
                     </div>
                   </div>
@@ -2213,6 +2325,200 @@ function syncMilestoneToNotes() { /* no-op */ }
 
 /* ══════════════════════════════════════════
    END GROUP MILESTONE
+══════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════
+   DELIVERY
+══════════════════════════════════════════ */
+
+var deliveryFeeType  = 'flat';    // 'flat' | 'area'
+var deliveryChoice   = 'choose';  // 'choose' | 'delivery' | 'collect'
+var deliveryAreas    = [];        // [{id, name, fee}]
+var deliveryDates    = [];        // [{id}] — rendered as DOM rows
+var deliveryAreaSeq  = 0;
+var deliveryDateSeq  = 0;
+
+/* Auto-open first date when delivery toggled on */
+(function() {
+  var origToggle = toggleSwitch;
+  toggleSwitch = function(row) {
+    origToggle(row);
+    if (row.id === 'delivery-toggle-row') {
+      var isOn = document.getElementById('delivery-toggle-sw').classList.contains('on');
+      if (isOn && document.getElementById('del-dates-list').children.length === 0) {
+        addDeliveryDate();
+        if (deliveryFeeType === 'area' && deliveryAreas.length === 0) addDeliveryArea();
+      }
+    }
+  };
+})();
+
+function setDeliveryChoice(choice) {
+  deliveryChoice = choice;
+  ['choose','delivery','collect'].forEach(function(c) {
+    document.getElementById('del-choice-' + c).classList.toggle('active', c === choice);
+  });
+  syncDeliveryToNotes();
+}
+
+function setDeliveryFeeType(type) {
+  deliveryFeeType = type;
+  document.getElementById('del-fee-flat').classList.toggle('active', type === 'flat');
+  document.getElementById('del-fee-area').classList.toggle('active', type === 'area');
+  document.getElementById('del-flat-wrap').style.display = type === 'flat' ? 'block' : 'none';
+  document.getElementById('del-area-wrap').style.display = type === 'area' ? 'block' : 'none';
+  if (type === 'area' && deliveryAreas.length === 0) addDeliveryArea();
+  syncDeliveryToNotes();
+}
+
+/* ── Areas ── */
+function addDeliveryArea() {
+  if (deliveryAreas.length >= 5) return;
+  deliveryAreaSeq++;
+  var id = deliveryAreaSeq;
+  deliveryAreas.push({ id: id });
+  renderDeliveryAreas();
+}
+
+function removeDeliveryArea(id) {
+  deliveryAreas = deliveryAreas.filter(function(a) { return a.id !== id; });
+  renderDeliveryAreas();
+  syncDeliveryToNotes();
+}
+
+function renderDeliveryAreas() {
+  var list = document.getElementById('del-areas-list');
+  var addWrap = document.getElementById('del-add-area-wrap');
+  list.innerHTML = deliveryAreas.map(function(a, i) {
+    return '<div class="del-area-row" id="del-area-row-' + a.id + '">'
+      + '<input class="del-area-name" type="text" placeholder="Area name (e.g. North)" id="del-area-name-' + a.id + '" oninput="syncDeliveryToNotes()" />'
+      + '<div class="tf-amt-wrap"><span class="tf-pfx">$</span>'
+      + '<input class="tier-amt-input" type="number" min="0" step="0.50" placeholder="0" id="del-area-fee-' + a.id + '" oninput="syncDeliveryToNotes()" /></div>'
+      + '<button class="del-del-btn" onclick="removeDeliveryArea(' + a.id + ')">'
+      + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+      + '</button></div>';
+  }).join('');
+  addWrap.innerHTML = deliveryAreas.length >= 5
+    ? '<div class="add-tier-limit">Maximum 5 areas reached.</div>'
+    : '<div class="add-tier-link" onclick="addDeliveryArea()">'
+      + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>'
+      + ' Add area</div>';
+}
+
+/* ── Dates ── */
+function addDeliveryDate() {
+  deliveryDateSeq++;
+  var id = deliveryDateSeq;
+  deliveryDates.push({ id: id });
+  renderDeliveryDates();
+}
+
+function removeDeliveryDate(id) {
+  deliveryDates = deliveryDates.filter(function(d) { return d.id !== id; });
+  renderDeliveryDates();
+  syncDeliveryToNotes();
+}
+
+function renderDeliveryDates() {
+  var list = document.getElementById('del-dates-list');
+  list.innerHTML = deliveryDates.map(function(d, i) {
+    return '<div class="del-date-row" id="del-date-row-' + d.id + '">'
+      + '<div class="del-date-top">'
+      + '<input class="del-date-input" type="date" id="del-date-val-' + d.id + '" oninput="syncDeliveryToNotes()" />'
+      + (deliveryDates.length > 1
+        ? '<button class="del-del-btn" onclick="removeDeliveryDate(' + d.id + ')">'
+          + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+          + '</button>'
+        : '')
+      + '</div>'
+      + '<div class="del-time-row">'
+      + '<span style="font-size:11px;color:#888780;">Between</span>'
+      + '<input class="del-time-input" type="time" id="del-time-from-' + d.id + '" value="10:00" oninput="syncDeliveryToNotes()" />'
+      + '<span style="font-size:11px;color:#888780;">—</span>'
+      + '<input class="del-time-input" type="time" id="del-time-to-' + d.id + '" value="17:00" oninput="syncDeliveryToNotes()" />'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+/* ── Format time helper ── */
+function fmtTime(val) {
+  if (!val) return '';
+  var parts = val.split(':');
+  var h = parseInt(parts[0]), m = parts[1];
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return h + (m !== '00' ? ':' + m : '') + ampm;
+}
+
+/* ── Sync delivery info to Additional Notes ── */
+function syncDeliveryToNotes() {
+  var notesItem = getNotesToggleRow();
+  var notesTA   = getNotesTextarea();
+  if (!notesTA || !notesItem) return;
+
+  var sw   = notesItem.querySelector('.toggle-sw');
+  var body = notesItem.querySelector('.toggle-body');
+
+  var marker   = '<!-- delivery -->';
+  var existing = notesTA.value;
+
+  // Build delivery summary sentence
+  var lines = [];
+
+  // Choice
+  var choiceText = deliveryChoice === 'delivery' ? 'Delivery only.'
+    : deliveryChoice === 'collect' ? 'Self-collect only.'
+    : 'Choose between self-collect or delivery.';
+  lines.push(choiceText);
+
+  // Fee
+  if (deliveryFeeType === 'flat') {
+    var flatAmt = parseFloat(document.getElementById('del-flat-amt') ? document.getElementById('del-flat-amt').value : '');
+    if (!isNaN(flatAmt) && flatAmt > 0) lines.push('Delivery fee: $' + flatAmt.toFixed(2) + ' per order.');
+  } else {
+    var areaLines = deliveryAreas.map(function(a) {
+      var name = document.getElementById('del-area-name-' + a.id);
+      var fee  = document.getElementById('del-area-fee-' + a.id);
+      if (!name || !fee) return null;
+      var n = name.value.trim();
+      var f = parseFloat(fee.value);
+      if (!n) return null;
+      return n + (!isNaN(f) && f > 0 ? ' ($' + f.toFixed(2) + ')' : '');
+    }).filter(Boolean);
+    if (areaLines.length) lines.push('Delivery areas: ' + areaLines.join(', ') + '.');
+  }
+
+  // Dates
+  var dateLines = deliveryDates.map(function(d) {
+    var dateEl = document.getElementById('del-date-val-' + d.id);
+    var fromEl = document.getElementById('del-time-from-' + d.id);
+    var toEl   = document.getElementById('del-time-to-' + d.id);
+    if (!dateEl || !dateEl.value) return null;
+    var dateStr = dateEl.value;
+    var timeStr = (fromEl && toEl) ? ' (' + fmtTime(fromEl.value) + '–' + fmtTime(toEl.value) + ')' : '';
+    return dateStr + timeStr;
+  }).filter(Boolean);
+  if (dateLines.length) lines.push('Delivery date' + (dateLines.length > 1 ? 's' : '') + ': ' + dateLines.join('; ') + '.');
+
+  var sentence = lines.join(' ');
+
+  // Ensure notes toggle is on
+  if (sentence && sw && body && !body.classList.contains('open')) {
+    sw.classList.add('on');
+    body.classList.add('open');
+  }
+
+  // Replace or insert
+  if (existing.includes(marker)) {
+    notesTA.value = existing.replace(/<!-- delivery -->.*?(\n|$)/, sentence ? marker + sentence + '\n' : '');
+  } else if (sentence) {
+    notesTA.value = (existing ? existing + '\n' : '') + marker + sentence;
+  }
+}
+
+/* ══════════════════════════════════════════
+   END DELIVERY
 ══════════════════════════════════════════ */
 
 /* ── PUBLISH ── */
