@@ -959,6 +959,27 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
+      <!-- Milestone in-progress — starts at 0, never shows unlocked in preview -->
+      <div id="sample-milestone-block" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;border:0.5px solid #80CCCB;background:#E0F5F5;">
+        <div style="padding:10px 12px 6px;display:flex;align-items:flex-start;gap:8px;">
+          <span style="font-size:18px;flex-shrink:0;">&#127919;</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#007A77;line-height:1.3;" id="sample-ms-title">Group discount unlocks at 10 orders</div>
+            <div style="font-size:11px;color:#009A97;margin-top:1px;">Invite friends to hit the target!</div>
+          </div>
+        </div>
+        <div style="padding:0 12px 4px;">
+          <div style="height:6px;background:rgba(0,154,151,0.18);border-radius:99px;overflow:hidden;">
+            <div style="height:100%;background:#009A97;border-radius:99px;width:0%;" id="sample-ms-bar"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;">
+            <span style="font-size:11px;font-weight:600;color:#007A77;" id="sample-ms-current">0 orders placed</span>
+            <span style="font-size:11px;color:#80CCCB;" id="sample-ms-target">10 orders target</span>
+          </div>
+        </div>
+        <div style="font-size:11px;color:#888780;padding:4px 12px 10px;" id="sample-ms-reward">Reward: 10% off for everyone once unlocked</div>
+      </div>
+
       <!-- Order Total box — exact match to member.html -->
       <div style="margin-top:10px;border-radius:12px;overflow:hidden;border:0.5px solid #e0dfd8;">
         <div style="background:#E0F5F5;padding:12px 14px;border-bottom:0.5px solid #80CCCB;">
@@ -977,27 +998,6 @@ select:focus { border-color: #009A97; }
           <span style="font-size:12px;color:#B4B2A9;">Purchase-on-Behalf</span>
           <span style="font-size:11px;color:#009A97;font-weight:600;">Admin fee included: $0.00</span>
         </div>
-      </div>
-
-      <!-- Milestone in-progress — starts at 0, never shows unlocked in preview -->
-      <div id="sample-milestone-block" style="display:none;margin-top:8px;border-radius:10px;overflow:hidden;border:0.5px solid #80CCCB;background:#E0F5F5;">
-        <div style="padding:10px 12px 6px;display:flex;align-items:flex-start;gap:8px;">
-          <span style="font-size:18px;flex-shrink:0;">&#127919;</span>
-          <div>
-            <div style="font-size:13px;font-weight:700;color:#007A77;line-height:1.3;" id="sample-ms-title">Group discount unlocks at 10 orders</div>
-            <div style="font-size:11px;color:#009A97;margin-top:1px;">Invite friends to hit the target!</div>
-          </div>
-        </div>
-        <div style="padding:0 12px 4px;">
-          <div style="height:6px;background:rgba(0,154,151,0.18);border-radius:99px;overflow:hidden;">
-            <div style="height:100%;background:#009A97;border-radius:99px;width:0%;" id="sample-ms-bar"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;margin-top:4px;">
-            <span style="font-size:11px;font-weight:600;color:#007A77;" id="sample-ms-current">0 orders placed</span>
-            <span style="font-size:11px;color:#80CCCB;" id="sample-ms-target">10 orders target</span>
-          </div>
-        </div>
-        <div style="font-size:11px;color:#888780;padding:4px 12px 10px;" id="sample-ms-reward">Reward: 10% off for everyone once unlocked</div>
       </div>
 
       <!-- Please note + Notes to host -->
@@ -2035,7 +2035,7 @@ function closeTierForm() {
   renderTiers();
 }
 
-/* ── Generate note text from tiers ── */
+/* ── Generate note text from tiers — order discounts only, no cap ── */
 function generateDiscountNote() {
   if (discountTiers.length === 0) return '';
   var parts = discountTiers.map(function(t) {
@@ -2045,11 +2045,7 @@ function generateDiscountNote() {
     var discPart = t.discType === 'fixed'
       ? '$' + parseFloat(t.discAmt).toFixed(2) + ' off your order'
       : t.discAmt + '% off your order';
-    var capPart = '';
-    if (t.discType === 'pct' && !t.noCap && t.capAmt) {
-      capPart = ' (capped at $' + parseFloat(t.capAmt).toFixed(2) + ')';
-    }
-    return condPart + ' and get ' + discPart + capPart;
+    return condPart + ' and get ' + discPart;
   });
 
   if (parts.length === 1) return 'Discount: ' + capitalise(parts[0]) + '!';
@@ -2210,70 +2206,10 @@ function updateMilestonePreview() {
 }
 
 
-/* ── Write milestone into Additional Notes ── */
-function syncMilestoneToNotes() {
-  var condVal = parseFloat(document.getElementById('ms-condVal').value);
-  var discAmt = parseFloat(document.getElementById('ms-discAmt').value);
-  if (isNaN(condVal) || isNaN(discAmt)) return;
+/* ── Milestone intentionally NOT written to notes ── */
+function syncMilestoneToNotes() { /* no-op */ }
 
-  var noCap  = document.getElementById('ms-noCap').checked;
-  var capAmt = parseFloat(document.getElementById('ms-capAmt').value);
-
-  var targetLabel = milestoneCondType === 'revenue'
-    ? 'total group orders reach $' + condVal.toFixed(2)
-    : 'the group places ' + condVal + ' orders';
-  var rewardLabel = milestoneDiscType === 'fixed'
-    ? '$' + discAmt.toFixed(2) + ' off'
-    : discAmt + '% off';
-  if (milestoneDiscType === 'pct' && !noCap && !isNaN(capAmt) && capAmt > 0) {
-    rewardLabel += ' (capped at $' + capAmt.toFixed(2) + ')';
-  }
-
-  var sentence = 'Group milestone: When ' + targetLabel + ', everyone gets ' + rewardLabel + ' automatically!';
-
-  var notesItem = getNotesToggleRow();
-  var notesTA   = getNotesTextarea();
-  if (!notesTA || !notesItem) return;
-
-  var sw   = notesItem.querySelector('.toggle-sw');
-  var body = notesItem.querySelector('.toggle-body');
-  if (sw && body && !body.classList.contains('open')) {
-    sw.classList.add('on');
-    body.classList.add('open');
-  }
-
-  var marker  = '<!-- milestone -->';
-  var existing = notesTA.value;
-  if (existing.includes(marker)) {
-    notesTA.value = existing.replace(/<!-- milestone -->.*?(\n|$)/, marker + sentence + '\n');
-  } else {
-    notesTA.value = (existing ? existing + '\n' : '') + marker + sentence;
-  }
-}
-
-/* Update populatePreview to include milestone */
-var _origPopulatePreview = populatePreview;
-populatePreview = function() {
-  _origPopulatePreview();
-  var discPreview = document.getElementById('preview-discount-wrap');
-  if (!discPreview) return;
-
-  // Append milestone summary if set
-  var condVal = parseFloat(document.getElementById('ms-condVal') ? document.getElementById('ms-condVal').value : '');
-  var discAmt = parseFloat(document.getElementById('ms-discAmt') ? document.getElementById('ms-discAmt').value : '');
-  var msOn    = document.getElementById('milestone-toggle-sw').classList.contains('on');
-
-  if (msOn && !isNaN(condVal) && condVal > 0 && !isNaN(discAmt) && discAmt > 0) {
-    var targetLabel = milestoneCondType === 'revenue' ? '$' + condVal.toFixed(2) + ' revenue' : condVal + ' orders';
-    var rewardLabel = milestoneDiscType === 'fixed' ? '$' + discAmt.toFixed(2) + ' off' : discAmt + '% off';
-    var msHtml = '<div style="margin-top:8px;background:#E0F5F5;border-radius:6px;padding:7px 10px;display:flex;align-items:center;gap:7px;">'
-      + '<span style="font-size:14px;">🎯</span>'
-      + '<span style="font-size:12px;font-weight:500;color:#007A77;">Group milestone: ' + targetLabel + ' → ' + rewardLabel + ' for all</span>'
-      + '</div>';
-    discPreview.style.display = 'block';
-    discPreview.innerHTML = (discPreview.innerHTML || '') + msHtml;
-  }
-};
+/* milestone preview handled inside populatePreview */
 
 /* ══════════════════════════════════════════
    END GROUP MILESTONE
