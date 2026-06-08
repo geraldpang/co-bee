@@ -200,9 +200,9 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             Clear
           </button>
-        </div>
-        <div id="date-range-label" style="font-size:11px;color:#888780;padding:2px 2px 6px;display:none;">
-          Showing: <span id="date-range-text" style="font-weight:600;color:#1a1a18;"></span>
+          <div id="date-range-label" style="margin-left:auto;font-size:11px;color:#888780;white-space:nowrap;display:none;">
+            Showing <span id="date-range-from" style="color:#009A97;font-weight:600;"></span> to <span id="date-range-to" style="color:#009A97;font-weight:600;"></span>
+          </div>
         </div>
 
         <!-- KPI CARDS -->
@@ -771,22 +771,23 @@ function setDateFilter(btn, period) {
   btn.classList.add('active');
 
   var label = document.getElementById('date-range-label');
-  var text  = document.getElementById('date-range-text');
   var today = new Date();
 
   function fmt(d) { return d.toLocaleDateString('en-AU'); }
 
   if (period === 'week') {
     var start = new Date(today);
-    start.setDate(today.getDate() - today.getDay() + 1); // Mon
+    start.setDate(today.getDate() - today.getDay() + 1);
     var end = new Date(start);
-    end.setDate(start.getDate() + 6); // Sun
-    text.textContent = fmt(start) + ' – ' + fmt(end);
+    end.setDate(start.getDate() + 6);
+    document.getElementById('date-range-from').textContent = fmt(start);
+    document.getElementById('date-range-to').textContent   = fmt(end);
     label.style.display = 'block';
   } else if (period === 'month') {
     var start = new Date(today.getFullYear(), today.getMonth(), 1);
     var end   = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-    text.textContent = fmt(start) + ' – ' + fmt(end);
+    document.getElementById('date-range-from').textContent = fmt(start);
+    document.getElementById('date-range-to').textContent   = fmt(end);
     label.style.display = 'block';
   } else {
     label.style.display = 'none';
