@@ -797,16 +797,35 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div class="section-collapse-body" style="border-top:0.5px solid #f0f0f0;">
-          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:10px;">
+
+            <!-- Payment options -->
             <div style="display:flex;gap:10px;">
-              <span style="font-size:11px;font-weight:600;color:#888780;width:72px;flex-shrink:0;">Payment</span>
+              <span style="font-size:11px;font-weight:600;color:#888780;width:100px;flex-shrink:0;">Payment</span>
               <span style="font-size:11px;color:#1a1a18;" id="preview-payment">Pay together</span>
             </div>
-            <div id="preview-discount-wrap" style="display:none;"></div>
+
+            <!-- Admin fee -->
             <div style="display:flex;gap:10px;">
-              <span style="font-size:11px;font-weight:600;color:#888780;width:72px;flex-shrink:0;">Products</span>
-              <div style="font-size:11px;color:#1a1a18;flex:1;" id="preview-products">No products added yet.</div>
+              <span style="font-size:11px;font-weight:600;color:#888780;width:100px;flex-shrink:0;">Admin fee</span>
+              <span style="font-size:11px;color:#1a1a18;" id="preview-admin-fee">$0.00 per order</span>
             </div>
+
+            <!-- Discounts -->
+            <div id="preview-discount-wrap" style="display:none;"></div>
+
+            <!-- Products -->
+            <div style="border-top:0.5px solid #f0f0f0;padding-top:8px;">
+              <div style="font-size:11px;font-weight:600;color:#888780;margin-bottom:6px;">Products</div>
+              <div id="preview-products" style="font-size:11px;color:#1a1a18;">No products added yet.</div>
+            </div>
+
+            <!-- Additional options -->
+            <div id="preview-addl-opts-wrap" style="border-top:0.5px solid #f0f0f0;padding-top:8px;display:none;">
+              <div style="font-size:11px;font-weight:600;color:#888780;margin-bottom:6px;">Additional options</div>
+              <div id="preview-addl-opts" style="font-size:11px;color:#1a1a18;display:flex;flex-direction:column;gap:3px;"></div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -960,32 +979,25 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-      <!-- Milestone in-progress -->
+      <!-- Milestone in-progress — starts at 0, never shows unlocked in preview -->
       <div id="sample-milestone-block" style="display:none;margin-top:8px;border-radius:10px;overflow:hidden;border:0.5px solid #80CCCB;background:#E0F5F5;">
         <div style="padding:10px 12px 6px;display:flex;align-items:flex-start;gap:8px;">
           <span style="font-size:18px;flex-shrink:0;">&#127919;</span>
           <div>
-            <div style="font-size:13px;font-weight:700;color:#007A77;line-height:1.3;" id="sample-ms-title">Group discount unlocks at $500</div>
+            <div style="font-size:13px;font-weight:700;color:#007A77;line-height:1.3;" id="sample-ms-title">Group discount unlocks at 10 orders</div>
             <div style="font-size:11px;color:#009A97;margin-top:1px;">Invite friends to hit the target!</div>
           </div>
         </div>
         <div style="padding:0 12px 4px;">
           <div style="height:6px;background:rgba(0,154,151,0.18);border-radius:99px;overflow:hidden;">
-            <div style="height:100%;background:#009A97;border-radius:99px;width:52%;" id="sample-ms-bar"></div>
+            <div style="height:100%;background:#009A97;border-radius:99px;width:0%;" id="sample-ms-bar"></div>
           </div>
           <div style="display:flex;justify-content:space-between;margin-top:4px;">
-            <span style="font-size:11px;font-weight:600;color:#007A77;" id="sample-ms-current">$260 ordered</span>
-            <span style="font-size:11px;color:#80CCCB;" id="sample-ms-target">$500 target</span>
+            <span style="font-size:11px;font-weight:600;color:#007A77;" id="sample-ms-current">0 orders placed</span>
+            <span style="font-size:11px;color:#80CCCB;" id="sample-ms-target">10 orders target</span>
           </div>
         </div>
         <div style="font-size:11px;color:#888780;padding:4px 12px 10px;" id="sample-ms-reward">Reward: 10% off for everyone once unlocked</div>
-      </div>
-
-      <!-- Milestone unlocked -->
-      <div id="sample-milestone-unlocked" style="display:none;margin-top:8px;border-radius:10px;overflow:hidden;background:#009A97;padding:14px;text-align:center;">
-        <div style="font-size:20px;margin-bottom:4px;">&#127881;</div>
-        <div style="font-size:14px;font-weight:700;color:white;margin-bottom:2px;">Milestone reached!</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.85);" id="sample-ms-unlocked-sub">Everyone gets 10% off this order.</div>
       </div>
 
       <!-- Please note + Notes to host -->
@@ -1003,12 +1015,6 @@ select:focus { border-color: #009A97; }
           <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:6px;">NOTES TO THE HOST</div>
           <textarea placeholder="Optional message to the host..." style="width:100%;height:64px;border:0.5px solid #D3D1C7;border-radius:8px;padding:8px 10px;font-size:12px;font-family:inherit;outline:none;resize:none;background:#FAFAF8;" disabled></textarea>
         </div>
-      </div>
-
-      <!-- Action buttons — read only -->
-      <div style="display:flex;gap:10px;margin-top:12px;">
-        <button style="flex:1;height:48px;border:0.5px solid #D3D1C7;border-radius:10px;background:white;font-size:14px;font-weight:600;color:#888780;cursor:not-allowed;font-family:inherit;opacity:0.6;">Cancel</button>
-        <button style="flex:2;height:48px;background:#009A97;border:none;border-radius:10px;font-size:14px;font-weight:700;color:white;cursor:not-allowed;font-family:inherit;opacity:0.7;">Place Order</button>
       </div>
 
       <!-- Divider before publish controls -->
@@ -1636,16 +1642,66 @@ function populatePreview() {
   document.querySelectorAll('#step-1 .toggle-item').forEach(function(item) {
     var sw  = item.querySelector('.toggle-sw');
     var lbl = item.querySelector('.toggle-lbl');
-    if (sw && sw.classList.contains('on') && lbl) payOn.push(lbl.textContent.trim());
+    if (sw && sw.classList.contains('on') && lbl) {
+      var lblText = lbl.textContent.trim();
+      // Exclude the discount/milestone ones from the payment list
+      if (lblText !== 'Order discounts' && lblText !== 'Group milestone discount') {
+        payOn.push(lblText);
+      }
+    }
   });
   document.getElementById('preview-payment').textContent = payOn.length ? payOn.join(' · ') : 'None selected';
+
+  // Admin fee
+  var adminFeeEl = document.getElementById('preview-admin-fee');
+  if (adminFeeEl) {
+    var adminFeeInput = document.getElementById('admin-fee-input');
+    var adminFeeOn = document.getElementById('admin-fee-toggle-row') && document.getElementById('admin-fee-toggle-row').querySelector('.toggle-sw').classList.contains('on');
+    adminFeeEl.textContent = (adminFeeOn && adminFeeInput && parseFloat(adminFeeInput.value) > 0)
+      ? '$' + parseFloat(adminFeeInput.value).toFixed(2) + ' per order'
+      : 'None';
+  }
 
   // Products in settings strip
   var prodEl = document.getElementById('preview-products');
   if (prodEl) {
     prodEl.innerHTML = products.length
-      ? products.map(function(p){ return '<span style="display:inline-block;margin-right:6px;">'+p.name+' <strong>$'+parseFloat(p.price||0).toFixed(2)+'</strong></span>'; }).join('')
+      ? products.map(function(p){
+          return '<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:0.5px solid #f0f0f0;">'
+            + '<span>' + p.name + '</span>'
+            + '<span style="font-weight:600;color:#009A97;">$' + parseFloat(p.price||0).toFixed(2) + '</span>'
+            + '</div>';
+        }).join('')
       : 'No products added yet.';
+  }
+
+  // Additional options (Important notes, Deadline, Limit)
+  var addlOpts = [];
+  document.querySelectorAll('#step-1 .toggle-item').forEach(function(item) {
+    var sw  = item.querySelector('.toggle-sw');
+    var lbl = item.querySelector('.toggle-lbl');
+    var body = item.querySelector('.toggle-body');
+    if (!sw || !sw.classList.contains('on') || !lbl || !body) return;
+    var lblText = lbl.textContent.trim();
+    if (lblText === 'Payment after closing date' || lblText === 'Pay together' || lblText === 'Admin fee per order' || lblText === 'Order discounts' || lblText === 'Group milestone discount') return;
+    // Grab any textarea or input value
+    var ta = body.querySelector('textarea');
+    var inp = body.querySelector('input[type="text"], input[type="number"]');
+    var val = ta ? ta.value.replace(/<!--[^>]*-->/g, '').trim() : (inp ? inp.value.trim() : '');
+    addlOpts.push({ label: lblText, val: val });
+  });
+  var addlWrap = document.getElementById('preview-addl-opts-wrap');
+  var addlEl   = document.getElementById('preview-addl-opts');
+  if (addlWrap && addlEl) {
+    if (addlOpts.length) {
+      addlWrap.style.display = 'block';
+      addlEl.innerHTML = addlOpts.map(function(o){
+        return '<div><span style="color:#888780;">' + o.label + '</span>'
+          + (o.val ? ': <span style="color:#1a1a18;">' + o.val.substring(0, 80) + (o.val.length > 80 ? '…' : '') + '</span>' : '') + '</div>';
+      }).join('');
+    } else {
+      addlWrap.style.display = 'none';
+    }
   }
 
   // Discounts in settings strip
@@ -1653,19 +1709,18 @@ function populatePreview() {
   if (discPreview) {
     if (discountTiers.length > 0) {
       discPreview.style.display = 'block';
-      discPreview.innerHTML = '<div style="display:flex;gap:10px;"><span style="font-size:11px;font-weight:600;color:#888780;width:72px;flex-shrink:0;">Discounts</span>'
-        + '<div style="display:flex;flex-direction:column;gap:3px;">'
+      discPreview.innerHTML = '<div style="border-top:0.5px solid #f0f0f0;padding-top:8px;"><div style="font-size:11px;font-weight:600;color:#888780;margin-bottom:6px;">Order discounts</div>'
         + discountTiers.map(function(t){
-            return '<span style="font-size:11px;color:#007A77;">&#127991; ' + tierSummaryText(t) + '</span>';
+            return '<div style="font-size:11px;color:#007A77;padding:2px 0;">&#127991; ' + tierSummaryText(t) + '</div>';
           }).join('')
-        + '</div></div>';
+        + '</div>';
     } else {
       discPreview.style.display = 'none';
     }
   }
 
-  // ── Please Note card — pull from Additional Notes textarea ──
-  var notesTA = getNotesTextarea();
+  // ── Please Note ──
+  var notesTA  = getNotesTextarea();
   var noteWrap = document.getElementById('preview-please-note');
   if (noteWrap && notesTA && notesTA.value.trim()) {
     var lines = notesTA.value.replace(/<!--[^>]*-->/g, '').trim().split('\n').filter(function(l){ return l.trim(); });
@@ -1694,15 +1749,14 @@ function populatePreview() {
     discLine.style.display = 'none';
   }
 
-  // ── Milestone blocks ──
+  // ── Milestone — always show 0 progress in preview ──
   var msOn      = document.getElementById('milestone-toggle-sw').classList.contains('on');
   var msCondVal = parseFloat(document.getElementById('ms-condVal').value);
   var msDiscAmt = parseFloat(document.getElementById('ms-discAmt').value);
   var hasMilestone = msOn && !isNaN(msCondVal) && msCondVal > 0 && !isNaN(msDiscAmt) && msDiscAmt > 0;
-  var msBlock    = document.getElementById('sample-milestone-block');
-  var msUnlocked = document.getElementById('sample-milestone-unlocked');
+  var msBlock = document.getElementById('sample-milestone-block');
 
-  if (hasMilestone && msBlock && msUnlocked) {
+  if (hasMilestone && msBlock) {
     var noCap      = document.getElementById('ms-noCap').checked;
     var capAmt     = parseFloat(document.getElementById('ms-capAmt').value);
     var targetLabel = milestoneCondType === 'revenue' ? '$' + msCondVal.toFixed(2) : msCondVal + ' orders';
@@ -1710,21 +1764,16 @@ function populatePreview() {
       ? '$' + msDiscAmt.toFixed(2) + ' off'
       : msDiscAmt + '% off';
     if (milestoneDiscType === 'pct' && !noCap && !isNaN(capAmt) && capAmt > 0) rewardLabel += ' (max $' + capAmt.toFixed(2) + ')';
-    var simCurrent = milestoneCondType === 'revenue'
-      ? '$' + (msCondVal * 0.52).toFixed(2) + ' ordered'
-      : Math.floor(msCondVal * 0.52) + ' orders placed';
+    var zeroLabel = milestoneCondType === 'revenue' ? '$0.00 ordered' : '0 orders placed';
 
-    document.getElementById('sample-ms-title').textContent        = 'Group discount unlocks at ' + targetLabel;
-    document.getElementById('sample-ms-current').textContent      = simCurrent;
-    document.getElementById('sample-ms-target').textContent       = targetLabel + ' target';
-    document.getElementById('sample-ms-bar').style.width          = '52%';
-    document.getElementById('sample-ms-reward').textContent       = 'Reward: ' + rewardLabel + ' for everyone once unlocked';
-    document.getElementById('sample-ms-unlocked-sub').textContent = 'Everyone gets ' + rewardLabel + ' on this order.';
-    msBlock.style.display    = 'block';
-    msUnlocked.style.display = 'block';
-  } else if (msBlock && msUnlocked) {
-    msBlock.style.display    = 'none';
-    msUnlocked.style.display = 'none';
+    document.getElementById('sample-ms-title').textContent   = 'Group discount unlocks at ' + targetLabel;
+    document.getElementById('sample-ms-current').textContent = zeroLabel;
+    document.getElementById('sample-ms-target').textContent  = targetLabel + ' target';
+    document.getElementById('sample-ms-bar').style.width     = '0%';
+    document.getElementById('sample-ms-reward').textContent  = 'Reward: ' + rewardLabel + ' for everyone once unlocked';
+    msBlock.style.display = 'block';
+  } else if (msBlock) {
+    msBlock.style.display = 'none';
   }
 }
 
