@@ -1660,16 +1660,12 @@ function toggleSwitch(row) {
   if (row.id === 'milestone-toggle-row' && sw.classList.contains('on')) {
     updateMilestonePreview();
   }
-  // Auto-add first date when Delivery is switched on
+  // Sync "Request delivery details" with Delivery toggle
   if (row.id === 'delivery-toggle-row') {
     var isOn = sw.classList.contains('on');
     if (isOn && document.getElementById('del-dates-list').children.length === 0) addDeliveryDate();
-    // Auto-enable "Request delivery details" toggle
-    var reqRow = document.getElementById('req-delivery-toggle-row');
-    if (reqRow) {
-      var reqSw = document.getElementById('req-delivery-toggle-sw');
-      if (isOn && reqSw && !reqSw.classList.contains('on')) reqSw.classList.add('on');
-    }
+    var reqSw = document.getElementById('req-delivery-toggle-sw');
+    if (reqSw) { isOn ? reqSw.classList.add('on') : reqSw.classList.remove('on'); }
   }
 }
 
