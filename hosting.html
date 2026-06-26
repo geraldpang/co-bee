@@ -347,10 +347,6 @@ select:focus { border-color: #009A97; }
 .type-pill.active { background: #009A97; color: white; }
 .type-pill:not(:last-child) { border-right: 0.5px solid #D3D1C7; }
 
-/* Cap row */
-.cap-check-lbl { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #888780; cursor: pointer; white-space: nowrap; }
-.cap-check-lbl input[type="checkbox"] { accent-color: #009A97; width: 13px; height: 13px; flex-shrink: 0; }
-
 /* Tier form footer */
 .tier-form-footer { display: flex; justify-content: flex-end; gap: 6px; border-top: 0.5px solid #e0dfd8; padding-top: 8px; margin-top: 1px; }
 .tier-cancel-btn {
@@ -595,12 +591,6 @@ select:focus { border-color: #009A97; }
                 <div class="discount-body" style="margin-top:4px;">
                   <div id="tiers-list"></div>
                   <div id="tier-form-wrap" style="display:none;"></div>
-                  <div id="add-tier-wrap">
-                    <div class="add-tier-link" onclick="openNewTierForm()">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-                      Add discount tier
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -1849,13 +1839,10 @@ function populatePreview() {
   var msBlock = document.getElementById('sample-milestone-block');
 
   if (hasMilestone && msBlock) {
-    var noCap      = document.getElementById('ms-noCap').checked;
-    var capAmt     = parseFloat(document.getElementById('ms-capAmt').value);
     var targetLabel = milestoneCondType === 'revenue' ? '$' + msCondVal.toFixed(2) : msCondVal + ' orders';
     var rewardLabel = milestoneDiscType === 'fixed'
       ? '$' + msDiscAmt.toFixed(2) + ' off'
       : msDiscAmt + '% off';
-    if (milestoneDiscType === 'pct' && !noCap && !isNaN(capAmt) && capAmt > 0) rewardLabel += ' (max $' + capAmt.toFixed(2) + ')';
     var zeroLabel = milestoneCondType === 'revenue' ? '$0.00 ordered' : '0 orders placed';
 
     document.getElementById('sample-ms-title').textContent   = 'Group discount unlocks at ' + targetLabel;
@@ -1873,7 +1860,7 @@ function populatePreview() {
    DISCOUNT TIERS
 ══════════════════════════════════════════ */
 
-var discountTiers = [];   // [{id, condType, condVal, discType, discAmt, capAmt, noCap}]
+var discountTiers = [];   // [{id, condType, condVal, discType, discAmt}]
 var tierIdSeq = 0;
 var editingTierId = null; // null = new, number = editing existing
 
@@ -1882,7 +1869,6 @@ var editingTierId = null; // null = new, number = editing existing
 /* ── Render all tier summaries ── */
 function renderTiers() {
   var list = document.getElementById('tiers-list');
-  var addWrap = document.getElementById('add-tier-wrap');
 
   if (discountTiers.length === 0) {
     list.innerHTML = '';
@@ -1901,17 +1887,6 @@ function renderTiers() {
         + '</div></div>';
     }).join('');
   }
-
-  // Show tier warning if needed
-  checkTierWarnings();
-
-  // Update add-tier-wrap: show link, grey it out at cap
-  var atCap = discountTiers.length >= 4;
-  addWrap.innerHTML = atCap
-    ? '<div class="add-tier-limit">Maximum 4 tiers reached.</div>'
-    : '<div class="add-tier-link" onclick="openNewTierForm()">'
-      + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>'
-      + ' Add discount tier</div>';
 }
 
 /* Human-readable summary for a tier */
@@ -1922,44 +1897,14 @@ function tierSummaryText(t) {
   var discLabel = t.discType === 'fixed'
     ? '$' + parseFloat(t.discAmt).toFixed(2) + ' off'
     : t.discAmt + '% off';
-  var capLabel = '';
-  if (t.discType === 'pct' && !t.noCap && t.capAmt) {
-    capLabel = ' (capped at $' + parseFloat(t.capAmt).toFixed(2) + ')';
-  }
-  return condLabel + ' → ' + discLabel + capLabel;
-}
-
-/* Check and show overlap / order warnings */
-function checkTierWarnings() {
-  var warn = document.getElementById('tier-warning-msg');
-  if (warn) warn.remove();
-  if (discountTiers.length < 2) return;
-
-  // Check if a lower threshold gives a higher $ value than a higher threshold
-  // (approximate check for fixed tiers)
-  var sorted = discountTiers.slice().sort(function(a,b){ return parseFloat(a.condVal)-parseFloat(b.condVal); });
-  var hasIssue = false;
-  for (var i = 1; i < sorted.length; i++) {
-    if (sorted[i].discType === 'fixed' && sorted[i-1].discType === 'fixed') {
-      if (parseFloat(sorted[i].discAmt) <= parseFloat(sorted[i-1].discAmt)) {
-        hasIssue = true; break;
-      }
-    }
-  }
-  if (hasIssue) {
-    var w = document.createElement('div');
-    w.id = 'tier-warning-msg';
-    w.className = 'tier-warning';
-    w.textContent = '⚠ A higher-spend tier should give a larger discount than a lower one.';
-    document.getElementById('tiers-list').after(w);
-  }
+  return condLabel + ' → ' + discLabel;
 }
 
 /* ── Open inline form for a NEW tier ── */
 function openNewTierForm() {
-  if (discountTiers.length >= 4) return;
+  if (discountTiers.length >= 1) return;
   editingTierId = null;
-  renderTierForm({ condType:'spend', condVal:'', discType:'fixed', discAmt:'', capAmt:'', noCap:false });
+  renderTierForm({ condType:'spend', condVal:'', discType:'fixed', discAmt:'' });
 }
 
 /* ── Open inline form to EDIT existing tier ── */
@@ -1980,7 +1925,7 @@ function renderTierForm(defaults) {
 
   wrap.innerHTML =
     '<div class="tier-form">'
-    + '<div class="tier-form-title">' + (isEdit ? 'Edit tier' : 'New discount tier') + '</div>'
+    + '<div class="tier-form-title">' + (isEdit ? 'Edit discount' : 'New discount') + '</div>'
 
     // Row: Condition type
     + '<div class="tf-row">'
@@ -2025,19 +1970,6 @@ function renderTierForm(defaults) {
     +   '</div>'
     + '</div>'
 
-    // Row: Cap (% only)
-    + '<div class="tf-row" id="tf-cap-row" style="display:' + (isPct ? 'grid' : 'none') + ';">'
-    +   '<span class="tf-lbl">Cap</span>'
-    +   '<div class="tf-amt-wrap">'
-    +     '<span class="tf-pfx">$</span>'
-    +     '<input class="tier-amt-input" type="number" id="tf-capAmt" min="0" step="0.50" placeholder="0"'
-    +       ' value="' + (defaults.capAmt || '') + '"' + (defaults.noCap ? ' disabled' : '') + ' />'
-    +   '</div>'
-    +   '<label class="cap-check-lbl">'
-    +     '<input type="checkbox" id="tf-noCap"' + (defaults.noCap ? ' checked' : '') + ' onchange="toggleNoCap(this)" /> No cap'
-    +   '</label>'
-    + '</div>'
-
     + '<div class="tier-form-footer">'
     +   '<button class="tier-cancel-btn" onclick="closeTierForm()">Cancel</button>'
     +   '<button class="tier-save-btn" id="tf-save-btn" onclick="saveTier()" disabled>' + (isEdit ? 'Update' : 'Save →') + '</button>'
@@ -2064,17 +1996,10 @@ function setDiscType(type) {
   document.getElementById('pill-pct').classList.toggle('active', type === 'pct');
   document.getElementById('tf-disc-prefix').textContent = type === 'fixed' ? '$' : '';
   document.getElementById('tf-disc-suffix').textContent = type === 'pct' ? '%' : '';
-  document.getElementById('tf-cap-row').style.display = type === 'pct' ? 'grid' : 'none';
   var inp = document.getElementById('tf-discAmt');
   inp.step = type === 'fixed' ? '0.50' : '0.5';
   inp.placeholder = '0';
   validateTierForm();
-}
-
-/* ── No-cap checkbox ── */
-function toggleNoCap(cb) {
-  document.getElementById('tf-capAmt').disabled = cb.checked;
-  if (cb.checked) document.getElementById('tf-capAmt').value = '';
 }
 
 /* ── Form validation ── */
@@ -2092,15 +2017,13 @@ function saveTier() {
   var condVal  = document.getElementById('tf-condVal').value;
   var discType = document.getElementById('pill-pct').classList.contains('active') ? 'pct' : 'fixed';
   var discAmt  = document.getElementById('tf-discAmt').value;
-  var noCap    = document.getElementById('tf-noCap') ? document.getElementById('tf-noCap').checked : false;
-  var capAmt   = (!noCap && document.getElementById('tf-capAmt')) ? document.getElementById('tf-capAmt').value : '';
 
   if (editingTierId !== null) {
     var t = discountTiers.find(function(x){ return x.id === editingTierId; });
-    if (t) { t.condType=condType; t.condVal=condVal; t.discType=discType; t.discAmt=discAmt; t.capAmt=capAmt; t.noCap=noCap; }
+    if (t) { t.condType=condType; t.condVal=condVal; t.discType=discType; t.discAmt=discAmt; }
   } else {
     tierIdSeq++;
-    discountTiers.push({ id:tierIdSeq, condType:condType, condVal:condVal, discType:discType, discAmt:discAmt, capAmt:capAmt, noCap:noCap });
+    discountTiers.push({ id:tierIdSeq, condType:condType, condVal:condVal, discType:discType, discAmt:discAmt });
   }
 
   // Sort tiers by condition value ascending
