@@ -1314,20 +1314,20 @@ select:focus { border-color: #009A97; }
               <div class="tile-body">
                 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;flex-wrap:wrap;">
                   <div class="tile-name">Spec</div>
-                  <div class="tile-price">$20.00</div>
+                  <div class="tile-price" id="spec-tile-price">$20.00</div>
                 </div>
-                <div class="tile-desc">Good Spec from Vietnam</div>
+                <div class="tile-desc">Single selection sub-items</div>
                 <div class="tile-options">
-                  <div class="tile-opt-label">Frame <span style="color:#009A97;">+$10</span> <span class="tile-req">*</span></div>
+                  <div class="tile-opt-label">Frame Color <span class="tile-req">*</span></div>
                   <div class="tile-opt-pills">
-                    <button class="tile-opt-pill" onclick="tilePill(this,'t-spec-frame')">Blue</button>
-                    <button class="tile-opt-pill" onclick="tilePill(this,'t-spec-frame')">Red</button>
-                    <button class="tile-opt-pill" onclick="tilePill(this,'t-spec-frame')">Green</button>
+                    <button class="tile-opt-pill" data-val="5"  data-group="t-spec-frame" onclick="tileSpecPill(this)">Blue +$5</button>
+                    <button class="tile-opt-pill" data-val="6"  data-group="t-spec-frame" onclick="tileSpecPill(this)">Red +$6</button>
+                    <button class="tile-opt-pill" data-val="10" data-group="t-spec-frame" onclick="tileSpecPill(this)">Green +$10</button>
                   </div>
-                  <div class="tile-opt-label">Lens <span style="color:#009A97;">+$5</span> <span class="tile-req">*</span></div>
+                  <div class="tile-opt-label">Lens Color <span class="tile-req">*</span></div>
                   <div class="tile-opt-pills">
-                    <button class="tile-opt-pill" onclick="tilePill(this,'t-spec-lens')">Clear</button>
-                    <button class="tile-opt-pill" onclick="tilePill(this,'t-spec-lens')">Tinted</button>
+                    <button class="tile-opt-pill" data-val="0"  data-group="t-spec-lens" onclick="tileSpecPill(this)">Clear +$0</button>
+                    <button class="tile-opt-pill" data-val="20" data-group="t-spec-lens" onclick="tileSpecPill(this)">Tinted +$20</button>
                   </div>
                 </div>
               </div>
@@ -1341,6 +1341,30 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
 
+            <!-- Tile: Bubble Tea -->
+            <div class="item-tile">
+              <div class="tile-img" style="background:#FEF2DC;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l1 6H7L8 2z"/><path d="M7 8c0 8 2 12 5 12s5-4 5-12"/><line x1="5" y1="11" x2="19" y2="11"/></svg></div>
+              <div class="tile-body">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;flex-wrap:wrap;">
+                  <div class="tile-name">Bubble Tea</div>
+                  <div class="tile-price" id="bt-tile-price">$5.00</div>
+                </div>
+                <div class="tile-desc">Multiple selection sub-items</div>
+                <div class="tile-options">
+                  <div class="tile-opt-label">Toppings <span style="color:#B4B2A9;font-weight:400;">· pick any</span></div>
+                  <div style="display:flex;flex-direction:column;gap:3px;margin-top:4px;" id="bt-tile-rows"></div>
+                </div>
+              </div>
+              <div class="tile-footer">
+                <span class="tile-orders">3 ordered</span>
+                <div class="tile-stepper">
+                  <button class="btn-minus" onclick="changeQty2('tp-bt',-1)">−</button>
+                  <span id="tp-bt">0</span>
+                  <button class="btn-plus" onclick="changeQty2('tp-bt',1)">+</button>
+                </div>
+              </div>
+            </div>
+
             <!-- Tile: Chestnut -->
             <div class="item-tile">
               <div class="tile-img" style="background:#FEF2DC;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
@@ -1350,13 +1374,6 @@ select:focus { border-color: #009A97; }
                   <div class="tile-price">$10.00</div>
                 </div>
                 <div class="tile-desc">Fresh chestnuts, per pack</div>
-                <div class="tile-options">
-                  <div class="tile-opt-label">Size</div>
-                  <div class="tile-opt-pills">
-                    <button class="tile-opt-pill" onclick="tilePill(this,'t-chest-size')">Small</button>
-                    <button class="tile-opt-pill" onclick="tilePill(this,'t-chest-size')">Large</button>
-                  </div>
-                </div>
               </div>
               <div class="tile-footer">
                 <span class="tile-orders">3 ordered</span>
@@ -4119,6 +4136,51 @@ function updateSpecPrice() {
   var total = base + (frameEl ? parseFloat(frameEl.value) : 0) + (lensEl ? parseFloat(lensEl.value) : 0);
   var el = document.getElementById('spec-price');
   if (el) el.textContent = '$' + total.toFixed(2);
+}
+function tileSpecPill(btn) {
+  var group = btn.getAttribute('data-group');
+  document.querySelectorAll('[data-group="' + group + '"]').forEach(function(b) {
+    b.classList.remove('sel');
+  });
+  btn.classList.add('sel');
+  // Update tile price
+  var frameBtn = document.querySelector('[data-group="t-spec-frame"].sel');
+  var lensBtn  = document.querySelector('[data-group="t-spec-lens"].sel');
+  var fv = frameBtn ? parseFloat(frameBtn.getAttribute('data-val')) : 0;
+  var lv = lensBtn  ? parseFloat(lensBtn.getAttribute('data-val'))  : 0;
+  var dp = document.getElementById('spec-tile-price');
+  if (dp) dp.textContent = '$' + (20 + fv + lv).toFixed(2);
+}
+
+(function initBtTile() {
+  var wrap = document.getElementById('bt-tile-rows');
+  if (!wrap) return;
+  var toppings = [
+    {label:'Pearl', addon:0.50}, {label:'Boba', addon:0.50},
+    {label:'Jelly', addon:0.50}, {label:'Strawberry', addon:1.00},
+    {label:'Chocolate', addon:1.00}
+  ];
+  toppings.forEach(function(t) {
+    var row = document.createElement('label');
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;font-size:10px;cursor:pointer;';
+    row.setAttribute('data-addon', t.addon);
+    row.innerHTML =
+      '<span style="display:flex;align-items:center;gap:4px;">'
+      + '<input type="checkbox" style="accent-color:#E8971A;width:11px;height:11px;" onchange="btTileUpdate()">'
+      + t.label + '</span>'
+      + '<span style="color:#E8971A;font-weight:600;">+$' + t.addon.toFixed(2) + '</span>';
+    wrap.appendChild(row);
+  });
+})();
+
+function btTileUpdate() {
+  var addons = 0;
+  document.querySelectorAll('#bt-tile-rows [data-addon]').forEach(function(row) {
+    var cb = row.querySelector('input[type=checkbox]');
+    if (cb && cb.checked) addons += parseFloat(row.getAttribute('data-addon')) || 0;
+  });
+  var dp = document.getElementById('bt-tile-price');
+  if (dp) dp.textContent = '$' + (5.00 + addons).toFixed(2);
 }
 </script>
 </body>
