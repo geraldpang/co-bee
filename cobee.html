@@ -1215,8 +1215,12 @@ select:focus { border-color: #009A97; }
 .tile-options { display:flex;flex-direction:column;gap:4px;margin-top:2px; }
 .tile-opt-label { font-size:9px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase; }
 .tile-opt-pills { display:flex;gap:4px;flex-wrap:wrap; }
-.tile-opt-pill { font-size:10px;padding:2px 7px;border-radius:99px;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-family:inherit;transition:all 0.1s; }
-.tile-opt-pill:hover,.tile-opt-pill.sel { background:#009A97;border-color:#009A97;color:white; }
+.tile-opt-pill { font-size:10px;padding:2px 7px;border-radius:99px;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-family:inherit;transition:all 0.1s;color:#888780; }
+.tile-opt-pill:hover { border-color:#80CCCB;color:#1a1a18; }
+.tile-opt-pill.sel { background:#E0F5F5;border-color:#80CCCB;color:#007A77;font-weight:600; }
+.spec-pill { font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-family:inherit;font-weight:500;color:#888780;transition:all 0.1s; }
+.spec-pill:hover { border-color:#80CCCB;color:#1a1a18; }
+.spec-pill.sel { background:#E0F5F5;border-color:#80CCCB;color:#007A77;font-weight:600; }
 .tile-req { font-size:9px;color:#E24B4A;font-weight:500; }
 .tile-footer { padding:8px 10px;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;gap:6px; }
 .tile-orders { font-size:10px;color:#B4B2A9; }
@@ -1230,15 +1234,15 @@ select:focus { border-color: #009A97; }
 .bt-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:0.5px solid #f0f0f0;}
 .bt-row:last-child{border-bottom:none;}
 .bt-chk{width:16px;height:16px;border-radius:3px;border:1.5px solid #D3D1C7;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all 0.12s;}
-.bt-chk.on{background:#E8971A;border-color:#E8971A;}
+.bt-chk.on{background:#80CCCB;border-color:#80CCCB;}
 .bt-chk svg{display:none;}
 .bt-chk.on svg{display:block;}
 .bt-name{font-size:11px;font-weight:500;color:#1a1a18;flex:1;}
-.bt-price-lbl{font-size:10px;font-weight:600;color:#E8971A;min-width:32px;text-align:right;}
+.bt-price-lbl{font-size:10px;font-weight:600;color:#009A97;min-width:32px;text-align:right;}
 .bt-stepper{display:flex;align-items:center;gap:4px;}
 .bt-sbtn{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
 .bt-sbtn.minus{border:0.5px solid #D3D1C7;background:white;color:#888780;}
-.bt-sbtn.plus{border:none;background:#E8971A;color:white;}
+.bt-sbtn.plus{border:none;background:#80CCCB;color:white;}
 .bt-sbtn:disabled{opacity:0.3;cursor:default;}
 .bt-val{font-size:11px;font-weight:600;color:#1a1a18;min-width:12px;text-align:center;}
 </style>
@@ -1465,27 +1469,17 @@ select:focus { border-color: #009A97; }
             <div style="margin-bottom:10px;">
               <div style="font-size:9px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">FRAME COLOR <span style="color:#E24B4A;">· Required</span></div>
               <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
-                  <input type="radio" name="spec1-frame" value="5" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Blue <span style="font-size:10px;color:#009A97;font-weight:600;">+$5</span>
-                </label>
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
-                  <input type="radio" name="spec1-frame" value="6" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Red <span style="font-size:10px;color:#009A97;font-weight:600;">+$6</span>
-                </label>
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
-                  <input type="radio" name="spec1-frame" value="10" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Green <span style="font-size:10px;color:#009A97;font-weight:600;">+$10</span>
-                </label>
+                <button class="spec-pill" data-group="list-frame" data-val="5"  onclick="listSpecPill(this)">Blue +$5</button>
+                <button class="spec-pill" data-group="list-frame" data-val="6"  onclick="listSpecPill(this)">Red +$6</button>
+                <button class="spec-pill" data-group="list-frame" data-val="10" onclick="listSpecPill(this)">Green +$10</button>
               </div>
             </div>
             <!-- Lens option -->
             <div>
               <div style="font-size:9px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">LENS COLOR <span style="color:#E24B4A;">· Required</span></div>
               <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
-                  <input type="radio" name="spec1-lens" value="0" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Clear <span style="font-size:10px;color:#009A97;font-weight:600;">+$0</span>
-                </label>
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
-                  <input type="radio" name="spec1-lens" value="20" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Tinted <span style="font-size:10px;color:#009A97;font-weight:600;">+$20</span>
-                </label>
+                <button class="spec-pill" data-group="list-lens" data-val="0"  onclick="listSpecPill(this)">Clear +$0</button>
+                <button class="spec-pill" data-group="list-lens" data-val="20" onclick="listSpecPill(this)">Tinted +$20</button>
               </div>
             </div>
           </div>
@@ -1494,7 +1488,7 @@ select:focus { border-color: #009A97; }
           <div style="padding:0 14px 14px;">
             <button onclick="addSpecEntry()" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-size:12px;font-weight:500;color:#80CCCB;font-family:inherit;padding:0;margin-bottom:8px;">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-              Add with a different option
+              Add another order with different options
             </button>
             <div style="display:flex;align-items:center;justify-content:space-between;">
               <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
@@ -4103,7 +4097,7 @@ function btToggle(chk) {
   var minus  = row.querySelector('.bt-sbtn.minus');
   var plus   = row.querySelector('.bt-sbtn.plus');
   name.style.color  = isOn ? '#1a1a18' : '#B4B2A9';
-  price.style.color = isOn ? '#E8971A' : '#B4B2A9';
+  price.style.color = isOn ? '#009A97' : '#B4B2A9';
   val.style.color   = isOn ? '#1a1a18' : '#B4B2A9';
   minus.disabled = !isOn;
   plus.disabled  = !isOn;
@@ -4129,21 +4123,42 @@ function btUpdatePrice() {
   var dp = document.getElementById('bt-hd-price');
   if (dp) dp.textContent = '$' + (BT_BASE + addons).toFixed(2);
 }
-function updateSpecPrice() {
-  var base = 20;
-  var frameEl = document.querySelector('input[name="spec1-frame"]:checked');
-  var lensEl  = document.querySelector('input[name="spec1-lens"]:checked');
-  var total = base + (frameEl ? parseFloat(frameEl.value) : 0) + (lensEl ? parseFloat(lensEl.value) : 0);
-  var el = document.getElementById('spec-price');
-  if (el) el.textContent = '$' + total.toFixed(2);
-}
-function tileSpecPill(btn) {
+function listSpecPill(btn) {
   var group = btn.getAttribute('data-group');
+  var isSelected = btn.classList.contains('sel');
   document.querySelectorAll('[data-group="' + group + '"]').forEach(function(b) {
     b.classList.remove('sel');
   });
-  btn.classList.add('sel');
-  // Update tile price
+  if (!isSelected) btn.classList.add('sel');
+  updateSpecPrice();
+}
+
+function updateSpecPrice() {
+  var base = 20;
+  var frameBtn = document.querySelector('[data-group="list-frame"].sel');
+  var lensBtn  = document.querySelector('[data-group="list-lens"].sel');
+  var fv = frameBtn ? parseFloat(frameBtn.getAttribute('data-val')) : 0;
+  var lv = lensBtn  ? parseFloat(lensBtn.getAttribute('data-val'))  : 0;
+  var el = document.getElementById('spec-price');
+  if (el) el.textContent = '$' + (base + fv + lv).toFixed(2);
+}
+function tileSpecPill(btn) {
+  var group = btn.getAttribute('data-group');
+  var isSelected = btn.classList.contains('sel');
+  document.querySelectorAll('[data-group="' + group + '"]').forEach(function(b) {
+    b.classList.remove('sel');
+    b.style.background = 'white';
+    b.style.borderColor = '#D3D1C7';
+    b.style.color = '';
+    b.style.fontWeight = '';
+  });
+  if (!isSelected) {
+    btn.classList.add('sel');
+    btn.style.background = '#E0F5F5';
+    btn.style.borderColor = '#80CCCB';
+    btn.style.color = '#007A77';
+    btn.style.fontWeight = '600';
+  }
   var frameBtn = document.querySelector('[data-group="t-spec-frame"].sel');
   var lensBtn  = document.querySelector('[data-group="t-spec-lens"].sel');
   var fv = frameBtn ? parseFloat(frameBtn.getAttribute('data-val')) : 0;
@@ -4161,14 +4176,18 @@ function tileSpecPill(btn) {
     {label:'Chocolate', addon:1.00}
   ];
   toppings.forEach(function(t) {
-    var row = document.createElement('label');
-    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;font-size:10px;cursor:pointer;';
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:5px;font-size:10px;';
     row.setAttribute('data-addon', t.addon);
     row.innerHTML =
-      '<span style="display:flex;align-items:center;gap:4px;">'
-      + '<input type="checkbox" style="accent-color:#E8971A;width:11px;height:11px;" onchange="btTileUpdate()">'
-      + t.label + '</span>'
-      + '<span style="color:#E8971A;font-weight:600;">+$' + t.addon.toFixed(2) + '</span>';
+      '<input type="checkbox" style="accent-color:#80CCCB;width:11px;height:11px;flex-shrink:0;" onchange="btTileChkToggle(this)">'
+      + '<span style="flex:1;color:#B4B2A9;">' + t.label + '</span>'
+      + '<span style="color:#009A97;font-weight:600;font-size:10px;">+$' + t.addon.toFixed(2) + '</span>'
+      + '<div style="display:flex;align-items:center;gap:3px;">'
+      +   '<button onclick="btTileChgQty(this,-1)" disabled style="width:16px;height:16px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;color:#D3D1C7;cursor:default;font-size:11px;font-weight:700;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>'
+      +   '<span class="bt-tile-qty" style="font-size:10px;font-weight:600;color:#B4B2A9;min-width:10px;text-align:center;">0</span>'
+      +   '<button onclick="btTileChgQty(this,1)" disabled style="width:16px;height:16px;border-radius:50%;border:none;background:#D3D1C7;color:white;cursor:default;font-size:11px;font-weight:700;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>'
+      + '</div>';
     wrap.appendChild(row);
   });
 })();
@@ -4177,10 +4196,43 @@ function btTileUpdate() {
   var addons = 0;
   document.querySelectorAll('#bt-tile-rows [data-addon]').forEach(function(row) {
     var cb = row.querySelector('input[type=checkbox]');
-    if (cb && cb.checked) addons += parseFloat(row.getAttribute('data-addon')) || 0;
+    if (cb && cb.checked) {
+      var qty = parseInt(row.querySelector('.bt-tile-qty').textContent) || 1;
+      addons += (parseFloat(row.getAttribute('data-addon')) || 0) * qty;
+    }
   });
   var dp = document.getElementById('bt-tile-price');
   if (dp) dp.textContent = '$' + (5.00 + addons).toFixed(2);
+}
+
+function btTileChkToggle(cb) {
+  var row   = cb.closest('[data-addon]');
+  var label = row.querySelector('span:nth-child(2)');
+  var val   = row.querySelector('.bt-tile-qty');
+  var minus = row.querySelectorAll('button')[0];
+  var plus  = row.querySelectorAll('button')[1];
+  if (cb.checked) {
+    label.style.color = '#1a1a18';
+    val.style.color   = '#1a1a18';
+    val.textContent   = '1';
+    minus.disabled = false; minus.style.color='#888780'; minus.style.background='white'; minus.style.borderColor='#D3D1C7'; minus.style.cursor='pointer';
+    plus.disabled  = false; plus.style.background='#80CCCB'; plus.style.cursor='pointer';
+  } else {
+    label.style.color = '#B4B2A9';
+    val.style.color   = '#B4B2A9';
+    val.textContent   = '0';
+    minus.disabled = true; minus.style.color='#D3D1C7'; minus.style.background='white'; minus.style.cursor='default';
+    plus.disabled  = true; plus.style.background='#D3D1C7'; plus.style.cursor='default';
+  }
+  btTileUpdate();
+}
+
+function btTileChgQty(btn, delta) {
+  var row = btn.closest('[data-addon]');
+  var val = row.querySelector('.bt-tile-qty');
+  var newVal = Math.max(1, parseInt(val.textContent) + delta);
+  val.textContent = newVal;
+  btTileUpdate();
 }
 </script>
 </body>
