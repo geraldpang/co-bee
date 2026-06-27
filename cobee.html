@@ -1424,7 +1424,7 @@ select:focus { border-color: #009A97; }
 
         <!-- Item 1: Spec with 2 options -->
         <div id="spec-entries" style="border-bottom:0.5px solid #f0f0f0;">
-          <div class="item-entry" style="padding:20px 14px;">
+          <div class="item-entry" style="padding:20px 14px 8px;">
             <div style="display:flex;gap:16px;align-items:flex-start;">
               <!-- Image -->
               <div style="width:88px;height:88px;border-radius:10px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
@@ -1437,57 +1437,54 @@ select:focus { border-color: #009A97; }
                   <div style="font-size:13px;font-weight:600;color:#1a1a18;">Spec</div>
                   <div style="font-size:14px;font-weight:700;color:#009A97;flex-shrink:0;" id="spec-price">$20.00</div>
                 </div>
-                <div style="font-size:11px;color:#888780;margin-top:1px;margin-bottom:8px;">This is an example allowing single selection of sub-items</div>
+                <div style="font-size:11px;color:#888780;margin-top:1px;">This is an example allowing single selection of sub-items</div>
+              </div>
+            </div>
+          </div>
 
-                <!-- Sub-items box -->
-                <div style="margin:0 0 8px;padding:8px 10px;background:#FAFAF8;border-radius:8px;border:0.5px solid #f0f0f0;">
+          <!-- Sub-items box — full width below image row -->
+          <div style="margin:0 14px 8px;padding:8px 10px;background:#FAFAF8;border-radius:8px;border:0.5px solid #f0f0f0;">
+            <!-- Frame Color option -->
+            <div style="margin-bottom:10px;">
+              <div style="font-size:9px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">FRAME COLOR <span style="color:#E24B4A;">· Required</span></div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
+                  <input type="radio" name="spec1-frame" value="5" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Blue <span style="font-size:10px;color:#009A97;font-weight:600;">+$5</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
+                  <input type="radio" name="spec1-frame" value="6" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Red <span style="font-size:10px;color:#009A97;font-weight:600;">+$6</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
+                  <input type="radio" name="spec1-frame" value="10" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Green <span style="font-size:10px;color:#009A97;font-weight:600;">+$10</span>
+                </label>
+              </div>
+            </div>
+            <!-- Lens option -->
+            <div>
+              <div style="font-size:9px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">LENS COLOR <span style="color:#E24B4A;">· Required</span></div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
+                  <input type="radio" name="spec1-lens" value="0" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Clear <span style="font-size:10px;color:#009A97;font-weight:600;">+$0</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
+                  <input type="radio" name="spec1-lens" value="20" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Tinted <span style="font-size:10px;color:#009A97;font-weight:600;">+$20</span>
+                </label>
+              </div>
+            </div>
+          </div>
 
-                  <!-- Frame Color option -->
-                  <div style="margin-bottom:10px;">
-                    <div style="font-size:9px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">FRAME COLOR <span style="color:#E24B4A;">· Required</span></div>
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-                      <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
-                        <input type="radio" name="spec1-frame" value="5" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Blue <span style="font-size:10px;color:#009A97;font-weight:600;">+$5</span>
-                      </label>
-                      <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
-                        <input type="radio" name="spec1-frame" value="6" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Red <span style="font-size:10px;color:#009A97;font-weight:600;">+$6</span>
-                      </label>
-                      <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
-                        <input type="radio" name="spec1-frame" value="10" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Green <span style="font-size:10px;color:#009A97;font-weight:600;">+$10</span>
-                      </label>
-                    </div>
-                  </div>
-
-                  <!-- Lens option -->
-                  <div>
-                    <div style="font-size:9px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">LENS COLOR <span style="color:#E24B4A;">· Required</span></div>
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-                      <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
-                        <input type="radio" name="spec1-lens" value="0" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Clear <span style="font-size:10px;color:#009A97;font-weight:600;">+$0</span>
-                      </label>
-                      <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;border:0.5px solid #D3D1C7;border-radius:20px;cursor:pointer;font-size:11px;font-weight:500;background:white;">
-                        <input type="radio" name="spec1-lens" value="20" onchange="updateSpecPrice()" style="accent-color:#009A97;width:12px;height:12px;"/> Tinted <span style="font-size:10px;color:#009A97;font-weight:600;">+$20</span>
-                      </label>
-                    </div>
-                  </div>
-
-                </div>
-
-                <!-- Add with different option — directly under options, above orders made -->
-                <button onclick="addSpecEntry()" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-size:12px;font-weight:500;color:#80CCCB;font-family:inherit;padding:0;margin-bottom:8px;">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-                  Add with a different option
-                </button>
-
-                <!-- Qty + orders made row -->
-                <div style="display:flex;align-items:center;justify-content:space-between;padding-top:4px;">
-                  <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
-                  <div style="display:flex;align-items:center;gap:10px;">
-                    <button onclick="changeQty2('p1',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
-                    <span id="p1" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
-                    <button onclick="changeQty2('p1',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
-                  </div>
-                </div>
+          <!-- Add with different option + qty row -->
+          <div style="padding:0 14px 14px;">
+            <button onclick="addSpecEntry()" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-size:12px;font-weight:500;color:#80CCCB;font-family:inherit;padding:0;margin-bottom:8px;">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+              Add with a different option
+            </button>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <button onclick="changeQty2('p1',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
+                <span id="p1" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                <button onclick="changeQty2('p1',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
               </div>
             </div>
           </div>
