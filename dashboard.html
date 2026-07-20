@@ -176,6 +176,18 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
 @media (max-width: 860px) {
   .bottom-grid { grid-template-columns: 1fr; }
 }
+
+/* REMINDER CONFIRMATION MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(26,26,24,0.45);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-backdrop.open{display:flex;}
+.modal-card{background:white;border-radius:16px;max-width:380px;width:100%;padding:32px 28px 24px;text-align:center;animation:modalIn 0.18s ease;}
+@keyframes modalIn{from{opacity:0;transform:translateY(8px) scale(0.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+.modal-icon{width:56px;height:56px;border-radius:50%;background:#E0F5F5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.modal-title{font-size:17px;font-weight:700;color:#1a1a18;margin-bottom:8px;}
+.modal-body-text{font-size:13px;color:#4a4a45;line-height:1.6;margin-bottom:24px;}
+.modal-body-text strong{color:#1a1a18;}
+.modal-ok-btn{width:100%;height:42px;background:#009A97;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+.modal-ok-btn:hover{background:#007A77;}
 </style>
 </head>
 <body>
@@ -802,6 +814,18 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
 
 <div class="toast-wrap" id="toast-wrap"></div>
 
+<!-- Reminder confirmation popup -->
+<div class="modal-backdrop" id="reminder-modal" onclick="if(event.target===this) closeReminderModal()">
+  <div class="modal-card">
+    <div class="modal-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="modal-title" id="reminder-modal-title">Reminder Sent</div>
+    <div class="modal-body-text" id="reminder-modal-text">An email reminder has been sent.</div>
+    <button class="modal-ok-btn" onclick="closeReminderModal()">Got it</button>
+  </div>
+</div>
+
 <script>
 // Set topbar date (only if element exists - page may run standalone or in iframe)
 const now = new Date();
@@ -905,7 +929,14 @@ function sendReminder(btn, name) {
   btn.disabled = true;
   btn.classList.add('sent');
   btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sent';
-  showToast('Reminder email sent to ' + name, 'success');
+
+  var row = btn.closest('.reminder-row');
+  var amount = row ? row.querySelector('.reminder-owed').textContent : '';
+
+  document.getElementById('reminder-modal-title').textContent = 'Reminder Sent';
+  document.getElementById('reminder-modal-text').innerHTML =
+    'An email reminder for <strong>' + amount + '</strong> outstanding has been sent to <strong>' + name + '</strong>.';
+  openReminderModal();
 }
 
 function remindAll(btn) {
@@ -918,7 +949,20 @@ function remindAll(btn) {
   });
   btn.disabled = true;
   btn.innerHTML = 'All reminders sent';
-  showToast('Reminder emails sent to ' + count + ' buyer' + (count === 1 ? '' : 's'), 'success');
+
+  document.getElementById('reminder-modal-title').textContent = 'Reminders Sent';
+  document.getElementById('reminder-modal-text').innerHTML =
+    'Email reminders have been sent to <strong>' + count + ' buyer' + (count === 1 ? '' : 's') + '</strong> with outstanding balances.';
+  openReminderModal();
+}
+
+function openReminderModal() {
+  document.getElementById('reminder-modal').classList.add('open');
+}
+
+function closeReminderModal() {
+  document.getElementById('reminder-modal').classList.remove('open');
+  window.location.href = 'payment-reminder-email-preview.html';
 }
 </script>
 </body>
