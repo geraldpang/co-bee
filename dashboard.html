@@ -10,6 +10,7 @@
   --amber:#E8971A; --amber-light:#FEF2DC; --amber-dark:#BA7517;
   --red:#E24B4A; --red-light:#FCEBEB; --red-dark:#A32D2D;
   --green:#27AE60; --green-light:#E8F8EF;
+  --blue:#2E7DD1; --blue-light:#E6F0FB; --blue-dark:#1F5FA8;
   --ink:#1a1a18; --mid:#888780; --faint:#B4B2A9;
   --border:#D3D1C7; --border-light:#E0DFD8;
   --sand:#F1EFE8; --sand-mid:#FAFAF8; --white:#FFFFFF;
@@ -56,10 +57,12 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
 .kpi-card.amber::before{background:var(--amber);}
 .kpi-card.red::before{background:var(--red);}
 .kpi-card.green::before{background:var(--green);}
+.kpi-card.blue::before{background:var(--blue);}
 .kpi-icon{width:36px;height:36px;border-radius:var(--radius-md);background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
 .kpi-card.amber .kpi-icon{background:var(--amber-light);}
 .kpi-card.red .kpi-icon{background:var(--red-light);}
 .kpi-card.green .kpi-icon{background:var(--green-light);}
+.kpi-card.blue .kpi-icon{background:var(--blue-light);}
 .kpi-label{font-size:11px;color:var(--mid);font-weight:500;margin-bottom:4px;}
 .kpi-val{font-size:26px;font-weight:700;color:var(--ink);line-height:1;}
 .kpi-trend{font-size:11px;margin-top:5px;display:flex;align-items:center;gap:3px;}
@@ -177,7 +180,7 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
         <!-- OVERALL FILTER BAR -->
         <div class="filter-bar">
           <span class="filter-label">Filter:</span>
-          <button class="filter-chip active" onclick="setDateFilter(this,'all')">All Time</button>
+          <button class="filter-chip active" onclick="setDateFilter(this,'90d')">90 days</button>
           <button class="filter-chip" onclick="setDateFilter(this,'month')">This Month</button>
           <button class="filter-chip" onclick="setDateFilter(this,'week')">This Week</button>
           <div class="filter-divider"></div>
@@ -207,31 +210,7 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
 
         <!-- KPI CARDS -->
         <div class="kpi-grid">
-          <!-- Total Orders -->
-          <div class="kpi-card amber">
-            <div class="kpi-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-            </div>
-            <div class="kpi-label">Total Orders</div>
-            <div class="kpi-val">47</div>
-            <div class="kpi-trend up" style="color:var(--amber-dark);">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-              12 this week
-            </div>
-          </div>
-          <!-- Pending Payments -->
-          <div class="kpi-card red">
-            <div class="kpi-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-            </div>
-            <div class="kpi-label">Pending Payments</div>
-            <div class="kpi-val">8</div>
-            <div class="kpi-trend down">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-              Needs follow-up
-            </div>
-          </div>
-          <!-- Total Sales (formerly Active Events) -->
+          <!-- Total Sales -->
           <div class="kpi-card">
             <div class="kpi-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
@@ -243,7 +222,7 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
               +22% vs last month
             </div>
           </div>
-          <!-- Sales Collected (formerly Revenue Collected) -->
+          <!-- Sales Collected -->
           <div class="kpi-card green">
             <div class="kpi-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -255,18 +234,42 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
               +18% vs last month
             </div>
           </div>
+          <!-- Payment Outstanding -->
+          <div class="kpi-card red">
+            <div class="kpi-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+            <div class="kpi-label">Payment Outstanding</div>
+            <div class="kpi-val">$340</div>
+            <div class="kpi-trend down">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              Needs follow-up
+            </div>
+          </div>
+          <!-- Total Profit -->
+          <div class="kpi-card blue">
+            <div class="kpi-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E7DD1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.5 2.5 0 0 1 2.5-2.5h.5a2.5 2.5 0 0 1 0 5H12a2.5 2.5 0 0 0 0 5h.5a2.5 2.5 0 0 0 2.5-2.5"/><line x1="12" y1="5" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="19"/></svg>
+            </div>
+            <div class="kpi-label">Total Profit</div>
+            <div class="kpi-val">$1,150</div>
+            <div class="kpi-trend up" style="color:var(--blue-dark);">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+              +15% vs last month
+            </div>
+          </div>
         </div>
 
         <!-- CHARTS ROW -->
         <div class="section-label">Analytics</div>
         <div class="chart-grid">
 
-          <!-- Events Sales bar chart -->
+          <!-- Orders bar chart -->
           <div class="chart-card">
             <div class="chart-header">
               <div>
-                <div class="chart-title">Events Sales</div>
-                <div class="chart-sub">Sales amount per event (SGD)</div>
+                <div class="chart-title">Orders Over Time</div>
+                <div class="chart-sub">Number of orders placed per event</div>
               </div>
 <button class="card-filter active" onclick="this.classList.toggle('active')" title="Filter this chart"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
               <div class="period-tabs">
@@ -278,27 +281,26 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
             <!-- Y axis labels -->
             <div style="display:flex;gap:0;">
               <div style="display:flex;flex-direction:column;justify-content:space-between;padding-bottom:20px;margin-right:8px;text-align:right;">
-                <span style="font-size:9px;color:var(--faint);">$1,200</span>
-                <span style="font-size:9px;color:var(--faint);">$800</span>
-                <span style="font-size:9px;color:var(--faint);">$400</span>
-                <span style="font-size:9px;color:var(--faint);">$0</span>
+                <span style="font-size:9px;color:var(--faint);">15</span>
+                <span style="font-size:9px;color:var(--faint);">10</span>
+                <span style="font-size:9px;color:var(--faint);">5</span>
+                <span style="font-size:9px;color:var(--faint);">0</span>
               </div>
               <div class="bar-chart" style="flex:1;">
-                <!-- Closed events use amber; Active events use teal -->
-                <div class="bar-wrap"><div class="bar amber" style="height:60%;" title="Groupbuy Event test · $720 (closed)"><span class="bar-label">GBT</span></div></div>
-                <div class="bar-wrap"><div class="bar amber" style="height:27%;" title="New event · $340 (closed)"><span class="bar-label">New</span></div></div>
-                <div class="bar-wrap"><div class="bar amber" style="height:87%;" title="Test event · $1,040 (closed)"><span class="bar-label">Test</span></div></div>
-                <div class="bar-wrap"><div class="bar" style="height:40%;" title="Batch 4 · $480 (active)"><span class="bar-label">Bt4</span></div></div>
-                <div class="bar-wrap"><div class="bar" style="height:20%;" title="May launch · $240 (active)"><span class="bar-label">May</span></div></div>
+                <div class="bar-wrap"><div class="bar" style="height:60%;" title="Groupbuy Event test · 9 orders"><span class="bar-label">GBT</span></div></div>
+                <div class="bar-wrap"><div class="bar" style="height:27%;" title="New event · 4 orders"><span class="bar-label">New</span></div></div>
+                <div class="bar-wrap"><div class="bar" style="height:87%;" title="Test event · 13 orders"><span class="bar-label">Test</span></div></div>
+                <div class="bar-wrap"><div class="bar amber" style="height:40%;" title="Batch 4 · 6 orders"><span class="bar-label">Bt4</span></div></div>
+                <div class="bar-wrap"><div class="bar amber" style="height:20%;" title="May launch · 3 orders"><span class="bar-label">May</span></div></div>
               </div>
             </div>
             <!-- Legend -->
             <div style="display:flex;gap:14px;margin-top:4px;padding-left:24px;">
               <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--mid);">
-                <div style="width:10px;height:10px;background:var(--amber);border-radius:2px;"></div> Closed
+                <div style="width:10px;height:10px;background:var(--teal);border-radius:2px;"></div> Closed
               </div>
               <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--mid);">
-                <div style="width:10px;height:10px;background:var(--teal);border-radius:2px;"></div> Active
+                <div style="width:10px;height:10px;background:var(--amber);border-radius:2px;"></div> Active
               </div>
             </div>
           </div>
@@ -351,24 +353,25 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
           </div>
         </div>
 
-        <!-- ROW 2: Sales trend + Fulfilment status -->
-        <div class="section-label" style="margin-top:18px;">Sales &amp; Fulfilment</div>
+        <!-- BOTTOM GRID: Events + Activity -->
+
+        <!-- ROW 2: Revenue trend + Fulfilment status -->
+        <div class="section-label" style="margin-top:18px;">Revenue &amp; Fulfilment</div>
         <div class="chart-grid" style="margin-bottom:0;">
-          <!-- Sales trend line chart -->
+          <!-- Revenue trend line chart -->
           <div class="chart-card">
             <div class="chart-header">
-              <div><div class="chart-title">Sales Trend</div><div class="chart-sub">Monthly sales collected (SGD)</div></div>
-<button class="card-filter" onclick="this.classList.toggle('active')" title="Filter sales"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+              <div><div class="chart-title">Revenue Trend</div><div class="chart-sub">Monthly revenue collected (SGD)</div></div>
+<button class="card-filter" onclick="this.classList.toggle('active')" title="Filter revenue"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
               <div style="font-size:12px;font-weight:600;color:#27AE60;">&#x2191; $1,240 this month</div>
             </div>
-            <svg width="100%" height="150" viewBox="0 0 460 150" preserveAspectRatio="none" style="overflow:visible;">
+            <svg width="100%" height="130" viewBox="0 0 460 130" preserveAspectRatio="none" style="overflow:visible;">
               <line x1="0" y1="110" x2="460" y2="110" stroke="#f0f0f0" stroke-width="1"/>
               <line x1="0" y1="80" x2="460" y2="80" stroke="#f0f0f0" stroke-width="1"/>
               <line x1="0" y1="50" x2="460" y2="50" stroke="#f0f0f0" stroke-width="1"/>
               <line x1="0" y1="20" x2="460" y2="20" stroke="#f0f0f0" stroke-width="1"/>
               <path d="M0,100 L65,95 L130,85 L195,78 L260,60 L325,45 L390,30 L460,18 L460,110 L0,110 Z" fill="#27AE60" opacity="0.12"/>
               <path d="M0,100 L65,95 L130,85 L195,78 L260,60 L325,45 L390,30 L460,18" fill="none" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Markers -->
               <circle cx="0" cy="100" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
               <circle cx="65" cy="95" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
               <circle cx="130" cy="85" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
@@ -377,53 +380,25 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
               <circle cx="325" cy="45" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
               <circle cx="390" cy="30" r="3.5" fill="white" stroke="#27AE60" stroke-width="2"/>
               <circle cx="460" cy="18" r="4" fill="#27AE60" stroke="white" stroke-width="2"/>
-              <!-- Dollar value labels above each marker -->
-              <text x="0" y="91" text-anchor="middle" style="font-size:8px;fill:#27AE60;font-weight:600;font-family:-apple-system,sans-serif;">$240</text>
-              <text x="65" y="86" text-anchor="middle" style="font-size:8px;fill:#27AE60;font-weight:600;font-family:-apple-system,sans-serif;">$320</text>
-              <text x="130" y="76" text-anchor="middle" style="font-size:8px;fill:#27AE60;font-weight:600;font-family:-apple-system,sans-serif;">$480</text>
-              <text x="195" y="69" text-anchor="middle" style="font-size:8px;fill:#27AE60;font-weight:600;font-family:-apple-system,sans-serif;">$560</text>
-              <text x="260" y="51" text-anchor="middle" style="font-size:8px;fill:#27AE60;font-weight:600;font-family:-apple-system,sans-serif;">$760</text>
-              <text x="325" y="36" text-anchor="middle" style="font-size:8px;fill:#27AE60;font-weight:600;font-family:-apple-system,sans-serif;">$940</text>
-              <text x="390" y="21" text-anchor="middle" style="font-size:8px;fill:#27AE60;font-weight:600;font-family:-apple-system,sans-serif;">$1,080</text>
-              <text x="460" y="9" text-anchor="middle" style="font-size:8px;fill:#27AE60;font-weight:700;font-family:-apple-system,sans-serif;">$1,240</text>
-              <!-- Month labels -->
-              <text x="0" y="145" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Oct</text>
-              <text x="65" y="145" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Nov</text>
-              <text x="130" y="145" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Dec</text>
-              <text x="195" y="145" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Jan</text>
-              <text x="260" y="145" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Feb</text>
-              <text x="325" y="145" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Mar</text>
-              <text x="390" y="145" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Apr</text>
-              <text x="460" y="145" text-anchor="middle" style="font-size:9px;fill:#888780;font-weight:600;">May</text>
+              <text x="0" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Oct</text>
+              <text x="65" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Nov</text>
+              <text x="130" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Dec</text>
+              <text x="195" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Jan</text>
+              <text x="260" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Feb</text>
+              <text x="325" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Mar</text>
+              <text x="390" y="125" text-anchor="middle" style="font-size:9px;fill:#B4B2A9;">Apr</text>
+              <text x="460" y="125" text-anchor="middle" style="font-size:9px;fill:#888780;font-weight:600;">May</text>
             </svg>
           </div>
           <!-- Fulfilment horizontal bars -->
           <div class="chart-card">
-            <div class="chart-header"><div><div class="chart-title">Fulfilment Status</div><div class="chart-sub">Orders collected vs outstanding</div></div><button class="card-filter" onclick="this.classList.toggle('active')" title="Filter"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button></div>
-            <div style="display:flex;flex-direction:column;gap:16px;">
-              <div>
-                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px;">
-                  <span style="color:var(--ink);font-weight:500;">Collected</span>
-                  <span style="color:var(--mid);">19 of 47 (40%)</span>
-                </div>
-                <div style="height:10px;background:var(--sand);border-radius:5px;overflow:hidden;">
-                  <div style="width:40%;height:100%;background:#009A97;border-radius:5px;"></div>
-                </div>
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px;">
-                  <span style="color:var(--ink);font-weight:500;">Not Collected</span>
-                  <span style="color:var(--mid);">28 of 47 (60%)</span>
-                </div>
-                <div style="height:10px;background:var(--sand);border-radius:5px;overflow:hidden;">
-                  <div style="width:60%;height:100%;background:#E8971A;border-radius:5px;"></div>
-                </div>
-              </div>
-              <!-- Summary note -->
-              <div style="margin-top:4px;padding:10px 12px;background:var(--sand);border-radius:8px;font-size:11px;color:var(--mid);display:flex;justify-content:space-between;align-items:center;">
-                <span>47 total orders</span>
-                <span style="font-weight:600;color:var(--ink);">40% collected</span>
-              </div>
+            <div class="chart-header"><div><div class="chart-title">Fulfilment Status</div><div class="chart-sub">Orders by current stage</div></div><button class="card-filter" onclick="this.classList.toggle('active')" title="Filter"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button></div>
+            <div style="display:flex;flex-direction:column;gap:11px;">
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;"><span style="color:var(--ink);font-weight:500;">Collected</span><span style="color:var(--mid);">19 (40%)</span></div><div style="height:7px;background:var(--sand);border-radius:4px;overflow:hidden;"><div style="width:40%;height:100%;background:#27AE60;border-radius:4px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;"><span style="color:var(--ink);font-weight:500;">Verified &amp; Paid</span><span style="color:var(--mid);">9 (19%)</span></div><div style="height:7px;background:var(--sand);border-radius:4px;overflow:hidden;"><div style="width:19%;height:100%;background:#009A97;border-radius:4px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;"><span style="color:var(--ink);font-weight:500;">Submitted &amp; Paid</span><span style="color:var(--mid);">7 (15%)</span></div><div style="height:7px;background:var(--sand);border-radius:4px;overflow:hidden;"><div style="width:15%;height:100%;background:#80CCCB;border-radius:4px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;"><span style="color:var(--ink);font-weight:500;">Submitted, Unpaid</span><span style="color:var(--mid);">5 (11%)</span></div><div style="height:7px;background:var(--sand);border-radius:4px;overflow:hidden;"><div style="width:11%;height:100%;background:#E8971A;border-radius:4px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;"><span style="color:var(--ink);font-weight:500;">Unpaid</span><span style="color:var(--mid);">8 (17%)</span></div><div style="height:7px;background:var(--sand);border-radius:4px;overflow:hidden;"><div style="width:17%;height:100%;background:#E24B4A;border-radius:4px;"></div></div></div>
             </div>
           </div>
         </div>
@@ -794,7 +769,7 @@ function filterInactive(days, btn) {
 
 function setDateFilter(btn, period) {
   document.querySelectorAll('.filter-bar .filter-chip').forEach(b => {
-    if (['All Time','This Month','This Week'].includes(b.textContent.trim())) b.classList.remove('active');
+    if (['90 days','This Month','This Week'].includes(b.textContent.trim())) b.classList.remove('active');
   });
   btn.classList.add('active');
 
@@ -817,6 +792,12 @@ function setDateFilter(btn, period) {
     document.getElementById('date-range-from').textContent = fmt(start);
     document.getElementById('date-range-to').textContent   = fmt(end);
     label.style.display = 'block';
+  } else if (period === '90d') {
+    var start = new Date(today);
+    start.setDate(today.getDate() - 90);
+    document.getElementById('date-range-from').textContent = fmt(start);
+    document.getElementById('date-range-to').textContent   = fmt(today);
+    label.style.display = 'block';
   } else {
     label.style.display = 'none';
   }
@@ -834,6 +815,11 @@ function setPeriod(el, period) {
   el.closest('.period-tabs').querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  var defaultChip = document.querySelector('.filter-bar .filter-chip.active');
+  if (defaultChip) setDateFilter(defaultChip, '90d');
+});
 </script>
 </body>
 </html>
