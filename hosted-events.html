@@ -1109,7 +1109,12 @@ const orderEventData = {
     orders: [
       { name: 'Minh Cong', price: 20.00, status: 'paid', ref: 'pn01', phone: '9821 4432', orderedOn: '29 Apr 2026, 10:14', item: 'Spec (Glasses)', qty: 1, note: '' },
       { name: 'Wei Ling Tan', price: 10.00, status: 'collected', ref: 'pn02', phone: '8123 9087', orderedOn: '29 Apr 2026, 10:22', item: 'Chestnut (Individual)', qty: 1, note: 'Leave at guard house' },
-      { name: 'Aisha Rahman', price: 15.00, status: 'unpaid', ref: 'pn03', phone: '9765 2201', orderedOn: '29 Apr 2026, 11:05', item: 'Toothpaste', qty: 2, note: '' },
+      { name: 'Aisha Rahman', price: 15.00, status: 'unpaid', ref: 'pn03', phone: '9765 2201', orderedOn: '29 Apr 2026, 11:05', note: '',
+        items: [
+          { name: 'Toothpaste', price: 12.00, qty: 2 },
+          { name: 'Spec (Glasses)', price: 3.00, qty: 1 }
+        ]
+      },
       { name: 'Daniel Ong', price: 10.00, status: 'pending', ref: 'pn04', phone: '8890 4471', orderedOn: '29 Apr 2026, 13:40', item: 'Chestnut (Individual)', qty: 1, note: '' },
       { name: 'Priya Sundaram', price: 20.00, status: 'paid', ref: 'pn05', phone: '9034 6612', orderedOn: '30 Apr 2026, 09:02', item: 'Spec (Glasses)', qty: 1, note: '' },
       { name: 'Bryan Koh', price: 15.00, status: 'unpaid', ref: 'pn06', phone: '8567 3390', orderedOn: '30 Apr 2026, 14:18', item: 'Toothpaste', qty: 2, note: '' }
