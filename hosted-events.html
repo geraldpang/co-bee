@@ -284,6 +284,1448 @@ a:hover { text-decoration: underline; }
   padding: 1.1rem 1.25rem;
   display: flex; flex-direction: column; gap: 10px;
   transition: border-color 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+}
+.event-card.shared { cursor: default; }
+.event-card:hover {
+  border-color: var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.event-card.shared { border-color: var(--teal-mid); }
+.event-card.shared:hover { border-color: var(--teal); }
+
+/* Shared-by banner inside card */
+.shared-banner {
+  background: var(--teal-light);
+  border: 0.5px solid var(--teal-mid);
+  border-radius: var(--radius-sm);
+  padding: 7px 10px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: #005f5d;
+}
+.shared-banner strong { font-weight: 600; }
+
+.card-top {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; gap: 10px;
+}
+.card-title { font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.35; }
+.card-desc { font-size: 13px; color: var(--mid); line-height: 1.45; }
+
+.card-meta { display: flex; flex-direction: column; gap: 4px; }
+.meta-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--mid); }
+.meta-row svg { width: 12px; height: 12px; flex-shrink: 0; }
+.meta-row.closing { color: var(--amber-dark); }
+.meta-row.expired { color: var(--red-dark); }
+
+.card-divider { border: none; border-top: 0.5px solid var(--border-light); }
+
+.card-actions { display: flex; gap: 6px; }
+.card-actions .btn { flex: 1; height: 30px; font-size: 12px; }
+
+/* ══════════════════════════════════════════
+   TABLE / LIST VIEW
+══════════════════════════════════════════ */
+.table-wrap { background: var(--white); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead { background: var(--sand-mid); border-bottom: 0.5px solid var(--border-light); }
+thead th {
+  padding: 10px 14px; text-align: left;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--mid); white-space: nowrap; user-select: none;
+}
+thead th.col-check { width: 40px; padding-left: 16px; }
+thead th.col-action { width: 40px; padding-right: 16px; }
+thead th.sortable { cursor: pointer; }
+thead th.sortable:hover { color: var(--ink); }
+tbody tr { border-bottom: 0.5px solid var(--border-light); transition: background 0.1s; cursor: pointer; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #f5fafa; }
+tbody td { padding: 11px 14px; vertical-align: middle; color: var(--ink); }
+tbody td.col-check { padding-left: 16px; width: 40px; }
+tbody td.col-action { padding-right: 16px; width: 40px; text-align: right; }
+tbody td.muted { color: var(--mid); font-size: 12px; }
+.table-toolbar {
+  padding: 10px 14px; border-bottom: 0.5px solid var(--border-light);
+  display: flex; align-items: center; gap: 8px;
+}
+.table-toolbar .search-wrap { flex: 1; max-width: 280px; }
+.table-footer {
+  padding: 10px 16px; border-top: 0.5px solid var(--border-light);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.table-count { font-size: 12px; color: var(--mid); }
+.pagination { display: flex; align-items: center; gap: 6px; }
+.page-btn {
+  height: 28px; padding: 0 10px; border-radius: var(--radius-md);
+  border: 0.5px solid var(--border); background: var(--white);
+  font-size: 12px; font-family: inherit; color: var(--ink); cursor: pointer; transition: background 0.1s;
+}
+.page-btn:hover { background: var(--sand); }
+.page-num {
+  width: 28px; height: 28px; background: var(--teal); border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--white);
+}
+.dot-menu {
+  width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm); cursor: pointer; transition: background 0.1s; color: var(--mid);
+}
+.dot-menu:hover { background: var(--sand); color: var(--ink); }
+
+/* ── MODALS ── */
+.modal-backdrop {
+  display: none; position: fixed; inset: 0;
+  background: rgba(26,26,24,0.5); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  z-index: 500; align-items: center; justify-content: center; padding: 1rem;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: var(--white); border-radius: var(--radius-lg); border: 0.5px solid var(--border-light);
+  width: 100%; max-height: calc(100vh - 2rem); display: flex; flex-direction: column;
+  animation: modalIn 0.18s ease;
+}
+.modal.sm { max-width: 380px; }
+.modal.md { max-width: 480px; }
+.modal.lg { max-width: 620px; }
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-header {
+  padding: 16px 20px 14px; border-bottom: 0.5px solid var(--border-light);
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.modal-title { font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+.modal-close {
+  width: 28px; height: 28px; border-radius: var(--radius-sm); border: none;
+  background: transparent; color: var(--mid); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background 0.1s; font-family: inherit;
+}
+.modal-close:hover { background: var(--sand); color: var(--ink); }
+.modal-body { padding: 18px 20px; overflow-y: auto; flex: 1; line-height: 1.6; color: var(--mid); font-size: 13px; }
+.modal-footer {
+  padding: 14px 20px; border-top: 0.5px solid var(--border-light);
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-shrink: 0;
+}
+
+/* ── TOAST ── */
+.toast-wrap { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 600; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast {
+  background: var(--ink); color: var(--white); font-size: 13px; padding: 10px 16px; border-radius: var(--radius-md);
+  display: flex; align-items: center; gap: 10px; min-width: 220px; max-width: 340px;
+  pointer-events: all; animation: toastIn 0.2s ease;
+}
+.toast.success { background: var(--teal-dark); }
+.toast.warning { background: var(--amber-dark); }
+.toast.danger  { background: var(--red-dark); }
+@keyframes toastIn { from { opacity:0; transform:translateX(12px); } to { opacity:1; transform:translateX(0); } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .footer-nav { display: flex; }
+  .footer-spacer { display: block; }
+  .main { padding: 1rem; }
+  .card-grid { grid-template-columns: 1fr; }
+  .page-header { flex-direction: column; }
+  .toolbar .search-wrap { max-width: 100%; }
+  .toolbar-right { margin-left: 0; }
+  .modal.sm, .modal.md, .modal.lg { max-width: 100%; }
+  .toast-wrap { bottom: calc(var(--footer-h) + 0.75rem); }
+}
+
+@media (max-width: 480px) {
+  html, body { overflow-x: hidden; }
+  .main-inner { padding: 14px 12px; }
+  .page-title { font-size: 19px; }
+  .page-actions { width: 100%; }
+  .page-actions .btn { flex: 1; }
+  .card-actions { flex-wrap: wrap; }
+  .card-actions .btn { flex: 1 1 calc(50% - 4px); }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-wrap table { min-width: 560px; }
+}
+
+/* Override body background to match shell */
+body { background: #F4F6F8; }
+.main-inner { max-width: 900px; margin: 0 auto; padding: 20px 16px; }
+
+/* ══════════════════════════════════════════
+   ORDER DETAIL VIEW
+══════════════════════════════════════════ */
+.od-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 1.5rem;
+}
+.od-meta-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.od-countdown { font-size: 12px; color: var(--amber-dark); font-weight: 500; }
+.od-countdown.expired { color: var(--red-dark); }
+.od-badge-wrap { margin: 6px 0 4px; }
+.od-links { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.od-links a { color: var(--mid); }
+.od-links a:hover { color: var(--teal-dark); }
+.od-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+.od-hint { font-size: 12px; color: var(--mid); text-align: center; margin: 12px 0; }
+.od-hint svg { vertical-align: -2px; margin: 0 2px; }
+.od-status-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; }
+.od-status-pill svg { width: 13px; height: 13px; flex-shrink: 0; }
+.od-status-select {
+  font-family: inherit; font-size: 12px; font-weight: 600; height: 32px;
+  border-radius: var(--radius-md); border: 0.5px solid var(--border);
+  padding: 0 26px 0 10px; background-color: var(--white); cursor: pointer; outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 8px center;
+}
+.od-status-unpaid    { color: var(--red-dark); }
+.od-status-pending   { color: var(--amber-dark); }
+.od-status-paid      { color: #005f5d; }
+.od-status-collected { color: #1c7a41; }
+.od-totals {
+  background: var(--teal-light); border-radius: var(--radius-lg);
+  padding: 18px 20px; margin-top: 14px;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+  font-size: 15px; color: var(--ink);
+}
+.od-totals strong { font-weight: 700; }
+.od-empty { text-align: center; padding: 36px 20px; color: var(--mid); font-size: 13px; }
+.od-exit-btn {
+  width: 100%; height: 44px; border-radius: 999px; margin: 18px 0 10px;
+  background: var(--white); border: 0.5px solid var(--teal-mid); color: var(--teal-dark);
+  font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
+.od-exit-btn:hover { background: var(--teal-light); }
+.od-delete-link { display: block; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mid); cursor: pointer; }
+.od-delete-link:hover { color: var(--red-dark); }
+@media (max-width: 640px) {
+  .od-header { flex-direction: column; }
+  .od-meta-right { align-items: flex-start; text-align: left; }
+  .od-actions .btn { flex: 1 1 calc(50% - 4px); }
+}
+
+@media (max-width: 420px) {
+  .od-actions { flex-direction: column; }
+  .od-actions .btn { flex: 1 1 100%; width: 100%; }
+  .od-totals { padding: 14px 16px; font-size: 13px; }
+  .od-hint { font-size: 11px; }
+}
+
+/* ── ORDER RECEIPT MODAL ── */
+.receipt-topline { display: flex; justify-content: space-between; align-items: flex-start; font-size: 12px; color: var(--mid); }
+.receipt-topline a { color: var(--mid); font-weight: 500; }
+.receipt-topline a:hover { color: var(--teal-dark); }
+.receipt-topline .danger-link:hover { color: var(--red-dark); }
+.receipt-logo-wrap { display: flex; justify-content: center; margin: 6px 0 18px; position: relative; }
+.receipt-logo {
+  width: 108px; height: 108px; border-radius: 50%; background: var(--teal);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  color: var(--white); position: relative;
+}
+.receipt-logo .rl-name { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+.receipt-logo .rl-name .dot { color: #F5A623; }
+.receipt-logo .rl-tag { font-size: 8px; opacity: 0.85; letter-spacing: 0.02em; }
+.receipt-wa {
+  position: absolute; bottom: 2px; right: -2px; width: 30px; height: 30px; border-radius: 50%;
+  background: #25D366; display: flex; align-items: center; justify-content: center; border: 2px solid var(--white);
+}
+.receipt-customer { text-align: center; margin-bottom: 14px; }
+.receipt-customer .rc-name { font-size: 17px; font-weight: 700; color: var(--amber-dark); }
+.receipt-customer .rc-phone { font-size: 13px; color: var(--amber-dark); margin-top: 2px; }
+.receipt-customer .rc-date { font-size: 12px; color: var(--mid); margin-top: 10px; }
+.receipt-items { margin: 14px 0; }
+.receipt-item-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 0; border-bottom: 0.5px solid var(--border-light); font-size: 13px;
+}
+.receipt-item-row:last-child { border-bottom: none; }
+.receipt-item-name { color: var(--ink); }
+.receipt-item-right { display: flex; align-items: center; gap: 16px; color: var(--mid); }
+.receipt-item-right strong { color: var(--ink); font-weight: 600; }
+.receipt-note-label { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: var(--amber-dark); text-transform: uppercase; margin-bottom: 6px; }
+.receipt-note {
+  width: 100%; min-height: 60px; border: 0.5px solid var(--border); border-radius: var(--radius-md);
+  padding: 10px 12px; font-family: inherit; font-size: 13px; resize: vertical; color: var(--ink);
+}
+.receipt-totals { margin-top: 18px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font-size: 14px; color: var(--ink); }
+.receipt-totals strong { font-weight: 700; }
+@media (max-width: 420px) {
+  .receipt-logo { width: 88px; height: 88px; }
+  .receipt-logo .rl-name { font-size: 15px; }
+  .receipt-item-right { gap: 10px; }
+  .receipt-topline { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<div class="main-inner">
+
+
+        <!-- Page header -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Hosted Events</h1>
+            <p class="page-subtitle">Manage your group buy events and packages</p>
+          </div>
+          <div class="page-actions">
+            <button class="btn secondary" onclick="openNewPackingListModal()" style="border-color:#009A97;color:#009A97;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              New Packing List
+            </button>
+            <button class="btn primary" onclick="window.parent.navigate('hosting.html', null)">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+              New event
+            </button>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="input" type="text" placeholder="Search events&hellip;" id="search-input" oninput="filterCards()" />
+          </div>
+          <div style="position:relative;">
+            <button class="btn secondary" onclick="toggleFilterMenu()" id="filter-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+              Filter
+            </button>
+            <div id="filter-menu" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:100;min-width:160px;overflow:hidden;">
+              <div onclick="setFilter('all')" class="filter-item filter-active" data-filter="all" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #f0f0f0;">All <span style="font-size:10px;color:#009A97;display:none;">✓</span></div>
+              <div onclick="setFilter('active')" class="filter-item" data-filter="active" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #f0f0f0;">Active <span style="font-size:10px;color:#009A97;display:none;">✓</span></div>
+              <div onclick="setFilter('draft')" class="filter-item" data-filter="draft" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #f0f0f0;">Draft <span style="font-size:10px;color:#009A97;display:none;">✓</span></div>
+              <div onclick="setFilter('closing')" class="filter-item" data-filter="closing" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #f0f0f0;">Closing soon <span style="font-size:10px;color:#009A97;display:none;">✓</span></div>
+              <div onclick="setFilter('expired')" class="filter-item" data-filter="expired" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">Expired <span style="font-size:10px;color:#009A97;display:none;">✓</span></div>
+            </div>
+          </div>
+          <div class="toolbar-right">
+            <div class="view-toggle" id="view-toggle">
+              <button class="btn active" id="btn-tile" title="Tile view" onclick="setView('tile')">
+                <svg viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
+              </button>
+              <button class="btn" id="btn-list" title="List view" onclick="setView('list')">
+                <svg viewBox="0 0 14 14" fill="currentColor"><rect y="1" width="14" height="2" rx="1"/><rect y="6" width="14" height="2" rx="1"/><rect y="11" width="14" height="2" rx="1"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════ TILE VIEW ══════════ -->
+        <div id="tile-view">
+
+          <!-- Templates shared with me -->
+          <div class="section-label">Templates shared with me</div>
+          <div class="card-grid" style="margin-bottom:2rem;">
+
+            <div class="event-card shared">
+              <div class="shared-banner">
+                <div class="avatar sm" style="background:var(--amber);">MC</div>
+                Template shared by <strong>Minh Cong</strong>
+              </div>
+              <div class="card-top">
+                <span class="card-title">Artisan keycap set — round 3</span>
+              </div>
+              <p class="card-desc">Limited run of hand-poured resin artisan caps. Ships internationally.</p>
+              <div class="card-meta">
+                <div class="meta-row">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
+                  Template from 15/03/2026
+                </div>
+              </div>
+              <hr class="card-divider"/>
+              <div class="card-actions">
+                <button class="btn teal-outline" onclick="showToast('Template applied','success')">Use template</button>
+                <button class="btn secondary">Preview</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- My events -->
+          <div class="section-label">My events</div>
+          <div class="card-grid" id="cards-grid">
+
+            <div class="event-card" data-title="atea 1" onclick="openOrderDetail(this)">
+              <div class="card-top">
+                <span class="card-title">atea 1</span>
+                <span class="badge gray">Draft</span>
+              </div>
+              <div class="card-meta">
+                <div class="meta-row">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
+                  Created 09/04/2026
+                </div>
+              </div>
+              <hr class="card-divider"/>
+              <div class="card-actions">
+                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit post</button>
+                <button class="btn secondary" onclick="event.stopPropagation();showToast('Event re-hosted','success')">Re-host</button>
+                <button class="btn secondary" onclick="event.stopPropagation();showToast('Link copied','success')">Share</button>
+              </div>
+            </div>
+
+            <div class="event-card" data-title="order without login" onclick="openOrderDetail(this)">
+              <div class="card-top">
+                <span class="card-title">order without login</span>
+                <span class="badge buy">2 buy</span>
+              </div>
+              <div class="card-meta">
+                <div class="meta-row closing">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 2"/></svg>
+                  Closing in 0 days
+                </div>
+                <div class="meta-row">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
+                  Created 24/04/2026
+                </div>
+              </div>
+              <hr class="card-divider"/>
+              <div class="card-actions">
+                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit post</button>
+                <button class="btn secondary" onclick="event.stopPropagation();showToast('Event re-hosted','success')">Re-host</button>
+                <button class="btn secondary" onclick="event.stopPropagation();showToast('Link copied','success')">Share</button>
+              </div>
+            </div>
+
+            <div class="event-card" data-title="test" onclick="openOrderDetail(this)">
+              <div class="card-top">
+                <span class="card-title">test</span>
+                <span class="badge buy zero">0 buy</span>
+              </div>
+              <div class="card-meta">
+                <div class="meta-row expired">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 2"/></svg>
+                  Closing in 0 days
+                </div>
+                <div class="meta-row">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
+                  Created 27/04/2026
+                </div>
+              </div>
+              <hr class="card-divider"/>
+              <div class="card-actions">
+                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit post</button>
+                <button class="btn secondary" onclick="event.stopPropagation();showToast('Event re-hosted','success')">Re-host</button>
+                <button class="btn secondary" onclick="event.stopPropagation();showToast('Link copied','success')">Share</button>
+              </div>
+            </div>
+
+            <div class="event-card" data-title="purchase with no login" onclick="openOrderDetail(this)">
+              <div class="card-top">
+                <span class="card-title">This is a test event for purchase with no login</span>
+                <span class="badge buy hot">6 buy</span>
+              </div>
+              <p class="card-desc">test</p>
+              <div class="card-meta">
+                <div class="meta-row">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 2"/></svg>
+                  Closing in 14 days
+                </div>
+                <div class="meta-row">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
+                  Created 29/04/2026
+                </div>
+              </div>
+              <hr class="card-divider"/>
+              <div class="card-actions">
+                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit post</button>
+                <button class="btn secondary" onclick="event.stopPropagation();showToast('Event re-hosted','success')">Re-host</button>
+                <button class="btn secondary" onclick="event.stopPropagation();showToast('Link copied','success')">Share</button>
+              </div>
+            </div>
+
+            <div class="event-card" data-title="new event" onclick="openOrderDetail(this)">
+              <div class="card-top">
+                <span class="card-title">new event</span>
+                <span class="badge buy zero">0 buy</span>
+              </div>
+              <p class="card-desc">test</p>
+              <div class="card-meta">
+                <div class="meta-row">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 2"/></svg>
+                  Closing in 15 days
+                </div>
+                <div class="meta-row">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
+                  Created 30/04/2026
+                </div>
+              </div>
+              <hr class="card-divider"/>
+              <div class="card-actions">
+                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit post</button>
+                <button class="btn secondary" onclick="event.stopPropagation();showToast('Event re-hosted','success')">Re-host</button>
+                <button class="btn secondary" onclick="event.stopPropagation();showToast('Link copied','success')">Share</button>
+              </div>
+            </div>
+
+          </div>
+        </div><!-- end tile-view -->
+
+        <!-- ══════════ LIST VIEW ══════════ -->
+        <div id="list-view" style="display:none;">
+          <div class="table-wrap">
+            <div class="table-toolbar">
+              <button class="btn secondary sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                Export
+              </button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-check"><input type="checkbox" /></th>
+                  <th class="sortable" onclick="sortTable(0)" style="cursor:pointer;">Event name <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+                  <th class="sortable" onclick="sortTable(1)" style="cursor:pointer;">Status <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+                  <th class="sortable" onclick="sortTable(2)" style="cursor:pointer;">Created <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+                  <th class="sortable" onclick="sortTable(3)" style="cursor:pointer;">Closing <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+                  <th class="sortable" onclick="sortTable(4)" style="cursor:pointer;">Buys <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+                  <th class="col-action"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background:#E0F5F5;border-left:3px solid #009A97;">
+                  <td class="col-check"><input type="checkbox" /></td>
+                  <td>
+                    <div style="font-weight:500;color:#009A97;">Artisan keycap set — round 3</div>
+                    <div style="font-size:11px;color:#888780;margin-top:2px;display:flex;align-items:center;gap:5px;">
+                      <div style="width:16px;height:16px;border-radius:50%;background:#E8971A;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:white;flex-shrink:0;">MC</div>
+                      Template shared by Minh Cong
+                    </div>
+                  </td>
+                  <td><span class="badge teal">Template</span></td>
+                  <td class="muted">15/03/2026</td>
+                  <td class="muted">—</td>
+                  <td><span class="badge buy zero">—</span></td>
+                  <td class="col-action">
+                    <div style="display:flex;gap:6px;">
+                      <button class="btn secondary sm" onclick="window.parent.navigate('hosting.html',null)" style="font-size:11px;padding:3px 8px;">Use</button>
+                      <button class="btn secondary sm" style="font-size:11px;padding:3px 8px;">Preview</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-title="atea 1" onclick="openOrderDetail(this)">
+                  <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+                  <td><span style="font-weight:500;">atea 1</span></td>
+                  <td><span class="badge gray">Draft</span></td>
+                  <td class="muted">09/04/2026</td>
+                  <td class="muted">—</td>
+                  <td><span class="badge buy zero">0 buy</span></td>
+                  <td class="col-action" onclick="event.stopPropagation()"><div class="dot-menu-wrap" style="position:relative;">
+                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
+                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
+                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
+                  </div>
+                </div></td>
+                </tr>
+                <tr data-title="order without login" onclick="openOrderDetail(this)">
+                  <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+                  <td><span style="font-weight:500;">order without login</span></td>
+                  <td><span class="badge amber">Closing soon</span></td>
+                  <td class="muted">24/04/2026</td>
+                  <td style="color:var(--amber-dark);font-size:12px;">0 days left</td>
+                  <td><span class="badge buy">2 buy</span></td>
+                  <td class="col-action" onclick="event.stopPropagation()"><div class="dot-menu-wrap" style="position:relative;">
+                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
+                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
+                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
+                  </div>
+                </div></td>
+                </tr>
+                <tr data-title="test" onclick="openOrderDetail(this)">
+                  <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+                  <td><span style="font-weight:500;">test</span></td>
+                  <td><span class="badge red">Expired</span></td>
+                  <td class="muted">27/04/2026</td>
+                  <td style="color:var(--red-dark);font-size:12px;">Closed</td>
+                  <td><span class="badge buy zero">0 buy</span></td>
+                  <td class="col-action" onclick="event.stopPropagation()"><div class="dot-menu-wrap" style="position:relative;">
+                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
+                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
+                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
+                  </div>
+                </div></td>
+                </tr>
+                <tr data-title="purchase with no login" onclick="openOrderDetail(this)">
+                  <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+                  <td><span style="font-weight:500;">This is a test event for purchase with no login</span></td>
+                  <td><span class="badge teal">Active</span></td>
+                  <td class="muted">29/04/2026</td>
+                  <td class="muted">14 days left</td>
+                  <td><span class="badge buy hot">6 buy</span></td>
+                  <td class="col-action" onclick="event.stopPropagation()"><div class="dot-menu-wrap" style="position:relative;">
+                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
+                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
+                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
+                  </div>
+                </div></td>
+                </tr>
+                <tr data-title="new event" onclick="openOrderDetail(this)">
+                  <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+                  <td><span style="font-weight:500;">new event</span></td>
+                  <td><span class="badge teal">Active</span></td>
+                  <td class="muted">30/04/2026</td>
+                  <td class="muted">15 days left</td>
+                  <td><span class="badge buy zero">0 buy</span></td>
+                  <td class="col-action" onclick="event.stopPropagation()"><div class="dot-menu-wrap" style="position:relative;">
+                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
+                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
+                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
+                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
+                  </div>
+                </div></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="table-footer">
+              <span class="table-count">Showing 5 of 5 events</span>
+              <div class="pagination">
+                <button class="page-btn">Previous</button>
+                <div class="page-num">1</div>
+                <button class="page-btn">Next</button>
+              </div>
+            </div>
+          </div>
+        </div><!-- end list-view -->
+
+        <!-- ══════════ ORDER DETAIL VIEW ══════════ -->
+        <div id="order-detail-view" style="display:none;">
+          <div class="od-header">
+            <div>
+              <h1 class="page-title" id="od-title">Event title</h1>
+              <p class="page-subtitle">
+                Closing: <strong id="od-closing">—</strong>
+                <span id="od-collection-wrap">&nbsp;&nbsp;·&nbsp;&nbsp;Collection: <strong id="od-collection">—</strong></span>
+              </p>
+            </div>
+            <div class="od-meta-right">
+              <div class="od-countdown" id="od-countdown-closing"></div>
+              <div class="od-countdown" id="od-countdown-delivery"></div>
+              <div class="od-badge-wrap" id="od-buy-badge-wrap"></div>
+              <div class="od-links">
+                <a href="javascript:void(0)" onclick="showToast('Event re-hosted','success')">Re-host</a>
+                <span style="color:var(--border);">·</span>
+                <a href="javascript:void(0)" onclick="showToast('Link copied','success')">Share</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="od-actions">
+            <button class="btn secondary" onclick="openModal('edit-event-modal')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit Event
+            </button>
+            <button class="btn secondary" onclick="showToast('Broadcast sent to all members','success')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>
+              Broadcast
+            </button>
+            <button class="btn secondary" onclick="showToast('Order closed','warning')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Close Order
+            </button>
+            <button class="btn secondary" onclick="showToast('Orders exported','success')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export Orders
+            </button>
+          </div>
+
+          <div class="search-wrap" style="margin-bottom:6px;">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="input" type="text" placeholder="Search Name / Mobile Number / Order Reference" oninput="filterOrderRows(this.value)" />
+          </div>
+
+          <p class="od-hint">
+            Click on Names for Order Details and on
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            for Payment Details.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Updates</th>
+                </tr>
+              </thead>
+              <tbody id="od-order-rows"></tbody>
+            </table>
+          </div>
+
+          <div class="od-totals">
+            <div>Total Purchase: <strong id="od-total-purchase">$0.00</strong></div>
+            <div>Payment Collected: <strong id="od-total-collected">$0.00</strong></div>
+          </div>
+
+          <button class="od-exit-btn" onclick="closeOrderDetail()">Exit</button>
+          <a href="javascript:void(0)" class="od-delete-link" onclick="openModal('delete-event-modal')">Delete</a>
+        </div><!-- end order-detail-view -->
+
+        <div class="footer-spacer"></div>
+      
+</div>
+<!-- MODAL: New Event -->
+<div class="modal-backdrop" id="new-event-modal">
+  <div class="modal lg">
+    <div class="modal-header">
+      <span class="modal-title">New event</span>
+      <button class="modal-close" onclick="closeModal('new-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px;">
+      <div class="form-group">
+        <label class="form-label">Event name</label>
+        <input class="input" type="text" placeholder="e.g. Fresh produce — May round" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="textarea" placeholder="Describe the event&hellip;"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label class="form-label">Closing date</label>
+          <input class="input" type="date" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Group</label>
+          <select class="select"><option>M6 Group</option></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-wrap">
+          <input type="checkbox" /> Allow order without login
+        </label>
+        <span class="form-hint">Members can order without a co&#xB7;bee account.</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn secondary" onclick="closeModal('new-event-modal')">Cancel</button>
+      <button class="btn primary" onclick="closeModal('new-event-modal');showToast('Event created','success')">Create event</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Edit Event -->
+<div class="modal-backdrop" id="edit-event-modal">
+  <div class="modal lg">
+    <div class="modal-header">
+      <span class="modal-title">Edit event</span>
+      <button class="modal-close" onclick="closeModal('edit-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px;">
+      <div class="form-group">
+        <label class="form-label">Event name</label>
+        <input class="input" type="text" value="order without login" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="textarea">test</textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label class="form-label">Closing date</label>
+          <input class="input" type="date" value="2026-05-02" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Group</label>
+          <select class="select"><option>M6 Group</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn danger" onclick="closeModal('edit-event-modal');openModal('delete-event-modal')">Delete event</button>
+      <button class="btn secondary" onclick="closeModal('edit-event-modal')">Cancel</button>
+      <button class="btn primary" onclick="closeModal('edit-event-modal');showToast('Event updated','success')">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Delete Event (danger) -->
+<div class="modal-backdrop" id="delete-event-modal">
+  <div class="modal sm">
+    <div class="modal-header">
+      <span class="modal-title" style="color:var(--red-dark);">Delete event</span>
+      <button class="modal-close" onclick="closeModal('delete-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="alert danger" style="margin-bottom:0.75rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        This action cannot be undone.
+      </div>
+      This will permanently delete the event and all associated order data.
+    </div>
+    <div class="modal-footer">
+      <button class="btn secondary" onclick="closeModal('delete-event-modal')">Cancel</button>
+      <button class="btn danger filled" onclick="closeModal('delete-event-modal');showToast('Event deleted','danger')">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Order Receipt (expanded from clicking a name) -->
+<div class="modal-backdrop" id="order-receipt-modal">
+  <div class="modal md">
+    <div class="modal-body" style="padding-top:16px;">
+      <div class="receipt-topline">
+        <span>Ref: <strong id="rc-ref" style="color:var(--ink);">—</strong></span>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;">
+          <a href="javascript:void(0)" onclick="closeModal('order-receipt-modal');showToast('Opening edit form…','success')">Edit Order</a>
+          <a href="javascript:void(0)" class="danger-link" onclick="closeModal('order-receipt-modal');showToast('Order cancelled','danger')">Cancel Order</a>
+        </div>
+      </div>
+
+      <div class="receipt-logo-wrap">
+        <div class="receipt-logo">
+          <div class="rl-name">co&middot;bee<span class="dot"></span></div>
+          <div class="rl-tag">Good things must share!</div>
+        </div>
+        <div class="receipt-wa">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.79.47 3.517 1.362 5.037L2 22l5.1-1.334A9.958 9.958 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.2a8.19 8.19 0 0 1-4.174-1.14l-.3-.178-3.024.792.808-2.95-.196-.303A8.196 8.196 0 1 1 20.2 12 8.208 8.208 0 0 1 12 20.2z"/></svg>
+        </div>
+      </div>
+
+      <div class="receipt-customer">
+        <div class="rc-name" id="rc-name">—</div>
+        <div class="rc-phone" id="rc-phone">—</div>
+        <div class="rc-date">Ordered on: <span id="rc-date">—</span></div>
+      </div>
+
+      <div class="receipt-items" id="rc-items"></div>
+
+      <div class="receipt-note-label">Note</div>
+      <textarea class="receipt-note" id="rc-note" placeholder="No note added"></textarea>
+
+      <div class="receipt-totals">
+        <div>Total Purchase: <strong id="rc-total">$0.00</strong></div>
+        <div>Payment Made: <strong id="rc-payment" style="color:var(--red-dark);">Unpaid</strong></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn secondary" onclick="closeModal('order-receipt-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap">
+<script>
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-backdrop').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-backdrop.open').forEach(el => el.classList.remove('open'));
+});
+
+/* ══════════ ORDER DETAIL VIEW LOGIC ══════════ */
+
+const orderEventData = {
+  'order without login': {
+    closing: '02-05-2026', collection: '06-05-2026',
+    closingNote: 'Closing in 0 day', deliveryNote: 'Delivery in 0 day', noteState: 'closing',
+    orders: [
+      { name: 'Minh Nguyen', price: 1.00, status: 'unpaid', ref: 'jq11', phone: '0962240817', orderedOn: '19 Mar 2025, 02:06', item: 'Dev c\u00f9i', qty: 1, note: '' },
+      { name: 'Gerald Pang', price: 1.00, status: 'unpaid', ref: 'jq12', phone: '9123 4567', orderedOn: '19 Mar 2025, 02:11', item: 'Dev c\u00f9i', qty: 1, note: '' }
+    ]
+  },
+  'purchase with no login': {
+    closing: '13-05-2026', collection: '17-05-2026',
+    closingNote: 'Closing in 14 days', deliveryNote: 'Delivery in 18 days', noteState: '',
+    orders: [
+      { name: 'Minh Cong', price: 20.00, status: 'paid', ref: 'pn01', phone: '9821 4432', orderedOn: '29 Apr 2026, 10:14', item: 'Spec (Glasses)', qty: 1, note: '' },
+      { name: 'Wei Ling Tan', price: 10.00, status: 'collected', ref: 'pn02', phone: '8123 9087', orderedOn: '29 Apr 2026, 10:22', item: 'Chestnut (Individual)', qty: 1, note: 'Leave at guard house' },
+      { name: 'Aisha Rahman', price: 15.00, status: 'unpaid', ref: 'pn03', phone: '9765 2201', orderedOn: '29 Apr 2026, 11:05', item: 'Toothpaste', qty: 2, note: '' },
+      { name: 'Daniel Ong', price: 10.00, status: 'pending', ref: 'pn04', phone: '8890 4471', orderedOn: '29 Apr 2026, 13:40', item: 'Chestnut (Individual)', qty: 1, note: '' },
+      { name: 'Priya Sundaram', price: 20.00, status: 'paid', ref: 'pn05', phone: '9034 6612', orderedOn: '30 Apr 2026, 09:02', item: 'Spec (Glasses)', qty: 1, note: '' },
+      { name: 'Bryan Koh', price: 15.00, status: 'unpaid', ref: 'pn06', phone: '8567 3390', orderedOn: '30 Apr 2026, 14:18', item: 'Toothpaste', qty: 2, note: '' }
+    ]
+  },
+  'atea 1': {
+    closing: '—', collection: '—',
+    closingNote: 'Not yet published', deliveryNote: '', noteState: '',
+    orders: []
+  },
+  'test': {
+    closing: '27-04-2026', collection: '01-05-2026',
+    closingNote: 'Expired', deliveryNote: '', noteState: 'expired',
+    orders: []
+  },
+  'new event': {
+    closing: '15-05-2026', collection: '19-05-2026',
+    closingNote: 'Closing in 15 days', deliveryNote: 'Delivery in 19 days', noteState: '',
+    orders: []
+  }
+};
+
+let odPreviousView = 'tile';
+let odCurrentOrders = [];
+
+function openOrderDetail(el) {
+  const title = el.dataset.title || el.getAttribute('data-title');
+  if (!title) return;
+
+  odPreviousView = document.getElementById('btn-tile').classList.contains('active') ? 'tile' : 'list';
+
+  const data = orderEventData[title] || { closing: '—', collection: '—', closingNote: '', deliveryNote: '', noteState: '', orders: [] };
+
+  document.getElementById('od-title').textContent = title;
+  document.getElementById('od-closing').textContent = data.closing;
+  document.getElementById('od-collection').textContent = data.collection;
+  document.getElementById('od-collection-wrap').style.display = data.collection === '—' ? 'none' : '';
+
+  const closingEl = document.getElementById('od-countdown-closing');
+  closingEl.textContent = data.closingNote;
+  closingEl.style.display = data.closingNote ? '' : 'none';
+  closingEl.classList.toggle('expired', data.noteState === 'expired');
+
+  const deliveryEl = document.getElementById('od-countdown-delivery');
+  deliveryEl.textContent = data.deliveryNote;
+  deliveryEl.style.display = data.deliveryNote ? '' : 'none';
+
+  const badgeSrc = el.querySelector('.badge.buy') || el.querySelector('td .badge.buy') || el.querySelector('.badge');
+  document.getElementById('od-buy-badge-wrap').innerHTML = badgeSrc ? badgeSrc.outerHTML : '';
+
+  renderOrderRows(data.orders);
+
+  document.querySelector('.page-header').style.display = 'none';
+  document.querySelector('.toolbar').style.display = 'none';
+  document.getElementById('tile-view').style.display = 'none';
+  document.getElementById('list-view').style.display = 'none';
+  document.getElementById('order-detail-view').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function closeOrderDetail() {
+  document.getElementById('order-detail-view').style.display = 'none';
+  document.querySelector('.page-header').style.display = '';
+  document.querySelector('.toolbar').style.display = '';
+  setView(odPreviousView);
+}
+
+const ODStatusMeta = {
+  unpaid:    { icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>', label: 'Not Paid', color: 'var(--red-dark)', chip: 'unpaid' },
+  pending:   { icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>', label: 'Pending', color: 'var(--amber-dark)', chip: 'pending' },
+  paid:      { icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>', label: 'Paid', color: '#005f5d', chip: 'paid' },
+  collected: { icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>', label: 'Collected', color: '#1c7a41', chip: 'collected' }
+};
+
+function renderOrderRows(orders) {
+  const tbody = document.getElementById('od-order-rows');
+  tbody.innerHTML = '';
+  odCurrentOrders = orders || [];
+
+  if (!orders || orders.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="od-empty">No orders yet for this event.</td></tr>';
+    document.getElementById('od-total-purchase').textContent = '$0.00';
+    document.getElementById('od-total-collected').textContent = '$0.00';
+    return;
+  }
+
+  orders.forEach((o, i) => {
+    const meta = ODStatusMeta[o.status] || ODStatusMeta.unpaid;
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="muted">' + (i + 1) + '</td>' +
+      '<td style="font-weight:500;cursor:pointer;color:var(--teal-dark);" onclick="openOrderReceipt(' + i + ')">' + o.name + '</td>' +
+      '<td>$' + o.price.toFixed(2) + '</td>' +
+      '<td><span class="od-status-pill" style="color:' + meta.color + ';">' + meta.icon + meta.label + '</span></td>' +
+      '<td>' +
+        '<select class="od-status-select od-status-' + o.status + '" onchange="updateOrderStatus(this)">' +
+          '<option value="unpaid"' + (o.status === 'unpaid' ? ' selected' : '') + '>Unpaid</option>' +
+          '<option value="pending"' + (o.status === 'pending' ? ' selected' : '') + '>Pending</option>' +
+          '<option value="paid"' + (o.status === 'paid' ? ' selected' : '') + '>Paid</option>' +
+          '<option value="collected"' + (o.status === 'collected' ? ' selected' : '') + '>Collected</option>' +
+        '</select>' +
+      '</td>';
+    tr.dataset.price = o.price;
+    tbody.appendChild(tr);
+  });
+
+  updateOrderTotals();
+}
+
+function openOrderReceipt(index) {
+  const o = odCurrentOrders[index];
+  if (!o) return;
+
+  document.getElementById('rc-ref').textContent = o.ref || '—';
+  document.getElementById('rc-name').textContent = o.name;
+  document.getElementById('rc-phone').textContent = o.phone || '—';
+  document.getElementById('rc-date').textContent = o.orderedOn || '—';
+  document.getElementById('rc-note').value = o.note || '';
+
+  const itemsWrap = document.getElementById('rc-items');
+  const items = o.items || [{ name: o.item, price: o.price, qty: o.qty || 1 }];
+  itemsWrap.innerHTML = items.map(it =>
+    '<div class="receipt-item-row">' +
+      '<span class="receipt-item-name">' + it.name + '</span>' +
+      '<div class="receipt-item-right"><strong>$' + it.price.toFixed(2) + '</strong><span>QTY: ' + it.qty + '</span></div>' +
+    '</div>'
+  ).join('');
+
+  document.getElementById('rc-total').textContent = '$' + o.price.toFixed(2);
+  const meta = ODStatusMeta[o.status] || ODStatusMeta.unpaid;
+  const paymentEl = document.getElementById('rc-payment');
+  paymentEl.textContent = meta.label === 'Not Paid' ? 'Unpaid' : meta.label;
+  paymentEl.style.color = meta.color;
+
+  openModal('order-receipt-modal');
+}
+
+function updateOrderStatus(selectEl) {
+  const newStatus = selectEl.value;
+  const meta = ODStatusMeta[newStatus] || ODStatusMeta.unpaid;
+  selectEl.className = 'od-status-select od-status-' + newStatus;
+  const row = selectEl.closest('tr');
+  const pill = row.querySelector('.od-status-pill');
+  pill.style.color = meta.color;
+  pill.innerHTML = meta.icon + meta.label;
+  updateOrderTotals();
+  showToast('Status updated to ' + meta.label, 'success');
+}
+
+function updateOrderTotals() {
+  let totalPurchase = 0, totalCollected = 0;
+  document.querySelectorAll('#od-order-rows tr[data-price]').forEach(row => {
+    const price = parseFloat(row.dataset.price) || 0;
+    totalPurchase += price;
+    const status = row.querySelector('.od-status-select')?.value;
+    if (status === 'paid' || status === 'collected') totalCollected += price;
+  });
+  document.getElementById('od-total-purchase').textContent = '$' + totalPurchase.toFixed(2);
+  document.getElementById('od-total-collected').textContent = '$' + totalCollected.toFixed(2);
+}
+
+function filterOrderRows(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('#od-order-rows tr[data-price]').forEach(row => {
+    const name = row.children[1].textContent.toLowerCase();
+    row.style.display = name.includes(q) ? '' : 'none';
+  });
+}
+
+function setView(v) {
+  const tile = document.getElementById('tile-view');
+  const list = document.getElementById('list-view');
+  const btnTile = document.getElementById('btn-tile');
+  const btnList = document.getElementById('btn-list');
+  if (v === 'tile') {
+    tile.style.display = ''; list.style.display = 'none';
+    btnTile.classList.add('active'); btnList.classList.remove('active');
+  } else {
+    tile.style.display = 'none'; list.style.display = '';
+    btnList.classList.add('active'); btnTile.classList.remove('active');
+  }
+}
+
+function filterCards() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  document.querySelectorAll('#cards-grid .event-card').forEach(card => {
+    const title = card.dataset.title || card.querySelector('.card-title').textContent.toLowerCase();
+    card.style.display = title.includes(q) ? '' : 'none';
+  });
+}
+
+function showToast(message, type) {
+  const icons = {
+    success: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    warning: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>',
+    danger:  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+  };
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type || 'success');
+  t.innerHTML = (icons[type] || icons.success) + '<span>' + message + '</span>';
+  document.getElementById('toast-wrap').appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+
+function toggleFilterMenu() {
+  const menu = document.getElementById('filter-menu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+function setFilter(filter) {
+  // Update active state
+  document.querySelectorAll('.filter-item').forEach(item => {
+    const isActive = item.dataset.filter === filter;
+    item.querySelector('span').style.display = isActive ? 'inline' : 'none';
+    item.style.background = isActive ? '#f5fafa' : '';
+    item.style.color = isActive ? '#009A97' : '#1a1a18';
+  });
+
+  // Update filter button label
+  const labels = {all:'Filter', active:'Active', draft:'Draft', closing:'Closing soon', expired:'Expired'};
+  const svgIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>';
+  document.getElementById('filter-btn').innerHTML = svgIcon + ' ' + (filter === 'all' ? 'Filter' : labels[filter]);
+
+  // Filter cards (tile view)
+  document.querySelectorAll('.event-card').forEach(card => {
+    if (filter === 'all') { card.closest('.card-col').style.display = ''; return; }
+    const badge = card.querySelector('.badge');
+    const text = badge ? badge.textContent.toLowerCase() : '';
+    const match = (filter === 'active' && text.includes('active')) ||
+                  (filter === 'draft' && text.includes('draft')) ||
+                  (filter === 'closing' && text.includes('closing')) ||
+                  (filter === 'expired' && text.includes('expired'));
+    card.closest('.card-col').style.display = match ? '' : 'none';
+  });
+
+  // Filter table rows (list view)
+  document.querySelectorAll('#list-view tbody tr').forEach(row => {
+    if (filter === 'all') { row.style.display = ''; return; }
+    const badge = row.querySelector('.badge');
+    const text = badge ? badge.textContent.toLowerCase() : '';
+    const match = (filter === 'active' && text.includes('active')) ||
+                  (filter === 'draft' && text.includes('draft')) ||
+                  (filter === 'closing' && text.includes('closing')) ||
+                  (filter === 'expired' && text.includes('expired')) ||
+                  (filter === 'active' && text.includes('template'));
+    row.style.display = match || filter === 'all' ? '' : 'none';
+  });
+
+  document.getElementById('filter-menu').style.display = 'none';
+}
+
+// Close filter menu on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#filter-btn') && !e.target.closest('#filter-menu')) {
+    const menu = document.getElementById('filter-menu');
+    if (menu) menu.style.display = 'none';
+  }
+});
+
+function sortTable(colIdx) {
+  const table = document.querySelector('#list-view table');
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const headers = table.querySelectorAll('th.sortable');
+  const header = headers[colIdx];
+  const asc = header.dataset.sort !== 'asc';
+  headers.forEach(h => { h.dataset.sort = ''; });
+  header.dataset.sort = asc ? 'asc' : 'desc';
+  rows.sort((a, b) => {
+    const aText = a.cells[colIdx + 1]?.textContent.trim() || '';
+    const bText = b.cells[colIdx + 1]?.textContent.trim() || '';
+    return asc ? aText.localeCompare(bText) : bText.localeCompare(aText);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+function toggleDotMenu(el) {
+  const dd = el.nextElementSibling;
+  const isOpen = dd.style.display === 'block';
+  document.querySelectorAll('.dot-dropdown').forEach(d => d.style.display = 'none');
+  dd.style.display = isOpen ? 'none' : 'block';
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.dot-menu-wrap')) {
+    document.querySelectorAll('.dot-dropdown').forEach(d => d.style.display = 'none');
+  }
+});
+</script>
+
+<!-- NEW PACKING LIST MODAL -->
+<div class="modal-backdrop" id="new-packing-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:14px;width:420px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,0.15);" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:0.5px solid #e0dfd8;">
+      <span style="font-size:15px;font-weight:600;color:#009A97;">New Packing List</span>
+      <button onclick="closePackingModal()" style="background:none;border:none;cursor:pointer;color:#888780;font-size:20px;line-height:1;">×</button>
+    </div>
+    <div style="padding:16px 20px;overflow-y:auto;flex:1;">
+      <label style="font-size:11px;font-weight:600;color:#888780;display:block;margin-bottom:4px;">Packing List Name</label>
+      <input id="packing-list-name" type="text" placeholder="e.g. May 2026 Batch" style="width:100%;height:40px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:14px;" />
+      <label style="font-size:11px;font-weight:600;color:#888780;display:block;margin-bottom:8px;">Select Events to Pack</label>
+      <div id="packing-event-list" style="max-height:280px;overflow-y:auto;">
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid #f0f0f0;cursor:pointer;">
+          <input type="checkbox" style="accent-color:#009A97;width:15px;height:15px;flex-shrink:0;cursor:pointer;" />
+          <div><div style="font-size:13px;color:#1a1a18;">atea 1</div><div style="font-size:11px;color:#B4B2A9;">● Closed · 3 orders</div></div>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid #f0f0f0;cursor:pointer;">
+          <input type="checkbox" style="accent-color:#009A97;width:15px;height:15px;flex-shrink:0;cursor:pointer;" />
+          <div><div style="font-size:13px;color:#1a1a18;">order without login</div><div style="font-size:11px;color:#B4B2A9;">● Closed · 2 orders</div></div>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid #f0f0f0;cursor:pointer;">
+          <input type="checkbox" style="accent-color:#009A97;width:15px;height:15px;flex-shrink:0;cursor:pointer;" />
+          <div><div style="font-size:13px;color:#1a1a18;">batch 3</div><div style="font-size:11px;color:#B4B2A9;">● Closed · 5 orders</div></div>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid #f0f0f0;cursor:pointer;">
+          <input type="checkbox" style="accent-color:#009A97;width:15px;height:15px;flex-shrink:0;cursor:pointer;" />
+          <div><div style="font-size:13px;color:#1a1a18;">batch 4</div><div style="font-size:11px;color:#B4B2A9;">● Closed · 4 orders</div></div>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;">
+          <input type="checkbox" style="accent-color:#009A97;width:15px;height:15px;flex-shrink:0;cursor:pointer;" />
+          <div><div style="font-size:13px;color:#1a1a18;">test batch</div><div style="font-size:11px;color:#B4B2A9;">● Closed · 1 order</div></div>
+        </label>
+      </div>
+      <div style="font-size:11px;color:#888780;margin-top:12px;display:flex;align-items:flex-start;gap:5px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Only closed events can be consolidated into a packing list.
+      </div>
+    </div>
+    <div style="padding:12px 20px 16px;border-top:0.5px solid #e0dfd8;">
+      <button onclick="createPackingList()" style="width:100%;height:42px;background:#009A97;color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Create List</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openNewPackingListModal() {
+  const m = document.getElementById('new-packing-modal');
+  m.style.display = 'flex';
+}
+function closePackingModal() {
+  document.getElementById('new-packing-modal').style.display = 'none';
+}
+function createPackingList() {
+  const name = document.getElementById('packing-list-name').value.trim();
+  const checked = document.querySelectorAll('#packing-event-list input:checked');
+  if (!name) { alert('Please enter a packing list name.'); return; }
+  if (checked.length === 0) { alert('Please select at least one event.'); return; }
+  closePackingModal();
+  window.parent.navigate('packing-list.html', null);
+}
+document.getElementById('new-packing-modal').addEventListener('click', function(e) {
+  if (e.target === this) closePackingModal();
+});
+</script>
+
+</body>
+</html>.topbar-logo { font-size: 15px; font-weight: 700; color: var(--white); letter-spacing: -0.02em; line-height: 1; }
+.topbar-logo .dot { color: #F5A623; }
+.topbar-tagline { font-size: 9px; color: rgba(255,255,255,0.5); letter-spacing: 0.03em; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.topbar-notif { position: relative; cursor: pointer; display: flex; align-items: center; }
+.topbar-notif-dot {
+  position: absolute; top: -2px; right: -2px;
+  width: 7px; height: 7px; background: #F5A623;
+  border-radius: 50%; border: 1.5px solid var(--teal);
+}
+.app-body { display: flex; flex: 1; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w); background: var(--white);
+  border-right: 0.5px solid var(--border-light);
+  display: flex; flex-direction: column; flex-shrink: 0;
+  height: calc(100vh - var(--topbar-h));
+  position: sticky; top: var(--topbar-h); overflow-y: auto;
+}
+.sidebar-group {
+  margin: 14px 12px 0; background: var(--teal-light);
+  border-radius: var(--radius-md); padding: 8px 10px;
+  display: flex; align-items: center; gap: 8px; cursor: pointer; transition: background 0.15s;
+}
+.sidebar-group:hover { background: #c8eeee; }
+.sidebar-group-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--teal); color: var(--white);
+  font-size: 10px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.sidebar-group-name { font-size: 12px; font-weight: 600; color: #005f5d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-group-sub { font-size: 10px; color: var(--teal); }
+.sidebar-chevron { color: var(--teal); flex-shrink: 0; }
+.sidebar-nav { padding: 10px 8px; flex: 1; }
+.sidebar-section-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--faint); padding: 8px 10px 4px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 9px; padding: 8px 10px;
+  font-size: 12px; color: var(--mid); border-radius: var(--radius-md);
+  cursor: pointer; margin-bottom: 1px; transition: all 0.12s; text-decoration: none;
+}
+.sidebar-item:hover { background: #f0fafa; color: var(--teal-dark); text-decoration: none; }
+.sidebar-item.active { background: var(--teal-light); color: var(--teal-dark); font-weight: 600; }
+.sidebar-item svg { flex-shrink: 0; }
+.sidebar-item .badge-count {
+  margin-left: auto; background: var(--sand); color: var(--mid);
+  font-size: 10px; font-weight: 600; padding: 1px 6px;
+  border-radius: 99px; border: 0.5px solid var(--border);
+}
+.sidebar-item.active .badge-count { background: var(--teal); color: var(--white); border-color: var(--teal); }
+.sidebar-footer {
+  padding: 12px; border-top: 0.5px solid var(--border-light);
+  display: flex; align-items: center; gap: 9px; flex-shrink: 0;
+}
+.sidebar-footer-name { font-size: 12px; font-weight: 600; color: var(--ink); }
+.sidebar-footer-role { font-size: 10px; color: var(--teal); }
+
+/* MAIN */
+.main { flex: 1; overflow-y: auto; padding: 2rem 1.5rem; min-width: 0; }
+.main-inner { max-width: 1100px; margin: 0 auto; }
+.page-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px; margin-bottom: 1.75rem; flex-wrap: wrap;
+}
+.page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: #009A97; line-height: 1.2; }
+.page-subtitle { font-size: 12px; color: #888780; margin-top: 3px; }
+.page-subtitle { font-size: 13px; color: var(--mid); margin-top: 3px; }
+.page-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* MOBILE FOOTER NAV */
+.footer-nav {
+  display: none; height: var(--footer-h); background: var(--white);
+  border-top: 0.5px solid var(--border-light);
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+}
+.footer-nav-inner { display: flex; height: 100%; }
+.footer-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 3px; font-size: 10px; color: var(--mid);
+  cursor: pointer; border: none; background: none; font-family: inherit; transition: color 0.12s;
+}
+.footer-btn.active { color: var(--teal); }
+.footer-spacer { height: var(--footer-h); display: none; }
+
+/* ── BUTTONS ── */
+.btn {
+  height: 36px; padding: 0 14px; border-radius: var(--radius-md);
+  border: 0.5px solid var(--border); background: var(--white); color: var(--ink);
+  font-size: 13px; font-family: inherit; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  white-space: nowrap; transition: background 0.12s, border-color 0.12s, color 0.12s;
+  text-decoration: none; font-weight: 500; flex-shrink: 0;
+}
+.btn:hover { background: var(--sand); }
+.btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+.btn.primary { background: var(--teal); border-color: var(--teal); color: var(--white); }
+.btn.primary:hover { background: #E0F5F5; }
+.btn.secondary { background: var(--white); border-color: var(--border); color: var(--ink); }
+.btn.secondary:hover { background: var(--sand); }
+.btn.danger { background: var(--white); border-color: #F09595; color: var(--red-dark); }
+.btn.danger:hover { background: var(--red-light); }
+.btn.danger.filled { background: var(--red); border-color: var(--red); color: var(--white); }
+.btn.danger.filled:hover { background: var(--red-dark); border-color: var(--red-dark); }
+.btn.teal-outline { background: var(--white); border-color: var(--teal-mid); color: var(--teal-dark); }
+.btn.teal-outline:hover { background: var(--teal-light); }
+.btn.sm { height: 30px; padding: 0 10px; font-size: 12px; }
+.btn.sm svg { width: 12px; height: 12px; }
+.btn.icon-only { width: 36px; padding: 0; }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; padding: 3px 9px;
+  border-radius: 99px; white-space: nowrap; flex-shrink: 0;
+}
+.badge.teal   { background: var(--teal-light); color: #005f5d; }
+.badge.amber  { background: var(--amber-light); color: var(--amber-dark); }
+.badge.red    { background: var(--red-light); color: var(--red-dark); }
+.badge.gray   { background: var(--sand); color: var(--mid); border: 0.5px solid var(--border-light); }
+.badge.buy    { background: var(--teal); color: var(--white); }
+.badge.buy.zero { background: var(--sand); color: var(--mid); border: 0.5px solid var(--border-light); }
+.badge.buy.hot  { background: var(--teal); color: var(--white); }
+
+/* ── AVATAR ── */
+.avatar {
+  border-radius: 50%; background: var(--teal); color: var(--white);
+  font-weight: 600; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.avatar.sm  { width: 24px; height: 24px; font-size: 9px; }
+.avatar.md  { width: 32px; height: 32px; font-size: 11px; }
+.avatar.lg  { width: 38px; height: 38px; font-size: 13px; }
+.avatar.amber { background: var(--amber); }
+
+/* ── FORMS ── */
+.input, .select {
+  font-family: inherit; font-size: 13px; color: var(--ink);
+  background: var(--white); border: 0.5px solid var(--border);
+  border-radius: var(--radius-md); outline: none; transition: border-color 0.15s;
+  height: 36px; padding: 0 12px; width: 100%;
+}
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
+}
+.input:focus, .select:focus { border-color: var(--teal); }
+.input::placeholder { color: var(--faint); }
+.textarea {
+  font-family: inherit; font-size: 13px; color: var(--ink);
+  background: var(--white); border: 0.5px solid var(--border);
+  border-radius: var(--radius-md); outline: none; transition: border-color 0.15s;
+  padding: 10px 12px; resize: vertical; min-height: 80px; line-height: 1.5; width: 100%;
+}
+.textarea:focus { border-color: var(--teal); }
+.textarea::placeholder { color: var(--faint); }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--ink); }
+.form-hint  { font-size: 11px; color: var(--mid); margin-top: 3px; }
+.checkbox-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: var(--ink); }
+.checkbox-wrap input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--teal); cursor: pointer; flex-shrink: 0; }
+.search-wrap { position: relative; }
+.search-wrap .search-icon {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  pointer-events: none; color: var(--faint); width: 14px; height: 14px;
+}
+.search-wrap .input { padding-left: 32px; }
+
+/* ── TOOLBAR ── */
+.toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.toolbar .search-wrap { flex: 1; min-width: 180px; max-width: 300px; }
+.toolbar-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.view-toggle { display: flex; border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.view-toggle .btn { width: 36px; height: 36px; padding: 0; border: none; border-radius: 0; }
+.view-toggle .btn.active { background: var(--sand); }
+.view-toggle .btn:first-child { border-right: 0.5px solid var(--border); }
+
+/* ── SECTION LABEL ── */
+.section-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--mid); margin-bottom: 12px;
+}
+
+/* ── ALERTS ── */
+.alert {
+  border-radius: var(--radius-md); padding: 10px 14px; font-size: 13px;
+  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 1rem; line-height: 1.5;
+}
+.alert svg { flex-shrink: 0; margin-top: 1px; width: 15px; height: 15px; }
+.alert.info    { background: var(--teal-light); color: #005f5d; border: 0.5px solid var(--teal-mid); }
+.alert.danger  { background: var(--red-light); color: var(--red-dark); border: 0.5px solid #F09595; }
+.alert.warning { background: var(--warn-light); color: var(--warn-dark); border: 0.5px solid #FAC775; }
+
+/* ── TAG FILTER ── */
+.tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.tag {
+  height: 30px; padding: 0 12px; border-radius: 99px;
+  border: 0.5px solid var(--border); background: var(--white);
+  font-size: 12px; color: var(--mid); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+  transition: all 0.12s; font-family: inherit;
+}
+.tag:hover { border-color: var(--teal-mid); color: var(--teal); }
+.tag.active { background: var(--teal); border-color: var(--teal); color: var(--white); font-weight: 600; }
+
+/* ══════════════════════════════════════════
+   TILE / CARD VIEW
+══════════════════════════════════════════ */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.event-card {
+  background: var(--white);
+  border: 0.5px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem 1.25rem;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: border-color 0.15s, box-shadow 0.15s;
   cursor: default;
 }
 .event-card:hover {
