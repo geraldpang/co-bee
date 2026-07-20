@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Payment Reminder</title>
+<!--[if mso]>
+<noscript>
+<xml>
+<o:OfficeDocumentSettings>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+</noscript>
+<![endif]-->
+<style>
+  /* Client resets — most email clients ignore <style>, so every real rule below is ALSO inlined.
+     This block only helps clients that do support it (Apple Mail, most modern webmail). */
+  body, table, td { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+  body { margin: 0; padding: 0; background-color: #F4F6F8; }
+  img { border: 0; line-height: 100%; outline: none; text-decoration: none; }
+  table { border-collapse: collapse; }
+  a { text-decoration: none; }
+  @media only screen and (max-width: 600px) {
+    .email-container { width: 100% !important; }
+    .stack-col { display: block !important; width: 100% !important; }
+    .px-mobile { padding-left: 20px !important; padding-right: 20px !important; }
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#F4F6F8;">
+
+  <!-- Preheader (hidden preview text shown in inbox list, not in the email body) -->
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#F4F6F8;">
+    Gerald Pang, your payment of $55.00 for Order without login is 21 days overdue.
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F4F6F8;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background-color:#FFFFFF;border-radius:12px;overflow:hidden;">
+
+          <!-- HEADER -->
+          <tr>
+            <td align="center" style="background-color:#009A97;padding:28px 24px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:22px;font-weight:700;color:#FFFFFF;line-height:1.2;">
+                    co<span style="color:#F5A623;">&middot;</span>bee
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.75);padding-top:2px;">
+                    Good things must share!
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- TITLE -->
+          <tr>
+            <td class="px-mobile" style="padding:32px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="left">
+                    <div style="display:inline-block;background-color:#FCEBEB;color:#A32D2D;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;padding:5px 12px;border-radius:99px;">
+                      Payment Reminder
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- GREETING -->
+          <tr>
+            <td class="px-mobile" style="padding:16px 40px 0 40px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+              <p style="margin:0 0 12px 0;font-size:18px;font-weight:700;color:#1a1a18;">Hi Gerald Pang,</p>
+              <p style="margin:0 0 8px 0;font-size:14px;line-height:1.6;color:#4a4a45;">
+                This is a friendly reminder that your payment for <strong style="color:#1a1a18;">Order without login</strong> is still outstanding.
+                It's been <strong style="color:#A32D2D;">21 days</strong> since the order closed — please settle this at your earliest convenience so your order can be included in the next collection.
+              </p>
+            </td>
+          </tr>
+
+          <!-- AMOUNT DUE BOX -->
+          <tr>
+            <td class="px-mobile" style="padding:20px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FCEBEB;border-radius:10px;">
+                <tr>
+                  <td style="padding:18px 20px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="left" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+                          <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#A32D2D;">Amount Due</p>
+                          <p style="margin:4px 0 0 0;font-size:30px;font-weight:700;color:#1a1a18;">$55.00</p>
+                        </td>
+                        <td align="right" valign="bottom" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+                          <p style="margin:0;font-size:11px;color:#A32D2D;">Ref: jq12</p>
+                          <p style="margin:2px 0 0 0;font-size:11px;color:#A32D2D;">21 days overdue</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ORDER SUMMARY -->
+          <tr>
+            <td class="px-mobile" style="padding:24px 40px 0 40px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+              <p style="margin:0 0 10px 0;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#888780;">Order Summary</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #E0DFD8;">
+                <!-- repeat this row block per line item -->
+                <tr>
+                  <td style="padding:12px 0;border-bottom:1px solid #E0DFD8;font-size:13px;color:#1a1a18;">Dev cùi</td>
+                  <td style="padding:12px 0;border-bottom:1px solid #E0DFD8;font-size:12px;color:#888780;text-align:center;width:60px;">Qty 1</td>
+                  <td style="padding:12px 0;border-bottom:1px solid #E0DFD8;font-size:13px;font-weight:700;color:#1a1a18;text-align:right;width:80px;">$55.00</td>
+                </tr>
+                <!-- /repeat -->
+                <tr>
+                  <td colspan="2" style="padding:12px 0 0 0;font-size:13px;font-weight:700;color:#1a1a18;">Total</td>
+                  <td style="padding:12px 0 0 0;font-size:15px;font-weight:700;color:#1a1a18;text-align:right;">$55.00</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- CTA BUTTON -->
+          <tr>
+            <td class="px-mobile" align="center" style="padding:28px 40px 8px 40px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" bgcolor="#009A97" style="border-radius:8px;">
+                    <a href="https://co-bee.com/pay/jq12" target="_blank" style="display:inline-block;padding:14px 36px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:15px;font-weight:700;color:#FFFFFF;text-decoration:none;border-radius:8px;">
+                      Pay $55.00 Now
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:14px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:12px;color:#888780;">
+                or copy this link: <a href="https://co-bee.com/pay/jq12" style="color:#009A97;">https://co-bee.com/pay/jq12</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- HOST NOTE -->
+          <tr>
+            <td class="px-mobile" style="padding:20px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FAFAF8;border-radius:10px;">
+                <tr>
+                  <td style="padding:14px 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:12px;line-height:1.5;color:#4a4a45;">
+                    Questions about this order? Just reply to this email or message <strong>Minh Cong</strong> directly — they're hosting <strong>M6 Group</strong> and can help sort out payment or delivery details.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td class="px-mobile" align="center" style="padding:28px 40px 32px 40px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+              <p style="margin:0 0 6px 0;font-size:11px;color:#B4B2A9;">
+                Sent on behalf of Minh Cong · M6 Group via co&middot;bee
+              </p>
+              <p style="margin:0;font-size:11px;color:#B4B2A9;">
+                <a href="https://co-bee.com/orders/jq12" style="color:#888780;">View order</a> &nbsp;&middot;&nbsp; <a href="https://co-bee.com/settings/notifications" style="color:#888780;">Notification settings</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+        <!-- /email-container -->
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
