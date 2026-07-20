@@ -466,6 +466,28 @@ body { background: #F4F6F8; }
 .od-links a { color: var(--mid); }
 .od-links a:hover { color: var(--teal-dark); }
 .od-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+
+.od-pl-panel {
+  background: var(--sand); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg);
+  padding: 8px 10px; margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.od-pl-field { display: flex; align-items: center; height: 32px; border: 0.5px solid var(--border); border-radius: var(--radius-md); background: var(--white); overflow: hidden; flex-shrink: 0; }
+.od-pl-field-label { font-size: 11px; color: var(--mid); padding: 0 8px; white-space: nowrap; border-right: 0.5px solid var(--border-light); background: var(--sand-mid); height: 100%; display: flex; align-items: center; }
+.od-pl-unit { font-size: 12px; color: var(--mid); padding: 0 8px 0 2px; white-space: nowrap; }
+.od-pl-input { width: 46px; border: none; padding: 0 4px 0 8px; font-family: inherit; font-size: 13px; color: var(--ink); outline: none; background: transparent; text-align: right; }
+.od-pl-request-btn {
+  height: 32px; padding: 0 12px; border-radius: var(--radius-md); border: none;
+  background: var(--teal); color: var(--white); font-size: 12px; font-weight: 600; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px; font-family: inherit; flex-shrink: 0;
+  margin-left: auto;
+}
+.od-pl-request-btn:hover { background: var(--teal-dark); }
+.od-pl-request-btn svg { width: 12px; height: 12px; }
+.od-pl-request-btn.sent { background: var(--teal-light); color: var(--teal-dark); cursor: default; }
+@media (max-width: 480px) {
+  .od-pl-request-btn { margin-left: 0; width: 100%; justify-content: center; }
+}
 .od-hint { font-size: 12px; color: var(--mid); text-align: center; margin: 12px 0; }
 .od-hint svg { vertical-align: -2px; margin: 0 2px; }
 .od-status-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; }
@@ -511,7 +533,7 @@ body { background: #F4F6F8; }
   .od-hint { font-size: 11px; }
 }
 
-/* ── INLINE ORDER EXPANSION (accordion row, two-column panel) ── */
+/* ── INLINE ORDER EXPANSION (accordion row) ── */
 tr.od-row-name-cell { cursor: pointer; }
 .od-chevron { display: inline-block; width: 9px; height: 9px; margin-left: 5px; border-right: 1.5px solid var(--faint); border-bottom: 1.5px solid var(--faint); transform: rotate(-45deg); transition: transform 0.15s; vertical-align: 2px; }
 .od-row-expanded .od-chevron { transform: rotate(45deg); }
@@ -519,8 +541,8 @@ tr.od-row-name-cell { cursor: pointer; }
 .od-expand-row.collapsed { display: none; }
 @keyframes odExpandIn { from { opacity: 0; } to { opacity: 1; } }
 
-.od-panel { background: var(--sand-mid); padding: 12px 18px 14px; display: grid; grid-template-columns: 200px 1fr; gap: 20px; animation: odExpandIn 0.15s ease; }
-.od-panel-header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; padding-bottom: 8px; border-bottom: 0.5px solid var(--border-light); }
+.od-panel { background: var(--sand-mid); padding: 12px 18px 14px; animation: odExpandIn 0.15s ease; max-width: 560px; }
+.od-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 0.5px solid var(--border-light); }
 .od-ref-chip { font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--mid); background: var(--sand); border: 0.5px solid var(--border-light); padding: 3px 8px; border-radius: var(--radius-sm); }
 .od-icon-actions { display: flex; gap: 6px; }
 .od-icon-btn { width: 28px; height: 28px; border-radius: var(--radius-sm); border: 0.5px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--mid); transition: background 0.1s, color 0.1s; }
@@ -529,39 +551,43 @@ tr.od-row-name-cell { cursor: pointer; }
 .od-icon-btn.wa:hover { background: #E7F9EE; color: #1c7a41; border-color: #9adfb4; }
 .od-icon-btn svg { width: 14px; height: 14px; }
 
-.od-cust-col { display: flex; flex-direction: column; gap: 6px; }
-.od-cust-id { display: flex; align-items: center; gap: 10px; }
-.od-cust-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--teal); color: var(--white); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.od-name-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .od-cust-name { font-size: 14px; font-weight: 600; color: var(--ink); }
-.od-cust-phone { font-size: 12px; color: var(--teal-dark); }
-.od-cust-date { font-size: 11px; color: var(--mid); }
-.od-pay-chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
+.od-cust-phone-inline { font-size: 12px; color: var(--mid); font-weight: 400; margin-left: 4px; }
+.od-cust-date { font-size: 11px; color: var(--faint); white-space: nowrap; }
 
-.od-order-col { display: flex; flex-direction: column; min-width: 0; }
-.od-item-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; font-size: 13px; border-bottom: 0.5px dashed var(--border-light); }
+.od-items-table { margin-top: 12px; padding-top: 8px; border-top: 0.5px solid var(--border-light); }
+.od-items-head {
+  display: grid; grid-template-columns: 1fr 56px 64px; column-gap: 10px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--mid);
+  margin-bottom: 4px;
+}
+.od-items-head span:nth-child(2), .od-items-head span:nth-child(3) { text-align: right; }
+.od-item-row {
+  display: grid; grid-template-columns: 1fr 56px 64px; column-gap: 10px; align-items: center;
+  padding: 5px 0; font-size: 13px; border-bottom: 0.5px dashed var(--border-light);
+}
 .od-item-row:last-of-type { border-bottom: none; }
 .od-item-name { color: var(--ink); }
-.od-item-right { display: grid; grid-template-columns: 48px 56px; column-gap: 14px; color: var(--mid); font-size: 12px; }
-.od-item-right span { text-align: right; }
-.od-item-right strong { color: var(--ink); font-size: 13px; text-align: right; }
+.od-item-qty { text-align: right; color: var(--mid); font-size: 12px; }
+.od-item-price { text-align: right; color: var(--ink); font-weight: 600; }
 
-.od-note-row { margin-top: 6px; }
+.od-note-row { margin-top: 10px; }
 .od-note-toggle { font-size: 12px; color: var(--teal-dark); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
 .od-note-toggle svg { width: 12px; height: 12px; }
 .od-note-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); display: inline-block; margin-left: 2px; }
 .od-note-box { display: none; margin-top: 8px; width: 100%; min-height: 44px; border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 8px 10px; font-family: inherit; font-size: 12px; resize: vertical; color: var(--ink); }
 .od-note-box.open { display: block; }
 
-.od-foot-row { display: flex; justify-content: flex-end; align-items: center; gap: 18px; margin-top: 8px; padding-top: 8px; border-top: 0.5px solid var(--border-light); }
+.od-foot-row { display: flex; justify-content: flex-end; align-items: center; gap: 18px; margin-top: 10px; padding-top: 8px; border-top: 0.5px solid var(--border-light); }
 .od-foot-stat { font-size: 12px; color: var(--mid); }
 .od-foot-stat strong { color: var(--ink); font-size: 13px; }
 .od-close-ghost { font-size: 12px; color: var(--mid); background: none; border: none; cursor: pointer; text-decoration: underline; font-family: inherit; }
 .od-close-ghost:hover { color: var(--ink); }
 
 @media (max-width: 640px) {
-  .od-panel { grid-template-columns: 1fr; gap: 14px; }
-  .od-cust-col { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
-  .od-cust-date { width: 100%; }
+  .od-panel { max-width: none; }
+  .od-name-row { flex-direction: column; align-items: flex-start; gap: 2px; }
 }
 </style>
 </head>
@@ -945,6 +971,23 @@ tr.od-row-name-cell { cursor: pointer; }
             </button>
           </div>
 
+          <div class="od-pl-panel" id="od-pl-panel" style="display:none;">
+            <div class="od-pl-field">
+              <span class="od-pl-field-label">Delivery fee</span>
+              <span class="od-pl-unit" style="padding-left:8px;">$</span>
+              <input class="od-pl-input" id="od-pl-fee" type="number" value="0" style="padding-left:0;" />
+            </div>
+            <div class="od-pl-field">
+              <span class="od-pl-field-label">Discount</span>
+              <input class="od-pl-input" id="od-pl-discount" type="number" value="0" />
+              <span class="od-pl-unit">%</span>
+            </div>
+            <button class="od-pl-request-btn" id="od-pl-btn" onclick="requestPayment()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Request Payment
+            </button>
+          </div>
+
           <div class="search-wrap" style="margin-bottom:6px;">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <input class="input" type="text" placeholder="Search Name / Mobile Number / Order Reference" oninput="filterOrderRows(this.value)" />
@@ -1098,6 +1141,7 @@ const orderEventData = {
   'order without login': {
     closing: '02-05-2026', collection: '06-05-2026',
     closingNote: 'Closing in 0 day', deliveryNote: 'Delivery in 0 day', noteState: 'closing',
+    payLater: true,
     orders: [
       { name: 'Minh Nguyen', price: 1.00, status: 'unpaid', ref: 'jq11', phone: '0962240817', orderedOn: '19 Mar 2025, 02:06', item: 'Dev c\u00f9i', qty: 1, note: '' },
       { name: 'Gerald Pang', price: 1.00, status: 'unpaid', ref: 'jq12', phone: '9123 4567', orderedOn: '19 Mar 2025, 02:11', item: 'Dev c\u00f9i', qty: 1, note: '' }
@@ -1165,6 +1209,18 @@ function openOrderDetail(el) {
   const badgeSrc = el.querySelector('.badge.buy') || el.querySelector('td .badge.buy') || el.querySelector('.badge');
   document.getElementById('od-buy-badge-wrap').innerHTML = badgeSrc ? badgeSrc.outerHTML : '';
 
+  const plPanel = document.getElementById('od-pl-panel');
+  plPanel.style.display = data.payLater ? 'flex' : 'none';
+  if (data.payLater) {
+    document.getElementById('od-pl-fee').value = 0;
+    document.getElementById('od-pl-fee').disabled = false;
+    document.getElementById('od-pl-discount').value = 0;
+    document.getElementById('od-pl-discount').disabled = false;
+    const plBtn = document.getElementById('od-pl-btn');
+    plBtn.classList.remove('sent');
+    plBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Request Payment';
+  }
+
   renderOrderRows(data.orders);
 
   document.querySelector('.page-header').style.display = 'none';
@@ -1173,6 +1229,20 @@ function openOrderDetail(el) {
   document.getElementById('list-view').style.display = 'none';
   document.getElementById('order-detail-view').style.display = 'block';
   window.scrollTo(0, 0);
+}
+
+function requestPayment() {
+  const fee = parseFloat(document.getElementById('od-pl-fee').value) || 0;
+  const discount = parseFloat(document.getElementById('od-pl-discount').value) || 0;
+
+  document.getElementById('od-pl-fee').disabled = true;
+  document.getElementById('od-pl-discount').disabled = true;
+
+  const plBtn = document.getElementById('od-pl-btn');
+  plBtn.classList.add('sent');
+  plBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Payment Requested';
+
+  showToast('Payment request sent \u00b7 fee $' + fee.toFixed(2) + ', discount ' + discount + '%', 'success');
 }
 
 function closeOrderDetail() {
@@ -1236,24 +1306,21 @@ function renderOrderRows(orders) {
 }
 
 function buildReceiptHTML(o, index) {
-  const meta = ODStatusMeta[o.status] || ODStatusMeta.unpaid;
-  const paymentLabel = meta.label === 'Not Paid' ? 'Unpaid' : meta.label;
   const items = o.items || [{ name: o.item, price: o.price, qty: o.qty || 1 }];
   const itemsHTML = items.map(it =>
     '<div class="od-item-row">' +
       '<span class="od-item-name">' + it.name + '</span>' +
-      '<div class="od-item-right"><span>QTY ' + it.qty + '</span><strong>$' + it.price.toFixed(2) + '</strong></div>' +
+      '<span class="od-item-qty">Qty ' + it.qty + '</span>' +
+      '<span class="od-item-price">$' + it.price.toFixed(2) + '</span>' +
     '</div>'
   ).join('');
 
-  const initials = o.name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
   const hasNote = !!(o.note && o.note.trim());
-  const payChipClass = (o.status === 'paid' || o.status === 'collected') ? 'style="background:var(--teal-light);color:#005f5d;"' : 'style="background:var(--red-light);color:var(--red-dark);"';
 
   return (
     '<div class="od-panel">' +
       '<div class="od-panel-header">' +
-        '<span class="od-ref-chip">Ref ' + (o.ref || '\u2014') + '</span>' +
+        '<span class="od-ref-chip">Ref: ' + (o.ref || '\u2014') + '</span>' +
         '<div class="od-icon-actions">' +
           '<div class="od-icon-btn" title="Edit order" onclick="event.stopPropagation();showToast(\'Opening edit form\u2026\',\'success\')">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
@@ -1267,31 +1334,27 @@ function buildReceiptHTML(o, index) {
         '</div>' +
       '</div>' +
 
-      '<div class="od-cust-col">' +
-        '<div class="od-cust-id">' +
-          '<div class="od-cust-avatar">' + initials + '</div>' +
-          '<div>' +
-            '<div class="od-cust-name">' + o.name + '</div>' +
-            '<div class="od-cust-phone">' + (o.phone || '\u2014') + '</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="od-cust-date">Ordered ' + (o.orderedOn || '\u2014') + '</div>' +
-        '<span class="od-pay-chip" ' + payChipClass + '>' + paymentLabel + '</span>' +
+      '<div class="od-name-row">' +
+        '<span><span class="od-cust-name">' + o.name + '</span><span class="od-cust-phone-inline">' + (o.phone ? '\u00b7 ' + o.phone : '') + '</span></span>' +
+        '<span class="od-cust-date">Ordered ' + (o.orderedOn || '\u2014') + '</span>' +
       '</div>' +
 
-      '<div class="od-order-col">' +
+      '<div class="od-items-table">' +
+        (items.length > 1 ? '<div class="od-items-head"><span>Items</span><span>Qty</span><span>Price</span></div>' : '') +
         itemsHTML +
-        '<div class="od-note-row">' +
-          '<div class="od-note-toggle" onclick="event.stopPropagation();this.nextElementSibling.classList.toggle(\'open\')">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
-            'Notes' + (hasNote ? '<span class="od-note-dot"></span>' : '') +
-          '</div>' +
-          '<textarea class="od-note-box' + (hasNote ? ' open' : '') + '" placeholder="No note added" onclick="event.stopPropagation()">' + (o.note || '') + '</textarea>' +
+      '</div>' +
+
+      '<div class="od-note-row">' +
+        '<div class="od-note-toggle" onclick="event.stopPropagation();this.nextElementSibling.classList.toggle(\'open\')">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
+          'Notes' + (hasNote ? '<span class="od-note-dot"></span>' : '') +
         '</div>' +
-        '<div class="od-foot-row">' +
-          '<span class="od-foot-stat">Total <strong>$' + o.price.toFixed(2) + '</strong></span>' +
-          '<button class="od-close-ghost" onclick="event.stopPropagation();toggleOrderExpand(' + index + ')">Close</button>' +
-        '</div>' +
+        '<textarea class="od-note-box' + (hasNote ? ' open' : '') + '" placeholder="No note added" onclick="event.stopPropagation()">' + (o.note || '') + '</textarea>' +
+      '</div>' +
+
+      '<div class="od-foot-row">' +
+        '<span class="od-foot-stat">Total <strong>$' + o.price.toFixed(2) + '</strong></span>' +
+        '<button class="od-close-ghost" onclick="event.stopPropagation();toggleOrderExpand(' + index + ')">Close</button>' +
       '</div>' +
     '</div>'
   );
