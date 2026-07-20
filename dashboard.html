@@ -153,6 +153,29 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
 
 /* SECTION DIVIDER */
 .section-label{font-size:11px;font-weight:600;color:var(--faint);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:10px;margin-top:4px;}
+
+/* TOAST */
+.toast-wrap{position:fixed;bottom:1.5rem;right:1.5rem;z-index:900;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+.toast{background:var(--ink);color:var(--white);font-size:13px;padding:10px 16px;border-radius:var(--radius-md);display:flex;align-items:center;gap:10px;min-width:220px;max-width:340px;pointer-events:all;animation:toastIn 0.2s ease;}
+.toast.success{background:var(--teal-dark);}
+.toast.warning{background:var(--amber-dark);}
+@keyframes toastIn{from{opacity:0;transform:translateX(12px);}to{opacity:1;transform:translateX(0);}}
+
+/* PAYMENT REMINDERS */
+.reminder-row{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:0.5px solid var(--border-light);}
+.reminder-row:last-of-type{border-bottom:none;}
+.reminder-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
+.reminder-name{font-size:12px;font-weight:500;color:var(--ink);}
+.reminder-owed{font-size:13px;font-weight:700;color:var(--red-dark);width:60px;text-align:right;flex-shrink:0;}
+.reminder-days{width:60px;text-align:right;flex-shrink:0;padding-left:10px;font-size:11px;font-weight:600;}
+.remind-btn{height:26px;padding:0 10px;border-radius:99px;border:0.5px solid var(--teal-mid);background:var(--white);color:var(--teal-dark);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;transition:background 0.12s;}
+.remind-btn:hover{background:var(--teal-light);}
+.remind-btn.sent{border-color:var(--border);color:var(--faint);cursor:default;background:var(--sand-mid);}
+.remind-btn svg{width:11px;height:11px;}
+
+@media (max-width: 860px) {
+  .bottom-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -534,55 +557,98 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
         <div class="section-label" style="margin-top:18px;">Events</div>
         <div class="bottom-grid" style="margin-bottom:14px;">
 
-          <!-- Card 1: Closing Soon -->
+          <!-- Card 1: Payment Reminders -->
           <div class="panel-card">
             <div class="panel-header">
               <div>
-                <div class="panel-title">Closing Soon</div>
-                <div style="font-size:11px;color:var(--mid);margin-top:1px;">Chase payments before orders close</div>
+                <div class="panel-title">Payment Reminders</div>
+                <div style="font-size:11px;color:var(--mid);margin-top:1px;">Buyers with outstanding balances, up to date</div>
               </div>
-              <a href="hosted-events.html" class="panel-link">View all →</a>
+              <a href="order-management.html" class="panel-link">View all →</a>
             </div>
-            <div style="display:grid;grid-template-columns:1fr auto auto;gap:0;padding:6px 16px;background:#FAFAF8;border-bottom:0.5px solid var(--border-light);">
-              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;">Event</div>
-              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;width:70px;text-align:center;">Closes</div>
-              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;width:56px;text-align:right;">Left</div>
+            <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;padding:6px 16px;background:#FAFAF8;border-bottom:0.5px solid var(--border-light);">
+              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;">Buyer</div>
+              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;width:60px;text-align:right;">Owes</div>
+              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;width:60px;text-align:right;padding-left:10px;">Days</div>
+              <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;width:78px;text-align:right;padding-left:10px;">Action</div>
             </div>
-            <div class="event-row" onclick="window.location='hosted-events.html'">
-              <div class="event-dot" style="background:#E24B4A;flex-shrink:0;"></div>
+            <div class="reminder-row">
+              <div class="reminder-avatar" style="background:#E24B4A;">G</div>
               <div style="flex:1;min-width:0;">
-                <div class="event-name">Groupbuy Event test</div>
-                <div class="event-meta">9 orders · <span style="color:#E24B4A;">8 unpaid</span></div>
+                <div class="reminder-name">Gerald Pang</div>
               </div>
-              <div style="width:70px;text-align:center;flex-shrink:0;font-size:11px;color:var(--ink);font-weight:500;">15-05-2026</div>
-              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge red">2 days</span></div>
+              <div class="reminder-owed">$55.00</div>
+              <div class="reminder-days" style="color:var(--red-dark);">21d</div>
+              <div style="width:78px;text-align:right;padding-left:10px;">
+                <button class="remind-btn" onclick="sendReminder(this,'Gerald Pang')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+                  Remind
+                </button>
+              </div>
             </div>
-            <div class="event-row" onclick="window.location='hosted-events.html'">
-              <div class="event-dot" style="background:#E8971A;flex-shrink:0;"></div>
+            <div class="reminder-row">
+              <div class="reminder-avatar" style="background:#009A97;">T</div>
               <div style="flex:1;min-width:0;">
-                <div class="event-name">New event</div>
-                <div class="event-meta">4 orders · <span style="color:#E8971A;">2 unpaid</span></div>
+                <div class="reminder-name">Tom Nguyen</div>
               </div>
-              <div style="width:70px;text-align:center;flex-shrink:0;font-size:11px;color:var(--ink);font-weight:500;">15-05-2026</div>
-              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge amber">5 days</span></div>
+              <div class="reminder-owed">$60.00</div>
+              <div class="reminder-days" style="color:var(--red-dark);">18d</div>
+              <div style="width:78px;text-align:right;padding-left:10px;">
+                <button class="remind-btn" onclick="sendReminder(this,'Tom Nguyen')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+                  Remind
+                </button>
+              </div>
             </div>
-            <div class="event-row" onclick="window.location='hosted-events.html'">
-              <div class="event-dot" style="background:#009A97;flex-shrink:0;"></div>
+            <div class="reminder-row">
+              <div class="reminder-avatar" style="background:#E8971A;">A</div>
               <div style="flex:1;min-width:0;">
-                <div class="event-name">Test event for login</div>
-                <div class="event-meta">13 orders · <span style="color:#27AE60;">all paid ✓</span></div>
+                <div class="reminder-name">Aisha Rahman</div>
               </div>
-              <div style="width:70px;text-align:center;flex-shrink:0;font-size:11px;color:var(--ink);font-weight:500;">20-05-2026</div>
-              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge teal">10 days</span></div>
+              <div class="reminder-owed">$95.00</div>
+              <div class="reminder-days" style="color:var(--amber-dark);">12d</div>
+              <div style="width:78px;text-align:right;padding-left:10px;">
+                <button class="remind-btn" onclick="sendReminder(this,'Aisha Rahman')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+                  Remind
+                </button>
+              </div>
             </div>
-            <div class="event-row" onclick="window.location='hosted-events.html'">
-              <div class="event-dot" style="background:#B4B2A9;flex-shrink:0;"></div>
+            <div class="reminder-row">
+              <div class="reminder-avatar" style="background:#3498DB;">B</div>
               <div style="flex:1;min-width:0;">
-                <div class="event-name">Batch 4</div>
-                <div class="event-meta">6 orders · <span style="color:#E8971A;">1 unpaid</span></div>
+                <div class="reminder-name">Bryan Koh</div>
               </div>
-              <div style="width:70px;text-align:center;flex-shrink:0;font-size:11px;color:var(--ink);font-weight:500;">25-05-2026</div>
-              <div style="width:56px;text-align:right;flex-shrink:0;"><span class="badge gray">15 days</span></div>
+              <div class="reminder-owed">$75.00</div>
+              <div class="reminder-days" style="color:var(--amber-dark);">9d</div>
+              <div style="width:78px;text-align:right;padding-left:10px;">
+                <button class="remind-btn" onclick="sendReminder(this,'Bryan Koh')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+                  Remind
+                </button>
+              </div>
+            </div>
+            <div class="reminder-row">
+              <div class="reminder-avatar" style="background:#9B59B6;">D</div>
+              <div style="flex:1;min-width:0;">
+                <div class="reminder-name">Daniel Ong</div>
+              </div>
+              <div class="reminder-owed">$55.00</div>
+              <div class="reminder-days" style="color:var(--mid);">6d</div>
+              <div style="width:78px;text-align:right;padding-left:10px;">
+                <button class="remind-btn" onclick="sendReminder(this,'Daniel Ong')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+                  Remind
+                </button>
+              </div>
+            </div>
+            <!-- Remind All CTA -->
+            <div style="padding:10px 16px;border-top:0.5px solid var(--border-light);background:#FAFAF8;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <span style="font-size:11px;color:var(--mid);">Total outstanding: <strong style="color:var(--red-dark);">$340.00</strong></span>
+              <button onclick="remindAll(this)" style="height:32px;padding:0 14px;background:white;border:0.5px solid #009A97;border-radius:8px;font-size:12px;font-weight:600;color:#009A97;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;white-space:nowrap;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+                Remind All (5)
+              </button>
             </div>
           </div>
 
@@ -734,6 +800,8 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
   </div>
 </div>
 
+<div class="toast-wrap" id="toast-wrap"></div>
+
 <script>
 // Set topbar date (only if element exists - page may run standalone or in iframe)
 const now = new Date();
@@ -820,6 +888,38 @@ document.addEventListener('DOMContentLoaded', function () {
   var defaultChip = document.querySelector('.filter-bar .filter-chip.active');
   if (defaultChip) setDateFilter(defaultChip, '90d');
 });
+
+function showToast(message, type) {
+  var wrap = document.getElementById('toast-wrap');
+  if (!wrap) return;
+  var t = document.createElement('div');
+  t.className = 'toast ' + (type || 'success');
+  t.innerHTML =
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' +
+    '<span>' + message + '</span>';
+  wrap.appendChild(t);
+  setTimeout(function () { t.remove(); }, 3000);
+}
+
+function sendReminder(btn, name) {
+  btn.disabled = true;
+  btn.classList.add('sent');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sent';
+  showToast('Reminder email sent to ' + name, 'success');
+}
+
+function remindAll(btn) {
+  var buttons = document.querySelectorAll('.remind-btn:not(.sent)');
+  var count = buttons.length;
+  buttons.forEach(function (b) {
+    b.disabled = true;
+    b.classList.add('sent');
+    b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sent';
+  });
+  btn.disabled = true;
+  btn.innerHTML = 'All reminders sent';
+  showToast('Reminder emails sent to ' + count + ' buyer' + (count === 1 ? '' : 's'), 'success');
+}
 </script>
 </body>
 </html>
