@@ -541,8 +541,8 @@ tr.od-row-name-cell { cursor: pointer; }
 .od-expand-row.collapsed { display: none; }
 @keyframes odExpandIn { from { opacity: 0; } to { opacity: 1; } }
 
-.od-panel { background: var(--sand-mid); padding: 12px 18px 14px; animation: odExpandIn 0.15s ease; max-width: 560px; }
-.od-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 0.5px solid var(--border-light); }
+.od-panel { background: var(--sand-mid); padding: 12px 18px 14px; animation: odExpandIn 0.15s ease; }
+.od-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 0.5px solid var(--border-light);  max-width: 560px;}
 .od-ref-chip { font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--mid); background: var(--sand); border: 0.5px solid var(--border-light); padding: 3px 8px; border-radius: var(--radius-sm); }
 .od-icon-actions { display: flex; gap: 6px; }
 .od-icon-btn { width: 28px; height: 28px; border-radius: var(--radius-sm); border: 0.5px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--mid); transition: background 0.1s, color 0.1s; }
@@ -551,12 +551,12 @@ tr.od-row-name-cell { cursor: pointer; }
 .od-icon-btn.wa:hover { background: #E7F9EE; color: #1c7a41; border-color: #9adfb4; }
 .od-icon-btn svg { width: 14px; height: 14px; }
 
-.od-name-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.od-name-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px;  max-width: 560px;}
 .od-cust-name { font-size: 14px; font-weight: 600; color: var(--ink); }
 .od-cust-phone-inline { font-size: 12px; color: var(--mid); font-weight: 400; margin-left: 4px; }
 .od-cust-date { font-size: 11px; color: var(--faint); white-space: nowrap; }
 
-.od-items-table { margin-top: 12px; padding-top: 8px; border-top: 0.5px solid var(--border-light); }
+.od-items-table { margin-top: 12px; padding-top: 8px; border-top: 0.5px solid var(--border-light);  max-width: 560px;}
 .od-items-head {
   display: grid; grid-template-columns: 1fr 56px 64px; column-gap: 10px;
   font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--mid);
@@ -572,21 +572,20 @@ tr.od-row-name-cell { cursor: pointer; }
 .od-item-qty { text-align: right; color: var(--mid); font-size: 12px; }
 .od-item-price { text-align: right; color: var(--ink); font-weight: 600; }
 
-.od-note-row { margin-top: 10px; }
+.od-note-row { margin-top: 10px;  max-width: 560px;}
 .od-note-toggle { font-size: 12px; color: var(--teal-dark); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
 .od-note-toggle svg { width: 12px; height: 12px; }
 .od-note-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); display: inline-block; margin-left: 2px; }
 .od-note-box { display: none; margin-top: 8px; width: 100%; min-height: 44px; border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 8px 10px; font-family: inherit; font-size: 12px; resize: vertical; color: var(--ink); }
 .od-note-box.open { display: block; }
 
-.od-foot-row { display: flex; justify-content: flex-end; align-items: center; gap: 18px; margin-top: 10px; padding-top: 8px; border-top: 0.5px solid var(--border-light); }
+.od-foot-row { display: flex; justify-content: flex-end; align-items: center; gap: 18px; margin-top: 10px; padding-top: 8px; border-top: 0.5px solid var(--border-light); max-width: 560px; }
 .od-foot-stat { font-size: 12px; color: var(--mid); }
 .od-foot-stat strong { color: var(--ink); font-size: 13px; }
 .od-close-ghost { font-size: 12px; color: var(--mid); background: none; border: none; cursor: pointer; text-decoration: underline; font-family: inherit; }
 .od-close-ghost:hover { color: var(--ink); }
 
 @media (max-width: 640px) {
-  .od-panel { max-width: none; }
   .od-name-row { flex-direction: column; align-items: flex-start; gap: 2px; }
 }
 </style>
