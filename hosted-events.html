@@ -511,49 +511,57 @@ body { background: #F4F6F8; }
   .od-hint { font-size: 11px; }
 }
 
-/* ── ORDER RECEIPT MODAL ── */
-.receipt-topline { display: flex; justify-content: space-between; align-items: flex-start; font-size: 12px; color: var(--mid); }
-.receipt-topline a { color: var(--mid); font-weight: 500; }
-.receipt-topline a:hover { color: var(--teal-dark); }
-.receipt-topline .danger-link:hover { color: var(--red-dark); }
-.receipt-logo-wrap { display: flex; justify-content: center; margin: 6px 0 18px; position: relative; }
-.receipt-logo {
-  width: 108px; height: 108px; border-radius: 50%; background: var(--teal);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  color: var(--white); position: relative;
-}
-.receipt-logo .rl-name { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
-.receipt-logo .rl-name .dot { color: #F5A623; }
-.receipt-logo .rl-tag { font-size: 8px; opacity: 0.85; letter-spacing: 0.02em; }
-.receipt-wa {
-  position: absolute; bottom: 2px; right: -2px; width: 30px; height: 30px; border-radius: 50%;
-  background: #25D366; display: flex; align-items: center; justify-content: center; border: 2px solid var(--white);
-}
-.receipt-customer { text-align: center; margin-bottom: 14px; }
-.receipt-customer .rc-name { font-size: 17px; font-weight: 700; color: var(--amber-dark); }
-.receipt-customer .rc-phone { font-size: 13px; color: var(--amber-dark); margin-top: 2px; }
-.receipt-customer .rc-date { font-size: 12px; color: var(--mid); margin-top: 10px; }
-.receipt-items { margin: 14px 0; }
-.receipt-item-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: 10px 0; border-bottom: 0.5px solid var(--border-light); font-size: 13px;
-}
-.receipt-item-row:last-child { border-bottom: none; }
-.receipt-item-name { color: var(--ink); }
-.receipt-item-right { display: flex; align-items: center; gap: 16px; color: var(--mid); }
-.receipt-item-right strong { color: var(--ink); font-weight: 600; }
-.receipt-note-label { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: var(--amber-dark); text-transform: uppercase; margin-bottom: 6px; }
-.receipt-note {
-  width: 100%; min-height: 60px; border: 0.5px solid var(--border); border-radius: var(--radius-md);
-  padding: 10px 12px; font-family: inherit; font-size: 13px; resize: vertical; color: var(--ink);
-}
-.receipt-totals { margin-top: 18px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font-size: 14px; color: var(--ink); }
-.receipt-totals strong { font-weight: 700; }
-@media (max-width: 420px) {
-  .receipt-logo { width: 88px; height: 88px; }
-  .receipt-logo .rl-name { font-size: 15px; }
-  .receipt-item-right { gap: 10px; }
-  .receipt-topline { font-size: 11px; }
+/* ── INLINE ORDER EXPANSION (accordion row, two-column panel) ── */
+tr.od-row-name-cell { cursor: pointer; }
+.od-chevron { display: inline-block; width: 9px; height: 9px; margin-left: 5px; border-right: 1.5px solid var(--faint); border-bottom: 1.5px solid var(--faint); transform: rotate(-45deg); transition: transform 0.15s; vertical-align: 2px; }
+.od-row-expanded .od-chevron { transform: rotate(45deg); }
+.od-expand-row td { padding: 0 !important; border-bottom: 0.5px solid var(--border-light); }
+.od-expand-row.collapsed { display: none; }
+@keyframes odExpandIn { from { opacity: 0; } to { opacity: 1; } }
+
+.od-panel { background: var(--sand-mid); padding: 16px 20px 18px; display: grid; grid-template-columns: 220px 1fr; gap: 24px; animation: odExpandIn 0.15s ease; }
+.od-panel-header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; padding-bottom: 12px; border-bottom: 0.5px solid var(--border-light); }
+.od-ref-chip { font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--mid); background: var(--sand); border: 0.5px solid var(--border-light); padding: 3px 8px; border-radius: var(--radius-sm); }
+.od-icon-actions { display: flex; gap: 6px; }
+.od-icon-btn { width: 28px; height: 28px; border-radius: var(--radius-sm); border: 0.5px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--mid); transition: background 0.1s, color 0.1s; }
+.od-icon-btn:hover { background: var(--sand); color: var(--ink); }
+.od-icon-btn.danger:hover { background: var(--red-light); color: var(--red-dark); border-color: #F09595; }
+.od-icon-btn.wa:hover { background: #E7F9EE; color: #1c7a41; border-color: #9adfb4; }
+.od-icon-btn svg { width: 14px; height: 14px; }
+
+.od-cust-col { display: flex; flex-direction: column; gap: 10px; }
+.od-cust-id { display: flex; align-items: center; gap: 10px; }
+.od-cust-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--teal); color: var(--white); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.od-cust-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+.od-cust-phone { font-size: 12px; color: var(--teal-dark); }
+.od-cust-date { font-size: 11px; color: var(--mid); }
+.od-pay-chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
+
+.od-order-col { display: flex; flex-direction: column; min-width: 0; }
+.od-item-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; font-size: 13px; border-bottom: 0.5px dashed var(--border-light); }
+.od-item-row:last-of-type { border-bottom: none; }
+.od-item-name { color: var(--ink); }
+.od-item-right { display: grid; grid-template-columns: 48px 56px; column-gap: 14px; color: var(--mid); font-size: 12px; }
+.od-item-right span { text-align: right; }
+.od-item-right strong { color: var(--ink); font-size: 13px; text-align: right; }
+
+.od-note-row { margin-top: 10px; }
+.od-note-toggle { font-size: 12px; color: var(--teal-dark); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+.od-note-toggle svg { width: 12px; height: 12px; }
+.od-note-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); display: inline-block; margin-left: 2px; }
+.od-note-box { display: none; margin-top: 8px; width: 100%; min-height: 44px; border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 8px 10px; font-family: inherit; font-size: 12px; resize: vertical; color: var(--ink); }
+.od-note-box.open { display: block; }
+
+.od-foot-row { display: flex; justify-content: flex-end; align-items: center; gap: 18px; margin-top: 14px; padding-top: 12px; border-top: 0.5px solid var(--border-light); }
+.od-foot-stat { font-size: 12px; color: var(--mid); }
+.od-foot-stat strong { color: var(--ink); font-size: 13px; }
+.od-close-ghost { font-size: 12px; color: var(--mid); background: none; border: none; cursor: pointer; text-decoration: underline; font-family: inherit; }
+.od-close-ghost:hover { color: var(--ink); }
+
+@media (max-width: 640px) {
+  .od-panel { grid-template-columns: 1fr; gap: 14px; }
+  .od-cust-col { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+  .od-cust-date { width: 100%; }
 }
 </style>
 </head>
@@ -1071,49 +1079,6 @@ body { background: #F4F6F8; }
   </div>
 </div>
 
-<!-- MODAL: Order Receipt (expanded from clicking a name) -->
-<div class="modal-backdrop" id="order-receipt-modal">
-  <div class="modal md">
-    <div class="modal-body" style="padding-top:16px;">
-      <div class="receipt-topline">
-        <span>Ref: <strong id="rc-ref" style="color:var(--ink);">—</strong></span>
-        <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;">
-          <a href="javascript:void(0)" onclick="closeModal('order-receipt-modal');showToast('Opening edit form…','success')">Edit Order</a>
-          <a href="javascript:void(0)" class="danger-link" onclick="closeModal('order-receipt-modal');showToast('Order cancelled','danger')">Cancel Order</a>
-        </div>
-      </div>
-
-      <div class="receipt-logo-wrap">
-        <div class="receipt-logo">
-          <div class="rl-name">co&middot;bee<span class="dot"></span></div>
-          <div class="rl-tag">Good things must share!</div>
-        </div>
-        <div class="receipt-wa">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.79.47 3.517 1.362 5.037L2 22l5.1-1.334A9.958 9.958 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.2a8.19 8.19 0 0 1-4.174-1.14l-.3-.178-3.024.792.808-2.95-.196-.303A8.196 8.196 0 1 1 20.2 12 8.208 8.208 0 0 1 12 20.2z"/></svg>
-        </div>
-      </div>
-
-      <div class="receipt-customer">
-        <div class="rc-name" id="rc-name">—</div>
-        <div class="rc-phone" id="rc-phone">—</div>
-        <div class="rc-date">Ordered on: <span id="rc-date">—</span></div>
-      </div>
-
-      <div class="receipt-items" id="rc-items"></div>
-
-      <div class="receipt-note-label">Note</div>
-      <textarea class="receipt-note" id="rc-note" placeholder="No note added"></textarea>
-
-      <div class="receipt-totals">
-        <div>Total Purchase: <strong id="rc-total">$0.00</strong></div>
-        <div>Payment Made: <strong id="rc-payment" style="color:var(--red-dark);">Unpaid</strong></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn secondary" onclick="closeModal('order-receipt-modal')">Close</button>
-    </div>
-  </div>
-</div>
 
 <div class="toast-wrap" id="toast-wrap">
 <script>
@@ -1233,10 +1198,12 @@ function renderOrderRows(orders) {
 
   orders.forEach((o, i) => {
     const meta = ODStatusMeta[o.status] || ODStatusMeta.unpaid;
+
     const tr = document.createElement('tr');
+    tr.id = 'od-row-' + i;
     tr.innerHTML =
       '<td class="muted">' + (i + 1) + '</td>' +
-      '<td style="font-weight:500;cursor:pointer;color:var(--teal-dark);" onclick="openOrderReceipt(' + i + ')">' + o.name + '</td>' +
+      '<td class="od-row-name-cell" style="font-weight:500;color:var(--teal-dark);" onclick="toggleOrderExpand(' + i + ')">' + o.name + '<span class="od-chevron"></span></td>' +
       '<td>$' + o.price.toFixed(2) + '</td>' +
       '<td><span class="od-status-pill" style="color:' + meta.color + ';">' + meta.icon + meta.label + '</span></td>' +
       '<td>' +
@@ -1249,37 +1216,97 @@ function renderOrderRows(orders) {
       '</td>';
     tr.dataset.price = o.price;
     tbody.appendChild(tr);
+
+    const expandTr = document.createElement('tr');
+    expandTr.id = 'od-expand-row-' + i;
+    expandTr.className = 'od-expand-row collapsed';
+    const expandTd = document.createElement('td');
+    expandTd.colSpan = 5;
+    expandTd.innerHTML = buildReceiptHTML(o, i);
+    expandTr.appendChild(expandTd);
+    tbody.appendChild(expandTr);
   });
 
   updateOrderTotals();
 }
 
-function openOrderReceipt(index) {
-  const o = odCurrentOrders[index];
-  if (!o) return;
-
-  document.getElementById('rc-ref').textContent = o.ref || '—';
-  document.getElementById('rc-name').textContent = o.name;
-  document.getElementById('rc-phone').textContent = o.phone || '—';
-  document.getElementById('rc-date').textContent = o.orderedOn || '—';
-  document.getElementById('rc-note').value = o.note || '';
-
-  const itemsWrap = document.getElementById('rc-items');
+function buildReceiptHTML(o, index) {
+  const meta = ODStatusMeta[o.status] || ODStatusMeta.unpaid;
+  const paymentLabel = meta.label === 'Not Paid' ? 'Unpaid' : meta.label;
   const items = o.items || [{ name: o.item, price: o.price, qty: o.qty || 1 }];
-  itemsWrap.innerHTML = items.map(it =>
-    '<div class="receipt-item-row">' +
-      '<span class="receipt-item-name">' + it.name + '</span>' +
-      '<div class="receipt-item-right"><strong>$' + it.price.toFixed(2) + '</strong><span>QTY: ' + it.qty + '</span></div>' +
+  const itemsHTML = items.map(it =>
+    '<div class="od-item-row">' +
+      '<span class="od-item-name">' + it.name + '</span>' +
+      '<div class="od-item-right"><span>QTY ' + it.qty + '</span><strong>$' + it.price.toFixed(2) + '</strong></div>' +
     '</div>'
   ).join('');
 
-  document.getElementById('rc-total').textContent = '$' + o.price.toFixed(2);
-  const meta = ODStatusMeta[o.status] || ODStatusMeta.unpaid;
-  const paymentEl = document.getElementById('rc-payment');
-  paymentEl.textContent = meta.label === 'Not Paid' ? 'Unpaid' : meta.label;
-  paymentEl.style.color = meta.color;
+  const initials = o.name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
+  const hasNote = !!(o.note && o.note.trim());
+  const payChipClass = (o.status === 'paid' || o.status === 'collected') ? 'style="background:var(--teal-light);color:#005f5d;"' : 'style="background:var(--red-light);color:var(--red-dark);"';
 
-  openModal('order-receipt-modal');
+  return (
+    '<div class="od-panel">' +
+      '<div class="od-panel-header">' +
+        '<span class="od-ref-chip">Ref ' + (o.ref || '\u2014') + '</span>' +
+        '<div class="od-icon-actions">' +
+          '<div class="od-icon-btn" title="Edit order" onclick="event.stopPropagation();showToast(\'Opening edit form\u2026\',\'success\')">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
+          '</div>' +
+          '<div class="od-icon-btn wa" title="Message on WhatsApp" onclick="event.stopPropagation();showToast(\'Opening WhatsApp\u2026\',\'success\')">' +
+            '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1s-.8 1-.9 1.2c-.2.2-.3.2-.6.1s-1.3-.5-2.4-1.5c-.9-.8-1.5-1.8-1.7-2.1s0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5s0-.4 0-.5c-.1-.1-.7-1.6-.9-2.2s-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4s-1 1-1 2.5 1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4s.2-1.3.2-1.4-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.4 5L2 22l5.1-1.3c1.5.8 3.2 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>' +
+          '</div>' +
+          '<div class="od-icon-btn danger" title="Cancel order" onclick="event.stopPropagation();showToast(\'Order cancelled\',\'danger\')">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="od-cust-col">' +
+        '<div class="od-cust-id">' +
+          '<div class="od-cust-avatar">' + initials + '</div>' +
+          '<div>' +
+            '<div class="od-cust-name">' + o.name + '</div>' +
+            '<div class="od-cust-phone">' + (o.phone || '\u2014') + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="od-cust-date">Ordered ' + (o.orderedOn || '\u2014') + '</div>' +
+        '<span class="od-pay-chip" ' + payChipClass + '>' + paymentLabel + '</span>' +
+      '</div>' +
+
+      '<div class="od-order-col">' +
+        itemsHTML +
+        '<div class="od-note-row">' +
+          '<div class="od-note-toggle" onclick="event.stopPropagation();this.nextElementSibling.classList.toggle(\'open\')">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
+            'Notes' + (hasNote ? '<span class="od-note-dot"></span>' : '') +
+          '</div>' +
+          '<textarea class="od-note-box' + (hasNote ? ' open' : '') + '" placeholder="No note added" onclick="event.stopPropagation()">' + (o.note || '') + '</textarea>' +
+        '</div>' +
+        '<div class="od-foot-row">' +
+          '<span class="od-foot-stat">Total <strong>$' + o.price.toFixed(2) + '</strong></span>' +
+          '<button class="od-close-ghost" onclick="event.stopPropagation();toggleOrderExpand(' + index + ')">Close</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>'
+  );
+}
+
+function toggleOrderExpand(index) {
+  const row = document.getElementById('od-row-' + index);
+  const expandRow = document.getElementById('od-expand-row-' + index);
+  if (!row || !expandRow) return;
+
+  const isOpen = !expandRow.classList.contains('collapsed');
+
+  // Accordion behaviour: close any other open expansion first
+  document.querySelectorAll('.od-expand-row').forEach(r => r.classList.add('collapsed'));
+  document.querySelectorAll('.od-row-expanded').forEach(r => r.classList.remove('od-row-expanded'));
+
+  if (!isOpen) {
+    expandRow.classList.remove('collapsed');
+    row.classList.add('od-row-expanded');
+  }
 }
 
 function updateOrderStatus(selectEl) {
@@ -1310,7 +1337,14 @@ function filterOrderRows(q) {
   q = q.toLowerCase();
   document.querySelectorAll('#od-order-rows tr[data-price]').forEach(row => {
     const name = row.children[1].textContent.toLowerCase();
-    row.style.display = name.includes(q) ? '' : 'none';
+    const match = name.includes(q);
+    row.style.display = match ? '' : 'none';
+    const idx = row.id.replace('od-row-', '');
+    const expandRow = document.getElementById('od-expand-row-' + idx);
+    if (expandRow) {
+      if (!match) expandRow.classList.add('collapsed');
+      expandRow.style.display = match ? '' : 'none';
+    }
   });
 }
 
