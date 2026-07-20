@@ -519,8 +519,8 @@ tr.od-row-name-cell { cursor: pointer; }
 .od-expand-row.collapsed { display: none; }
 @keyframes odExpandIn { from { opacity: 0; } to { opacity: 1; } }
 
-.od-panel { background: var(--sand-mid); padding: 16px 20px 18px; display: grid; grid-template-columns: 220px 1fr; gap: 24px; animation: odExpandIn 0.15s ease; }
-.od-panel-header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; padding-bottom: 12px; border-bottom: 0.5px solid var(--border-light); }
+.od-panel { background: var(--sand-mid); padding: 12px 18px 14px; display: grid; grid-template-columns: 200px 1fr; gap: 20px; animation: odExpandIn 0.15s ease; }
+.od-panel-header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; padding-bottom: 8px; border-bottom: 0.5px solid var(--border-light); }
 .od-ref-chip { font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--mid); background: var(--sand); border: 0.5px solid var(--border-light); padding: 3px 8px; border-radius: var(--radius-sm); }
 .od-icon-actions { display: flex; gap: 6px; }
 .od-icon-btn { width: 28px; height: 28px; border-radius: var(--radius-sm); border: 0.5px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--mid); transition: background 0.1s, color 0.1s; }
@@ -529,30 +529,30 @@ tr.od-row-name-cell { cursor: pointer; }
 .od-icon-btn.wa:hover { background: #E7F9EE; color: #1c7a41; border-color: #9adfb4; }
 .od-icon-btn svg { width: 14px; height: 14px; }
 
-.od-cust-col { display: flex; flex-direction: column; gap: 10px; }
+.od-cust-col { display: flex; flex-direction: column; gap: 6px; }
 .od-cust-id { display: flex; align-items: center; gap: 10px; }
-.od-cust-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--teal); color: var(--white); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.od-cust-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--teal); color: var(--white); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .od-cust-name { font-size: 14px; font-weight: 600; color: var(--ink); }
 .od-cust-phone { font-size: 12px; color: var(--teal-dark); }
 .od-cust-date { font-size: 11px; color: var(--mid); }
 .od-pay-chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
 
 .od-order-col { display: flex; flex-direction: column; min-width: 0; }
-.od-item-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; font-size: 13px; border-bottom: 0.5px dashed var(--border-light); }
+.od-item-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; font-size: 13px; border-bottom: 0.5px dashed var(--border-light); }
 .od-item-row:last-of-type { border-bottom: none; }
 .od-item-name { color: var(--ink); }
 .od-item-right { display: grid; grid-template-columns: 48px 56px; column-gap: 14px; color: var(--mid); font-size: 12px; }
 .od-item-right span { text-align: right; }
 .od-item-right strong { color: var(--ink); font-size: 13px; text-align: right; }
 
-.od-note-row { margin-top: 10px; }
+.od-note-row { margin-top: 6px; }
 .od-note-toggle { font-size: 12px; color: var(--teal-dark); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
 .od-note-toggle svg { width: 12px; height: 12px; }
 .od-note-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); display: inline-block; margin-left: 2px; }
 .od-note-box { display: none; margin-top: 8px; width: 100%; min-height: 44px; border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 8px 10px; font-family: inherit; font-size: 12px; resize: vertical; color: var(--ink); }
 .od-note-box.open { display: block; }
 
-.od-foot-row { display: flex; justify-content: flex-end; align-items: center; gap: 18px; margin-top: 14px; padding-top: 12px; border-top: 0.5px solid var(--border-light); }
+.od-foot-row { display: flex; justify-content: flex-end; align-items: center; gap: 18px; margin-top: 8px; padding-top: 8px; border-top: 0.5px solid var(--border-light); }
 .od-foot-stat { font-size: 12px; color: var(--mid); }
 .od-foot-stat strong { color: var(--ink); font-size: 13px; }
 .od-close-ghost { font-size: 12px; color: var(--mid); background: none; border: none; cursor: pointer; text-decoration: underline; font-family: inherit; }
