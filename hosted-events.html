@@ -543,18 +543,20 @@ tr.od-row-name-cell { cursor: pointer; }
 
 .od-panel { background: var(--sand-mid); padding: 12px 18px 14px; animation: odExpandIn 0.15s ease; }
 .od-panel-inner { max-width: 560px; margin: 0 auto; }
-.od-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 0.5px solid var(--border-light); }
-.od-ref-chip { font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--mid); background: var(--sand); border: 0.5px solid var(--border-light); padding: 3px 8px; border-radius: var(--radius-sm); }
+.od-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.od-phone-link { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: var(--ink); cursor: pointer; margin-bottom: 2px; }
+.od-phone-link:hover { color: var(--teal-dark); text-decoration: underline; }
+.od-phone-link svg { width: 12px; height: 12px; color: #B4B2A9; flex-shrink: 0; }
+.od-phone-link:hover svg { color: #25D366; }
 .od-icon-actions { display: flex; gap: 6px; }
 .od-icon-btn { width: 28px; height: 28px; border-radius: var(--radius-sm); border: 0.5px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--mid); transition: background 0.1s, color 0.1s; }
 .od-icon-btn:hover { background: var(--sand); color: var(--ink); }
 .od-icon-btn.danger:hover { background: var(--red-light); color: var(--red-dark); border-color: #F09595; }
-.od-icon-btn.wa:hover { background: #E7F9EE; color: #1c7a41; border-color: #9adfb4; }
 .od-icon-btn svg { width: 14px; height: 14px; }
 
 .od-name-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.od-cust-name { font-size: 14px; font-weight: 600; color: var(--ink); }
-.od-cust-phone-inline { font-size: 12px; color: var(--mid); font-weight: 400; margin-left: 4px; }
+.od-ref-text { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--faint); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.od-ref-text svg { width: 11px; height: 11px; flex-shrink: 0; }
 .od-cust-date { font-size: 11px; color: var(--faint); white-space: nowrap; }
 
 .od-items-table { margin-top: 12px; padding-top: 8px; border-top: 0.5px solid var(--border-light); }
@@ -583,12 +585,40 @@ tr.od-row-name-cell { cursor: pointer; }
 .od-foot-row { display: flex; justify-content: flex-end; align-items: center; gap: 18px; margin-top: 10px; padding-top: 8px; border-top: 0.5px solid var(--border-light); }
 .od-foot-stat { font-size: 12px; color: var(--mid); }
 .od-foot-stat strong { color: var(--ink); font-size: 13px; }
-.od-close-ghost { font-size: 12px; color: var(--mid); background: none; border: none; cursor: pointer; text-decoration: underline; font-family: inherit; }
-.od-close-ghost:hover { color: var(--ink); }
 
 @media (max-width: 640px) {
   .od-name-row { flex-direction: column; align-items: flex-start; gap: 2px; }
 }
+
+/* ── BUYER PROFILE MODAL (ported from members.html for consistency) ── */
+.bp-modal { background: white; border-radius: 16px; width: 460px; max-width: 100%; max-height: 88vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
+.bp-modal-hd { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 0.5px solid #f0f0f0; }
+.bp-modal-title { font-size: 15px; font-weight: 600; color: #009A97; }
+.bp-modal-close { background: none; border: none; cursor: pointer; color: #888780; font-size: 20px; line-height: 1; }
+.bp-hero { text-align: center; padding: 28px 20px 16px; }
+.bp-hero-avatar { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: white; margin: 0 auto 12px; position: relative; }
+.bp-whatsapp-badge { position: absolute; bottom: 0; right: 0; width: 24px; height: 24px; background: #25D366; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.bp-hero-name { font-size: 17px; font-weight: 700; color: #1a1a18; }
+.bp-hero-contact { font-size: 13px; color: #009A97; margin-top: 4px; }
+.bp-hero-actions { display: flex; gap: 8px; justify-content: center; margin-top: 14px; }
+.bp-btn-danger-outline { height: 34px; padding: 0 20px; border: 1px solid #E24B4A; border-radius: 8px; background: white; font-size: 12px; font-weight: 600; color: #E24B4A; cursor: pointer; font-family: inherit; transition: background 0.12s; }
+.bp-btn-danger-outline:hover { background: #FCEBEB; }
+.bp-btn-outline { height: 34px; padding: 0 14px; border: 1px solid #009A97; border-radius: 8px; background: white; font-size: 12px; font-weight: 600; color: #009A97; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; white-space: nowrap; transition: background 0.12s; }
+.bp-btn-outline:hover { background: #E0F5F5; }
+.bp-modal-section { padding: 14px 20px; border-top: 0.5px solid #f0f0f0; }
+.bp-modal-section-title { font-size: 11px; font-weight: 600; color: #009A97; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px; }
+.bp-rights-row { display: flex; gap: 20px; }
+.bp-right-option { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+.bp-right-option input { accent-color: #009A97; width: 15px; height: 15px; }
+.bp-verification-img { width: 100%; border-radius: 8px; background: #f0f0f0; min-height: 60px; display: flex; align-items: center; justify-content: center; color: #B4B2A9; font-size: 12px; border: 0.5px dashed #D3D1C7; padding: 12px; }
+.bp-purchase-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 0.5px solid #f0f0f0; font-size: 12px; }
+.bp-purchase-row:last-child { border-bottom: none; }
+.bp-purchase-event { color: #1a1a18; flex: 1; }
+.bp-purchase-date { color: #888780; margin: 0 12px; white-space: nowrap; }
+.bp-purchase-price { font-weight: 600; color: #1a1a18; white-space: nowrap; }
+.bp-modal-footer { padding: 12px 20px 16px; display: flex; gap: 8px; justify-content: flex-end; border-top: 0.5px solid #f0f0f0; }
+.bp-modal-btn-save { height: 36px; padding: 0 20px; background: #009A97; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.bp-modal-btn-cancel { height: 36px; padding: 0 16px; background: white; color: #888780; border: 0.5px solid #D3D1C7; border-radius: 8px; font-size: 13px; cursor: pointer; font-family: inherit; }
 </style>
 </head>
 <body>
@@ -969,6 +999,10 @@ tr.od-row-name-cell { cursor: pointer; }
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               Export Orders
             </button>
+            <button class="btn secondary" id="od-cost-btn" onclick="openEventCostModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              Add Event Cost
+            </button>
           </div>
 
           <div class="od-pl-panel" id="od-pl-panel" style="display:none;">
@@ -1005,6 +1039,7 @@ tr.od-row-name-cell { cursor: pointer; }
                 <tr>
                   <th>No</th>
                   <th>Name</th>
+                  <th>Qty</th>
                   <th>Price</th>
                   <th>Status</th>
                   <th>Updates</th>
@@ -1017,6 +1052,7 @@ tr.od-row-name-cell { cursor: pointer; }
           <div class="od-totals">
             <div>Total Purchase: <strong id="od-total-purchase">$0.00</strong></div>
             <div>Payment Collected: <strong id="od-total-collected">$0.00</strong></div>
+            <div>Total Profit: <strong id="od-total-profit" style="color:var(--teal-dark);">$0.00</strong></div>
           </div>
 
           <button class="od-exit-btn" onclick="closeOrderDetail()">Exit</button>
@@ -1122,6 +1158,90 @@ tr.od-row-name-cell { cursor: pointer; }
   </div>
 </div>
 
+<!-- EVENT COST MODAL -->
+<div class="modal-backdrop" id="event-cost-modal">
+  <div class="modal sm">
+    <div class="modal-header">
+      <span class="modal-title">Event Cost</span>
+      <button class="modal-close" onclick="closeModal('event-cost-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p style="margin-bottom:12px;">Enter what this event cost you (wholesale goods, delivery, packaging, etc.) so Total Profit can be calculated.</p>
+      <label style="display:block;font-size:11px;font-weight:600;color:var(--mid);margin-bottom:6px;">Event Cost ($)</label>
+      <input type="number" id="event-cost-input" class="input" style="width:100%;" placeholder="0.00" step="0.01" min="0" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn secondary" onclick="closeModal('event-cost-modal')">Cancel</button>
+      <button class="btn teal-outline" onclick="saveEventCost()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- BUYER PROFILE MODAL (consistent with members.html) -->
+<div class="modal-backdrop" id="buyer-profile-modal">
+  <div class="bp-modal" onclick="event.stopPropagation()">
+    <div class="bp-modal-hd">
+      <span class="bp-modal-title" id="bp-title">Member Details</span>
+      <button class="bp-modal-close" onclick="closeModal('buyer-profile-modal')">&times;</button>
+    </div>
+
+    <div class="bp-hero">
+      <div class="bp-hero-avatar" id="bp-avatar">
+        <div class="bp-whatsapp-badge" id="bp-whatsapp" title="Contact on WhatsApp">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.122 1.523 5.855L.057 23.082a.75.75 0 0 0 .916.916l5.228-1.466A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.93 0-3.736-.518-5.29-1.424l-.378-.224-3.905 1.095 1.094-3.906-.224-.378A9.953 9.953 0 0 1 2 12C2 6.478 6.478 2 12 2s10 4.478 10 10-4.478 10-10 10z"/></svg>
+        </div>
+        <span id="bp-initials">JN</span>
+      </div>
+      <div class="bp-hero-name" id="bp-name">Buyer Name</div>
+      <div class="bp-hero-contact" id="bp-contact">phone &middot; email</div>
+      <div class="bp-hero-actions">
+        <button class="bp-btn-danger-outline" onclick="showToast('Buyer banned','danger')">Ban</button>
+        <button class="bp-btn-danger-outline" onclick="showToast('Buyer removed','danger')">Remove</button>
+        <button class="bp-btn-outline" id="bp-message-btn" onclick="">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Message
+        </button>
+      </div>
+    </div>
+
+    <div class="bp-modal-section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div class="bp-modal-section-title" style="margin-bottom:0;">Member Details</div>
+        <button class="bp-btn-outline" style="height:28px;font-size:11px;padding:0 10px;" onclick="showToast('Opening edit form\u2026','success')">Edit</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+        <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Name</span><span id="bp-view-name" style="font-weight:500;"></span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Phone</span><span id="bp-view-phone" style="color:#009A97;"></span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Email</span><span id="bp-view-email" style="color:#009A97;"></span></div>
+      </div>
+    </div>
+
+    <div class="bp-modal-section">
+      <div class="bp-modal-section-title">User Rights</div>
+      <div class="bp-rights-row">
+        <label class="bp-right-option"><input type="radio" name="bp-right" value="admin" /> Admin</label>
+        <label class="bp-right-option"><input type="radio" name="bp-right" value="host" /> Host</label>
+        <label class="bp-right-option"><input type="radio" name="bp-right" value="member" checked /> Member</label>
+      </div>
+    </div>
+
+    <div class="bp-modal-section">
+      <div class="bp-modal-section-title">User Verification Response</div>
+      <div class="bp-verification-img">No verification image submitted</div>
+    </div>
+
+    <div class="bp-modal-section">
+      <div class="bp-modal-section-title" style="color:#1a1a18;">Past Purchases</div>
+      <div id="bp-purchases"></div>
+    </div>
+
+    <div class="bp-modal-footer">
+      <button class="bp-modal-btn-cancel" onclick="closeModal('buyer-profile-modal')">Close</button>
+      <button class="bp-modal-btn-save" onclick="closeModal('buyer-profile-modal');showToast('Changes saved','success')">Save Changes</button>
+    </div>
+  </div>
+</div>
+
 
 <div class="toast-wrap" id="toast-wrap">
 <script>
@@ -1143,25 +1263,25 @@ const orderEventData = {
     closingNote: 'Closing in 0 day', deliveryNote: 'Delivery in 0 day', noteState: 'closing',
     payLater: true,
     orders: [
-      { name: 'Minh Nguyen', price: 1.00, status: 'unpaid', ref: 'jq11', phone: '0962240817', orderedOn: '19 Mar 2025, 02:06', item: 'Dev c\u00f9i', qty: 1, note: '' },
-      { name: 'Gerald Pang', price: 1.00, status: 'unpaid', ref: 'jq12', phone: '9123 4567', orderedOn: '19 Mar 2025, 02:11', item: 'Dev c\u00f9i', qty: 1, note: '' }
+      { name: 'Minh Nguyen', price: 1.00, status: 'unpaid', ref: 'jq11', email: 'minh.nguyen@example.com', phone: '0962240817', orderedOn: '19 Mar 2025, 02:06', item: 'Dev c\u00f9i', qty: 1, note: '' },
+      { name: 'Gerald Pang', price: 1.00, status: 'unpaid', ref: 'jq12', email: 'gerald.pang@example.com', phone: '9123 4567', orderedOn: '19 Mar 2025, 02:11', item: 'Dev c\u00f9i', qty: 1, note: '' }
     ]
   },
   'purchase with no login': {
     closing: '13-05-2026', collection: '17-05-2026',
     closingNote: 'Closing in 14 days', deliveryNote: 'Delivery in 18 days', noteState: '',
     orders: [
-      { name: 'Minh Cong', price: 20.00, status: 'paid', ref: 'pn01', phone: '9821 4432', orderedOn: '29 Apr 2026, 10:14', item: 'Spec (Glasses)', qty: 1, note: '' },
-      { name: 'Wei Ling Tan', price: 10.00, status: 'collected', ref: 'pn02', phone: '8123 9087', orderedOn: '29 Apr 2026, 10:22', item: 'Chestnut (Individual)', qty: 1, note: 'Leave at guard house' },
-      { name: 'Aisha Rahman', price: 15.00, status: 'unpaid', ref: 'pn03', phone: '9765 2201', orderedOn: '29 Apr 2026, 11:05', note: '',
+      { name: 'Minh Cong', price: 20.00, status: 'paid', ref: 'pn01', email: 'minh.cong@example.com', phone: '9821 4432', orderedOn: '29 Apr 2026, 10:14', item: 'Spec (Glasses)', qty: 1, note: '' },
+      { name: 'Wei Ling Tan', price: 10.00, status: 'collected', ref: 'pn02', email: 'weiling.tan@example.com', phone: '8123 9087', orderedOn: '29 Apr 2026, 10:22', item: 'Chestnut (Individual)', qty: 1, note: 'Leave at guard house' },
+      { name: 'Aisha Rahman', price: 15.00, status: 'unpaid', ref: 'pn03', email: 'aisha.rahman@example.com', phone: '9765 2201', orderedOn: '29 Apr 2026, 11:05', note: '',
         items: [
           { name: 'Toothpaste', price: 12.00, qty: 2 },
           { name: 'Spec (Glasses)', price: 3.00, qty: 1 }
         ]
       },
-      { name: 'Daniel Ong', price: 10.00, status: 'pending', ref: 'pn04', phone: '8890 4471', orderedOn: '29 Apr 2026, 13:40', item: 'Chestnut (Individual)', qty: 1, note: '' },
-      { name: 'Priya Sundaram', price: 20.00, status: 'paid', ref: 'pn05', phone: '9034 6612', orderedOn: '30 Apr 2026, 09:02', item: 'Spec (Glasses)', qty: 1, note: '' },
-      { name: 'Bryan Koh', price: 15.00, status: 'unpaid', ref: 'pn06', phone: '8567 3390', orderedOn: '30 Apr 2026, 14:18', item: 'Toothpaste', qty: 2, note: '' }
+      { name: 'Daniel Ong', price: 10.00, status: 'pending', ref: 'pn04', email: 'daniel.ong@example.com', phone: '8890 4471', orderedOn: '29 Apr 2026, 13:40', item: 'Chestnut (Individual)', qty: 1, note: '' },
+      { name: 'Priya Sundaram', price: 20.00, status: 'paid', ref: 'pn05', email: 'priya.sundaram@example.com', phone: '9034 6612', orderedOn: '30 Apr 2026, 09:02', item: 'Spec (Glasses)', qty: 1, note: '' },
+      { name: 'Bryan Koh', price: 15.00, status: 'unpaid', ref: 'pn06', email: 'bryan.koh@example.com', phone: '8567 3390', orderedOn: '30 Apr 2026, 14:18', item: 'Toothpaste', qty: 2, note: '' }
     ]
   },
   'atea 1': {
@@ -1182,6 +1302,7 @@ const orderEventData = {
 };
 
 let odPreviousView = 'tile';
+let odCurrentEventKey = null;
 let odCurrentOrders = [];
 
 function openOrderDetail(el) {
@@ -1191,6 +1312,7 @@ function openOrderDetail(el) {
   odPreviousView = document.getElementById('btn-tile').classList.contains('active') ? 'tile' : 'list';
 
   const data = orderEventData[title] || { closing: '—', collection: '—', closingNote: '', deliveryNote: '', noteState: '', orders: [] };
+  odCurrentEventKey = title;
 
   document.getElementById('od-title').textContent = title;
   document.getElementById('od-closing').textContent = data.closing;
@@ -1222,6 +1344,7 @@ function openOrderDetail(el) {
   }
 
   renderOrderRows(data.orders);
+  updateEventCostButton(data.eventCost || 0);
 
   document.querySelector('.page-header').style.display = 'none';
   document.querySelector('.toolbar').style.display = 'none';
@@ -1265,20 +1388,27 @@ function renderOrderRows(orders) {
   odCurrentOrders = orders || [];
 
   if (!orders || orders.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="od-empty">No orders yet for this event.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="od-empty">No orders yet for this event.</td></tr>';
     document.getElementById('od-total-purchase').textContent = '$0.00';
     document.getElementById('od-total-collected').textContent = '$0.00';
+    const eventCost = (orderEventData[odCurrentEventKey] && orderEventData[odCurrentEventKey].eventCost) || 0;
+    const profitEl = document.getElementById('od-total-profit');
+    profitEl.textContent = (eventCost > 0 ? '-$' + eventCost.toFixed(2) : '$0.00');
+    profitEl.style.color = eventCost > 0 ? 'var(--red-dark)' : 'var(--teal-dark)';
     return;
   }
 
   orders.forEach((o, i) => {
     const meta = ODStatusMeta[o.status] || ODStatusMeta.unpaid;
+    const items = o.items || [{ qty: o.qty || 1 }];
+    const totalQty = items.reduce((sum, it) => sum + (it.qty || 1), 0);
 
     const tr = document.createElement('tr');
     tr.id = 'od-row-' + i;
     tr.innerHTML =
       '<td class="muted">' + (i + 1) + '</td>' +
       '<td class="od-row-name-cell" style="font-weight:500;color:var(--teal-dark);" onclick="toggleOrderExpand(' + i + ')">' + o.name + '<span class="od-chevron"></span></td>' +
+      '<td class="muted" style="text-align:center;">' + totalQty + '</td>' +
       '<td>$' + o.price.toFixed(2) + '</td>' +
       '<td><span class="od-status-pill" style="color:' + meta.color + ';">' + meta.icon + meta.label + '</span></td>' +
       '<td>' +
@@ -1296,7 +1426,7 @@ function renderOrderRows(orders) {
     expandTr.id = 'od-expand-row-' + i;
     expandTr.className = 'od-expand-row collapsed';
     const expandTd = document.createElement('td');
-    expandTd.colSpan = 5;
+    expandTd.colSpan = 6;
     expandTd.innerHTML = buildReceiptHTML(o, i);
     expandTr.appendChild(expandTd);
     tbody.appendChild(expandTr);
@@ -1321,13 +1451,21 @@ function buildReceiptHTML(o, index) {
     '<div class="od-panel">' +
       '<div class="od-panel-inner">' +
       '<div class="od-panel-header">' +
-        '<span class="od-ref-chip">Ref: ' + (o.ref || '\u2014') + '</span>' +
+        (o.phone
+          ? '<span class="od-phone-link" onclick="event.stopPropagation();openWhatsApp(\'' + o.phone + '\')" title="Message on WhatsApp">' +
+              '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1s-.8 1-.9 1.2c-.2.2-.3.2-.6.1s-1.3-.5-2.4-1.5c-.9-.8-1.5-1.8-1.7-2.1s0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5s0-.4 0-.5c-.1-.1-.7-1.6-.9-2.2s-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4s-1 1-1 2.5 1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4s.2-1.3.2-1.4-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.4 5L2 22l5.1-1.3c1.5.8 3.2 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>' +
+              o.phone +
+            '</span>'
+          : '<span></span>') +
         '<div class="od-icon-actions">' +
           '<div class="od-icon-btn" title="Edit order" onclick="event.stopPropagation();showToast(\'Opening edit form\u2026\',\'success\')">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
           '</div>' +
-          '<div class="od-icon-btn wa" title="Message on WhatsApp" onclick="event.stopPropagation();showToast(\'Opening WhatsApp\u2026\',\'success\')">' +
-            '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1s-.8 1-.9 1.2c-.2.2-.3.2-.6.1s-1.3-.5-2.4-1.5c-.9-.8-1.5-1.8-1.7-2.1s0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5s0-.4 0-.5c-.1-.1-.7-1.6-.9-2.2s-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4s-1 1-1 2.5 1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4s.2-1.3.2-1.4-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.4 5L2 22l5.1-1.3c1.5.8 3.2 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>' +
+          '<div class="od-icon-btn" title="More info about buyer" onclick="event.stopPropagation();openBuyerProfile(' + index + ')">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
+          '</div>' +
+          '<div class="od-icon-btn" title="Email buyer" onclick="event.stopPropagation();sendEmail(\'' + (o.email || '') + '\')">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>' +
           '</div>' +
           '<div class="od-icon-btn danger" title="Cancel order" onclick="event.stopPropagation();showToast(\'Order cancelled\',\'danger\')">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>' +
@@ -1336,7 +1474,7 @@ function buildReceiptHTML(o, index) {
       '</div>' +
 
       '<div class="od-name-row">' +
-        '<span><span class="od-cust-name">' + o.name + '</span><span class="od-cust-phone-inline">' + (o.phone ? '\u00b7 ' + o.phone : '') + '</span></span>' +
+        '<span class="od-ref-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13 21l-9-9V3h9l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>Order Reference: ' + (o.ref || '\u2014') + '</span>' +
         '<span class="od-cust-date">Ordered ' + (o.orderedOn || '\u2014') + '</span>' +
       '</div>' +
 
@@ -1355,11 +1493,57 @@ function buildReceiptHTML(o, index) {
 
       '<div class="od-foot-row">' +
         '<span class="od-foot-stat">Total <strong>$' + o.price.toFixed(2) + '</strong></span>' +
-        '<button class="od-close-ghost" onclick="event.stopPropagation();toggleOrderExpand(' + index + ')">Close</button>' +
       '</div>' +
       '</div>' +
     '</div>'
   );
+}
+
+const BP_COLORS = ['#9B59B6', '#E8971A', '#3498DB', '#009A97', '#E24B4A', '#27AE60'];
+
+function openBuyerProfile(index) {
+  const o = odCurrentOrders[index];
+  if (!o) return;
+
+  const initials = o.name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
+  const color = BP_COLORS[index % BP_COLORS.length];
+  const contact = (o.phone || '\u2014') + ' \u00b7 ' + (o.email || '\u2014');
+
+  document.getElementById('bp-title').textContent = o.name;
+  document.getElementById('bp-avatar').style.background = color;
+  document.getElementById('bp-initials').textContent = initials;
+  document.getElementById('bp-name').textContent = o.name;
+  document.getElementById('bp-contact').textContent = contact;
+  document.getElementById('bp-whatsapp').onclick = function () { openWhatsApp(o.phone); };
+  document.getElementById('bp-message-btn').onclick = function () { openWhatsApp(o.phone); };
+
+  document.getElementById('bp-view-name').textContent = o.name;
+  document.getElementById('bp-view-phone').textContent = o.phone || '\u2014';
+  document.getElementById('bp-view-email').textContent = o.email || '\u2014';
+
+  const eventTitle = document.getElementById('od-title').textContent;
+  document.getElementById('bp-purchases').innerHTML =
+    '<div class="bp-purchase-row">' +
+      '<span class="bp-purchase-event">' + eventTitle + '</span>' +
+      '<span class="bp-purchase-date">' + (o.orderedOn || '\u2014') + '</span>' +
+      '<span class="bp-purchase-price">$' + o.price.toFixed(2) + '</span>' +
+    '</div>';
+
+  openModal('buyer-profile-modal');
+}
+
+function sendEmail(email) {
+  if (!email) { showToast('No email on file', 'warning'); return; }
+  window.location.href = 'mailto:' + email;
+}
+
+function openWhatsApp(phone) {
+  if (!phone) { showToast('No phone number on file', 'warning'); return; }
+  var digits = phone.replace(/[^0-9]/g, '');
+  // Assume local Singapore mobile numbers (8 digits, no country code) need the +65 prefix.
+  // Numbers that already look like they include a country code are left as-is.
+  if (digits.length === 8) digits = '65' + digits;
+  window.open('https://wa.me/' + digits, '_blank');
 }
 
 function toggleOrderExpand(index) {
@@ -1401,6 +1585,36 @@ function updateOrderTotals() {
   });
   document.getElementById('od-total-purchase').textContent = '$' + totalPurchase.toFixed(2);
   document.getElementById('od-total-collected').textContent = '$' + totalCollected.toFixed(2);
+
+  const eventCost = (orderEventData[odCurrentEventKey] && orderEventData[odCurrentEventKey].eventCost) || 0;
+  const profit = totalPurchase - eventCost;
+  const profitEl = document.getElementById('od-total-profit');
+  profitEl.textContent = (profit < 0 ? '-$' + Math.abs(profit).toFixed(2) : '$' + profit.toFixed(2));
+  profitEl.style.color = profit < 0 ? 'var(--red-dark)' : 'var(--teal-dark)';
+}
+
+function updateEventCostButton(cost) {
+  const btn = document.getElementById('od-cost-btn');
+  const label = cost > 0 ? ('Event Cost: $' + cost.toFixed(2)) : 'Add Event Cost';
+  btn.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>' +
+    label;
+}
+
+function openEventCostModal() {
+  const current = (orderEventData[odCurrentEventKey] && orderEventData[odCurrentEventKey].eventCost) || 0;
+  document.getElementById('event-cost-input').value = current > 0 ? current.toFixed(2) : '';
+  openModal('event-cost-modal');
+}
+
+function saveEventCost() {
+  const val = parseFloat(document.getElementById('event-cost-input').value) || 0;
+  if (!orderEventData[odCurrentEventKey]) return;
+  orderEventData[odCurrentEventKey].eventCost = val;
+  updateEventCostButton(val);
+  updateOrderTotals();
+  closeModal('event-cost-modal');
+  showToast('Event cost saved \u00b7 $' + val.toFixed(2), 'success');
 }
 
 function filterOrderRows(q) {
