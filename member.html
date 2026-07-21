@@ -71,6 +71,8 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .mef-tile-img { width: 100%; aspect-ratio: 1 / 1; background: #E0F5F5; display: flex; align-items: center; justify-content: center; position: relative; }
   .mef-tile-buy { position: absolute; top: 6px; right: 6px; font-size: 10px; font-weight: 600; border-radius: 10px; padding: 2px 7px; color: white; }
   .mef-tile-body { padding: 8px 9px 9px; }
+  .mef-tile-host { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #888780; margin-bottom: 4px; }
+  .mef-tile-avatar { width: 14px; height: 14px; border-radius: 50%; background: #009A97; color: white; font-size: 7px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .mef-card-actions { display: flex; align-items: center; gap: 14px; padding: 8px 14px 10px; border-top: 0.5px solid #f0f0f0; }
   .mef-tile .mef-card-actions { padding: 6px 9px 8px; gap: 10px; }
   .mef-card-actions button { background: none; border: none; padding: 0; font-size: 11px; font-weight: 500; color: #888780; text-decoration: underline; cursor: pointer; font-family: inherit; }
@@ -1954,6 +1956,7 @@ select:focus { border-color: #009A97; }
           <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
         </div>
         <div class="mef-tile-body">
+          <div class="mef-tile-host"><span class="mef-tile-avatar">M6</span>M6 group</div>
           <div class="mef-tile-closing">Closing in 15 days</div>
           <div class="mef-tile-title">Groupbuy Event test</div>
         </div>
@@ -1968,6 +1971,7 @@ select:focus { border-color: #009A97; }
           <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
         </div>
         <div class="mef-tile-body">
+          <div class="mef-tile-host"><span class="mef-tile-avatar">M6</span>M6 group</div>
           <div class="mef-tile-closing">Closing in 15 days</div>
           <div class="mef-tile-title">New event</div>
         </div>
@@ -1982,6 +1986,7 @@ select:focus { border-color: #009A97; }
           <span class="mef-tile-buy" style="background:#009A97;">6 BUY</span>
         </div>
         <div class="mef-tile-body">
+          <div class="mef-tile-host"><span class="mef-tile-avatar">M6</span>M6 group</div>
           <div class="mef-tile-closing">Closing in 14 days</div>
           <div class="mef-tile-title">This is a test event for Purchase with no login</div>
         </div>
