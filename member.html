@@ -60,6 +60,33 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .card-title { font-size: 15px; font-weight: 700; color: #1a1a18; margin-bottom: 4px; }
   .card-desc { font-size: 13px; color: #666; line-height: 1.5; }
 
+  /* MEMBER EVENTS FEED — LIST/TILE TOGGLE + SORT (namespaced mef- to avoid clashing with .event-card/.card-* used elsewhere in this file) */
+  .mef-view-toggle { display: flex; border: 0.5px solid #d3d1c7; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: white; }
+  .mef-view-toggle button { width: 28px; height: 24px; border: none; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #888780; padding: 0; }
+  .mef-view-toggle button:first-child { border-right: 0.5px solid #d3d1c7; }
+  .mef-view-toggle button.active { background: #E0F5F5; color: #009A97; }
+  .mef-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; padding: 4px 14px 16px; max-width: 600px; margin: 0 auto; }
+  .mef-tile { cursor: pointer; background: white; border: 0.5px solid #e0dfd8; border-radius: 12px; overflow: hidden; transition: border-color 0.15s; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+  .mef-tile:hover { border-color: #009A97; }
+  .mef-tile-img { width: 100%; aspect-ratio: 1 / 1; background: #E0F5F5; display: flex; align-items: center; justify-content: center; position: relative; }
+  .mef-tile-buy { position: absolute; top: 6px; right: 6px; font-size: 10px; font-weight: 600; border-radius: 10px; padding: 2px 7px; color: white; }
+  .mef-tile-body { padding: 8px 9px 9px; }
+  .mef-card-actions { display: flex; align-items: center; gap: 14px; padding: 8px 14px 10px; border-top: 0.5px solid #f0f0f0; }
+  .mef-tile .mef-card-actions { padding: 6px 9px 8px; gap: 10px; }
+  .mef-card-actions button { background: none; border: none; padding: 0; font-size: 11px; font-weight: 500; color: #888780; text-decoration: underline; cursor: pointer; font-family: inherit; }
+  .mef-card-actions button:hover { color: #009A97; }
+  .mef-tile-closing { font-size: 10px; color: #E87722; font-weight: 500; margin-bottom: 3px; }
+  .mef-tile-title { font-size: 12px; font-weight: 600; color: #1a1a18; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .mef-sort-wrap { position: relative; }
+  .mef-sort-btn { display: flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 99px; border: 0.5px solid #d3d1c7; background: white; color: #888780; font-size: 11px; font-family: inherit; cursor: pointer; }
+  .mef-sort-btn:hover { border-color: #009A97; color: #009A97; }
+  .mef-sort-menu { display: none; position: absolute; top: calc(100% + 4px); right: 0; background: white; border: 0.5px solid #e0dfd8; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 100; min-width: 150px; overflow: hidden; }
+  .mef-sort-menu.open { display: block; }
+  .mef-sort-item { padding: 9px 14px; font-size: 12px; color: #1a1a18; cursor: pointer; border-bottom: 0.5px solid #f0f0f0; }
+  .mef-sort-item:last-child { border-bottom: none; }
+  .mef-sort-item:hover { background: #f5fafa; }
+  .mef-sort-item.active { color: #009A97; font-weight: 600; background: #f5fafa; }
+
   /* BOTTOM NAV  */
   .bottom-bar { background: white; border-top: 0.5px solid #e0e0e0; display: flex; align-items: center; flex-shrink: 0; z-index: 100; }
   .bottom-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 0; cursor: pointer; color: #888; font-size: 10px; transition: color 0.15s; border: none; background: none; }
@@ -1856,13 +1883,33 @@ select:focus { border-color: #009A97; }
   <div id="view-all">
     <div class="feed-header">
       <span class="feed-header-count">3 EVENTS</span>
+      <div class="mef-view-toggle">
+        <button class="active" id="mef-btn-list" onclick="setFeedView('list')" title="List view">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect y="1" width="14" height="2" rx="1"/><rect y="6" width="14" height="2" rx="1"/><rect y="11" width="14" height="2" rx="1"/></svg>
+        </button>
+        <button id="mef-btn-tile" onclick="setFeedView('tile')" title="Tile view">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="feed-header" style="padding-top:0;">
       <div class="feed-chips">
         <div class="chip active">All</div>
         <div class="chip">Closing soon</div>
       </div>
+      <div class="mef-sort-wrap">
+        <button class="mef-sort-btn" id="mef-sort-btn" onclick="toggleSortMenu()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          <span id="mef-sort-label">Sort</span>
+        </button>
+        <div class="mef-sort-menu" id="mef-sort-menu">
+          <div class="mef-sort-item" data-sort="closing" onclick="setSortBy('closing')">Closing soon</div>
+          <div class="mef-sort-item" data-sort="eventdate" onclick="setSortBy('eventdate')">Event date</div>
+        </div>
+      </div>
     </div>
     <div class="feed">
-      <div class="event-card" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
+      <div class="event-card" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-05-22" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
         <div class="card-header">
           <div class="card-host">
             <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
@@ -1878,8 +1925,12 @@ select:focus { border-color: #009A97; }
         <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
         <div class="card-rating"><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span></div><span class="rating-score">4.0</span><span class="rating-count">(3 reviews)</span></div>
         <div class="rating-preview"><strong>Janet:</strong> "Great quality, will order again next round!"</div>
+        <div class="mef-card-actions" onclick="event.stopPropagation()">
+          <button onclick="showToast('Event re-hosted','success')">Re-host</button>
+          <button onclick="showToast('Link copied','success')">Share</button>
+        </div>
       </div>
-      <div class="event-card" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
+      <div class="event-card" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-05-22" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
         <div class="card-header">
           <div class="card-host">
             <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
@@ -1892,8 +1943,12 @@ select:focus { border-color: #009A97; }
         </div>
         <div class="card-body"><div class="card-title">New event</div><div class="card-desc">test</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
+        <div class="mef-card-actions" onclick="event.stopPropagation()">
+          <button onclick="showToast('Event re-hosted','success')">Re-host</button>
+          <button onclick="showToast('Link copied','success')">Share</button>
+        </div>
       </div>
-      <div class="event-card" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
+      <div class="event-card" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-05-22" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
         <div class="card-header">
           <div class="card-host">
             <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
@@ -1908,6 +1963,55 @@ select:focus { border-color: #009A97; }
         <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">14-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
         <div class="card-rating"><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><span class="rating-score">5.0</span><span class="rating-count">(6 reviews)</span></div>
         <div class="rating-preview"><strong>Minh:</strong> "Smooth process, delivery was on time."</div>
+        <div class="mef-card-actions" onclick="event.stopPropagation()">
+          <button onclick="showToast('Event re-hosted','success')">Re-host</button>
+          <button onclick="showToast('Link copied','success')">Share</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mef-grid" id="mef-tile-grid" style="display:none;">
+      <div class="mef-tile" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-05-22" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
+        <div class="mef-tile-img">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+        </div>
+        <div class="mef-tile-body">
+          <div class="mef-tile-closing">Closing in 15 days</div>
+          <div class="mef-tile-title">Groupbuy Event test</div>
+        </div>
+        <div class="mef-card-actions" onclick="event.stopPropagation()">
+          <button onclick="showToast('Event re-hosted','success')">Re-host</button>
+          <button onclick="showToast('Link copied','success')">Share</button>
+        </div>
+      </div>
+      <div class="mef-tile" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-05-22" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
+        <div class="mef-tile-img">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+        </div>
+        <div class="mef-tile-body">
+          <div class="mef-tile-closing">Closing in 15 days</div>
+          <div class="mef-tile-title">New event</div>
+        </div>
+        <div class="mef-card-actions" onclick="event.stopPropagation()">
+          <button onclick="showToast('Event re-hosted','success')">Re-host</button>
+          <button onclick="showToast('Link copied','success')">Share</button>
+        </div>
+      </div>
+      <div class="mef-tile" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-05-22" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
+        <div class="mef-tile-img">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="mef-tile-buy" style="background:#009A97;">6 BUY</span>
+        </div>
+        <div class="mef-tile-body">
+          <div class="mef-tile-closing">Closing in 14 days</div>
+          <div class="mef-tile-title">This is a test event for Purchase with no login</div>
+        </div>
+        <div class="mef-card-actions" onclick="event.stopPropagation()">
+          <button onclick="showToast('Event re-hosted','success')">Re-host</button>
+          <button onclick="showToast('Link copied','success')">Share</button>
+        </div>
       </div>
     </div>
   </div>
@@ -4486,6 +4590,76 @@ function tbtExUpdate(eid) {
 function tbtExChgQty(btn, delta, id) {
   var el = document.getElementById(id);
   if (el) el.textContent = Math.max(0, parseInt(el.textContent) + delta);
+}
+
+function showToast(message, type) {
+  var icons = {
+    success: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    warning: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>',
+    danger:  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+  };
+  var wrap = document.getElementById('toast-wrap');
+  if (!wrap) return;
+  var t = document.createElement('div');
+  t.className = 'toast ' + (type || 'success');
+  t.innerHTML = (icons[type] || icons.success) + '<span>' + message + '</span>';
+  wrap.appendChild(t);
+  setTimeout(function () { t.remove(); }, 3000);
+}
+
+function setFeedView(mode) {
+  var listView = document.querySelector('#view-all > .feed');
+  var tileView = document.getElementById('mef-tile-grid');
+  var btnList = document.getElementById('mef-btn-list');
+  var btnTile = document.getElementById('mef-btn-tile');
+  if (!listView || !tileView) return;
+  if (mode === 'tile') {
+    listView.style.display = 'none';
+    tileView.style.display = 'grid';
+    btnList.classList.remove('active');
+    btnTile.classList.add('active');
+  } else {
+    listView.style.display = 'flex';
+    tileView.style.display = 'none';
+    btnList.classList.add('active');
+    btnTile.classList.remove('active');
+  }
+}
+
+function toggleSortMenu() {
+  var menu = document.getElementById('mef-sort-menu');
+  if (menu) menu.classList.toggle('open');
+}
+
+document.addEventListener('click', function (e) {
+  if (!e.target.closest('.mef-sort-wrap')) {
+    var menu = document.getElementById('mef-sort-menu');
+    if (menu) menu.classList.remove('open');
+  }
+});
+
+function setSortBy(criteria) {
+  var labels = { closing: 'Closing soon', eventdate: 'Event date' };
+  document.getElementById('mef-sort-label').textContent = labels[criteria] || 'Sort';
+  document.querySelectorAll('.mef-sort-item').forEach(function (item) {
+    item.classList.toggle('active', item.dataset.sort === criteria);
+  });
+
+  ['.feed', '#mef-tile-grid'].forEach(function (containerSel) {
+    var container = document.querySelector('#view-all ' + containerSel);
+    if (!container) return;
+    var cards = Array.prototype.slice.call(container.children);
+    if (criteria === 'closing') {
+      cards.sort(function (a, b) { return (parseInt(a.dataset.closing) || 0) - (parseInt(b.dataset.closing) || 0); });
+    } else if (criteria === 'eventdate') {
+      cards.sort(function (a, b) { return new Date(a.dataset.eventdate) - new Date(b.dataset.eventdate); });
+    } else {
+      cards.sort(function (a, b) { return (parseInt(a.dataset.order) || 0) - (parseInt(b.dataset.order) || 0); });
+    }
+    cards.forEach(function (card) { container.appendChild(card); });
+  });
+
+  toggleSortMenu();
 }
 </script>
 </body>
