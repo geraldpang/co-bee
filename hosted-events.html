@@ -1052,7 +1052,7 @@ tr.od-row-name-cell { cursor: pointer; }
           <div class="od-totals">
             <div>Total Purchase: <strong id="od-total-purchase">$0.00</strong></div>
             <div>Payment Collected: <strong id="od-total-collected">$0.00</strong></div>
-            <div>Total Profit: <strong id="od-total-profit" style="color:var(--teal-dark);">$0.00</strong></div>
+            <div id="od-profit-row" style="display:none;">Total Profit: <strong id="od-total-profit" style="color:var(--teal-dark);">$0.00</strong></div>
           </div>
 
           <button class="od-exit-btn" onclick="closeOrderDetail()">Exit</button>
@@ -1345,6 +1345,7 @@ function openOrderDetail(el) {
 
   renderOrderRows(data.orders);
   updateEventCostButton(data.eventCost || 0);
+  document.getElementById('od-profit-row').style.display = data.hasOwnProperty('eventCost') ? '' : 'none';
 
   document.querySelector('.page-header').style.display = 'none';
   document.querySelector('.toolbar').style.display = 'none';
@@ -1612,6 +1613,7 @@ function saveEventCost() {
   if (!orderEventData[odCurrentEventKey]) return;
   orderEventData[odCurrentEventKey].eventCost = val;
   updateEventCostButton(val);
+  document.getElementById('od-profit-row').style.display = '';
   updateOrderTotals();
   closeModal('event-cost-modal');
   showToast('Event cost saved \u00b7 $' + val.toFixed(2), 'success');
