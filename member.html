@@ -1886,8 +1886,9 @@ select:focus { border-color: #009A97; }
           <span id="mef-sort-label">Sort</span>
         </button>
         <div class="mef-sort-menu" id="mef-sort-menu">
-          <div class="mef-sort-item" data-sort="closing" onclick="setSortBy('closing')">Closing soon</div>
-          <div class="mef-sort-item" data-sort="eventdate" onclick="setSortBy('eventdate')">Event date</div>
+          <div class="mef-sort-item" data-sort="closing" onclick="setSortBy('closing')">Closing Soon</div>
+          <div class="mef-sort-item" data-sort="newest" onclick="setSortBy('newest')">Newest Event</div>
+          <div class="mef-sort-item" data-sort="active" onclick="setSortBy('active')">Most Active</div>
         </div>
       </div>
     </div>
@@ -4615,7 +4616,7 @@ document.addEventListener('click', function (e) {
 });
 
 function setSortBy(criteria) {
-  var labels = { closing: 'Closing soon', eventdate: 'Event date' };
+  var labels = { closing: 'Closing Soon', newest: 'Newest Event', active: 'Most Active' };
   document.getElementById('mef-sort-label').textContent = labels[criteria] || 'Sort';
   document.querySelectorAll('.mef-sort-item').forEach(function (item) {
     item.classList.toggle('active', item.dataset.sort === criteria);
@@ -4627,8 +4628,10 @@ function setSortBy(criteria) {
     var cards = Array.prototype.slice.call(container.children);
     if (criteria === 'closing') {
       cards.sort(function (a, b) { return (parseInt(a.dataset.closing) || 0) - (parseInt(b.dataset.closing) || 0); });
-    } else if (criteria === 'eventdate') {
-      cards.sort(function (a, b) { return new Date(a.dataset.eventdate) - new Date(b.dataset.eventdate); });
+    } else if (criteria === 'newest') {
+      cards.sort(function (a, b) { return (parseInt(b.dataset.order) || 0) - (parseInt(a.dataset.order) || 0); });
+    } else if (criteria === 'active') {
+      cards.sort(function (a, b) { return (parseInt(b.dataset.buy) || 0) - (parseInt(a.dataset.buy) || 0); });
     } else {
       cards.sort(function (a, b) { return (parseInt(a.dataset.order) || 0) - (parseInt(b.dataset.order) || 0); });
     }
