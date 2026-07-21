@@ -445,6 +445,23 @@ tbody td.muted { color: var(--mid); font-size: 12px; }
   .card-actions .btn { flex: 1 1 calc(50% - 4px); }
   .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .table-wrap table { min-width: 560px; }
+
+  /* Order detail table: compress to actually fit, no horizontal scroll */
+  #order-detail-view .table-wrap { overflow-x: visible; }
+  #order-detail-view .table-wrap table { min-width: 0; width: 100%; table-layout: fixed; }
+  #order-detail-view thead th:nth-child(1), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(1),
+  #order-detail-view thead th:nth-child(5), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(5) {
+    display: none;
+  }
+  #order-detail-view thead th:nth-child(2), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(2) { width: 40%; }
+  #order-detail-view thead th:nth-child(3), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(3) { width: 14%; }
+  #order-detail-view thead th:nth-child(4), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(4) { width: 20%; }
+  #order-detail-view thead th:nth-child(6), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(6) { width: 26%; }
+  #order-detail-view th, #order-detail-view td { padding: 9px 5px; font-size: 12px; }
+  #order-detail-view .od-row-name-cell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #order-detail-view .od-status-select { font-size: 11px; height: 30px; width: 100%; padding: 0 20px 0 6px; background-position: right 5px center; }
+  #order-detail-view .od-clip-btn { width: 20px; height: 20px; }
+  #order-detail-view .od-clip-btn svg { width: 11px; height: 11px; }
 }
 
 /* Override body background to match shell */
@@ -619,6 +636,26 @@ tr.od-row-name-cell { cursor: pointer; }
 .bp-modal-footer { padding: 12px 20px 16px; display: flex; gap: 8px; justify-content: flex-end; border-top: 0.5px solid #f0f0f0; }
 .bp-modal-btn-save { height: 36px; padding: 0 20px; background: #009A97; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
 .bp-modal-btn-cancel { height: 36px; padding: 0 16px; background: white; color: #888780; border: 0.5px solid #D3D1C7; border-radius: 8px; font-size: 13px; cursor: pointer; font-family: inherit; }
+
+/* ── PAYMENT PROOF (paperclip) ── */
+.od-clip-btn { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 4px; border: none; background: none; color: var(--faint); cursor: pointer; margin-left: 2px; flex-shrink: 0; }
+.od-clip-btn:hover { background: var(--sand); color: var(--teal-dark); }
+.od-clip-btn svg { width: 13px; height: 13px; }
+
+.pp-modal { background: white; border-radius: 16px; width: 340px; max-width: 100%; padding: 24px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
+.pp-name { font-size: 17px; font-weight: 700; color: var(--teal-dark); }
+.pp-amount { font-size: 14px; color: var(--teal-dark); margin-top: 2px; margin-bottom: 16px; }
+.pp-receipt { background: linear-gradient(180deg, #E01A1A 0%, #C81414 100%); border-radius: 12px; padding: 18px 16px 20px; color: white; text-align: left; }
+.pp-receipt-brand { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 14px; }
+.pp-receipt-check { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+.pp-receipt-status { text-align: center; font-size: 12px; opacity: 0.9; margin-bottom: 2px; }
+.pp-receipt-amount { text-align: center; font-size: 26px; font-weight: 700; margin-bottom: 14px; }
+.pp-receipt-row { display: flex; justify-content: space-between; font-size: 11px; padding: 6px 0; border-top: 1px solid rgba(255,255,255,0.2); }
+.pp-receipt-row span:first-child { opacity: 0.75; }
+.pp-ok-btn { width: 100%; height: 42px; margin-top: 18px; background: var(--teal); color: white; border: none; border-radius: 999px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.pp-ok-btn:hover { background: var(--teal-dark); }
+.pp-invalid-link { display: inline-block; margin-top: 12px; font-size: 12px; color: var(--mid); cursor: pointer; background: none; border: none; font-family: inherit; text-decoration: underline; }
+.pp-invalid-link:hover { color: var(--red-dark); }
 </style>
 </head>
 <body>
@@ -1158,6 +1195,34 @@ tr.od-row-name-cell { cursor: pointer; }
   </div>
 </div>
 
+<!-- PAYMENT PROOF MODAL (PayNow receipt style) -->
+<div class="modal-backdrop" id="payment-proof-modal">
+  <div class="pp-modal" onclick="event.stopPropagation()">
+    <div class="pp-name" id="pp-name">Buyer Name</div>
+    <div class="pp-amount" id="pp-amount">Payment made for $0.00</div>
+
+    <div class="pp-receipt">
+      <div class="pp-receipt-brand">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        PayNow Transfer
+      </div>
+      <div class="pp-receipt-check">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="pp-receipt-status">Transfer Successful</div>
+      <div class="pp-receipt-amount" id="pp-receipt-amount">$0.00</div>
+      <div class="pp-receipt-row"><span>To</span><span id="pp-receipt-to">M6 Group</span></div>
+      <div class="pp-receipt-row"><span>From</span><span id="pp-receipt-from">&mdash;</span></div>
+      <div class="pp-receipt-row"><span>Reference</span><span id="pp-receipt-ref">&mdash;</span></div>
+      <div class="pp-receipt-row"><span>Date &amp; Time</span><span id="pp-receipt-date">&mdash;</span></div>
+      <div class="pp-receipt-row"><span>Transaction ID</span><span id="pp-receipt-txn">&mdash;</span></div>
+    </div>
+
+    <button class="pp-ok-btn" onclick="closeModal('payment-proof-modal')">OK</button>
+    <button class="pp-invalid-link" id="pp-invalid-btn" onclick="">If invalid payment, click here</button>
+  </div>
+</div>
+
 <!-- EVENT COST MODAL -->
 <div class="modal-backdrop" id="event-cost-modal">
   <div class="modal sm">
@@ -1412,13 +1477,16 @@ function renderOrderRows(orders) {
       '<td class="muted" style="text-align:center;">' + totalQty + '</td>' +
       '<td>$' + o.price.toFixed(2) + '</td>' +
       '<td><span class="od-status-pill" style="color:' + meta.color + ';">' + meta.icon + meta.label + '</span></td>' +
-      '<td>' +
+      '<td style="display:flex;align-items:center;gap:4px;">' +
         '<select class="od-status-select od-status-' + o.status + '" onchange="updateOrderStatus(this)">' +
           '<option value="unpaid"' + (o.status === 'unpaid' ? ' selected' : '') + '>Unpaid</option>' +
           '<option value="pending"' + (o.status === 'pending' ? ' selected' : '') + '>Pending</option>' +
           '<option value="paid"' + (o.status === 'paid' ? ' selected' : '') + '>Paid</option>' +
           '<option value="collected"' + (o.status === 'collected' ? ' selected' : '') + '>Collected</option>' +
         '</select>' +
+        '<button class="od-clip-btn" id="od-clip-' + i + '" style="display:' + ((o.status === 'paid' || o.status === 'collected') ? 'inline-flex' : 'none') + ';" title="View payment proof" onclick="event.stopPropagation();viewPaymentProof(' + i + ')">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>' +
+        '</button>' +
       '</td>';
     tr.dataset.price = o.price;
     tbody.appendChild(tr);
@@ -1502,6 +1570,34 @@ function buildReceiptHTML(o, index) {
 
 const BP_COLORS = ['#9B59B6', '#E8971A', '#3498DB', '#009A97', '#E24B4A', '#27AE60'];
 
+function viewPaymentProof(index) {
+  const o = odCurrentOrders[index];
+  if (!o) return;
+
+  document.getElementById('pp-name').textContent = o.name;
+  document.getElementById('pp-amount').textContent = 'Payment made for $' + o.price.toFixed(2);
+  document.getElementById('pp-receipt-amount').textContent = '$' + o.price.toFixed(2);
+  document.getElementById('pp-receipt-to').textContent = 'M6 Group';
+  document.getElementById('pp-receipt-from').textContent = o.name;
+  document.getElementById('pp-receipt-ref').textContent = o.ref || '\u2014';
+  document.getElementById('pp-receipt-date').textContent = o.orderedOn || '\u2014';
+  document.getElementById('pp-receipt-txn').textContent = 'PN' + (o.ref || 'XXXX').toUpperCase().replace(/[^A-Z0-9]/g, '') + '00' + (index + 1);
+
+  document.getElementById('pp-invalid-btn').onclick = function () { markInvalidPayment(index); };
+
+  openModal('payment-proof-modal');
+}
+
+function markInvalidPayment(index) {
+  const select = document.querySelector('#od-row-' + index + ' .od-status-select');
+  if (select) {
+    select.value = 'unpaid';
+    updateOrderStatus(select);
+  }
+  closeModal('payment-proof-modal');
+  showToast('Marked as invalid payment', 'danger');
+}
+
 function openBuyerProfile(index) {
   const o = odCurrentOrders[index];
   if (!o) return;
@@ -1572,6 +1668,8 @@ function updateOrderStatus(selectEl) {
   const pill = row.querySelector('.od-status-pill');
   pill.style.color = meta.color;
   pill.innerHTML = meta.icon + meta.label;
+  const clipBtn = row.querySelector('.od-clip-btn');
+  if (clipBtn) clipBtn.style.display = (newStatus === 'paid' || newStatus === 'collected') ? 'inline-flex' : 'none';
   updateOrderTotals();
   showToast('Status updated to ' + meta.label, 'success');
 }
