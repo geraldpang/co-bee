@@ -422,6 +422,37 @@ select:focus { border-color: #009A97; }
 }
 .del-del-btn:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
 
+/* External links (repeatable) */
+.extlink-row {
+  background: #FAFAF8; border: 0.5px solid #D3D1C7; border-radius: 8px;
+  padding: 8px 10px; display: flex; align-items: center; gap: 6px;
+}
+.extlink-row .extlink-name-input {
+  width: 34%; flex: 0 0 34%; height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 8px; font-size: 12px; font-family: inherit; color: #1a1a18;
+  outline: none; background: white; transition: border-color 0.15s;
+}
+.extlink-row .extlink-url-input {
+  width: auto; flex: 1 1 0%; height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 8px; font-size: 12px; font-family: inherit; color: #1a1a18;
+  outline: none; background: white; transition: border-color 0.15s; min-width: 0;
+}
+.extlink-name-input:focus, .extlink-url-input:focus { border-color: #009A97; }
+
+/* Preview: Share Links card */
+.preview-sharelink-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid #f0f0f0; }
+.preview-sharelink-row:last-child { border-bottom: none; }
+.preview-sharelink-icon { width: 32px; height: 32px; border-radius: 8px; background: #E0F5F5; color: #009A97; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.preview-sharelink-body { flex: 1; min-width: 0; }
+.preview-sharelink-name { font-size: 12px; font-weight: 600; color: #1a1a18; margin-bottom: 3px; }
+.preview-sharelink-url { font-size: 11px; color: #888780; background: #FAFAF8; border: 0.5px solid #e0dfd8; border-radius: 6px; padding: 5px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.preview-sharelink-copy {
+  height: 28px; padding: 0 12px; border-radius: 6px; border: none; background: #009A97; color: white;
+  font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit; flex-shrink: 0; transition: background 0.12s;
+}
+.preview-sharelink-copy:hover { background: #007A77; }
+.preview-sharelink-copy.copied { background: #27AE60; }
+
 .ms-preview-card {
   background: #E0F5F5; border: 0.5px solid #80CCCB;
   border-radius: 10px; padding: 12px 12px 10px;
@@ -726,12 +757,18 @@ select:focus { border-color: #009A97; }
             </div>
 
             <div class="toggle-item">
-              <div class="toggle-row" onclick="toggleSwitch(this)">
-                <span class="toggle-lbl">External URL</span>
-                <div class="toggle-sw"></div>
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="extlink-toggle-row">
+                <span class="toggle-lbl">External Links</span>
+                <div class="toggle-sw" id="extlink-toggle-sw"></div>
               </div>
               <div class="toggle-body">
-                <input type="url" style="margin-top:4px;" placeholder="https://…" />
+                <div id="extlinks-list" style="display:flex;flex-direction:column;gap:8px;margin-top:4px;"></div>
+                <div style="margin-top:6px;">
+                  <div class="add-tier-link" onclick="addExternalLink()">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+                    Add link
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -909,6 +946,13 @@ select:focus { border-color: #009A97; }
             <div id="preview-addl-opts-wrap" style="border-top:0.5px solid #f0f0f0;padding-top:8px;display:none;">
               <div style="font-size:11px;font-weight:600;color:#888780;margin-bottom:6px;">Additional options</div>
               <div id="preview-addl-opts" style="font-size:11px;color:#1a1a18;display:flex;flex-direction:column;gap:3px;"></div>
+            </div>
+
+            <!-- Share Links -->
+            <div id="preview-sharelinks-wrap" style="border-top:0.5px solid #f0f0f0;padding-top:10px;display:none;">
+              <div style="font-size:11px;font-weight:600;color:#888780;margin-bottom:2px;">Share links</div>
+              <div style="font-size:10px;color:#B4B2A9;margin-bottom:4px;">Only visible to you — copy and send these wherever you like.</div>
+              <div id="preview-sharelinks"></div>
             </div>
 
           </div>
@@ -1711,6 +1755,10 @@ function toggleSwitch(row) {
     var reqSw = document.getElementById('req-delivery-toggle-sw');
     if (reqSw) { isOn ? reqSw.classList.add('on') : reqSw.classList.remove('on'); }
   }
+  // Auto-add first row when External Links is switched on
+  if (row.id === 'extlink-toggle-row' && sw.classList.contains('on')) {
+    if (extLinks.length === 0) addExternalLink();
+  }
 }
 
 /* ── CHECKBOX ── */
@@ -1910,6 +1958,32 @@ function populatePreview() {
     msBlock.style.display = 'block';
   } else if (msBlock) {
     msBlock.style.display = 'none';
+  }
+
+  // ── Share Links ──
+  var slWrap = document.getElementById('preview-sharelinks-wrap');
+  var slList = document.getElementById('preview-sharelinks');
+  var linkRows = extLinks.map(function (l) {
+    var nameEl = document.getElementById('extlink-name-' + l.id);
+    var urlEl  = document.getElementById('extlink-url-' + l.id);
+    return { name: (nameEl && nameEl.value.trim()) || 'Link', url: (urlEl && urlEl.value.trim()) || '' };
+  }).filter(function (l) { return l.url; });
+
+  if (linkRows.length > 0) {
+    slList.innerHTML = linkRows.map(function (l, i) {
+      var safeUrl = l.url.replace(/'/g, '&#39;');
+      return '<div class="preview-sharelink-row">'
+        + '<div class="preview-sharelink-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>'
+        + '<div class="preview-sharelink-body">'
+        + '<div class="preview-sharelink-name">' + (i + 1) + ') ' + l.name + '</div>'
+        + '<div class="preview-sharelink-url">' + l.url + '</div>'
+        + '</div>'
+        + '<button class="preview-sharelink-copy" onclick="copyShareLink(this,\'' + safeUrl + '\')">Copy</button>'
+        + '</div>';
+    }).join('');
+    slWrap.style.display = 'block';
+  } else {
+    slWrap.style.display = 'none';
   }
 }
 
@@ -2361,6 +2435,8 @@ var deliveryAreas    = [];        // [{id, name, fee}]
 var deliveryDates    = [];        // [{id}] — rendered as DOM rows
 var deliveryAreaSeq  = 0;
 var deliveryDateSeq  = 0;
+var extLinks         = [];        // [{id}] — rendered as DOM rows
+var extLinkSeq       = 0;
 
 /* delivery auto-open handled inside toggleSwitch below */
 
@@ -2414,6 +2490,39 @@ function renderDeliveryAreas() {
     : '<div class="add-tier-link" onclick="addDeliveryArea()">'
       + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>'
       + ' Add area</div>';
+}
+
+/* ── External Links ── */
+function extLinkRowHTML(id) {
+  return '<div class="extlink-row" id="extlink-row-' + id + '">'
+    + '<input class="extlink-name-input" type="text" id="extlink-name-' + id + '" placeholder="Label (e.g. Telegram)" />'
+    + '<input class="extlink-url-input" type="url" id="extlink-url-' + id + '" placeholder="https://…" />'
+    + '<button class="del-del-btn" onclick="removeExternalLink(' + id + ')">'
+    + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+    + '</button>'
+    + '</div>';
+}
+
+function addExternalLink() {
+  extLinkSeq++;
+  var id = extLinkSeq;
+  extLinks.push({ id: id });
+  var list = document.getElementById('extlinks-list');
+  if (list) list.insertAdjacentHTML('beforeend', extLinkRowHTML(id));
+}
+
+function removeExternalLink(id) {
+  extLinks = extLinks.filter(function (l) { return l.id !== id; });
+  var row = document.getElementById('extlink-row-' + id);
+  if (row) row.remove();
+}
+
+function copyShareLink(btn, url) {
+  navigator.clipboard.writeText(url).catch(function () {});
+  var original = btn.textContent;
+  btn.textContent = 'Copied';
+  btn.classList.add('copied');
+  setTimeout(function () { btn.textContent = original; btn.classList.remove('copied'); }, 1500);
 }
 
 /* ── Dates ── */
