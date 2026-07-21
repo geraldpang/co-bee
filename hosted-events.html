@@ -1477,7 +1477,8 @@ function renderOrderRows(orders) {
       '<td class="muted" style="text-align:center;">' + totalQty + '</td>' +
       '<td>$' + o.price.toFixed(2) + '</td>' +
       '<td><span class="od-status-pill" style="color:' + meta.color + ';">' + meta.icon + meta.label + '</span></td>' +
-      '<td style="display:flex;align-items:center;gap:4px;">' +
+      '<td>' +
+        '<div style="display:flex;align-items:center;gap:4px;">' +
         '<select class="od-status-select od-status-' + o.status + '" onchange="updateOrderStatus(this)">' +
           '<option value="unpaid"' + (o.status === 'unpaid' ? ' selected' : '') + '>Unpaid</option>' +
           '<option value="pending"' + (o.status === 'pending' ? ' selected' : '') + '>Pending</option>' +
@@ -1487,6 +1488,7 @@ function renderOrderRows(orders) {
         '<button class="od-clip-btn" id="od-clip-' + i + '" style="display:' + ((o.status === 'paid' || o.status === 'collected') ? 'inline-flex' : 'none') + ';" title="View payment proof" onclick="event.stopPropagation();viewPaymentProof(' + i + ')">' +
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>' +
         '</button>' +
+        '</div>' +
       '</td>';
     tr.dataset.price = o.price;
     tbody.appendChild(tr);
