@@ -449,14 +449,13 @@ tbody td.muted { color: var(--mid); font-size: 12px; }
   /* Order detail table: compress to actually fit, no horizontal scroll */
   #order-detail-view .table-wrap { overflow-x: visible; }
   #order-detail-view .table-wrap table { min-width: 0; width: 100%; table-layout: fixed; }
-  #order-detail-view thead th:nth-child(1), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(1),
-  #order-detail-view thead th:nth-child(5), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(5) {
+  #order-detail-view thead th:nth-child(1), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(1) {
     display: none;
   }
-  #order-detail-view thead th:nth-child(2), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(2) { width: 40%; }
-  #order-detail-view thead th:nth-child(3), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(3) { width: 14%; }
+  #order-detail-view thead th:nth-child(2), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(2) { width: 42%; }
+  #order-detail-view thead th:nth-child(3), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(3) { width: 15%; }
   #order-detail-view thead th:nth-child(4), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(4) { width: 20%; }
-  #order-detail-view thead th:nth-child(6), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(6) { width: 26%; }
+  #order-detail-view thead th:nth-child(5), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(5) { width: 23%; }
   #order-detail-view th, #order-detail-view td { padding: 9px 5px; font-size: 12px; }
   #order-detail-view .od-row-name-cell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   #order-detail-view .od-status-select { font-size: 11px; height: 30px; width: 100%; padding: 0 20px 0 6px; background-position: right 5px center; }
@@ -507,8 +506,6 @@ body { background: #F4F6F8; }
 }
 .od-hint { font-size: 12px; color: var(--mid); text-align: center; margin: 12px 0; }
 .od-hint svg { vertical-align: -2px; margin: 0 2px; }
-.od-status-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; }
-.od-status-pill svg { width: 13px; height: 13px; flex-shrink: 0; }
 .od-status-select {
   font-family: inherit; font-size: 12px; font-weight: 600; height: 32px;
   border-radius: var(--radius-md); border: 0.5px solid var(--border);
@@ -1078,7 +1075,6 @@ tr.od-row-name-cell { cursor: pointer; }
                   <th>Name</th>
                   <th>Qty</th>
                   <th>Price</th>
-                  <th>Status</th>
                   <th>Updates</th>
                 </tr>
               </thead>
@@ -1454,7 +1450,7 @@ function renderOrderRows(orders) {
   odCurrentOrders = orders || [];
 
   if (!orders || orders.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" class="od-empty">No orders yet for this event.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" class="od-empty">No orders yet for this event.</td></tr>';
     document.getElementById('od-total-purchase').textContent = '$0.00';
     document.getElementById('od-total-collected').textContent = '$0.00';
     const eventCost = (orderEventData[odCurrentEventKey] && orderEventData[odCurrentEventKey].eventCost) || 0;
@@ -1465,7 +1461,6 @@ function renderOrderRows(orders) {
   }
 
   orders.forEach((o, i) => {
-    const meta = ODStatusMeta[o.status] || ODStatusMeta.unpaid;
     const items = o.items || [{ qty: o.qty || 1 }];
     const totalQty = items.reduce((sum, it) => sum + (it.qty || 1), 0);
 
@@ -1476,7 +1471,6 @@ function renderOrderRows(orders) {
       '<td class="od-row-name-cell" style="font-weight:500;color:var(--teal-dark);" onclick="toggleOrderExpand(' + i + ')">' + o.name + '<span class="od-chevron"></span></td>' +
       '<td class="muted" style="text-align:center;">' + totalQty + '</td>' +
       '<td>$' + o.price.toFixed(2) + '</td>' +
-      '<td><span class="od-status-pill" style="color:' + meta.color + ';">' + meta.icon + meta.label + '</span></td>' +
       '<td>' +
         '<div style="display:flex;align-items:center;gap:4px;">' +
         '<select class="od-status-select od-status-' + o.status + '" onchange="updateOrderStatus(this)">' +
@@ -1497,7 +1491,7 @@ function renderOrderRows(orders) {
     expandTr.id = 'od-expand-row-' + i;
     expandTr.className = 'od-expand-row collapsed';
     const expandTd = document.createElement('td');
-    expandTd.colSpan = 6;
+    expandTd.colSpan = 5;
     expandTd.innerHTML = buildReceiptHTML(o, i);
     expandTr.appendChild(expandTd);
     tbody.appendChild(expandTr);
@@ -1667,9 +1661,6 @@ function updateOrderStatus(selectEl) {
   const meta = ODStatusMeta[newStatus] || ODStatusMeta.unpaid;
   selectEl.className = 'od-status-select od-status-' + newStatus;
   const row = selectEl.closest('tr');
-  const pill = row.querySelector('.od-status-pill');
-  pill.style.color = meta.color;
-  pill.innerHTML = meta.icon + meta.label;
   const clipBtn = row.querySelector('.od-clip-btn');
   if (clipBtn) clipBtn.style.display = (newStatus === 'paid' || newStatus === 'collected') ? 'inline-flex' : 'none';
   updateOrderTotals();
