@@ -15,8 +15,14 @@ Return ONLY valid JSON — no markdown fences, no commentary, no leading/trailin
   "collectionDate": "YYYY-MM-DD" | null,
   "timeFrom": "HH:MM" | null,
   "timeTo": "HH:MM" | null,
+  "bannerBox": { "x": number, "y": number, "w": number, "h": number } | null,
   "items": [
-    { "name": string, "description": string | null, "price": number | null }
+    {
+      "name": string,
+      "description": string | null,
+      "price": number | null,
+      "imageBox": { "x": number, "y": number, "w": number, "h": number } | null
+    }
   ]
 }
 
@@ -25,7 +31,14 @@ Rules:
 - "items" should be an empty array if no distinct products/items are mentioned.
 - Dates: if a relative date is mentioned (e.g. "this Friday") and no absolute date is given, return null for that field rather than guessing a calendar date.
 - Prices: strip currency symbols, return as a plain number (e.g. 18.90, not "$18.90").
-- If the source is a screenshot of a chat conversation, focus on the message that actually describes the group buy, not surrounding chatter.`;
+- If the source is a screenshot of a chat conversation, focus on the message that actually describes the group buy, not surrounding chatter.
+
+Image cropping boxes (only if an image was provided):
+- All box coordinates are FRACTIONS of the source image's width/height, from 0 to 1, with (0,0) at the top-left corner. Example: a region starting a quarter of the way down, spanning the full width, for the top 20% of the image: {"x":0,"y":0.25,"w":1,"h":0.2}.
+- "bannerBox": a region suitable as a wide event banner (e.g. a hero photo/collage area, title graphic, or a representative food shot). Null if the image has no suitable banner-like region (e.g. it's just a text price list).
+- Each item's "imageBox": the region showing that specific product's own photo, if the image contains individual product photos. Null if that item has no distinguishable photo of its own (e.g. it's plain text on a price list, or shares an image with other items you can't separate cleanly).
+- These are approximate regions for a client-side crop, not pixel-perfect — favor a slightly generous box over cutting off part of the subject.
+- If no image was provided at all, set "bannerBox" to null and every item's "imageBox" to null.`;
 
 export async function onRequestPost({ request, env }) {
   let body;
