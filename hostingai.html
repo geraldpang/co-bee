@@ -230,7 +230,13 @@ select:focus { border-color: #009A97; }
 .field-row { display: flex; align-items: flex-start; gap: 10px; }
 .field-lbl { font-size: 12px; color: #888780; width: 76px; flex-shrink: 0; padding-top: 9px; }
 .field-val { flex: 1; min-width: 0; }
-.img-upload { width: 64px; height: 64px; border: 0.5px dashed #80CCCB; border-radius: 8px; background: #E0F5F5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; flex-shrink: 0; }
+.img-upload { width: 64px; height: 64px; border: 0.5px dashed #80CCCB; border-radius: 8px; background: #E0F5F5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; flex-shrink: 0; position: relative; overflow: hidden; }
+.img-upload.has-image { border-style: solid; border-color: #D3D1C7; background: #f0f0f0; }
+.img-upload.has-image img { width: 100%; height: 100%; object-fit: cover; }
+.img-upload-ai-badge {
+  position: absolute; bottom: 2px; left: 2px; right: 2px; background: rgba(124,92,252,0.9); color: white;
+  font-size: 7px; font-weight: 700; text-align: center; padding: 1px 0; border-radius: 3px; letter-spacing: 0.02em;
+}
 .img-upload-lbl { font-size: 9px; color: #009A97; font-weight: 600; }
 .price-row { display: flex; align-items: center; gap: 8px; }
 .price-prefix { font-size: 13px; font-weight: 600; color: #888780; }
@@ -1410,7 +1416,7 @@ async function runAIFill() {
       throw new Error(data.error || ('Request failed (' + res.status + ').'));
     }
 
-    applyAIExtraction(data.extracted);
+    await applyAIExtraction(data.extracted);
     document.getElementById('ai-fill-status').style.display = 'flex';
   } catch (err) {
     showAIFillError(
@@ -1424,7 +1430,7 @@ async function runAIFill() {
   }
 }
 
-function applyAIExtraction(extracted) {
+async function applyAIExtraction(extracted) {
   if (!extracted) return;
   if (extracted.title) document.getElementById('ev-title').value = extracted.title;
   if (extracted.description) document.getElementById('ev-desc').value = extracted.description;
@@ -1433,6 +1439,22 @@ function applyAIExtraction(extracted) {
   if (extracted.collectionDate) document.getElementById('ev-collection').value = extracted.collectionDate;
   if (extracted.timeFrom) document.getElementById('ev-time-from').value = extracted.timeFrom;
   if (extracted.timeTo) document.getElementById('ev-time-to').value = extracted.timeTo;
+
+  // If an image was provided and the API returned crop boxes, load the source
+  // image once so we can crop banner/item photos from it client-side.
+  let sourceImg = null;
+  if (aiFillImageBase64 && (extracted.bannerBox || (extracted.items || []).some(it => it.imageBox))) {
+    try {
+      sourceImg = await loadImage('data:' + (aiFillImageMediaType || 'image/jpeg') + ';base64,' + aiFillImageBase64);
+    } catch (e) {
+      sourceImg = null; // fall through — text fields still get filled even if this fails
+    }
+  }
+
+  if (sourceImg && extracted.bannerBox) {
+    const dataUrl = cropImageFromBox(sourceImg, extracted.bannerBox);
+    if (dataUrl) addBannerFromDataUrl(dataUrl, 'ai-cropped-banner.jpg');
+  }
 
   (extracted.items || []).forEach(function (it) {
     addItem();
@@ -1444,7 +1466,59 @@ function applyAIExtraction(extracted) {
     if (nameInput && it.name) nameInput.value = it.name;
     if (descInput && it.description) descInput.value = it.description;
     if (priceInput && it.price != null) priceInput.value = it.price;
+
+    if (sourceImg && it.imageBox) {
+      const dataUrl = cropImageFromBox(sourceImg, it.imageBox);
+      if (dataUrl) setItemImagePreview(itemCount, dataUrl, true);
+    }
   });
+}
+
+function loadImage(src) {
+  return new Promise(function (resolve, reject) {
+    const img = new Image();
+    img.onload = function () { resolve(img); };
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+// box = {x, y, w, h} as fractions (0–1) of the source image's width/height.
+function cropImageFromBox(img, box) {
+  if (!box) return null;
+  const x = Math.max(0, Math.min(1, box.x || 0));
+  const y = Math.max(0, Math.min(1, box.y || 0));
+  const w = Math.max(0.01, Math.min(1 - x, box.w || 0));
+  const h = Math.max(0.01, Math.min(1 - y, box.h || 0));
+
+  const sx = x * img.naturalWidth;
+  const sy = y * img.naturalHeight;
+  const sw = w * img.naturalWidth;
+  const sh = h * img.naturalHeight;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = sw;
+  canvas.height = sh;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
+  return canvas.toDataURL('image/jpeg', 0.9);
+}
+
+function setItemImagePreview(id, dataUrl, isAI) {
+  const label = document.getElementById('item-img-upload-' + id);
+  if (!label) return;
+  label.classList.add('has-image');
+  label.innerHTML = '<img src="' + dataUrl + '" alt="Item photo" />'
+    + (isAI ? '<span class="img-upload-ai-badge">AI cropped</span>' : '')
+    + '<input type="file" accept="image/*" id="item-img-input-' + id + '" style="display:none;" onchange="handleItemImageUpload(this,' + id + ')" />';
+}
+
+function handleItemImageUpload(input, id) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) { setItemImagePreview(id, e.target.result, false); };
+  reader.readAsDataURL(file);
 }
 
 function showAIFillError(msg) {
@@ -1573,10 +1647,10 @@ function addItem() {
     <div class="product-item-body">
       <div class="field-row">
         <span class="field-lbl">Image</span>
-        <label class="img-upload">
+        <label class="img-upload" id="item-img-upload-${id}">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           <span class="img-upload-lbl">Upload</span>
-          <input type="file" accept="image/*" style="display:none;" />
+          <input type="file" accept="image/*" id="item-img-input-${id}" style="display:none;" onchange="handleItemImageUpload(this,${id})" />
         </label>
       </div>
       <div class="field-row">
@@ -2788,6 +2862,12 @@ function renderDeliveryAreas() {
 
 /* ── External Links ── */
 /* ── Event Banners (multi-upload, drag to reorder) ── */
+function addBannerFromDataUrl(dataUrl, label) {
+  bannerSeq++;
+  bannerImages.push({ id: bannerSeq, src: dataUrl, aiCropped: true });
+  renderBanners();
+}
+
 function addBannerFiles(fileList) {
   Array.prototype.forEach.call(fileList, function (file) {
     if (!file.type.startsWith('image/')) return;
@@ -2821,6 +2901,7 @@ function renderBanners() {
       + ' ondragend="onBannerDragEnd(event)">'
       + '<img src="' + b.src + '" alt="Banner ' + (i + 1) + '" />'
       + '<span class="banner-thumb-order">' + (i + 1) + '</span>'
+      + (b.aiCropped ? '<span class="img-upload-ai-badge" style="font-size:8px;">AI cropped</span>' : '')
       + '<button class="banner-thumb-remove" onclick="event.stopPropagation();removeBanner(' + b.id + ')">'
       + '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
       + '</button>'
