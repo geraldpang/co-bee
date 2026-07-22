@@ -77,8 +77,10 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .mef-tile .mef-card-actions { padding: 6px 9px 8px; gap: 10px; }
   .mef-card-actions button { background: none; border: none; padding: 0; font-size: 11px; font-weight: 500; color: #888780; text-decoration: underline; cursor: pointer; font-family: inherit; }
   .mef-card-actions button:hover { color: #009A97; }
-  .mef-card-actions button.mef-link-btn { display: inline-flex; align-items: center; gap: 3px; }
+  .mef-card-actions button.mef-link-btn { display: inline-flex; align-items: center; gap: 3px; order: 1; }
   .mef-card-actions button.mef-link-btn svg { width: 10px; height: 10px; flex-shrink: 0; }
+  .mef-card-actions button.mef-share-btn { display: inline-flex; align-items: center; text-decoration: none; order: 2; margin-left: auto; }
+  .mef-card-actions button.mef-share-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
   .mef-tile-closing { font-size: 10px; color: #E87722; font-weight: 500; margin-bottom: 3px; }
   .mef-tile-title { font-size: 12px; font-weight: 600; color: #1a1a18; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .mef-sort-wrap { position: relative; }
@@ -1415,10 +1417,12 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div style="border-top:0.5px solid #f0f0f0;padding:10px 14px;display:flex;align-items:center;gap:14px;">
-          <button onclick="shareEvent(this, document.getElementById('ev1-title').textContent)" style="background:none;border:none;padding:0;font-size:12px;font-weight:500;color:#888780;text-decoration:underline;cursor:pointer;font-family:inherit;">Share</button>
           <button id="ev1-link-btn" onclick="handleLinkClick(document.getElementById('ev1-title').textContent)" style="display:none;align-items:center;gap:4px;background:none;border:none;padding:0;font-size:12px;font-weight:500;color:#888780;text-decoration:underline;cursor:pointer;font-family:inherit;">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             <span id="ev1-link-label"></span>
+          </button>
+          <button onclick="shareEvent(this, document.getElementById('ev1-title').textContent)" style="display:inline-flex;align-items:center;background:none;border:none;padding:0;font-size:12px;font-weight:500;color:#888780;cursor:pointer;font-family:inherit;margin-left:auto;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg>
           </button>
         </div>
       </div>
@@ -2028,7 +2032,7 @@ select:focus { border-color: #009A97; }
         <div class="card-body"><div class="card-title">Groupbuy Event test</div><div class="card-desc">This is how it looks like in an actual group buy</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="shareEvent(this,'Groupbuy Event test')">Share</button>
+          <button class="mef-share-btn" onclick="shareEvent(this,'Groupbuy Event test')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
           <button class="mef-link-btn" onclick="handleLinkClick('Groupbuy Event test')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             Telegram Group
@@ -2049,7 +2053,7 @@ select:focus { border-color: #009A97; }
         <div class="card-body"><div class="card-title">New event</div><div class="card-desc">test</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="shareEvent(this,'New event')">Share</button>
+          <button class="mef-share-btn" onclick="shareEvent(this,'New event')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
           <button class="mef-link-btn" onclick="handleLinkClick('New event')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             3 Links
@@ -2070,7 +2074,7 @@ select:focus { border-color: #009A97; }
         <div class="card-body"><div class="card-title">This is a test event for Purchase with no login</div><div class="card-desc">test</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">14-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="shareEvent(this,'This is a test event for Purchase with no login')">Share</button>
+          <button class="mef-share-btn" onclick="shareEvent(this,'This is a test event for Purchase with no login')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
           <button class="mef-link-btn" onclick="handleLinkClick('This is a test event for Purchase with no login')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             3 Links
@@ -2091,7 +2095,7 @@ select:focus { border-color: #009A97; }
           <div class="mef-tile-title">Groupbuy Event test</div>
         </div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="shareEvent(this,'Groupbuy Event test')">Share</button>
+          <button class="mef-share-btn" onclick="shareEvent(this,'Groupbuy Event test')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
           <button class="mef-link-btn" onclick="handleLinkClick('Groupbuy Event test')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             Telegram
@@ -2109,7 +2113,7 @@ select:focus { border-color: #009A97; }
           <div class="mef-tile-title">New event</div>
         </div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="shareEvent(this,'New event')">Share</button>
+          <button class="mef-share-btn" onclick="shareEvent(this,'New event')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
           <button class="mef-link-btn" onclick="handleLinkClick('New event')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             3 Links
@@ -2127,7 +2131,7 @@ select:focus { border-color: #009A97; }
           <div class="mef-tile-title">This is a test event for Purchase with no login</div>
         </div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="shareEvent(this,'This is a test event for Purchase with no login')">Share</button>
+          <button class="mef-share-btn" onclick="shareEvent(this,'This is a test event for Purchase with no login')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
           <button class="mef-link-btn" onclick="handleLinkClick('This is a test event for Purchase with no login')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             3 Links
