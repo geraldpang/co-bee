@@ -438,6 +438,13 @@ select:focus { border-color: #009A97; }
   outline: none; background: white; transition: border-color 0.15s; min-width: 0;
 }
 .extlink-name-input:focus, .extlink-url-input:focus { border-color: #009A97; }
+.extlink-share-toggle {
+  display: flex; align-items: flex-start; gap: 6px; font-size: 11px; color: #888780;
+  cursor: pointer; line-height: 1.4; padding-left: 1px; margin-top: 10px; padding-top: 10px;
+  border-top: 0.5px solid #E0DFD8;
+}
+.extlink-share-toggle input { margin-top: 2px; accent-color: #009A97; width: 13px; height: 13px; flex-shrink: 0; cursor: pointer; }
+.extlink-share-toggle span { user-select: none; }
 
 /* Preview: Share Links card */
 .preview-sharelink-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid #f0f0f0; }
@@ -769,6 +776,10 @@ select:focus { border-color: #009A97; }
                     Add link
                   </div>
                 </div>
+                <label class="extlink-share-toggle">
+                  <input type="checkbox" id="extlinks-share-all" />
+                  <span>Let buyers copy or preview links instead of opening them directly.</span>
+                </label>
               </div>
             </div>
 
@@ -1963,19 +1974,27 @@ function populatePreview() {
   // ── Share Links ──
   var slWrap = document.getElementById('preview-sharelinks-wrap');
   var slList = document.getElementById('preview-sharelinks');
+  var allowCopyPreviewAll = !!(document.getElementById('extlinks-share-all') && document.getElementById('extlinks-share-all').checked);
   var linkRows = extLinks.map(function (l) {
     var nameEl = document.getElementById('extlink-name-' + l.id);
     var urlEl  = document.getElementById('extlink-url-' + l.id);
-    return { name: (nameEl && nameEl.value.trim()) || 'Link', url: (urlEl && urlEl.value.trim()) || '' };
+    return {
+      name: (nameEl && nameEl.value.trim()) || 'Link',
+      url: (urlEl && urlEl.value.trim()) || '',
+      allowCopyPreview: allowCopyPreviewAll
+    };
   }).filter(function (l) { return l.url; });
 
   if (linkRows.length > 0) {
     slList.innerHTML = linkRows.map(function (l, i) {
       var safeUrl = l.url.replace(/'/g, '&#39;');
+      var modeBadge = l.allowCopyPreview
+        ? '<span style="font-size:9px;font-weight:600;color:#009A97;background:#E0F5F5;padding:2px 6px;border-radius:99px;margin-left:6px;">Copy &amp; Preview</span>'
+        : '<span style="font-size:9px;font-weight:600;color:#888780;background:#F0EFEA;padding:2px 6px;border-radius:99px;margin-left:6px;">Opens directly</span>';
       return '<div class="preview-sharelink-row">'
         + '<div class="preview-sharelink-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>'
         + '<div class="preview-sharelink-body">'
-        + '<div class="preview-sharelink-name">' + (i + 1) + ') ' + l.name + '</div>'
+        + '<div class="preview-sharelink-name">' + (i + 1) + ') ' + l.name + modeBadge + '</div>'
         + '<div class="preview-sharelink-url">' + l.url + '</div>'
         + '</div>'
         + '<button class="preview-sharelink-copy" onclick="copyShareLink(this,\'' + safeUrl + '\')">Copy</button>'
