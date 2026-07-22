@@ -1,0 +1,3069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>co·bee — Host an Event</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1a1a18; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; } body { height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #F4F6F8; color: #1a1a18;
+  display: flex; flex-direction: column;
+}
+
+/* ── TOPBAR ── */
+
+.topbar-brand p:first-child { font-size: 15px; font-weight: 600; color: white; line-height: 1.1; }
+.topbar-brand p:last-child  { font-size: 9px; color: rgba(255,255,255,0.65); }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.notif-wrap { position: relative; cursor: pointer; }
+.notif-dot { position: absolute; top: -2px; right: -2px; width: 7px; height: 7px; background: #F5A623; border-radius: 50%; border: 1.5px solid #009A97; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: #E8971A; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: white; cursor: pointer; flex-shrink: 0; }
+
+/* ── NAV TABS ── */
+
+
+.nav-tab.active { color: #009A97; border-bottom-color: #009A97; font-weight: 500; }
+
+/* ── SCROLL AREA ── */
+.scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; min-height: 0; }
+
+/* ── BOTTOM BAR ── */
+
+
+.bottom-btn.active { color: #009A97; }
+.bottom-btn:hover { color: #009A97; }
+
+/* ── STEP CONTENT PAGES ── */
+.step-page { display: none; }
+.step-page.active { display: block; }
+
+/* ── STEP PROGRESS ── */
+.steps-bar {
+  max-width: 600px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px 14px 8px;
+}
+.step { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.step-circle {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+}
+.step-circle.done   { background: #009A97; color: white; }
+.step-circle.active { background: #009A97; color: white; }
+.step-circle.todo   { background: white; color: #B4B2A9; border: 0.5px solid #D3D1C7; }
+.step-lbl { font-size: 9px; color: #888780; white-space: nowrap; text-align: center; }
+.step-lbl.active { color: #009A97; font-weight: 600; }
+.step-lbl.done   { color: #009A97; }
+.step-line { flex: 1; max-width: 48px; height: 0.5px; background: #D3D1C7; margin-bottom: 16px; }
+.step-line.done { background: #009A97; }
+
+/* ── FORM ELEMENTS ── */
+.page-inner { max-width: 600px; margin: 0 auto; padding: 8px 10px 16px; display: flex; flex-direction: column; gap: 8px; overflow: visible; }
+
+.template-strip { background: white; border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 10px; border: 0.5px solid #e0dfd8; }
+.template-btn { font-size: 11px; font-weight: 600; color: #009A97; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+
+.form-card { background: white; border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.form-card-title { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-label { font-size: 12px; font-weight: 600; color: #1a1a18; }
+.req { color: #E24B4A; font-size: 11px; }
+.form-hint { font-size: 11px; color: #888780; }
+
+input[type="text"], input[type="date"], input[type="time"],
+input[type="number"], input[type="url"], .form-input {
+  height: 36px; border: 0.5px solid #D3D1C7; border-radius: 8px;
+  padding: 0 10px; font-size: 13px; font-family: inherit;
+  color: #1a1a18; outline: none; background: white; width: 100%;
+  transition: border-color 0.15s;
+}
+input:focus { border-color: #009A97; }
+input::placeholder { color: #B4B2A9; }
+textarea {
+  border: 0.5px solid #D3D1C7; border-radius: 8px;
+  padding: 8px 10px; font-size: 13px; font-family: inherit;
+  color: #1a1a18; outline: none; background: white; width: 100%;
+  resize: none; height: 70px; line-height: 1.5; transition: border-color 0.15s;
+}
+textarea:focus { border-color: #009A97; }
+textarea::placeholder { color: #B4B2A9; }
+select {
+  height: 36px; border: 0.5px solid #D3D1C7; border-radius: 8px;
+  padding: 0 28px 0 10px; font-size: 13px; font-family: inherit;
+  color: #1a1a18; outline: none; background: white; width: 100%;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+  transition: border-color 0.15s;
+}
+select:focus { border-color: #009A97; }
+
+.date-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.time-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: center; }
+.time-sep { font-size: 13px; color: #888780; text-align: center; }
+
+/* Banner upload */
+.banner-upload {
+  border: 0.5px dashed #80CCCB; border-radius: 8px; height: 90px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 5px; cursor: pointer; background: #E0F5F5; transition: background 0.15s;
+}
+.banner-upload:hover { background: #c8eeee; }
+.banner-upload-icon { width: 30px; height: 30px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; }
+
+.banner-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.banner-thumb {
+  position: relative; width: 142px; height: 80px; border-radius: 8px; overflow: hidden;
+  border: 0.5px solid #D3D1C7; cursor: grab; background: #f0f0f0; flex-shrink: 0;
+}
+.banner-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.banner-thumb.dragging { opacity: 0.4; }
+.banner-thumb.drag-over { outline: 2px solid #009A97; outline-offset: -2px; }
+.banner-thumb-order {
+  position: absolute; top: 4px; left: 4px; background: rgba(0,0,0,0.55); color: white;
+  font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 99px; pointer-events: none;
+}
+.banner-thumb-remove {
+  position: absolute; top: 4px; right: 4px; width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(0,0,0,0.55); color: white; border: none; display: flex; align-items: center;
+  justify-content: center; cursor: pointer; padding: 0;
+}
+.banner-thumb-remove:hover { background: #E24B4A; }
+.banner-add-tile {
+  width: 142px; height: 80px; border-radius: 8px; border: 0.5px dashed #80CCCB; background: #E0F5F5;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  cursor: pointer; transition: background 0.15s; flex-shrink: 0;
+}
+.banner-add-tile:hover { background: #c8eeee; }
+.banner-hint { font-size: 10px; color: #888780; margin-top: 6px; }
+
+/* Payment checkboxes */
+.check-option {
+  border: 0.5px solid #e0dfd8; border-radius: 8px; padding: 10px 12px;
+  cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.check-option.on { border-color: #009A97; background: #f5fafa; }
+.check-top { display: flex; align-items: center; gap: 8px; }
+.check-box {
+  width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid #D3D1C7;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s;
+}
+.check-box.on { background: #009A97; border-color: #009A97; }
+.check-lbl { font-size: 13px; font-weight: 600; color: #1a1a18; }
+.check-desc { font-size: 11px; color: #888780; margin-top: 5px; padding-left: 24px; line-height: 1.5; }
+
+.fee-row { display: flex; align-items: center; gap: 8px; }
+.fee-prefix { font-size: 13px; font-weight: 600; color: #888780; }
+
+/* Toggle items */
+.toggle-item { border: 0.5px solid #e0dfd8; border-radius: 8px; overflow: hidden; }
+.toggle-item + .toggle-item { border-top: none; border-radius: 0; }
+.toggle-item:first-child { border-radius: 8px 8px 0 0; }
+.toggle-item:last-child { border-radius: 0 0 8px 8px; }
+.toggle-item:only-child { border-radius: 8px; }
+.toggle-row { display: flex; align-items: center; gap: 10px; padding: 11px 12px; cursor: pointer; }
+.toggle-lbl { font-size: 13px; font-weight: 500; color: #1a1a18; flex: 1; }
+.toggle-sw { width: 34px; height: 20px; border-radius: 99px; background: #D3D1C7; position: relative; transition: background 0.2s; flex-shrink: 0; pointer-events: none; }
+.toggle-sw.on { background: #009A97; }
+.toggle-sw::after { content: ''; position: absolute; width: 16px; height: 16px; border-radius: 50%; background: white; top: 2px; left: 2px; transition: left 0.2s; }
+.toggle-sw.on::after { left: 16px; }
+.toggle-body { padding: 0 12px 10px; display: none; }
+.toggle-body.open { display: block; }
+
+/* Product row (step 2) */
+.product-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid #f0f0f0; }
+.product-row:last-child { border-bottom: none; }
+.product-thumb { width: 40px; height: 40px; border-radius: 8px; background: #E0F5F5; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.product-name { font-size: 13px; font-weight: 500; color: #1a1a18; }
+.product-price { font-size: 12px; color: #888780; margin-top: 2px; }
+.product-add { font-size: 11px; font-weight: 600; color: #009A97; margin-left: auto; cursor: pointer; flex-shrink: 0; }
+
+/* Preview card (step 3) */
+.preview-card { background: white; border-radius: 12px; overflow: hidden; }
+.preview-banner { background: #E0F5F5; height: 120px; display: flex; align-items: center; justify-content: center; }
+.preview-body { padding: 12px 14px; }
+.preview-title { font-size: 15px; font-weight: 600; color: #009A97; margin-bottom: 4px; }
+.preview-desc { font-size: 12px; color: #888780; line-height: 1.5; margin-bottom: 10px; }
+.preview-info-row { display: flex; gap: 8px; font-size: 12px; margin-bottom: 4px; }
+.preview-info-lbl { color: #888780; width: 70px; flex-shrink: 0; }
+.preview-info-val { color: #888780; }
+.preview-product-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 0.5px solid #f0f0f0; font-size: 13px; }
+.preview-product-row:last-child { border-bottom: none; }
+.preview-section-lbl { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; margin: 12px 0 8px; }
+
+/* Action bar */
+.action-bar { max-width: 600px; margin: 0 auto; display: flex; gap: 10px; padding: 16px 10px 20px; width: 100%; }
+.btn-back { flex: 1; height: 48px; border: 0.5px solid #D3D1C7; border-radius: 10px; background: white; font-size: 14px; font-weight: 600; color: #888780; cursor: pointer; font-family: inherit; padding: 0 8px; }
+.btn-next { flex: 2; height: 48px; background: #009A97; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; padding: 0 8px; }
+.btn-next:hover { background: #007A77; }
+.btn-publish { width: 100%; height: 48px; background: #009A97; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; }
+.btn-publish:hover { background: #007A77; }
+
+/* Section collapse */
+.section-collapse-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; cursor: pointer; border-radius: 12px;
+  transition: background 0.12s;
+}
+.section-collapse-hd:hover { background: #FAFAF8; }
+.collapse-chevron { transition: transform 0.2s; flex-shrink: 0; }
+.collapse-chevron.open { transform: rotate(180deg); }
+.section-collapse-body { display: none; border-top: 0.5px solid #f0f0f0; }
+.section-collapse-body.open { display: block; }
+
+/* Product item */
+.product-item { background: white; border: 0.5px solid #e0dfd8; border-radius: 10px; overflow: visible; }
+.product-item-hd { background: #F4F6F8; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 0.5px solid #e0dfd8; border-radius: 10px 10px 0 0; }
+.product-item-num { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.05em; text-transform: uppercase; }
+.product-item-actions { display: flex; gap: 6px; align-items: center; }
+.icon-btn { width: 26px; height: 26px; border-radius: 6px; border: 0.5px solid #e0dfd8; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #888780; transition: all 0.12s; flex-shrink: 0; }
+.icon-btn:hover { background: #f0f0f0; }
+.icon-btn.danger:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
+.product-item-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+.field-row { display: flex; align-items: flex-start; gap: 10px; }
+.field-lbl { font-size: 12px; color: #888780; width: 76px; flex-shrink: 0; padding-top: 9px; }
+.field-val { flex: 1; min-width: 0; }
+.img-upload { width: 64px; height: 64px; border: 0.5px dashed #80CCCB; border-radius: 8px; background: #E0F5F5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; flex-shrink: 0; }
+.img-upload-lbl { font-size: 9px; color: #009A97; font-weight: 600; }
+.price-row { display: flex; align-items: center; gap: 8px; }
+.price-prefix { font-size: 13px; font-weight: 600; color: #888780; }
+.options-wrap { border-top: 0.5px solid #f0f0f0; padding-top: 8px; margin-top: 2px; overflow: visible; position: relative; }
+.options-hd { display: flex; align-items: center; justify-content: flex-end; margin-bottom: 6px; }
+.options-lbl { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.05em; text-transform: uppercase; }
+.add-option-trigger { font-size: 12px; font-weight: 600; color: #009A97; cursor: pointer; display: flex; align-items: center; gap: 3px; position: relative; overflow: visible; }
+.option-dropdown { position: absolute; top: calc(100% + 4px); right: 0; background: white; border: 0.5px solid #D3D1C7; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 200; min-width: 200px; overflow: hidden; }
+.opt-dd-item { padding: 10px 14px; font-size: 12px; color: #1a1a18; cursor: pointer; border-bottom: 0.5px solid #f0f0f0; transition: background 0.1s; }
+.opt-dd-item:last-child { border-bottom: none; }
+.opt-dd-item:hover { background: #f5fafa; }
+.opt-dd-sub { font-size: 10px; color: #888780; margin-top: 1px; }
+.option-panel { background: #FAFAF8; border: 0.5px solid #e0dfd8; border-radius: 8px; padding: 12px; margin-top: 6px; display: flex; flex-direction: column; gap: 8px; }
+.option-body { display: flex; flex-direction: column; gap: 8px; }
+.option-panel-title { font-size: 12px; font-weight: 600; color: #009A97; margin-bottom: 2px; }
+.option-field { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; color: #1a1a18; }
+.option-field input { width: 90px; height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px; padding: 0 8px; font-size: 12px; font-family: inherit; text-align: right; outline: none; }
+.option-field input:focus { border-color: #009A97; }
+.option-radio { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #1a1a18; cursor: pointer; }
+.option-radio input[type="radio"] { accent-color: #009A97; width: 14px; height: 14px; }
+.option-ack { display: flex; align-items: flex-start; gap: 7px; font-size: 11px; color: #888780; line-height: 1.5; }
+.option-ack input[type="checkbox"] { accent-color: #009A97; width: 14px; height: 14px; margin-top: 1px; flex-shrink: 0; }
+
+.subitem-group { background: #FAFAF8; border: 0.5px solid #e0dfd8; border-radius: 8px; padding: 8px 10px; margin-top: 6px; }
+.subitem-group-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.subitem-group-name { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.04em; text-transform: uppercase; }
+.subitem-row { display: flex; align-items: center; gap: 4px; margin-bottom: 5px; width: 100%; }
+.subitem-name { flex: 1; min-width: 0; height: 28px; border: 0.5px solid #D3D1C7; border-radius: 6px; padding: 0 8px; font-size: 12px; font-family: inherit; color: #1a1a18; outline: none; background: white; }
+.subitem-price { width: 60px; flex-shrink: 0; height: 28px; border: 0.5px solid #D3D1C7; border-radius: 6px; padding: 0 6px; font-size: 12px; font-family: inherit; color: #1a1a18; outline: none; background: white; text-align: right; }
+.subitem-del { color: #B4B2A9; cursor: pointer; flex-shrink: 0; }
+.subitem-del:hover { color: #E24B4A; }
+.subitem-required-row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; padding-top: 6px; border-top: 0.5px solid #e0dfd8; font-size: 12px; color: #888780; }
+.add-subitem-btn { font-size: 11px; font-weight: 600; color: #009A97; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; margin-top: 6px; }
+.add-item-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border: 0.5px dashed #80CCCB; border-radius: 10px; cursor: pointer; background: #FAFAF8; font-size: 13px; font-weight: 600; color: #009A97; transition: background 0.12s; }
+.add-item-btn:hover { background: #E0F5F5; }
+
+/* Catalogue modal */
+.cat-backdrop { position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:500;display:none;align-items:center;justify-content:center; }
+.cat-backdrop.open { display:flex; }
+.cat-modal { background:white;border-radius:14px;width:560px;max-width:95vw;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,0.18); }
+.cat-header { padding:14px 18px;border-bottom:0.5px solid #E0DFD8;display:flex;align-items:center;justify-content:space-between; }
+.cat-title { font-size:15px;font-weight:700;color:#1a1a18; }
+.cat-close { width:28px;height:28px;border-radius:50%;background:#F4F6F8;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888780; }
+.cat-close:hover { background:#e0e0e0; }
+.cat-search { padding:10px 16px;border-bottom:0.5px solid #E0DFD8; }
+.cat-search-wrap { position:relative; }
+.cat-search-wrap svg { position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#B4B2A9; }
+.cat-search-input { width:100%;height:36px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 12px 0 34px;font-size:12px;font-family:inherit;outline:none; }
+.cat-search-input:focus { border-color:#009A97; }
+.cat-list { flex:1;overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:8px; }
+.cat-item { display:flex;align-items:center;gap:12px;padding:10px 12px;border:0.5px solid #E0DFD8;border-radius:10px;cursor:pointer;transition:all 0.12s; }
+.cat-item:hover { border-color:#009A97;background:#f5fafa; }
+.cat-item.selected { border-color:#009A97;background:#E0F5F5; }
+.cat-item-img { width:44px;height:44px;border-radius:8px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center; }
+.cat-item-name { font-size:13px;font-weight:600;color:#1a1a18; }
+.cat-item-desc { font-size:11px;color:#888780;margin-top:1px; }
+.cat-item-price { font-size:13px;font-weight:700;color:#009A97;margin-left:auto;flex-shrink:0; }
+.cat-item-check { width:20px;height:20px;border-radius:50%;border:2px solid #D3D1C7;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.12s; }
+.cat-item.selected .cat-item-check { border-color:#009A97;background:#009A97; }
+.cat-item.selected .cat-item-check::after { content:'';width:8px;height:8px;background:white;border-radius:50%; }
+.cat-footer { padding:12px 16px;border-top:0.5px solid #E0DFD8;display:flex;align-items:center;justify-content:space-between;gap:10px; }
+.cat-selected-count { font-size:12px;color:#888780; }
+.cat-add-btn { height:36px;padding:0 20px;background:#009A97;color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.12s; }
+.cat-add-btn:hover { background:#007A77; }
+.cat-add-btn:disabled { background:#D3D1C7;cursor:not-allowed; }
+
+/* ── DISCOUNT TIERS ── */
+.discount-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0 6px;
+}
+.discount-toggle-lbl { font-size: 13px; font-weight: 600; color: #1a1a18; }
+.discount-body { display: flex; flex-direction: column; gap: 8px; }
+
+/* Tier summary pill */
+.tier-summary {
+  display: flex; align-items: center; gap: 8px;
+  background: #E0F5F5; border: 0.5px solid #80CCCB;
+  border-radius: 8px; padding: 8px 10px;
+  animation: tierFadeIn 0.18s ease;
+}
+@keyframes tierFadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+.tier-tag { font-size: 13px; }
+.tier-text { flex: 1; font-size: 12px; font-weight: 500; color: #007A77; line-height: 1.4; }
+.tier-action-btns { display: flex; gap: 4px; flex-shrink: 0; }
+.tier-edit-btn, .tier-del-btn {
+  width: 24px; height: 24px; border-radius: 6px; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background 0.12s;
+}
+.tier-edit-btn { background: white; color: #009A97; border: 0.5px solid #80CCCB; }
+.tier-edit-btn:hover { background: #f0fafa; }
+.tier-del-btn { background: white; color: #B4B2A9; border: 0.5px solid #e0dfd8; }
+.tier-del-btn:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
+
+/* Tier edit form (inline) */
+.tier-form {
+  background: #FAFAF8; border: 0.5px solid #D3D1C7; border-radius: 10px;
+  padding: 10px 12px; display: flex; flex-direction: column; gap: 7px;
+  animation: tierFadeIn 0.18s ease;
+}
+.tier-form-title { font-size: 10px; font-weight: 600; color: #B4B2A9; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 1px; }
+
+/* Compact 3-col grid rows */
+.tf-row { display: grid; grid-template-columns: 72px 1fr 1fr; align-items: center; gap: 6px; }
+.tf-row.two-col { grid-template-columns: 72px 1fr; }
+.tf-row.three-col-even { grid-template-columns: 1fr 1fr 1fr; }
+.tf-lbl { font-size: 11px; color: #888780; font-weight: 500; }
+
+/* Compact select */
+.tier-select {
+  height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 22px 0 8px; font-size: 12px; font-family: inherit;
+  color: #1a1a18; outline: none; background: white; width: 100%;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 8px center;
+  transition: border-color 0.15s; cursor: pointer;
+}
+.tier-select:focus { border-color: #009A97; }
+
+/* Amount input with inline prefix */
+.tf-amt-wrap { display: flex; align-items: center; gap: 4px; }
+.tf-pfx { font-size: 12px; font-weight: 600; color: #888780; flex-shrink: 0; }
+.tier-amt-input {
+  height: 30px; flex: 1; min-width: 0; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 8px; font-size: 12px; font-family: inherit; font-weight: 600;
+  color: #1a1a18; outline: none; background: white; text-align: right;
+  transition: border-color 0.15s;
+}
+.tier-amt-input:focus { border-color: #009A97; }
+
+/* Type toggle pills */
+.type-toggle { display: flex; border: 0.5px solid #D3D1C7; border-radius: 6px; overflow: hidden; }
+.type-pill {
+  flex: 1; height: 30px; border: none; font-size: 11px; font-weight: 600;
+  padding: 0 6px; white-space: nowrap;
+  font-family: inherit; cursor: pointer; background: white; color: #888780;
+  transition: background 0.12s, color 0.12s;
+}
+.type-pill.active { background: #009A97; color: white; }
+.type-pill:not(:last-child) { border-right: 0.5px solid #D3D1C7; }
+
+/* Cap row */
+.cap-check-lbl { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #888780; cursor: pointer; white-space: nowrap; }
+.cap-check-lbl input[type="checkbox"] { accent-color: #009A97; width: 13px; height: 13px; flex-shrink: 0; }
+
+/* Tier form footer */
+.tier-form-footer { display: flex; justify-content: flex-end; gap: 6px; border-top: 0.5px solid #e0dfd8; padding-top: 8px; margin-top: 1px; }
+.tier-cancel-btn {
+  height: 28px; padding: 0 12px; background: white; border: 0.5px solid #D3D1C7;
+  border-radius: 6px; font-size: 11px; font-weight: 600; color: #888780;
+  cursor: pointer; font-family: inherit; transition: background 0.12s;
+}
+.tier-cancel-btn:hover { background: #f4f4f4; }
+.tier-save-btn {
+  height: 28px; padding: 0 14px; background: #009A97; border: none;
+  border-radius: 6px; font-size: 11px; font-weight: 600; color: white;
+  cursor: pointer; font-family: inherit; transition: background 0.12s;
+}
+.tier-save-btn:hover { background: #007A77; }
+.tier-save-btn:disabled { background: #D3D1C7; cursor: not-allowed; }
+
+/* Add tier link */
+.add-tier-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; color: #009A97; cursor: pointer;
+  padding: 4px 0;
+}
+.add-tier-link:hover { color: #007A77; }
+.add-tier-limit { font-size: 11px; color: #B4B2A9; }
+
+/* Warning */
+.tier-warning { font-size: 11px; color: #E8971A; background: #FEF2DC; border-radius: 6px; padding: 6px 10px; line-height: 1.5; }
+
+/* ── DELIVERY ── */
+.del-choice-pill {
+  height: 28px; padding: 0 10px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  background: white; font-size: 11px; font-weight: 600; color: #888780;
+  cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.12s;
+}
+.del-choice-pill.active { background: #009A97; color: white; border-color: #009A97; }
+
+.del-area-row {
+  display: grid; grid-template-columns: 1fr 90px 28px;
+  align-items: center; gap: 6px;
+}
+.del-area-name {
+  height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 8px; font-size: 12px; font-family: inherit; color: #1a1a18;
+  outline: none; background: white; transition: border-color 0.15s;
+}
+.del-area-name:focus { border-color: #009A97; }
+.del-date-row {
+  background: #FAFAF8; border: 0.5px solid #D3D1C7; border-radius: 8px;
+  padding: 8px 10px; display: flex; flex-direction: column; gap: 7px;
+}
+.del-date-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.del-date-input {
+  flex: 1; height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 8px; font-size: 12px; font-family: inherit; color: #1a1a18;
+  outline: none; background: white; transition: border-color 0.15s;
+}
+.del-date-input:focus { border-color: #009A97; }
+.del-time-row { display: flex; align-items: center; gap: 6px; }
+.del-time-input {
+  width: 72px; height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 6px; font-size: 12px; font-family: inherit; color: #1a1a18;
+  outline: none; background: white; transition: border-color 0.15s;
+}
+.del-time-input:focus { border-color: #009A97; }
+.del-del-btn {
+  width: 28px; height: 28px; border: 0.5px solid #e0dfd8; border-radius: 6px;
+  background: white; cursor: pointer; display: flex; align-items: center;
+  justify-content: center; color: #B4B2A9; flex-shrink: 0; transition: all 0.12s;
+}
+.del-del-btn:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
+
+/* External links (repeatable) */
+.extlink-row {
+  background: #FAFAF8; border: 0.5px solid #D3D1C7; border-radius: 8px;
+  padding: 8px 10px; display: flex; align-items: center; gap: 6px;
+}
+.extlink-row .extlink-name-input {
+  width: 34%; flex: 0 0 34%; height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 8px; font-size: 12px; font-family: inherit; color: #1a1a18;
+  outline: none; background: white; transition: border-color 0.15s;
+}
+.extlink-row .extlink-url-input {
+  width: auto; flex: 1 1 0%; height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px;
+  padding: 0 8px; font-size: 12px; font-family: inherit; color: #1a1a18;
+  outline: none; background: white; transition: border-color 0.15s; min-width: 0;
+}
+.extlink-name-input:focus, .extlink-url-input:focus { border-color: #009A97; }
+.extlink-share-toggle {
+  display: flex; align-items: flex-start; gap: 6px; font-size: 11px; color: #888780;
+  cursor: pointer; line-height: 1.4; padding-left: 1px; margin-top: 10px; padding-top: 10px;
+  border-top: 0.5px solid #E0DFD8;
+}
+.extlink-share-toggle input { margin-top: 2px; accent-color: #009A97; width: 13px; height: 13px; flex-shrink: 0; cursor: pointer; }
+.extlink-share-toggle span { user-select: none; }
+
+/* Preview: Share Links card */
+.preview-sharelink-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid #f0f0f0; }
+.preview-sharelink-row:last-child { border-bottom: none; }
+.preview-sharelink-icon { width: 32px; height: 32px; border-radius: 8px; background: #E0F5F5; color: #009A97; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.preview-sharelink-body { flex: 1; min-width: 0; }
+.preview-sharelink-name { font-size: 12px; font-weight: 600; color: #1a1a18; margin-bottom: 3px; }
+.preview-sharelink-url { font-size: 11px; color: #888780; background: #FAFAF8; border: 0.5px solid #e0dfd8; border-radius: 6px; padding: 5px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.preview-sharelink-copy {
+  height: 28px; padding: 0 12px; border-radius: 6px; border: none; background: #009A97; color: white;
+  font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit; flex-shrink: 0; transition: background 0.12s;
+}
+.preview-sharelink-copy:hover { background: #007A77; }
+.preview-sharelink-copy.copied { background: #27AE60; }
+
+.ms-preview-card {
+  background: #E0F5F5; border: 0.5px solid #80CCCB;
+  border-radius: 10px; padding: 12px 12px 10px;
+}
+.ms-preview-header { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+.ms-preview-icon { font-size: 18px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+.ms-preview-title { font-size: 13px; font-weight: 700; color: #007A77; line-height: 1.3; }
+.ms-preview-sub { font-size: 11px; color: #009A97; margin-top: 2px; }
+.ms-bar-wrap { display: flex; flex-direction: column; gap: 4px; }
+.ms-bar-track { height: 7px; background: rgba(0,154,151,0.18); border-radius: 99px; overflow: hidden; }
+.ms-bar-fill { height: 100%; background: #009A97; border-radius: 99px; transition: width 0.4s ease; }
+.ms-bar-labels { display: flex; justify-content: space-between; }
+.ms-bar-current { font-size: 11px; font-weight: 600; color: #007A77; }
+.ms-bar-target { font-size: 11px; color: #80CCCB; }
+.ms-unlocked-banner { background: linear-gradient(135deg, #009A97 0%, #007A77 100%); border-radius: 8px; padding: 14px 14px 12px; text-align: center; animation: msUnlock 0.3s ease; }
+@keyframes msUnlock { from { opacity:0; transform:scale(0.96); } to { opacity:1; transform:scale(1); } }
+.ms-unlocked-title { font-size: 14px; font-weight: 700; color: white; margin-bottom: 3px; }
+.ms-unlocked-sub { font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.4; }
+
+/* AI Quick Fill */
+.ai-fill-card {
+  background: linear-gradient(135deg, #F3F1FE 0%, #EDF9F9 100%);
+  border: 0.5px solid #D9D3FA; border-radius: 12px; padding: 14px; margin-bottom: 12px;
+}
+.ai-fill-hd { display: flex; gap: 10px; align-items: flex-start; }
+.ai-fill-body { margin-top: 10px; }
+.ai-fill-icon {
+  width: 32px; height: 32px; border-radius: 8px; background: white; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; color: #7C5CFC;
+  box-shadow: 0 1px 4px rgba(124,92,252,0.25);
+}
+.ai-fill-title { font-size: 13px; font-weight: 700; color: #1a1a18; display: flex; align-items: center; gap: 5px; }
+.ai-fill-badge {
+  font-size: 9px; font-weight: 700; color: white; background: linear-gradient(135deg,#7C5CFC,#009A97);
+  padding: 1px 6px; border-radius: 99px; letter-spacing: 0.03em;
+}
+.ai-fill-sub { font-size: 11px; color: #888780; margin-top: 2px; line-height: 1.4; }
+.ai-fill-textarea {
+  width: 100%; min-height: 64px; border: 0.5px solid #D9D3FA; border-radius: 8px; background: white;
+  padding: 8px 10px; font-size: 12px; font-family: inherit; outline: none; resize: vertical;
+  color: #1a1a18; transition: border-color 0.15s;
+}
+.ai-fill-textarea:focus { border-color: #7C5CFC; }
+.ai-fill-actions { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.ai-fill-upload-btn {
+  height: 32px; padding: 0 12px; border-radius: 7px; border: 0.5px solid #D9D3FA; background: white;
+  color: #7C5CFC; font-size: 11px; font-weight: 600; cursor: pointer; display: inline-flex;
+  align-items: center; gap: 5px; font-family: inherit; transition: background 0.12s;
+}
+.ai-fill-upload-btn:hover { background: #F3F1FE; }
+.ai-fill-filename { font-size: 11px; color: #888780; display: flex; align-items: center; gap: 4px; }
+.ai-fill-filename button { background: none; border: none; color: #888780; cursor: pointer; padding: 0; display: flex; }
+.ai-fill-btn {
+  height: 32px; padding: 0 14px; border-radius: 7px; border: none; margin-left: auto;
+  background: linear-gradient(135deg,#7C5CFC,#009A97); color: white; font-size: 12px; font-weight: 700;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-family: inherit;
+  transition: opacity 0.12s;
+}
+.ai-fill-btn:hover { opacity: 0.9; }
+.ai-fill-btn:disabled { opacity: 0.7; cursor: default; }
+.ai-fill-spin { animation: aiSpin 0.8s linear infinite; }
+@keyframes aiSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.ai-fill-status {
+  display: none; align-items: center; gap: 6px; margin-top: 10px; padding-top: 10px;
+  border-top: 0.5px solid #D9D3FA; font-size: 11px; font-weight: 600; color: #007A77;
+}
+.ai-fill-error {
+  display: none; align-items: flex-start; gap: 6px; margin-top: 10px; padding-top: 10px;
+  border-top: 0.5px solid #D9D3FA; font-size: 11px; font-weight: 600; color: #A32D2D;
+}
+.ai-fill-error svg { flex-shrink: 0; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<!-- ── SCROLL AREA ── -->
+<div class="scroll-area">
+
+  <!-- STEP 1: Event Details -->
+  <div class="step-page active" id="step-1">
+
+    <div class="steps-bar">
+      <div class="step"><div class="step-circle active">1</div><div class="step-lbl active">Event Details</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-circle todo">2</div><div class="step-lbl">Product Details</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-circle todo">3</div><div class="step-lbl">Preview &amp; Publish</div></div>
+    </div>
+
+    <div class="page-inner">
+
+      <!-- AI Quick Fill -->
+      <div class="ai-fill-card">
+        <div class="ai-fill-hd" onclick="toggleAIFillCard()" style="cursor:pointer;">
+          <div class="ai-fill-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74L12 2z"/><path d="M19 15l0.7 2.1L22 18l-2.3 0.9L19 21l-0.7-2.1L16 18l2.3-0.9L19 15z"/><path d="M5 13l0.5 1.5L7 15l-1.5 0.5L5 17l-0.5-1.5L3 15l1.5-0.5L5 13z"/></svg>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div class="ai-fill-title">Quick Fill with AI <span class="ai-fill-badge">BETA</span></div>
+            <div class="ai-fill-sub">Paste a message, old listing, or notes — or upload a photo of a menu/poster — and we'll fill in the form for you.</div>
+          </div>
+          <svg id="ai-fill-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C5CFC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="ai-fill-body" id="ai-fill-body" style="display:none;">
+          <textarea class="ai-fill-textarea" id="ai-fill-text" placeholder="Paste text here… e.g. a forwarded WhatsApp message, an old event description, or a supplier price list. You can also paste or drop a photo right here." onpaste="handleAITextPaste(event)" ondrop="handleAITextDrop(event)" ondragover="handleAITextDragOver(event)" ondragleave="handleAITextDragLeave(event)"></textarea>
+          <div class="ai-fill-actions">
+            <label class="ai-fill-upload-btn" id="ai-fill-upload-label">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Upload photo
+              <input type="file" accept="image/*" id="ai-fill-image-input" style="display:none;" onchange="handleAIImageUpload(this)" />
+            </label>
+            <div class="ai-fill-filename" id="ai-fill-filename" style="display:none;"></div>
+            <button class="ai-fill-btn" id="ai-fill-btn" onclick="runAIFill()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74L12 2z"/></svg>
+              Fill form with AI
+            </button>
+          </div>
+          <div class="ai-fill-status" id="ai-fill-status">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Form filled — please review every field before publishing.</span>
+          </div>
+          <div class="ai-fill-error" id="ai-fill-error" style="display:none;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event template strip -->
+      <div class="template-strip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B4B2A9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:10px;font-weight:600;color:#B4B2A9;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Event template</div>
+          <div style="font-size:12px;color:#888780;">Pre-fill this form using a saved template</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
+          <div style="font-size:11px;font-weight:600;color:#009A97;cursor:pointer;display:flex;align-items:center;gap:3px;" onclick="alert('Downloading template…')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download template
+          </div>
+          <label style="font-size:11px;font-weight:600;color:#009A97;cursor:pointer;display:flex;align-items:center;gap:3px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload
+            <input type="file" accept=".xls,.xlsx,.csv" style="display:none;" onchange="handleTemplateUpload(this)" />
+          </label>
+        </div>
+        <div id="template-filename" style="font-size:11px;color:#009A97;display:none;margin-top:4px;"></div>
+      </div>
+
+      <!-- Event details -->
+      <div class="form-card">
+        <div class="form-card-title">Event details</div>
+
+        <div class="form-group">
+          <label class="form-label">Event banner</label>
+          <input type="file" id="banner-file-input" accept="image/*" multiple style="display:none;" onchange="addBannerFiles(this.files)" />
+          <div class="banner-grid" id="banner-grid"></div>
+          <div class="banner-hint">Recommended 16:9 · PNG or JPG · drag thumbnails to reorder</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Title <span class="req">*</span></label>
+          <input type="text" id="ev-title" placeholder="e.g. Fresh produce — May round" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea id="ev-desc" placeholder="Describe your group buy event…"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Pick-up location</label>
+          <input type="text" id="ev-location" placeholder="e.g. Simei Street 1" />
+        </div>
+
+        <div class="date-row">
+          <div class="form-group">
+            <label class="form-label">Closing <span class="req">*</span></label>
+            <input type="date" id="ev-closing" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Collection <span class="req">*</span></label>
+            <input type="date" id="ev-collection" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Collection time</label>
+          <div class="time-row">
+            <input type="time" id="ev-time-from" value="10:00" />
+            <span class="time-sep">to</span>
+            <input type="time" id="ev-time-to" value="17:00" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment options — collapsable -->
+      <div class="form-card" style="padding:0;gap:0;">
+        <div class="section-collapse-hd" onclick="toggleSection(this)">
+          <span class="form-card-title" style="margin:0;">Payment options</span>
+          <svg class="collapse-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="section-collapse-body">
+          <div style="padding:0 14px 12px;display:flex;flex-direction:column;gap:0;">
+
+            <!-- Payment after closing date -->
+            <div class="toggle-item">
+              <div class="toggle-row" onclick="toggleSwitch(this)">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Payment after closing date</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Host distributes delivery cost and consolidates discount at event close.</div>
+                </div>
+                <div class="toggle-sw"></div>
+              </div>
+            </div>
+
+            <!-- Pay together -->
+            <div class="toggle-item" style="border-top:none;">
+              <div class="toggle-row" onclick="toggleSwitch(this)">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Pay together</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Members can pay for multiple events at once via Pay Together.</div>
+                </div>
+                <div class="toggle-sw on"></div>
+              </div>
+            </div>
+
+            <!-- Admin fee per order -->
+            <div class="toggle-item" style="border-top:none;">
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="admin-fee-toggle-row">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Admin fee per order</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Charge a fixed fee on each member's order.</div>
+                </div>
+                <div class="toggle-sw"></div>
+              </div>
+              <div class="toggle-body">
+                <div class="fee-row" style="margin-top:4px;">
+                  <span class="fee-prefix">$</span>
+                  <input type="number" id="admin-fee-input" value="0.00" step="0.50" min="0" style="width:90px;text-align:right;" />
+                  <span style="font-size:13px;color:#888780;">per order</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Order discounts -->
+            <div class="toggle-item" style="border-top:none;">
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="discount-toggle-row">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Order discounts</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Auto-applied per order based on individual spend or quantity.</div>
+                </div>
+                <div class="toggle-sw" id="discount-toggle-sw"></div>
+              </div>
+              <div class="toggle-body" id="discount-section">
+                <div class="discount-body" style="margin-top:4px;">
+                  <div id="tiers-list"></div>
+                  <div id="tier-form-wrap" style="display:none;"></div>
+                  <div id="add-tier-wrap">
+                    <div class="add-tier-link" onclick="openNewTierForm()">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+                      Add discount tier
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Group milestone discount -->
+            <div class="toggle-item" style="border-top:none;">
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="milestone-toggle-row">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Group milestone discount</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Unlocks for everyone when the group hits a target.</div>
+                </div>
+                <div class="toggle-sw" id="milestone-toggle-sw"></div>
+              </div>
+              <div class="toggle-body" id="milestone-section">
+                <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+
+                  <!-- Condition -->
+                  <div class="tier-form" style="margin-top:2px;">
+                    <div class="tf-row">
+                      <span class="tf-lbl">Unlock when</span>
+                      <div class="type-toggle">
+                        <button class="type-pill active" id="ms-pill-revenue" onclick="setMilestoneCondType('revenue')">$ Revenue</button>
+                        <button class="type-pill" id="ms-pill-orders" onclick="setMilestoneCondType('orders')"># Orders</button>
+                      </div>
+                      <div class="tf-amt-wrap">
+                        <span class="tf-pfx" id="ms-cond-prefix">$</span>
+                        <input class="tier-amt-input" type="number" id="ms-condVal" min="1" step="50" placeholder="0" oninput="updateMilestonePreview()" />
+                        <span class="tf-pfx" id="ms-cond-suffix" style="margin-left:2px;"></span>
+                      </div>
+                    </div>
+
+                    <div style="height:0.5px;background:#e0dfd8;"></div>
+
+                    <!-- Reward -->
+                    <div class="tf-row">
+                      <span class="tf-lbl">Reward</span>
+                      <div class="type-toggle">
+                        <button class="type-pill active" id="ms-pill-fixed" onclick="setMilestoneDiscType('fixed')">$ Fixed</button>
+                        <button class="type-pill" id="ms-pill-pct" onclick="setMilestoneDiscType('pct')">%</button>
+                      </div>
+                      <div class="tf-amt-wrap">
+                        <span class="tf-pfx" id="ms-disc-prefix">$</span>
+                        <input class="tier-amt-input" type="number" id="ms-discAmt" min="0" step="0.5" placeholder="0" oninput="updateMilestonePreview()" />
+                        <span class="tf-pfx" id="ms-disc-suffix" style="margin-left:2px;"></span>
+                      </div>
+                    </div>
+
+                    <!-- Cap (% only) -->
+                    <div class="tf-row" id="ms-cap-row" style="display:none;">
+                      <span class="tf-lbl">Cap</span>
+                      <div class="tf-amt-wrap">
+                        <span class="tf-pfx">$</span>
+                        <input class="tier-amt-input" type="number" id="ms-capAmt" min="0" step="0.50" placeholder="0" oninput="updateMilestonePreview()" />
+                      </div>
+                      <label class="cap-check-lbl">
+                        <input type="checkbox" id="ms-noCap" onchange="toggleMilestoneNoCap(this);updateMilestonePreview()" /> No cap
+                      </label>
+                    </div>
+                  </div>
+
+                                    <!-- Member-facing preview -->
+                  <div id="ms-preview-wrap" style="display:none;">
+                    <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;">Preview — how members see this</div>
+                    <div class="ms-preview-card">
+                      <div id="ms-preview-progress">
+                        <div class="ms-preview-header">
+                          <span class="ms-preview-icon">🎯</span>
+                          <div style="flex:1;min-width:0;">
+                            <div class="ms-preview-title" id="ms-prev-title">Group discount unlocks at $500</div>
+                            <div class="ms-preview-sub" id="ms-prev-sub">Invite friends to hit the target!</div>
+                          </div>
+                        </div>
+                        <div class="ms-bar-wrap">
+                          <div class="ms-bar-track">
+                            <div class="ms-bar-fill" id="ms-bar-fill" style="width:64%"></div>
+                          </div>
+                          <div class="ms-bar-labels">
+                            <span class="ms-bar-current" id="ms-bar-current">$320 ordered</span>
+                            <span class="ms-bar-target" id="ms-bar-target">$500 target</span>
+                          </div>
+                        </div>
+                        <div style="font-size:11px;color:#888780;margin-top:4px;" id="ms-prev-reward-line">Reward: 10% off for everyone once unlocked</div>
+                      </div>
+                      <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid #c8e8e8;">
+                        <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;">Unlocked state (members see this when milestone is hit)</div>
+                        <div id="ms-preview-unlocked">
+                          <div style="border-radius:10px;border:0.5px solid #80CCCB;background:#E0F5F5;padding:14px 12px;text-align:center;">
+                            <div style="font-size:18px;text-align:center;margin-bottom:4px;">🎉</div>
+                            <div style="font-size:14px;font-weight:700;color:#007A77;margin-bottom:3px;" id="ms-unlocked-title">Milestone reached!</div>
+                            <div style="font-size:12px;color:#009A97;line-height:1.4;" id="ms-unlocked-sub">Everyone gets 10% off this order.</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional options — collapsable -->
+      <div class="form-card" style="padding:0;gap:0;">
+        <div class="section-collapse-hd" onclick="toggleSection(this)">
+          <span class="form-card-title" style="margin:0;">Additional options</span>
+          <svg class="collapse-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="section-collapse-body">
+          <div style="padding:0 14px 12px;display:flex;flex-direction:column;gap:8px;">
+
+            <div class="toggle-item">
+              <div class="toggle-row" onclick="toggleSwitch(this)">
+                <span class="toggle-lbl">Important notes to buyers</span>
+                <div class="toggle-sw"></div>
+              </div>
+              <div class="toggle-body">
+                <textarea style="margin-top:4px;" placeholder="Notes buyers will see before ordering…"></textarea>
+              </div>
+            </div>
+
+            <div class="toggle-item">
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="extlink-toggle-row">
+                <span class="toggle-lbl">External Links</span>
+                <div class="toggle-sw" id="extlink-toggle-sw"></div>
+              </div>
+              <div class="toggle-body">
+                <div id="extlinks-list" style="display:flex;flex-direction:column;gap:8px;margin-top:4px;"></div>
+                <div style="margin-top:6px;">
+                  <div class="add-tier-link" onclick="addExternalLink()">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+                    Add link
+                  </div>
+                </div>
+                <label class="extlink-share-toggle">
+                  <input type="checkbox" id="extlinks-share-all" />
+                  <span>Let buyers copy or preview links instead of opening them directly.</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="toggle-item">
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="delivery-toggle-row">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Add Delivery Options</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Host delivers to member's address. Fee added as a line item.</div>
+                </div>
+                <div class="toggle-sw" id="delivery-toggle-sw"></div>
+              </div>
+              <div class="toggle-body" id="delivery-section">
+                <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+
+                  <!-- Member choice -->
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Members can</div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                      <button class="del-choice-pill active" id="del-choice-choose"   onclick="setDeliveryChoice('choose')">Delivery &amp; Self-collect</button>
+                      <button class="del-choice-pill"        id="del-choice-delivery" onclick="setDeliveryChoice('delivery')">Delivery only</button>
+                      <button class="del-choice-pill"        id="del-choice-collect"  onclick="setDeliveryChoice('collect')">Self-collect only</button>
+                    </div>
+                  </div>
+
+                  <!-- Fee type -->
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Fee type</div>
+                    <div class="type-toggle" style="max-width:200px;">
+                      <button class="type-pill active" id="del-fee-flat" onclick="setDeliveryFeeType('flat')">Flat fee</button>
+                      <button class="type-pill"        id="del-fee-area" onclick="setDeliveryFeeType('area')">By area</button>
+                    </div>
+                  </div>
+
+                  <!-- Flat fee input -->
+                  <div id="del-flat-wrap">
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Delivery fee</div>
+                    <div class="tf-amt-wrap">
+                      <span class="tf-pfx">$</span>
+                      <input class="tier-amt-input" type="number" id="del-flat-amt" min="0" step="0.50" placeholder="0" style="width:90px;" oninput="syncDeliveryToNotes()" />
+                      <span style="font-size:11px;color:#888780;margin-left:6px;">per order</span>
+                    </div>
+                  </div>
+
+                  <!-- By area -->
+                  <div id="del-area-wrap" style="display:none;">
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Delivery areas</div>
+                    <div id="del-areas-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+                    <div id="del-add-area-wrap" style="margin-top:6px;"></div>
+                  </div>
+
+                  <!-- Delivery dates -->
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Delivery dates</div>
+                    <div id="del-dates-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+                    <div style="margin-top:6px;">
+                      <div class="add-tier-link" onclick="addDeliveryDate()">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+                        Add date
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="toggle-item">
+              <div class="toggle-row" onclick="toggleSwitch(this)" id="req-delivery-toggle-row">
+                <div style="flex:1;min-width:0;">
+                  <div class="toggle-lbl">Request delivery details</div>
+                  <div style="font-size:11px;color:#888780;margin-top:2px;line-height:1.4;">Buyers will be asked to provide their delivery address when ordering.</div>
+                </div>
+                <div class="toggle-sw" id="req-delivery-toggle-sw"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn-back" onclick="window.location.href='cobee.html'">Cancel</button>
+        <button class="btn-next" onclick="goToStep(2)">Next →</button>
+      </div>
+
+    </div>
+  </div><!-- end step-1 -->
+
+  <!-- STEP 2: Product Details -->
+  <div class="step-page" id="step-2">
+
+    <div class="steps-bar">
+      <div class="step"><div class="step-circle done">✓</div><div class="step-lbl done">Event Details</div></div>
+      <div class="step-line done"></div>
+      <div class="step"><div class="step-circle active">2</div><div class="step-lbl active">Product Details</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-circle todo">3</div><div class="step-lbl">Preview &amp; Publish</div></div>
+    </div>
+
+    <div class="page-inner">
+
+      <!-- Product items container -->
+      <div id="product-items-wrap" style="display:flex;flex-direction:column;gap:8px;"></div>
+
+      <!-- Add item buttons -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="add-item-btn" onclick="addItem()">
+          <svg width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+          Add Item
+        </div>
+        <div class="add-item-btn" onclick="openCatalogue()" style="border-color:#E8971A;color:#E8971A;background:#FFFBF4;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Add from Product Catalogue
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn-back" onclick="goToStep(1)">← Back</button>
+        <button class="btn-next" onclick="goToStep(3)">Next →</button>
+      </div>
+
+    </div>
+  </div><!-- end step-2 -->
+
+  <!-- STEP 3: Preview & Publish -->
+  <div class="step-page" id="step-3">
+
+    <div class="steps-bar">
+      <div class="step"><div class="step-circle done">✓</div><div class="step-lbl done">Event Details</div></div>
+      <div class="step-line done"></div>
+      <div class="step"><div class="step-circle done">✓</div><div class="step-lbl done">Product Details</div></div>
+      <div class="step-line done"></div>
+      <div class="step"><div class="step-circle active">3</div><div class="step-lbl active">Preview &amp; Publish</div></div>
+    </div>
+
+    <div class="page-inner" style="gap:0;padding-bottom:0;">
+
+      <!-- Settings summary strip (host-only, collapsible) -->
+      <div style="background:white;border-radius:12px;border:0.5px solid #e0dfd8;margin-bottom:10px;overflow:hidden;">
+        <div style="padding:10px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleSection(this)">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+            <span style="font-size:11px;font-weight:600;color:#009A97;letter-spacing:0.05em;text-transform:uppercase;">Your settings</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:11px;font-weight:600;color:#009A97;cursor:pointer;" onclick="event.stopPropagation();goToStep(1)">Edit</span>
+            <svg class="collapse-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="section-collapse-body" style="border-top:0.5px solid #f0f0f0;">
+          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:10px;">
+
+            <!-- Payment options -->
+            <div style="display:flex;gap:10px;">
+              <span style="font-size:11px;font-weight:600;color:#888780;width:100px;flex-shrink:0;">Payment</span>
+              <span style="font-size:11px;color:#1a1a18;" id="preview-payment">Pay together</span>
+            </div>
+
+            <!-- Admin fee -->
+            <div style="display:flex;gap:10px;">
+              <span style="font-size:11px;font-weight:600;color:#888780;width:100px;flex-shrink:0;">Admin fee</span>
+              <span style="font-size:11px;color:#1a1a18;" id="preview-admin-fee">$0.00 per order</span>
+            </div>
+
+            <!-- Discounts -->
+            <div id="preview-discount-wrap" style="display:none;"></div>
+
+            <!-- Products -->
+            <div style="border-top:0.5px solid #f0f0f0;padding-top:8px;">
+              <div style="font-size:11px;font-weight:600;color:#888780;margin-bottom:6px;">Products</div>
+              <div id="preview-products" style="font-size:11px;color:#1a1a18;">No products added yet.</div>
+            </div>
+
+            <!-- Additional options -->
+            <div id="preview-addl-opts-wrap" style="border-top:0.5px solid #f0f0f0;padding-top:8px;display:none;">
+              <div style="font-size:11px;font-weight:600;color:#888780;margin-bottom:6px;">Additional options</div>
+              <div id="preview-addl-opts" style="font-size:11px;color:#1a1a18;display:flex;flex-direction:column;gap:3px;"></div>
+            </div>
+
+            <!-- Share Links -->
+            <div id="preview-sharelinks-wrap" style="border-top:0.5px solid #f0f0f0;padding-top:10px;display:none;">
+              <div style="font-size:11px;font-weight:600;color:#888780;margin-bottom:2px;">Share links</div>
+              <div style="font-size:10px;color:#B4B2A9;margin-bottom:4px;">Only visible to you — copy and send these wherever you like.</div>
+              <div id="preview-sharelinks"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MEMBER VIEW — exact mirror of member.html ev-screen-1 ── -->
+      <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;text-align:center;margin-bottom:8px;">Member view</div>
+
+      <!-- Event header card -->
+      <div style="background:white;border-radius:14px;overflow:hidden;border:0.5px solid #e0dfd8;box-shadow:0 1px 8px rgba(0,0,0,0.05);">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 10px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;">M6</div>
+            <div><div style="font-size:13px;font-weight:600;color:#1a1a18;">M6 group</div><div style="font-size:11px;color:#888780;">Minh Cong</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;font-weight:600;color:#E8971A;" id="preview-days">Closing in — days</span>
+            <span style="background:#D3D1C7;color:#5F5E5A;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;">0 BUY</span>
+          </div>
+        </div>
+        <div style="height:190px;background:#E0F5F5;display:flex;align-items:center;justify-content:center;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div style="padding:14px;">
+          <div id="preview-title" style="font-size:17px;font-weight:700;color:#1a1a18;margin-bottom:4px;">Your event title</div>
+          <div id="preview-desc" style="font-size:13px;color:#888780;margin-bottom:10px;">Your event description will appear here.</div>
+          <div style="display:grid;grid-template-columns:80px 1fr;gap:5px 0;font-size:12px;margin-bottom:12px;">
+            <span style="color:#888780;">Closing:</span><span style="color:#1a1a18;" id="preview-closing">—</span>
+            <span style="color:#888780;">Collection:</span><span style="color:#1a1a18;" id="preview-collection">—</span>
+            <span style="color:#888780;">Address:</span><span style="color:#1a1a18;" id="preview-location">—</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="color:#E8971A;font-size:14px;">★★★★</span><span style="color:#D3D1C7;font-size:14px;">★</span>
+            <span style="font-size:12px;font-weight:600;color:#1a1a18;">4.0</span>
+            <span style="font-size:11px;color:#888780;">(3 reviews)</span>
+          </div>
+          <div style="font-size:12px;color:#888780;font-style:italic;margin-top:6px;"><strong style="color:#1a1a18;font-style:normal;">Janet:</strong> "Great quality, will order again next round!"</div>
+        </div>
+      </div>
+
+      <!-- Search bar -->
+      <div style="margin:10px 0 0;position:relative;">
+        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#B4B2A9;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input placeholder="Search product" style="width:100%;height:38px;border:0.5px solid #D3D1C7;border-radius:20px;padding:0 12px 0 32px;font-size:12px;font-family:inherit;outline:none;background:white;" disabled />
+      </div>
+
+      <!-- Items card -->
+      <div style="background:white;border-radius:14px;border:0.5px solid #e0dfd8;margin-top:10px;overflow:hidden;">
+        <div style="padding:10px 14px;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;">ITEMS</span>
+          <span style="font-size:10px;color:#B4B2A9;">Sample products</span>
+        </div>
+
+        <!-- Item 1: Spec -->
+        <div id="preview-items-list" style="display:flex;flex-direction:column;gap:0;">
+          <div style="padding:16px 14px;border-bottom:0.5px solid #f0f0f0;">
+            <div style="display:flex;gap:16px;align-items:flex-start;">
+              <div style="width:88px;height:88px;border-radius:10px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                  <div style="font-size:13px;font-weight:600;color:#1a1a18;">Spec (Glasses)</div>
+                  <div style="font-size:14px;font-weight:700;color:#009A97;">$20.00</div>
+                </div>
+                <div style="font-size:11px;color:#888780;margin-top:1px;">Good Spec from Vietnam</div>
+                <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:5px;">
+                  <span style="padding:3px 10px;border-radius:99px;font-size:11px;border:0.5px solid #D3D1C7;color:#888780;">Blue</span>
+                  <span style="padding:3px 10px;border-radius:99px;font-size:11px;border:0.5px solid #D3D1C7;color:#888780;">Red</span>
+                  <span style="padding:3px 10px;border-radius:99px;font-size:11px;border:0.5px solid #D3D1C7;color:#888780;">Green</span>
+                  <span style="font-size:11px;color:#E24B4A;font-weight:600;padding:3px 0;">Required</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                  <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <button style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.5;">−</button>
+                    <span style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                    <button style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.6;">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 2: Toothpaste -->
+          <div style="padding:16px 14px;border-bottom:0.5px solid #f0f0f0;">
+            <div style="display:flex;gap:16px;align-items:center;">
+              <div style="width:88px;height:88px;border-radius:10px;background:#E8F8EF;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                  <div style="font-size:13px;font-weight:600;color:#1a1a18;">Toothpaste</div>
+                  <div style="font-size:14px;font-weight:700;color:#009A97;">$2.00</div>
+                </div>
+                <div style="font-size:11px;color:#888780;margin-top:1px;">Whitening toothpaste, pack of 3</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                  <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <button style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.5;">−</button>
+                    <span style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                    <button style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.6;">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 3: Chestnut -->
+          <div style="padding:16px 14px;">
+            <div style="display:flex;gap:16px;align-items:center;">
+              <div style="width:88px;height:88px;border-radius:10px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                  <div style="font-size:13px;font-weight:600;color:#1a1a18;">Chestnut (Case)</div>
+                  <div style="font-size:14px;font-weight:700;color:#009A97;">$10.00</div>
+                </div>
+                <div style="font-size:11px;color:#888780;margin-top:1px;">Fresh chestnuts, per case</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                  <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <button style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.5;">−</button>
+                    <span style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                    <button style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:0.6;">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Milestone in-progress — starts at 0, never shows unlocked in preview -->
+      <div id="sample-milestone-block" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;border:0.5px solid #80CCCB;background:#E0F5F5;">
+        <div style="padding:10px 12px 6px;display:flex;align-items:flex-start;gap:8px;">
+          <span style="font-size:18px;flex-shrink:0;">&#127919;</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#007A77;line-height:1.3;" id="sample-ms-title">Group discount unlocks at 10 orders</div>
+            <div style="font-size:11px;color:#009A97;margin-top:1px;">Invite friends to hit the target!</div>
+          </div>
+        </div>
+        <div style="padding:0 12px 4px;">
+          <div style="height:6px;background:rgba(0,154,151,0.18);border-radius:99px;overflow:hidden;">
+            <div style="height:100%;background:#009A97;border-radius:99px;width:0%;" id="sample-ms-bar"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;">
+            <span style="font-size:11px;font-weight:600;color:#007A77;" id="sample-ms-current">0 orders placed</span>
+            <span style="font-size:11px;color:#80CCCB;" id="sample-ms-target">10 orders target</span>
+          </div>
+        </div>
+        <div style="font-size:11px;color:#888780;padding:4px 12px 10px;" id="sample-ms-reward">Reward: 10% off for everyone once unlocked</div>
+      </div>
+
+      <!-- Order Total box — exact match to member.html -->
+      <div style="margin-top:10px;border-radius:12px;overflow:hidden;border:0.5px solid #e0dfd8;">
+        <div style="background:#E0F5F5;padding:12px 14px;border-bottom:0.5px solid #80CCCB;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;font-weight:600;color:#007A77;">Order Total</span>
+            <span style="font-size:18px;font-weight:700;color:#007A77;">$0.00 SGD</span>
+          </div>
+          <!-- Discount chip — visible when order discounts configured -->
+          <div id="sample-order-disc-line" style="display:none;align-items:center;gap:6px;background:white;border:0.5px solid #80CCCB;border-radius:6px;padding:5px 10px;margin-top:6px;">
+            <span style="font-size:12px;flex-shrink:0;">&#127991;</span>
+            <span style="font-size:11px;font-weight:500;color:#007A77;flex:1;" id="sample-order-disc-text">Spend $20+ discount applied</span>
+            <span style="font-size:12px;font-weight:700;color:#007A77;" id="sample-order-disc-amt">−$3.00</span>
+          </div>
+        </div>
+        <div style="background:white;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;color:#B4B2A9;">Purchase-on-Behalf</span>
+          <span style="font-size:11px;color:#009A97;font-weight:600;">Admin fee included: $0.00</span>
+        </div>
+      </div>
+
+      <!-- Please note + Notes to host -->
+      <div style="background:white;border-radius:12px;border:0.5px solid #e0dfd8;margin-top:10px;overflow:hidden;">
+        <div style="padding:12px 14px 10px;border-bottom:0.5px solid #f0f0f0;">
+          <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:8px;">PLEASE NOTE</div>
+          <div id="preview-please-note" style="display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;gap:7px;font-size:12px;color:#888780;align-items:flex-start;">
+              <span style="color:#009A97;font-weight:700;flex-shrink:0;font-size:14px;line-height:1.2;">•</span>
+              <span style="font-style:italic;color:#B4B2A9;">Additional notes from the host will appear here.</span>
+            </div>
+          </div>
+        </div>
+        <div style="padding:12px 14px;">
+          <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:6px;">NOTES TO THE HOST</div>
+          <textarea placeholder="Optional message to the host..." style="width:100%;height:64px;border:0.5px solid #D3D1C7;border-radius:8px;padding:8px 10px;font-size:12px;font-family:inherit;outline:none;resize:none;background:#FAFAF8;" disabled></textarea>
+        </div>
+      </div>
+
+      <!-- Divider before publish controls -->
+      <div style="margin-top:20px;border-top:0.5px solid #e0dfd8;padding-top:16px;">
+        <div class="action-bar" style="padding:0 0 8px;">
+          <button class="btn-back" onclick="goToStep(2)">&#8592; Back</button>
+          <button class="btn-next" onclick="publishEvent()">Publish &#8594;</button>
+        </div>
+        <div style="max-width:600px;margin:0 auto;padding:0 0 20px;">
+          <button class="btn-back" style="width:100%;height:36px;" onclick="saveDraft()">Save as draft</button>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- end step-3 -->
+
+</div><!-- end scroll-area -->
+
+
+<script>
+
+function handleTemplateUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const el = document.getElementById('template-filename');
+  el.textContent = '✓ ' + file.name + ' uploaded';
+  el.style.display = 'block';
+}
+
+/* ── PRODUCT ITEMS (STEP 2) ── */
+let itemCount = 0;
+
+/* ── AI Quick Fill (calls the real Cloudflare Pages Function at /ai-fill) ── */
+let aiFillImageName = null;
+let aiFillImageBase64 = null;
+let aiFillImageMediaType = null;
+
+function toggleAIFillCard() {
+  const body = document.getElementById('ai-fill-body');
+  const chevron = document.getElementById('ai-fill-chevron');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+function handleAIImageUpload(input) {
+  const file = input.files && input.files[0];
+  if (file) setAIImage(file);
+}
+
+function setAIImage(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  aiFillImageName = file.name;
+  aiFillImageMediaType = file.type;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const dataUrl = e.target.result;
+    aiFillImageBase64 = dataUrl.split(',')[1]; // strip the "data:image/...;base64," prefix
+    const box = document.getElementById('ai-fill-filename');
+    box.style.display = 'flex';
+    box.innerHTML = '<img src="' + dataUrl + '" style="width:20px;height:20px;border-radius:4px;object-fit:cover;flex-shrink:0;" />'
+      + '<span>' + file.name + '</span>'
+      + '<button onclick="clearAIImage()" title="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearAIImage() {
+  aiFillImageName = null;
+  aiFillImageBase64 = null;
+  aiFillImageMediaType = null;
+  document.getElementById('ai-fill-image-input').value = '';
+  document.getElementById('ai-fill-filename').style.display = 'none';
+}
+
+function handleAITextPaste(e) {
+  const items = e.clipboardData && e.clipboardData.items;
+  if (!items) return;
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].kind === 'file' && items[i].type.startsWith('image/')) {
+      const file = items[i].getAsFile();
+      if (file) setAIImage(file);
+      // Let any accompanying text still paste normally — only intercept the image part.
+    }
+  }
+}
+
+function handleAITextDrop(e) {
+  e.preventDefault();
+  document.getElementById('ai-fill-text').style.borderColor = '';
+  const files = e.dataTransfer && e.dataTransfer.files;
+  if (files && files.length) {
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].type.startsWith('image/')) { setAIImage(files[i]); break; }
+    }
+  }
+}
+
+function handleAITextDragOver(e) {
+  e.preventDefault();
+  document.getElementById('ai-fill-text').style.borderColor = '#7C5CFC';
+}
+
+function handleAITextDragLeave(e) {
+  document.getElementById('ai-fill-text').style.borderColor = '';
+}
+
+async function runAIFill() {
+  const text = document.getElementById('ai-fill-text').value.trim();
+  if (!text && !aiFillImageBase64) {
+    alert('Paste some text or upload a photo first, so there\'s something for the AI to read.');
+    return;
+  }
+
+  const btn = document.getElementById('ai-fill-btn');
+  const originalHTML = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg class="ai-fill-spin" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-9-9"/></svg> Reading&hellip;';
+  hideAIFillError();
+  document.getElementById('ai-fill-status').style.display = 'none';
+
+  try {
+    const res = await fetch('/ai-fill', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        text: text || undefined,
+        imageBase64: aiFillImageBase64 || undefined,
+        imageMediaType: aiFillImageMediaType || undefined
+      })
+    });
+
+    let data;
+    try {
+      data = await res.json();
+    } catch (e) {
+      throw new Error('The server returned an unexpected response.');
+    }
+
+    if (!res.ok || data.error) {
+      throw new Error(data.error || ('Request failed (' + res.status + ').'));
+    }
+
+    applyAIExtraction(data.extracted);
+    document.getElementById('ai-fill-status').style.display = 'flex';
+  } catch (err) {
+    showAIFillError(
+      err.message === 'Failed to fetch'
+        ? "Couldn't reach /ai-fill — this only works once deployed to Cloudflare Pages with the function set up."
+        : err.message
+    );
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalHTML;
+  }
+}
+
+function applyAIExtraction(extracted) {
+  if (!extracted) return;
+  if (extracted.title) document.getElementById('ev-title').value = extracted.title;
+  if (extracted.description) document.getElementById('ev-desc').value = extracted.description;
+  if (extracted.address) document.getElementById('ev-location').value = extracted.address;
+  if (extracted.closingDate) document.getElementById('ev-closing').value = extracted.closingDate;
+  if (extracted.collectionDate) document.getElementById('ev-collection').value = extracted.collectionDate;
+  if (extracted.timeFrom) document.getElementById('ev-time-from').value = extracted.timeFrom;
+  if (extracted.timeTo) document.getElementById('ev-time-to').value = extracted.timeTo;
+
+  (extracted.items || []).forEach(function (it) {
+    addItem();
+    const itemDiv = document.getElementById('item-' + itemCount);
+    if (!itemDiv) return;
+    const nameInput = itemDiv.querySelector('.field-val input[type="text"]');
+    const descInput = itemDiv.querySelector('.field-val textarea');
+    const priceInput = itemDiv.querySelector('.field-val input[type="number"]');
+    if (nameInput && it.name) nameInput.value = it.name;
+    if (descInput && it.description) descInput.value = it.description;
+    if (priceInput && it.price != null) priceInput.value = it.price;
+  });
+}
+
+function showAIFillError(msg) {
+  const box = document.getElementById('ai-fill-error');
+  box.querySelector('span').textContent = msg;
+  box.style.display = 'flex';
+}
+
+function hideAIFillError() {
+  const box = document.getElementById('ai-fill-error');
+  if (box) box.style.display = 'none';
+}
+
+let subitemGroupCount = 0;
+
+
+// ── PRODUCT CATALOGUE ──
+var CATALOGUE = [
+  { id:'c1', name:'Spec (Glasses)', desc:'Optical frames from Vietnam', price:20.00, color:'#E0F5F5', stroke:'#009A97' },
+  { id:'c2', name:'Chestnut (Case)', desc:'Fresh chestnuts, per case (10 packs)', price:85.00, color:'#FEF2DC', stroke:'#E8971A' },
+  { id:'c3', name:'Chestnut (Individual)', desc:'Fresh chestnuts, per pack', price:10.00, color:'#FEF2DC', stroke:'#E8971A' },
+  { id:'c4', name:'Toothpaste', desc:'Whitening toothpaste, pack of 3', price:6.00, color:'#E8F8EF', stroke:'#27AE60' },
+  { id:'c5', name:'Dev cùi', desc:'Test product', price:10.00, color:'#EEEDFE', stroke:'#7F55D4' },
+];
+var catSelected = new Set();
+
+function renderCatalogue(filter) {
+  var list = document.getElementById('cat-list');
+  var items = filter ? CATALOGUE.filter(function(p){ return p.name.toLowerCase().includes(filter.toLowerCase()) || p.desc.toLowerCase().includes(filter.toLowerCase()); }) : CATALOGUE;
+  if (!items.length) { list.innerHTML = '<div style="text-align:center;padding:24px;color:#888780;font-size:12px;">No products found</div>'; return; }
+  list.innerHTML = items.map(function(p) {
+    var sel = catSelected.has(p.id);
+    var div = document.createElement('div');
+    div.className = 'cat-item' + (sel ? ' selected' : '');
+    div.id = 'cati-' + p.id;
+    div.setAttribute('data-catid', p.id);
+    div.innerHTML = '<div class="cat-item-img" style="background:' + p.color + '"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + p.stroke + '" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>'
+      + '<div style="flex:1;min-width:0;"><div class="cat-item-name">' + p.name + '</div><div class="cat-item-desc">' + p.desc + '</div></div>'
+      + '<div class="cat-item-price">$' + p.price.toFixed(2) + '</div>'
+      + '<div class="cat-item-check"></div>';
+    return div.outerHTML;
+  }).join('');
+  // Attach click handlers via event delegation
+  list.onclick = function(e) {
+    var item = e.target.closest('.cat-item');
+    if (item) toggleCatItem(item.getAttribute('data-catid'));
+  };
+}
+
+function toggleCatItem(id) {
+  if (catSelected.has(id)) catSelected.delete(id);
+  else catSelected.add(id);
+  var el = document.getElementById('cati-' + id);
+  if (el) el.classList.toggle('selected', catSelected.has(id));
+  var count = catSelected.size;
+  document.getElementById('cat-count').textContent = count + ' selected';
+  document.getElementById('cat-add-btn').disabled = count === 0;
+}
+
+function filterCatalogue(q) { renderCatalogue(q); }
+
+function openCatalogue() {
+  catSelected.clear();
+  document.getElementById('cat-search').value = '';
+  document.getElementById('cat-count').textContent = '0 selected';
+  document.getElementById('cat-add-btn').disabled = true;
+  renderCatalogue('');
+  document.getElementById('cat-backdrop').classList.add('open');
+}
+
+function closeCatalogue() {
+  document.getElementById('cat-backdrop').classList.remove('open');
+}
+
+function addFromCatalogue() {
+  catSelected.forEach(function(id) {
+    var prod = CATALOGUE.find(function(p){ return p.id === id; });
+    if (!prod) return;
+    itemCount++;
+    var iid = itemCount;
+    var wrap = document.getElementById('product-items-wrap');
+    var div = document.createElement('div');
+    div.className = 'product-item';
+    div.id = 'item-' + iid;
+    div.innerHTML = '<div class="product-item-hd"><span class="product-item-num">Item ' + iid + '</span>'
+      + '<div class="product-item-actions">'
+      + '<div class="icon-btn" onclick="moveItem(' + iid + ',-1)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></div>'
+      + '<div class="icon-btn" onclick="moveItem(' + iid + ',1)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'
+      + '<div class="icon-btn danger" onclick="removeItem(' + iid + ')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></div>'
+      + '</div></div>'
+      + '<div class="product-item-body">'
+      + '<div class="field-row"><span class="field-lbl">Name <span style="color:#E24B4A;">*</span></span><div class="field-val"><input type="text" value="' + prod.name + '" /></div></div>'
+      + '<div class="field-row"><span class="field-lbl">Description</span><div class="field-val"><textarea style="height:46px;">' + prod.desc + '</textarea></div></div>'
+      + '<div class="field-row"><span class="field-lbl">Price <span style="color:#E24B4A;">*</span></span><div class="field-val"><div class="price-row"><span class="price-prefix">$</span><input type="number" value="' + prod.price.toFixed(2) + '" step="0.50" min="0" style="width:90px;text-align:right;" /></div></div></div>'
+      + '</div>';
+    wrap.appendChild(div);
+  });
+  closeCatalogue();
+}
+
+function addItem() {
+  itemCount++;
+  const id = itemCount;
+  const wrap = document.getElementById('product-items-wrap');
+  const div = document.createElement('div');
+  div.className = 'product-item';
+  div.id = 'item-' + id;
+  div.innerHTML = `
+    <div class="product-item-hd">
+      <span class="product-item-num">Item ${id}</span>
+      <div class="product-item-actions">
+        <div class="icon-btn" title="Move up" onclick="moveItem(${id},-1)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+        </div>
+        <div class="icon-btn" title="Move down" onclick="moveItem(${id},1)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="icon-btn" title="Duplicate" onclick="duplicateItem(${id})">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </div>
+        <div class="icon-btn danger" title="Delete" onclick="removeItem(${id})">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="product-item-body">
+      <div class="field-row">
+        <span class="field-lbl">Image</span>
+        <label class="img-upload">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="img-upload-lbl">Upload</span>
+          <input type="file" accept="image/*" style="display:none;" />
+        </label>
+      </div>
+      <div class="field-row">
+        <span class="field-lbl">Name <span style="color:#E24B4A;">*</span></span>
+        <div class="field-val"><input type="text" placeholder="Item name" /></div>
+      </div>
+      <div class="field-row">
+        <span class="field-lbl">Description</span>
+        <div class="field-val"><textarea placeholder="Optional…" style="height:46px;"></textarea></div>
+      </div>
+      <div class="field-row">
+        <span class="field-lbl">Price <span style="color:#E24B4A;">*</span></span>
+        <div class="field-val">
+          <div class="price-row">
+            <span class="price-prefix">$</span>
+            <input type="number" placeholder="0.00" step="0.50" min="0" style="width:90px;text-align:right;" />
+          </div>
+        </div>
+      </div>
+      <div class="options-wrap">
+        <div class="options-hd">
+          
+          <div class="add-option-trigger" onclick="toggleOptDropdown(${id})">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+            Add option
+            <div class="option-dropdown" id="opt-dd-${id}" style="display:none;">
+              <div class="opt-dd-item" onclick="event.stopPropagation();addOrderSettings(${id})">
+                Order Settings
+                <div class="opt-dd-sub">Available stock, limits per order</div>
+              </div>
+              <div class="opt-dd-item" onclick="event.stopPropagation();addSplitCase(${id})">
+                Split Case Purchase
+                <div class="opt-dd-sub">Allow partial case orders</div>
+              </div>
+              <div class="opt-dd-item" onclick="event.stopPropagation();addSubitemGroup(${id})">
+                Add sub-item
+                <div class="opt-dd-sub">e.g. Frame Color, Lens Color</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="opt-panels-${id}"></div>
+      </div>
+    </div>`;
+  wrap.appendChild(div);
+  renumberItems();
+}
+
+function removeItem(id) {
+  const el = document.getElementById('item-' + id);
+  if (el) el.remove();
+  renumberItems();
+}
+
+function renumberItems() {
+  document.querySelectorAll('.product-item').forEach((el, i) => {
+    el.querySelector('.product-item-num').textContent = 'Item ' + (i + 1);
+  });
+}
+
+function moveItem(id, dir) {
+  const el = document.getElementById('item-' + id);
+  const wrap = el.parentElement;
+  if (dir === -1 && el.previousElementSibling) {
+    wrap.insertBefore(el, el.previousElementSibling);
+  } else if (dir === 1 && el.nextElementSibling) {
+    wrap.insertBefore(el.nextElementSibling, el);
+  }
+  renumberItems();
+}
+
+function duplicateItem(id) {
+  const el = document.getElementById('item-' + id);
+  const clone = el.cloneNode(true);
+  itemCount++;
+  clone.id = 'item-' + itemCount;
+  el.parentElement.insertBefore(clone, el.nextSibling);
+  renumberItems();
+}
+
+function toggleOptDropdown(id) {
+  const dd = document.getElementById('opt-dd-' + id);
+  document.querySelectorAll('.option-dropdown').forEach(d => { if (d !== dd) d.style.display = 'none'; });
+  dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.add-option-trigger')) {
+    document.querySelectorAll('.option-dropdown').forEach(d => d.style.display = 'none');
+  }
+});
+
+function makeOptionHeader(title, resetFn, panelClass) {
+  const hd = document.createElement('div');
+  hd.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;';
+
+  const lbl = document.createElement('div');
+  lbl.className = 'option-panel-title';
+  lbl.textContent = title;
+
+  const actions = document.createElement('div');
+  actions.style.cssText = 'display:flex;align-items:center;gap:10px;';
+
+  const resetBtn = document.createElement('span');
+  resetBtn.textContent = 'Reset';
+  resetBtn.style.cssText = 'font-size:11px;font-weight:600;color:#888780;cursor:pointer;';
+  resetBtn.addEventListener('click', resetFn);
+
+  const hideBtn = document.createElement('span');
+  hideBtn.textContent = 'Hide';
+  hideBtn.style.cssText = 'font-size:11px;font-weight:600;color:#009A97;cursor:pointer;';
+  hideBtn.addEventListener('click', function() {
+    const panel = hideBtn.closest('.option-panel, .subitem-container');
+    const fields = panel.querySelectorAll('.option-field, .option-radio, .option-ack, .option-body');
+    const isHidden = fields[0] && fields[0].style.display === 'none';
+    fields.forEach(f => f.style.display = isHidden ? '' : 'none');
+    hideBtn.textContent = isHidden ? 'Hide' : 'Show';
+  });
+
+  const delBtn = document.createElement('div');
+  delBtn.className = 'icon-btn danger';
+  delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
+  delBtn.addEventListener('click', function() {
+    delBtn.closest('.option-panel, .subitem-container').remove();
+  });
+
+  actions.appendChild(resetBtn);
+  actions.appendChild(hideBtn);
+  actions.appendChild(delBtn);
+  hd.appendChild(lbl);
+  hd.appendChild(actions);
+  return hd;
+}
+
+function addOrderSettings(id) {
+  document.getElementById('opt-dd-' + id).style.display = 'none';
+  const panels = document.getElementById('opt-panels-' + id);
+  const div = document.createElement('div');
+  div.className = 'option-panel';
+
+  const body = document.createElement('div');
+  body.className = 'option-body';
+
+  const fields = [
+    { label: 'Available stock', value: '1000' },
+    { label: 'Limit per order', value: '1000' },
+    { label: 'Minimum per order', value: '1' },
+  ];
+  fields.forEach(f => {
+    const row = document.createElement('div');
+    row.className = 'option-field';
+    row.innerHTML = '<span>' + f.label + '</span><input type="number" value="' + f.value + '" />';
+    body.appendChild(row);
+  });
+
+  const hd = makeOptionHeader('Order Settings', function() {
+    const inputs = div.querySelectorAll('input[type="number"]');
+    inputs[0].value = '1000'; inputs[1].value = '1000'; inputs[2].value = '1';
+  });
+
+  div.appendChild(hd);
+  div.appendChild(body);
+  panels.appendChild(div);
+}
+
+function addSplitCase(id) {
+  document.getElementById('opt-dd-' + id).style.display = 'none';
+  const panels = document.getElementById('opt-panels-' + id);
+  const div = document.createElement('div');
+  div.className = 'option-panel';
+
+  const body = document.createElement('div');
+  body.className = 'option-body';
+
+  const numFields = [
+    { label: 'Items per case/carton', value: '' },
+    { label: 'Cost per item', value: '' },
+    { label: 'Minimum item order', value: '1' },
+  ];
+  numFields.forEach(f => {
+    const row = document.createElement('div');
+    row.className = 'option-field';
+    row.innerHTML = '<span>' + f.label + '</span><input type="number" value="' + f.value + '" placeholder="' + (f.value || '0') + '" />';
+    body.appendChild(row);
+  });
+
+  const n = 'sc-' + id + '-' + Date.now();
+  const r1 = document.createElement('label');
+  r1.className = 'option-radio';
+  r1.innerHTML = '<input type="radio" name="' + n + '" checked /> Fulfil only when a full case is ordered';
+  const r2 = document.createElement('label');
+  r2.className = 'option-radio';
+  r2.innerHTML = '<input type="radio" name="' + n + '" /> Fulfil even if the case is incomplete';
+  const ack = document.createElement('label');
+  ack.className = 'option-ack';
+  ack.innerHTML = '<input type="checkbox" /> I acknowledge that enabling split case will automatically activate the Pay Later option.';
+  body.appendChild(r1);
+  body.appendChild(r2);
+  body.appendChild(ack);
+
+  const hd = makeOptionHeader('Split Case Purchase', function() {
+    div.querySelectorAll('input[type="number"]').forEach((inp, i) => inp.value = i === 2 ? '1' : '');
+    div.querySelectorAll('input[type="radio"]')[0].checked = true;
+    div.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+  });
+
+  div.appendChild(hd);
+  div.appendChild(body);
+  panels.appendChild(div);
+}
+
+function addSubitemGroup(id) {
+  document.getElementById('opt-dd-' + id).style.display = 'none';
+  const panels = document.getElementById('opt-panels-' + id);
+
+  // Create outer container first time
+  let subContainer = document.getElementById('sub-container-' + id);
+  if (!subContainer) {
+    subContainer = document.createElement('div');
+    subContainer.id = 'sub-container-' + id;
+    subContainer.className = 'option-panel';
+    subContainer.style.padding = '0';
+
+    const hd = document.createElement('div');
+    hd.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:0.5px solid #e0dfd8;';
+
+    const lbl = document.createElement('div');
+    lbl.className = 'option-panel-title';
+    lbl.textContent = 'Sub-Items';
+
+    const actions = document.createElement('div');
+    actions.style.cssText = 'display:flex;align-items:center;gap:10px;';
+
+    const hideBtn = document.createElement('span');
+    hideBtn.textContent = 'Hide';
+    hideBtn.style.cssText = 'font-size:11px;font-weight:600;color:#009A97;cursor:pointer;';
+    hideBtn.addEventListener('click', function() {
+      const isHidden = groupsWrap.style.display === 'none';
+      groupsWrap.style.display = isHidden ? '' : 'none';
+      addTitleBtn.style.display = isHidden ? '' : 'none';
+      hideBtn.textContent = isHidden ? 'Hide' : 'Show';
+    });
+
+    const delBtn = document.createElement('div');
+    delBtn.className = 'icon-btn danger';
+    delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
+    delBtn.addEventListener('click', function() { subContainer.remove(); });
+
+    actions.appendChild(hideBtn);
+    actions.appendChild(delBtn);
+    hd.appendChild(lbl);
+    hd.appendChild(actions);
+
+    const groupsWrap = document.createElement('div');
+    groupsWrap.id = 'sub-groups-' + id;
+    groupsWrap.style.cssText = 'padding:10px;display:flex;flex-direction:column;gap:20px;';
+
+    subContainer.appendChild(hd);
+    subContainer.appendChild(groupsWrap);
+
+    // "+ Add sub-item title" button outside the box in white background
+    const addTitleBtn = document.createElement('div');
+    addTitleBtn.style.cssText = 'font-size:12px;font-weight:600;color:#009A97;cursor:pointer;display:flex;align-items:center;gap:4px;padding:8px 12px;background:white;border:0.5px solid #e0dfd8;border-top:none;border-radius:0 0 8px 8px;justify-content:flex-end;';
+    addTitleBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg> Add sub-item';
+    addTitleBtn.addEventListener('click', function() { addSubitemTitle(id); });
+    subContainer.appendChild(addTitleBtn);
+    panels.appendChild(subContainer);
+  }
+  addSubitemTitle(id);
+}
+
+function addSubitemTitle(id) {
+  subitemGroupCount++;
+  const gid = 'sg-' + id + '-' + subitemGroupCount;
+  const gw = document.getElementById('sub-groups-' + id);
+
+  const div = document.createElement('div');
+  div.id = gid;
+  div.style.cssText = 'background:#FAFAF8;border:0.5px solid #888780;border-radius:8px;padding:10px 10px 8px;overflow:visible;position:relative;';
+
+  // Title input row
+  const titleRow = document.createElement('div');
+  titleRow.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:8px;';
+
+  const titleInput = document.createElement('input');
+  titleInput.type = 'text';
+  titleInput.placeholder = 'Sub-item title (e.g. Frame Color)';
+  titleInput.style.cssText = 'flex:1;height:30px;border:0.5px solid #D3D1C7;border-radius:6px;padding:0 8px;font-size:12px;font-family:inherit;outline:none;background:white;';
+
+  const delBtn = document.createElement('div');
+  delBtn.className = 'icon-btn danger';
+  delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
+  delBtn.addEventListener('click', function() { div.remove(); });
+
+  titleRow.appendChild(titleInput);
+  titleRow.appendChild(delBtn);
+
+  // Column headers
+  const colHd = document.createElement('div');
+  colHd.style.cssText = 'display:flex;gap:4px;margin-bottom:4px;';
+  colHd.innerHTML = '<span style="font-size:10px;color:#B4B2A9;flex:1;padding-left:2px;">Choice name</span>'
+    + '<span style="font-size:10px;color:#B4B2A9;width:90px;text-align:right;padding-right:4px;">Add-on cost</span>'
+    + '<span style="width:20px;"></span>';
+
+  // Rows container
+  const rowsWrap = document.createElement('div');
+  rowsWrap.id = gid + '-rows';
+
+  // Add choices button
+  const addChoicesBtn = document.createElement('div');
+  addChoicesBtn.style.cssText = 'font-size:11px;font-weight:600;color:#009A97;cursor:pointer;display:inline-flex;align-items:center;gap:3px;margin-top:6px;';
+  addChoicesBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg> Add choices';
+  addChoicesBtn.addEventListener('click', function() { addChoiceRow(gid); });
+
+  // Selection type row (Single / Multiple)
+  const selRow = document.createElement('div');
+  selRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:0.5px solid #e0dfd8;font-size:12px;color:#888780;';
+  const selLabel = document.createElement('span');
+  selLabel.textContent = 'Selection Mode';
+
+  const selToggle = document.createElement('div');
+  selToggle.style.cssText = 'display:flex;border:0.5px solid #D3D1C7;border-radius:6px;overflow:hidden;';
+
+  const pillSingle = document.createElement('button');
+  pillSingle.textContent = 'Single choice';
+  pillSingle.style.cssText = 'height:26px;padding:0 10px;border:none;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:#009A97;color:white;transition:background 0.12s,color 0.12s;border-right:0.5px solid #D3D1C7;';
+  pillSingle.setAttribute('data-sel', 'single');
+
+  const pillMulti = document.createElement('button');
+  pillMulti.textContent = 'Multiple choices';
+  pillMulti.style.cssText = 'height:26px;padding:0 10px;border:none;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:white;color:#888780;transition:background 0.12s,color 0.12s;';
+  pillMulti.setAttribute('data-sel', 'multiple');
+
+  function setSelType(type) {
+    if (type === 'single') {
+      pillSingle.style.background = '#009A97';
+      pillSingle.style.color = 'white';
+      pillMulti.style.background = 'white';
+      pillMulti.style.color = '#888780';
+    } else {
+      pillMulti.style.background = '#009A97';
+      pillMulti.style.color = 'white';
+      pillSingle.style.background = 'white';
+      pillSingle.style.color = '#888780';
+    }
+    selToggle.setAttribute('data-selection-type', type);
+  }
+
+  selToggle.setAttribute('data-selection-type', 'single');
+  pillSingle.addEventListener('click', function() { setSelType('single'); });
+  pillMulti.addEventListener('click', function() { setSelType('multiple'); });
+
+  selToggle.appendChild(pillSingle);
+  selToggle.appendChild(pillMulti);
+  selRow.appendChild(selLabel);
+  selRow.appendChild(selToggle);
+
+  // Required row
+  const reqRow = document.createElement('div');
+  reqRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:6px;border-top:0.5px solid #e0dfd8;font-size:12px;color:#888780;';
+  const reqLabel = document.createElement('span');
+  reqLabel.textContent = 'Required';
+  const reqToggle = document.createElement('div');
+  reqToggle.className = 'toggle-sw';
+  reqToggle.style.cssText = 'pointer-events:auto;cursor:pointer;';
+  reqToggle.addEventListener('click', function() { this.classList.toggle('on'); });
+  reqRow.appendChild(reqLabel);
+  reqRow.appendChild(reqToggle);
+
+  div.appendChild(titleRow);
+  div.appendChild(colHd);
+  div.appendChild(rowsWrap);
+  div.appendChild(addChoicesBtn);
+  div.appendChild(selRow);
+  div.appendChild(reqRow);
+  gw.appendChild(div);
+  addChoiceRow(gid);
+}
+
+function addChoiceRow(gid) {
+  const rows = document.getElementById(gid + '-rows');
+  const row = document.createElement('div');
+  row.className = 'subitem-row';
+
+  const nameInput = document.createElement('input');
+  nameInput.className = 'subitem-name';
+  nameInput.type = 'text';
+  nameInput.placeholder = 'e.g. Blue';
+  nameInput.style.cssText = 'flex:1;min-width:0;height:28px;border:0.5px solid #D3D1C7;border-radius:6px;padding:0 8px;font-size:12px;font-family:inherit;color:#1a1a18;outline:none;background:white;';
+
+  const dollarSign = document.createElement('span');
+  dollarSign.style.cssText = 'font-size:12px;color:#888780;flex-shrink:0;';
+  dollarSign.textContent = '+$';
+
+  const priceInput = document.createElement('input');
+  priceInput.className = 'subitem-price';
+  priceInput.type = 'number';
+  priceInput.placeholder = '0';
+  priceInput.step = '0.5';
+  priceInput.min = '0';
+  priceInput.style.cssText = 'width:90px;flex-shrink:0;height:28px;border:0.5px solid #D3D1C7;border-radius:6px;padding:0 8px;font-size:12px;font-family:inherit;color:#1a1a18;outline:none;background:white;text-align:right;';
+
+  const delDiv = document.createElement('div');
+  delDiv.className = 'subitem-del';
+  delDiv.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  delDiv.addEventListener('click', function() { row.remove(); });
+
+  row.appendChild(nameInput);
+  row.appendChild(dollarSign);
+  row.appendChild(priceInput);
+  row.appendChild(delDiv);
+  rows.appendChild(row);
+}
+
+
+// Auto-add first item on step 2
+function initStep2() {
+  if (document.getElementById('product-items-wrap').children.length === 0) addItem();
+}
+
+/* ── TOGGLE SECTION (collapsable card) ── */
+function toggleSection(hd) {
+  const body = hd.nextElementSibling;
+  const chev = hd.querySelector('.collapse-chevron');
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+/* ── STEP NAVIGATION ── */
+function goToStep(n) {
+  document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+  document.querySelector('.scroll-area').scrollTo(0, 0);
+  if (n === 2) initStep2();
+  if (n === 3) populatePreview();
+}
+
+/* ── TOGGLE SWITCH ── */
+function toggleSwitch(row) {
+  const sw = row.querySelector('.toggle-sw');
+  sw.classList.toggle('on');
+  const item = row.closest('.toggle-item');
+  if (item) {
+    const body = item.querySelector('.toggle-body');
+    if (body) body.classList.toggle('open');
+  }
+  // Auto-open new tier form when Order discounts is switched on
+  if (row.id === 'discount-toggle-row' && sw.classList.contains('on')) {
+    if (discountTiers.length === 0) openNewTierForm();
+  }
+  // Refresh milestone preview when milestone toggle is switched on
+  if (row.id === 'milestone-toggle-row' && sw.classList.contains('on')) {
+    updateMilestonePreview();
+  }
+  // Sync "Request delivery details" with Delivery toggle
+  if (row.id === 'delivery-toggle-row') {
+    var isOn = sw.classList.contains('on');
+    if (isOn && document.getElementById('del-dates-list').children.length === 0) addDeliveryDate();
+    var reqSw = document.getElementById('req-delivery-toggle-sw');
+    if (reqSw) { isOn ? reqSw.classList.add('on') : reqSw.classList.remove('on'); }
+  }
+  // Auto-add first row when External Links is switched on
+  if (row.id === 'extlink-toggle-row' && sw.classList.contains('on')) {
+    if (extLinks.length === 0) addExternalLink();
+  }
+}
+
+/* ── CHECKBOX ── */
+function toggleCheck(el) {
+  el.classList.toggle('on');
+  const box = el.querySelector('.check-box');
+  box.classList.toggle('on');
+  box.innerHTML = box.classList.contains('on')
+    ? '<svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>'
+    : '';
+}
+
+/* ── ADD PRODUCT ── */
+const products = [];
+function addProduct() {
+  const name = document.querySelector('#step-2 input[placeholder*="Spec"]').value.trim();
+  const price = document.querySelector('#step-2 input[type="number"]').value;
+  if (!name) { alert('Please enter a product name.'); return; }
+  products.push({ name, price });
+  renderProducts();
+  document.querySelector('#step-2 input[placeholder*="Spec"]').value = '';
+  document.querySelector('#step-2 input[type="number"]').value = '';
+}
+
+function renderProducts() {
+  const list = document.getElementById('products-list');
+  if (products.length === 0) {
+    list.innerHTML = '<div class="form-card-title">Products added</div><div style="text-align:center;padding:16px 0;color:#B4B2A9;font-size:13px;">No products yet.</div>';
+    return;
+  }
+  list.innerHTML = '<div class="form-card-title">Products added (' + products.length + ')</div>' +
+    products.map((p, i) => `
+      <div class="product-row">
+        <div class="product-thumb"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div style="flex:1;"><div class="product-name">${p.name}</div><div class="product-price">$${parseFloat(p.price||0).toFixed(2)}</div></div>
+        <div style="font-size:11px;font-weight:600;color:#E24B4A;cursor:pointer;" onclick="removeProduct(${i})">Remove</div>
+      </div>`).join('');
+}
+
+function removeProduct(i) {
+  products.splice(i, 1);
+  renderProducts();
+}
+
+/* ── PREVIEW ── */
+function populatePreview() {
+  // ── Event card fields ──
+  var title    = document.getElementById('ev-title').value    || 'Your event title';
+  var desc     = document.getElementById('ev-desc').value     || 'Your event description will appear here.';
+  var location = document.getElementById('ev-location').value || '—';
+  var closing  = document.getElementById('ev-closing').value;
+  var collect  = document.getElementById('ev-collection').value;
+  document.getElementById('preview-title').textContent      = title;
+  document.getElementById('preview-desc').textContent       = desc;
+  document.getElementById('preview-location').textContent   = location;
+  document.getElementById('preview-closing').textContent    = closing || '—';
+  document.getElementById('preview-collection').textContent = collect || '—';
+  if (closing) {
+    var days = Math.ceil((new Date(closing) - new Date()) / 86400000);
+    document.getElementById('preview-days').textContent = days > 0 ? 'Closing in ' + days + ' days' : 'Closed';
+  }
+
+  // ── Settings strip (payment toggles) ──
+  var payOn = [];
+  document.querySelectorAll('#step-1 .toggle-item').forEach(function(item) {
+    var sw  = item.querySelector('.toggle-sw');
+    var lbl = item.querySelector('.toggle-lbl');
+    if (sw && sw.classList.contains('on') && lbl) {
+      var lblText = lbl.textContent.trim();
+      // Exclude the discount/milestone ones from the payment list
+      if (lblText !== 'Order discounts' && lblText !== 'Group milestone discount') {
+        payOn.push(lblText);
+      }
+    }
+  });
+  document.getElementById('preview-payment').textContent = payOn.length ? payOn.join(' · ') : 'None selected';
+
+  // Admin fee
+  var adminFeeEl = document.getElementById('preview-admin-fee');
+  if (adminFeeEl) {
+    var adminFeeInput = document.getElementById('admin-fee-input');
+    var adminFeeOn = document.getElementById('admin-fee-toggle-row') && document.getElementById('admin-fee-toggle-row').querySelector('.toggle-sw').classList.contains('on');
+    adminFeeEl.textContent = (adminFeeOn && adminFeeInput && parseFloat(adminFeeInput.value) > 0)
+      ? '$' + parseFloat(adminFeeInput.value).toFixed(2) + ' per order'
+      : 'None';
+  }
+
+  // Products in settings strip
+  var prodEl = document.getElementById('preview-products');
+  if (prodEl) {
+    prodEl.innerHTML = products.length
+      ? products.map(function(p){
+          return '<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:0.5px solid #f0f0f0;">'
+            + '<span>' + p.name + '</span>'
+            + '<span style="font-weight:600;color:#009A97;">$' + parseFloat(p.price||0).toFixed(2) + '</span>'
+            + '</div>';
+        }).join('')
+      : 'No products added yet.';
+  }
+
+  // Additional options (Important notes, Deadline, Limit)
+  var addlOpts = [];
+  document.querySelectorAll('#step-1 .toggle-item').forEach(function(item) {
+    var sw  = item.querySelector('.toggle-sw');
+    var lbl = item.querySelector('.toggle-lbl');
+    var body = item.querySelector('.toggle-body');
+    if (!sw || !sw.classList.contains('on') || !lbl || !body) return;
+    var lblText = lbl.textContent.trim();
+    if (lblText === 'Payment after closing date' || lblText === 'Pay together' || lblText === 'Admin fee per order' || lblText === 'Order discounts' || lblText === 'Group milestone discount') return;
+    // Grab any textarea or input value
+    var ta = body.querySelector('textarea');
+    var inp = body.querySelector('input[type="text"], input[type="number"]');
+    var val = ta ? ta.value.replace(/<!--[^>]*-->/g, '').trim() : (inp ? inp.value.trim() : '');
+    addlOpts.push({ label: lblText, val: val });
+  });
+  var addlWrap = document.getElementById('preview-addl-opts-wrap');
+  var addlEl   = document.getElementById('preview-addl-opts');
+  if (addlWrap && addlEl) {
+    if (addlOpts.length) {
+      addlWrap.style.display = 'block';
+      addlEl.innerHTML = addlOpts.map(function(o){
+        return '<div><span style="color:#888780;">' + o.label + '</span>'
+          + (o.val ? ': <span style="color:#1a1a18;">' + o.val.substring(0, 80) + (o.val.length > 80 ? '…' : '') + '</span>' : '') + '</div>';
+      }).join('');
+    } else {
+      addlWrap.style.display = 'none';
+    }
+  }
+
+  // Discounts in settings strip
+  var discPreview = document.getElementById('preview-discount-wrap');
+  if (discPreview) {
+    if (discountTiers.length > 0) {
+      discPreview.style.display = 'block';
+      discPreview.innerHTML = '<div style="border-top:0.5px solid #f0f0f0;padding-top:8px;"><div style="font-size:11px;font-weight:600;color:#888780;margin-bottom:6px;">Order discounts</div>'
+        + discountTiers.map(function(t){
+            return '<div style="font-size:11px;color:#007A77;padding:2px 0;">&#127991; ' + tierSummaryText(t) + '</div>';
+          }).join('')
+        + '</div>';
+    } else {
+      discPreview.style.display = 'none';
+    }
+  }
+
+  // ── Please Note ──
+  var notesTA  = getNotesTextarea();
+  var noteWrap = document.getElementById('preview-please-note');
+  if (noteWrap && notesTA && notesTA.value.trim()) {
+    var lines = notesTA.value.replace(/<!--[^>]*-->/g, '').trim().split('\n').filter(function(l){ return l.trim(); });
+    noteWrap.innerHTML = lines.map(function(line){
+      return '<div style="display:flex;gap:7px;font-size:12px;color:#888780;align-items:flex-start;">'
+        + '<span style="color:#009A97;font-weight:700;flex-shrink:0;font-size:14px;line-height:1.2;">•</span>'
+        + '<span>' + line.trim() + '</span></div>';
+    }).join('');
+  }
+
+  // ── Order discount chip ──
+  var hasOrderDisc = discountTiers.length > 0;
+  var discLine = document.getElementById('sample-order-disc-line');
+  if (hasOrderDisc && discLine) {
+    var t = discountTiers[0];
+    var condStr = t.condType === 'spend'
+      ? 'Spend $' + parseFloat(t.condVal).toFixed(2) + '+'
+      : 'Order ' + t.condVal + '+ items';
+    var discAmt = t.discType === 'fixed'
+      ? '−$' + parseFloat(t.discAmt).toFixed(2)
+      : '−' + t.discAmt + '%';
+    document.getElementById('sample-order-disc-text').textContent = condStr + ' discount applied';
+    document.getElementById('sample-order-disc-amt').textContent  = discAmt;
+    discLine.style.display = 'flex';
+  } else if (discLine) {
+    discLine.style.display = 'none';
+  }
+
+  // ── Milestone — always show 0 progress in preview ──
+  var msOn      = document.getElementById('milestone-toggle-sw').classList.contains('on');
+  var msCondVal = parseFloat(document.getElementById('ms-condVal').value);
+  var msDiscAmt = parseFloat(document.getElementById('ms-discAmt').value);
+  var hasMilestone = msOn && !isNaN(msCondVal) && msCondVal > 0 && !isNaN(msDiscAmt) && msDiscAmt > 0;
+  var msBlock = document.getElementById('sample-milestone-block');
+
+  if (hasMilestone && msBlock) {
+    var noCap      = document.getElementById('ms-noCap').checked;
+    var capAmt     = parseFloat(document.getElementById('ms-capAmt').value);
+    var targetLabel = milestoneCondType === 'revenue' ? '$' + msCondVal.toFixed(2) : msCondVal + ' orders';
+    var rewardLabel = milestoneDiscType === 'fixed'
+      ? '$' + msDiscAmt.toFixed(2) + ' off'
+      : msDiscAmt + '% off';
+    if (milestoneDiscType === 'pct' && !noCap && !isNaN(capAmt) && capAmt > 0) rewardLabel += ' (max $' + capAmt.toFixed(2) + ')';
+    var zeroLabel = milestoneCondType === 'revenue' ? '$0.00 ordered' : '0 orders placed';
+
+    document.getElementById('sample-ms-title').textContent   = 'Group discount unlocks at ' + targetLabel;
+    document.getElementById('sample-ms-current').textContent = zeroLabel;
+    document.getElementById('sample-ms-target').textContent  = targetLabel + ' target';
+    document.getElementById('sample-ms-bar').style.width     = '0%';
+    document.getElementById('sample-ms-reward').textContent  = 'Reward: ' + rewardLabel + ' for everyone once unlocked';
+    msBlock.style.display = 'block';
+  } else if (msBlock) {
+    msBlock.style.display = 'none';
+  }
+
+  // ── Share Links ──
+  var slWrap = document.getElementById('preview-sharelinks-wrap');
+  var slList = document.getElementById('preview-sharelinks');
+  var allowCopyPreviewAll = !!(document.getElementById('extlinks-share-all') && document.getElementById('extlinks-share-all').checked);
+  var linkRows = extLinks.map(function (l) {
+    var nameEl = document.getElementById('extlink-name-' + l.id);
+    var urlEl  = document.getElementById('extlink-url-' + l.id);
+    return {
+      name: (nameEl && nameEl.value.trim()) || 'Link',
+      url: (urlEl && urlEl.value.trim()) || '',
+      allowCopyPreview: allowCopyPreviewAll
+    };
+  }).filter(function (l) { return l.url; });
+
+  if (linkRows.length > 0) {
+    slList.innerHTML = linkRows.map(function (l, i) {
+      var safeUrl = l.url.replace(/'/g, '&#39;');
+      var modeBadge = l.allowCopyPreview
+        ? '<span style="font-size:9px;font-weight:600;color:#009A97;background:#E0F5F5;padding:2px 6px;border-radius:99px;margin-left:6px;">Copy &amp; Preview</span>'
+        : '<span style="font-size:9px;font-weight:600;color:#888780;background:#F0EFEA;padding:2px 6px;border-radius:99px;margin-left:6px;">Opens directly</span>';
+      return '<div class="preview-sharelink-row">'
+        + '<div class="preview-sharelink-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>'
+        + '<div class="preview-sharelink-body">'
+        + '<div class="preview-sharelink-name">' + (i + 1) + ') ' + l.name + modeBadge + '</div>'
+        + '<div class="preview-sharelink-url">' + l.url + '</div>'
+        + '</div>'
+        + '<button class="preview-sharelink-copy" onclick="copyShareLink(this,\'' + safeUrl + '\')">Copy</button>'
+        + '</div>';
+    }).join('');
+    slWrap.style.display = 'block';
+  } else {
+    slWrap.style.display = 'none';
+  }
+}
+
+/* ══════════════════════════════════════════
+   DISCOUNT TIERS
+══════════════════════════════════════════ */
+
+var discountTiers = [];   // [{id, condType, condVal, discType, discAmt, capAmt, noCap}]
+var tierIdSeq = 0;
+var editingTierId = null; // null = new, number = editing existing
+
+/* toggleDiscountSection now handled by toggleSwitch via toggle-item pattern */
+
+/* ── Render all tier summaries ── */
+function renderTiers() {
+  var list = document.getElementById('tiers-list');
+  var addWrap = document.getElementById('add-tier-wrap');
+
+  if (discountTiers.length === 0) {
+    list.innerHTML = '';
+  } else {
+    list.innerHTML = discountTiers.map(function(t) {
+      return '<div class="tier-summary" id="tier-sum-' + t.id + '">'
+        + '<span class="tier-tag">🏷</span>'
+        + '<span class="tier-text">' + tierSummaryText(t) + '</span>'
+        + '<div class="tier-action-btns">'
+        + '<button class="tier-edit-btn" onclick="openEditTierForm(' + t.id + ')" title="Edit">'
+        + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+        + '</button>'
+        + '<button class="tier-del-btn" onclick="deleteTier(' + t.id + ')" title="Remove">'
+        + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+        + '</button>'
+        + '</div></div>';
+    }).join('');
+  }
+
+  // Show tier warning if needed
+  checkTierWarnings();
+
+  // Update add-tier-wrap: show link, grey it out at cap
+  var atCap = discountTiers.length >= 4;
+  addWrap.innerHTML = atCap
+    ? '<div class="add-tier-limit">Maximum 4 tiers reached.</div>'
+    : '<div class="add-tier-link" onclick="openNewTierForm()">'
+      + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>'
+      + ' Add discount tier</div>';
+}
+
+/* Human-readable summary for a tier */
+function tierSummaryText(t) {
+  var condLabel = t.condType === 'spend'
+    ? 'Spend $' + parseFloat(t.condVal).toFixed(2) + '+'
+    : 'Order ' + t.condVal + '+ items';
+  var discLabel = t.discType === 'fixed'
+    ? '$' + parseFloat(t.discAmt).toFixed(2) + ' off'
+    : t.discAmt + '% off';
+  var capLabel = '';
+  if (t.discType === 'pct' && !t.noCap && t.capAmt) {
+    capLabel = ' (capped at $' + parseFloat(t.capAmt).toFixed(2) + ')';
+  }
+  return condLabel + ' → ' + discLabel + capLabel;
+}
+
+/* Check and show overlap / order warnings */
+function checkTierWarnings() {
+  var warn = document.getElementById('tier-warning-msg');
+  if (warn) warn.remove();
+  if (discountTiers.length < 2) return;
+
+  // Check if a lower threshold gives a higher $ value than a higher threshold
+  // (approximate check for fixed tiers)
+  var sorted = discountTiers.slice().sort(function(a,b){ return parseFloat(a.condVal)-parseFloat(b.condVal); });
+  var hasIssue = false;
+  for (var i = 1; i < sorted.length; i++) {
+    if (sorted[i].discType === 'fixed' && sorted[i-1].discType === 'fixed') {
+      if (parseFloat(sorted[i].discAmt) <= parseFloat(sorted[i-1].discAmt)) {
+        hasIssue = true; break;
+      }
+    }
+  }
+  if (hasIssue) {
+    var w = document.createElement('div');
+    w.id = 'tier-warning-msg';
+    w.className = 'tier-warning';
+    w.textContent = '⚠ A higher-spend tier should give a larger discount than a lower one.';
+    document.getElementById('tiers-list').after(w);
+  }
+}
+
+/* ── Open inline form for a NEW tier ── */
+function openNewTierForm() {
+  if (discountTiers.length >= 4) return;
+  editingTierId = null;
+  renderTierForm({ condType:'spend', condVal:'', discType:'fixed', discAmt:'', capAmt:'', noCap:false });
+}
+
+/* ── Open inline form to EDIT existing tier ── */
+function openEditTierForm(id) {
+  var t = discountTiers.find(function(x){ return x.id === id; });
+  if (!t) return;
+  editingTierId = id;
+  renderTierForm(t);
+}
+
+/* ── Render the inline tier form ── */
+function renderTierForm(defaults) {
+  var wrap = document.getElementById('tier-form-wrap');
+  wrap.style.display = 'block';
+  var isEdit = editingTierId !== null;
+  var isPct  = defaults.discType === 'pct';
+  var isQty  = defaults.condType === 'qty';
+
+  wrap.innerHTML =
+    '<div class="tier-form">'
+    + '<div class="tier-form-title">' + (isEdit ? 'Edit tier' : 'New discount tier') + '</div>'
+
+    // Row: Condition type
+    + '<div class="tf-row">'
+    +   '<span class="tf-lbl">Condition</span>'
+    +   '<select class="tier-select" id="tf-condType" onchange="onCondTypeChange()" style="grid-column:span 2;">'
+    +     '<option value="spend"' + (!isQty ? ' selected' : '') + '>Min. spend</option>'
+    +     '<option value="qty"'   + ( isQty ? ' selected' : '') + '>Min. quantity</option>'
+    +   '</select>'
+    + '</div>'
+
+    // Row: Threshold value
+    + '<div class="tf-row">'
+    +   '<span class="tf-lbl" style="color:#B4B2A9;">over</span>'
+    +   '<div class="tf-amt-wrap" style="grid-column:span 2;">'
+    +     '<span class="tf-pfx" id="tf-cond-prefix">' + (!isQty ? '$' : '') + '</span>'
+    +     '<input class="tier-amt-input" type="number" id="tf-condVal" min="0"'
+    +       ' step="' + (!isQty ? '0.50' : '1') + '"'
+    +       ' placeholder="0"'
+    +       ' value="' + (defaults.condVal || '') + '"'
+    +       ' oninput="validateTierForm()" />'
+    +     '<span class="tf-pfx" id="tf-cond-suffix" style="margin-left:2px;">' + (isQty ? 'items' : '') + '</span>'
+    +   '</div>'
+    + '</div>'
+
+    + '<div style="height:0.5px;background:#e0dfd8;"></div>'
+
+    // Row: Discount type + amount
+    + '<div class="tf-row">'
+    +   '<span class="tf-lbl">Discount</span>'
+    +   '<div class="type-toggle">'
+    +     '<button class="type-pill' + (!isPct ? ' active' : '') + '" id="pill-fixed" onclick="setDiscType(\'fixed\')">$ Fixed</button>'
+    +     '<button class="type-pill' + ( isPct ? ' active' : '') + '" id="pill-pct"   onclick="setDiscType(\'pct\')">%</button>'
+    +   '</div>'
+    +   '<div class="tf-amt-wrap">'
+    +     '<span class="tf-pfx" id="tf-disc-prefix">' + (!isPct ? '$' : '') + '</span>'
+    +     '<input class="tier-amt-input" type="number" id="tf-discAmt" min="0"'
+    +       ' step="' + (!isPct ? '0.50' : '0.5') + '"'
+    +       ' placeholder="0"'
+    +       ' value="' + (defaults.discAmt || '') + '"'
+    +       ' oninput="validateTierForm()" />'
+    +     '<span class="tf-pfx" id="tf-disc-suffix" style="margin-left:2px;">' + (isPct ? '%' : '') + '</span>'
+    +   '</div>'
+    + '</div>'
+
+    // Row: Cap (% only)
+    + '<div class="tf-row" id="tf-cap-row" style="display:' + (isPct ? 'grid' : 'none') + ';">'
+    +   '<span class="tf-lbl">Cap</span>'
+    +   '<div class="tf-amt-wrap">'
+    +     '<span class="tf-pfx">$</span>'
+    +     '<input class="tier-amt-input" type="number" id="tf-capAmt" min="0" step="0.50" placeholder="0"'
+    +       ' value="' + (defaults.capAmt || '') + '"' + (defaults.noCap ? ' disabled' : '') + ' />'
+    +   '</div>'
+    +   '<label class="cap-check-lbl">'
+    +     '<input type="checkbox" id="tf-noCap"' + (defaults.noCap ? ' checked' : '') + ' onchange="toggleNoCap(this)" /> No cap'
+    +   '</label>'
+    + '</div>'
+
+    + '<div class="tier-form-footer">'
+    +   '<button class="tier-cancel-btn" onclick="closeTierForm()">Cancel</button>'
+    +   '<button class="tier-save-btn" id="tf-save-btn" onclick="saveTier()" disabled>' + (isEdit ? 'Update' : 'Save →') + '</button>'
+    + '</div>'
+    + '</div>';
+
+  validateTierForm();
+}
+
+/* ── Condition type change ── */
+function onCondTypeChange() {
+  var type = document.getElementById('tf-condType').value;
+  document.getElementById('tf-cond-prefix').textContent = type === 'spend' ? '$' : '';
+  document.getElementById('tf-cond-suffix').textContent = type === 'qty' ? 'items' : '';
+  var inp = document.getElementById('tf-condVal');
+  inp.step = type === 'spend' ? '0.50' : '1';
+  inp.placeholder = '0';
+  validateTierForm();
+}
+
+/* ── Switch $ / % ── */
+function setDiscType(type) {
+  document.getElementById('pill-fixed').classList.toggle('active', type === 'fixed');
+  document.getElementById('pill-pct').classList.toggle('active', type === 'pct');
+  document.getElementById('tf-disc-prefix').textContent = type === 'fixed' ? '$' : '';
+  document.getElementById('tf-disc-suffix').textContent = type === 'pct' ? '%' : '';
+  document.getElementById('tf-cap-row').style.display = type === 'pct' ? 'grid' : 'none';
+  var inp = document.getElementById('tf-discAmt');
+  inp.step = type === 'fixed' ? '0.50' : '0.5';
+  inp.placeholder = '0';
+  validateTierForm();
+}
+
+/* ── No-cap checkbox ── */
+function toggleNoCap(cb) {
+  document.getElementById('tf-capAmt').disabled = cb.checked;
+  if (cb.checked) document.getElementById('tf-capAmt').value = '';
+}
+
+/* ── Form validation ── */
+function validateTierForm() {
+  var condVal = parseFloat(document.getElementById('tf-condVal').value);
+  var discAmt = parseFloat(document.getElementById('tf-discAmt').value);
+  var ok = !isNaN(condVal) && condVal > 0 && !isNaN(discAmt) && discAmt > 0;
+  var btn = document.getElementById('tf-save-btn');
+  if (btn) btn.disabled = !ok;
+}
+
+/* ── Save / update tier ── */
+function saveTier() {
+  var condType = document.getElementById('tf-condType').value;
+  var condVal  = document.getElementById('tf-condVal').value;
+  var discType = document.getElementById('pill-pct').classList.contains('active') ? 'pct' : 'fixed';
+  var discAmt  = document.getElementById('tf-discAmt').value;
+  var noCap    = document.getElementById('tf-noCap') ? document.getElementById('tf-noCap').checked : false;
+  var capAmt   = (!noCap && document.getElementById('tf-capAmt')) ? document.getElementById('tf-capAmt').value : '';
+
+  if (editingTierId !== null) {
+    var t = discountTiers.find(function(x){ return x.id === editingTierId; });
+    if (t) { t.condType=condType; t.condVal=condVal; t.discType=discType; t.discAmt=discAmt; t.capAmt=capAmt; t.noCap=noCap; }
+  } else {
+    tierIdSeq++;
+    discountTiers.push({ id:tierIdSeq, condType:condType, condVal:condVal, discType:discType, discAmt:discAmt, capAmt:capAmt, noCap:noCap });
+  }
+
+  // Sort tiers by condition value ascending
+  discountTiers.sort(function(a,b){ return parseFloat(a.condVal)-parseFloat(b.condVal); });
+
+  closeTierForm();
+  renderTiers();
+  syncDiscountToNotes();
+}
+
+/* ── Delete a tier ── */
+function deleteTier(id) {
+  discountTiers = discountTiers.filter(function(t){ return t.id !== id; });
+  renderTiers();
+  syncDiscountToNotes();
+}
+
+/* ── Close the inline form ── */
+function closeTierForm() {
+  var wrap = document.getElementById('tier-form-wrap');
+  wrap.style.display = 'none';
+  wrap.innerHTML = '';
+  editingTierId = null;
+  renderTiers();
+}
+
+/* ── Generate note text from tiers — order discounts only, no cap ── */
+function generateDiscountNote() {
+  if (discountTiers.length === 0) return '';
+  var parts = discountTiers.map(function(t) {
+    var condPart = t.condType === 'spend'
+      ? 'spend $' + parseFloat(t.condVal).toFixed(2) + ' or more'
+      : 'order ' + t.condVal + ' or more items';
+    var discPart = t.discType === 'fixed'
+      ? '$' + parseFloat(t.discAmt).toFixed(2) + ' off your order'
+      : t.discAmt + '% off your order';
+    return condPart + ' and get ' + discPart;
+  });
+
+  if (parts.length === 1) return 'Discount: ' + capitalise(parts[0]) + '!';
+  var last = parts.pop();
+  return 'Discounts: ' + parts.map(capitalise).join('. ') + '. ' + capitalise(last) + '!';
+}
+
+function capitalise(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+function getNotesTextarea() {
+  // Find the "Important notes to buyers" textarea in Additional Options
+  var tas = document.querySelectorAll('#step-1 textarea');
+  for (var i = 0; i < tas.length; i++) {
+    if (tas[i].placeholder && tas[i].placeholder.indexOf('Notes buyers') > -1) return tas[i];
+  }
+  return null;
+}
+
+function getNotesToggleRow() {
+  var tas = document.querySelectorAll('#step-1 .toggle-item');
+  for (var i = 0; i < tas.length; i++) {
+    var lbl = tas[i].querySelector('.toggle-lbl');
+    if (lbl && lbl.textContent.indexOf('Important notes') > -1) return tas[i];
+  }
+  return null;
+}
+function syncDiscountToNotes() {
+  var notesItem = getNotesToggleRow();
+  var notesTA   = getNotesTextarea();
+  if (!notesTA || !notesItem) return;
+
+  var generatedNote = generateDiscountNote();
+
+  if (discountTiers.length > 0) {
+    var sw   = notesItem.querySelector('.toggle-sw');
+    var body = notesItem.querySelector('.toggle-body');
+    if (sw && body && !body.classList.contains('open')) {
+      sw.classList.add('on');
+      body.classList.add('open');
+    }
+  }
+
+  var existing = notesTA.value;
+  var discMarker = '<!-- discount -->';
+  if (existing.startsWith(discMarker)) {
+    var afterMarker = existing.indexOf('\n', discMarker.length);
+    var rest = afterMarker > -1 ? existing.slice(afterMarker + 1) : '';
+    notesTA.value = generatedNote
+      ? discMarker + generatedNote + (rest ? '\n' + rest : '')
+      : rest;
+  } else {
+    notesTA.value = generatedNote
+      ? discMarker + generatedNote + (existing ? '\n' + existing : '')
+      : existing;
+  }
+}
+
+/* ── Hook preview to include discount summary ── */
+
+/* ══════════════════════════════════════════
+   GROUP MILESTONE DISCOUNT
+══════════════════════════════════════════ */
+
+var milestoneCondType = 'revenue'; // 'revenue' | 'orders'
+var milestoneDiscType = 'fixed';   // 'fixed' | 'pct'
+
+/* toggleMilestoneSection now handled by toggleSwitch via toggle-item pattern */
+
+function setMilestoneCondType(type) {
+  milestoneCondType = type;
+  document.getElementById('ms-pill-revenue').classList.toggle('active', type === 'revenue');
+  document.getElementById('ms-pill-orders').classList.toggle('active', type === 'orders');
+  document.getElementById('ms-cond-prefix').textContent = type === 'revenue' ? '$' : '';
+  document.getElementById('ms-cond-suffix').textContent = type === 'orders' ? 'orders' : '';
+  var inp = document.getElementById('ms-condVal');
+  inp.step = type === 'revenue' ? '50' : '1';
+  inp.placeholder = '0';
+  validateMilestone();
+  updateMilestonePreview();
+}
+
+function setMilestoneDiscType(type) {
+  milestoneDiscType = type;
+  document.getElementById('ms-pill-fixed').classList.toggle('active', type === 'fixed');
+  document.getElementById('ms-pill-pct').classList.toggle('active', type === 'pct');
+  document.getElementById('ms-disc-prefix').textContent = type === 'fixed' ? '$' : '';
+  document.getElementById('ms-disc-suffix').textContent = type === 'pct' ? '%' : '';
+  document.getElementById('ms-cap-row').style.display = type === 'pct' ? 'grid' : 'none';
+  var inp = document.getElementById('ms-discAmt');
+  inp.step = type === 'fixed' ? '0.50' : '1';
+  inp.placeholder = '0';
+  validateMilestone();
+  updateMilestonePreview();
+}
+
+function toggleMilestoneNoCap(cb) {
+  var capInp = document.getElementById('ms-capAmt');
+  capInp.disabled = cb.checked;
+  if (cb.checked) capInp.value = '';
+}
+
+function validateMilestone() {
+  // Just keeps the preview live — no save button needed (it's always-on when toggled)
+}
+
+/* ── Build milestone preview card ── */
+function updateMilestonePreview() {
+  var condVal  = parseFloat(document.getElementById('ms-condVal').value);
+  var discAmt  = parseFloat(document.getElementById('ms-discAmt').value);
+  if (isNaN(condVal) || condVal <= 0 || isNaN(discAmt) || discAmt <= 0) {
+    document.getElementById('ms-preview-wrap').style.display = 'none';
+    return;
+  }
+
+  var noCap  = document.getElementById('ms-noCap').checked;
+  var capAmt = parseFloat(document.getElementById('ms-capAmt').value);
+
+  // Unlock target label
+  var targetLabel = milestoneCondType === 'revenue'
+    ? '$' + condVal.toFixed(2)
+    : condVal + ' orders';
+
+  // Reward label
+  var rewardLabel = milestoneDiscType === 'fixed'
+    ? '$' + discAmt.toFixed(2) + ' off'
+    : discAmt + '% off';
+  if (milestoneDiscType === 'pct' && !noCap && !isNaN(capAmt) && capAmt > 0) {
+    rewardLabel += ' (capped at $' + capAmt.toFixed(2) + ')';
+  }
+
+  // Simulated progress (64% of target for demo)
+  var simCurrent, simCurrentLabel;
+  if (milestoneCondType === 'revenue') {
+    simCurrent = Math.round(condVal * 0.64 * 100) / 100;
+    simCurrentLabel = '$' + simCurrent.toFixed(2) + ' ordered';
+  } else {
+    simCurrent = Math.max(1, Math.floor(condVal * 0.64));
+    simCurrentLabel = simCurrent + ' orders placed';
+  }
+  var pct = Math.min(100, Math.round((simCurrent / condVal) * 100));
+
+  // Update DOM
+  document.getElementById('ms-prev-title').textContent   = 'Group discount unlocks at ' + targetLabel;
+  document.getElementById('ms-prev-sub').textContent     = 'Invite friends to hit the target!';
+  document.getElementById('ms-bar-fill').style.width     = pct + '%';
+  document.getElementById('ms-bar-current').textContent  = simCurrentLabel;
+  document.getElementById('ms-bar-target').textContent   = targetLabel + ' target';
+  document.getElementById('ms-prev-reward-line').textContent = 'Reward: ' + rewardLabel + ' for everyone once unlocked';
+
+  // Unlocked banner text
+  document.getElementById('ms-unlocked-title').textContent = 'Milestone reached! 🎉';
+  document.getElementById('ms-unlocked-sub').textContent   = 'Everyone gets ' + rewardLabel + ' on this order.';
+
+  document.getElementById('ms-preview-wrap').style.display = 'block';
+
+  // Also sync to notes
+  syncMilestoneToNotes();
+}
+
+
+/* ── Milestone intentionally NOT written to notes ── */
+function syncMilestoneToNotes() { /* no-op */ }
+
+/* milestone preview handled inside populatePreview */
+
+/* ══════════════════════════════════════════
+   END GROUP MILESTONE
+══════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════
+   DELIVERY
+══════════════════════════════════════════ */
+
+var deliveryFeeType  = 'flat';    // 'flat' | 'area'
+var deliveryChoice   = 'choose';  // 'choose' | 'delivery' | 'collect'
+var deliveryAreas    = [];        // [{id, name, fee}]
+var deliveryDates    = [];        // [{id}] — rendered as DOM rows
+var deliveryAreaSeq  = 0;
+var deliveryDateSeq  = 0;
+var extLinks         = [];        // [{id}] — rendered as DOM rows
+var extLinkSeq       = 0;
+var bannerImages     = [];        // [{id, src}] — order = display order
+var bannerSeq        = 0;
+var bannerDragId      = null;
+
+/* delivery auto-open handled inside toggleSwitch below */
+
+function setDeliveryChoice(choice) {
+  deliveryChoice = choice;
+  ['choose','delivery','collect'].forEach(function(c) {
+    document.getElementById('del-choice-' + c).classList.toggle('active', c === choice);
+  });
+  syncDeliveryToNotes();
+}
+
+function setDeliveryFeeType(type) {
+  deliveryFeeType = type;
+  document.getElementById('del-fee-flat').classList.toggle('active', type === 'flat');
+  document.getElementById('del-fee-area').classList.toggle('active', type === 'area');
+  document.getElementById('del-flat-wrap').style.display = type === 'flat' ? 'block' : 'none';
+  document.getElementById('del-area-wrap').style.display = type === 'area' ? 'block' : 'none';
+  if (type === 'area' && deliveryAreas.length === 0) addDeliveryArea();
+  syncDeliveryToNotes();
+}
+
+/* ── Areas ── */
+function addDeliveryArea() {
+  if (deliveryAreas.length >= 5) return;
+  deliveryAreaSeq++;
+  var id = deliveryAreaSeq;
+  deliveryAreas.push({ id: id });
+  renderDeliveryAreas();
+}
+
+function removeDeliveryArea(id) {
+  deliveryAreas = deliveryAreas.filter(function(a) { return a.id !== id; });
+  renderDeliveryAreas();
+  syncDeliveryToNotes();
+}
+
+function renderDeliveryAreas() {
+  var list = document.getElementById('del-areas-list');
+  var addWrap = document.getElementById('del-add-area-wrap');
+  list.innerHTML = deliveryAreas.map(function(a, i) {
+    return '<div class="del-area-row" id="del-area-row-' + a.id + '">'
+      + '<input class="del-area-name" type="text" placeholder="Area name (e.g. North)" id="del-area-name-' + a.id + '" oninput="syncDeliveryToNotes()" />'
+      + '<div class="tf-amt-wrap"><span class="tf-pfx">$</span>'
+      + '<input class="tier-amt-input" type="number" min="0" step="0.50" placeholder="0" id="del-area-fee-' + a.id + '" oninput="syncDeliveryToNotes()" /></div>'
+      + '<button class="del-del-btn" onclick="removeDeliveryArea(' + a.id + ')">'
+      + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+      + '</button></div>';
+  }).join('');
+  addWrap.innerHTML = deliveryAreas.length >= 5
+    ? '<div class="add-tier-limit">Maximum 5 areas reached.</div>'
+    : '<div class="add-tier-link" onclick="addDeliveryArea()">'
+      + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>'
+      + ' Add area</div>';
+}
+
+/* ── External Links ── */
+/* ── Event Banners (multi-upload, drag to reorder) ── */
+function addBannerFiles(fileList) {
+  Array.prototype.forEach.call(fileList, function (file) {
+    if (!file.type.startsWith('image/')) return;
+    bannerSeq++;
+    var id = bannerSeq;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      bannerImages.push({ id: id, src: e.target.result });
+      renderBanners();
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('banner-file-input').value = '';
+}
+
+function removeBanner(id) {
+  bannerImages = bannerImages.filter(function (b) { return b.id !== id; });
+  renderBanners();
+}
+
+function renderBanners() {
+  var grid = document.getElementById('banner-grid');
+  if (!grid) return;
+
+  var thumbs = bannerImages.map(function (b, i) {
+    return '<div class="banner-thumb" draggable="true" data-id="' + b.id + '"'
+      + ' ondragstart="onBannerDragStart(event,' + b.id + ')"'
+      + ' ondragover="onBannerDragOver(event,' + b.id + ')"'
+      + ' ondragleave="onBannerDragLeave(event)"'
+      + ' ondrop="onBannerDrop(event,' + b.id + ')"'
+      + ' ondragend="onBannerDragEnd(event)">'
+      + '<img src="' + b.src + '" alt="Banner ' + (i + 1) + '" />'
+      + '<span class="banner-thumb-order">' + (i + 1) + '</span>'
+      + '<button class="banner-thumb-remove" onclick="event.stopPropagation();removeBanner(' + b.id + ')">'
+      + '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+      + '</button>'
+      + '</div>';
+  }).join('');
+
+  var addTile = '<div class="banner-add-tile" onclick="document.getElementById(\'banner-file-input\').click()">'
+    + '<div class="banner-upload-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>'
+    + '<div style="font-size:10px;font-weight:600;color:#009A97;text-align:center;">' + (bannerImages.length ? 'Add another' : 'Upload banner') + '</div>'
+    + '</div>';
+
+  grid.innerHTML = thumbs + addTile;
+}
+
+function onBannerDragStart(e, id) {
+  bannerDragId = id;
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function onBannerDragOver(e, overId) {
+  e.preventDefault();
+  if (overId !== bannerDragId) e.currentTarget.classList.add('drag-over');
+}
+
+function onBannerDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+
+function onBannerDrop(e, dropId) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (bannerDragId === null || bannerDragId === dropId) return;
+
+  var fromIdx = bannerImages.findIndex(function (b) { return b.id === bannerDragId; });
+  var toIdx = bannerImages.findIndex(function (b) { return b.id === dropId; });
+  if (fromIdx === -1 || toIdx === -1) return;
+
+  var moved = bannerImages.splice(fromIdx, 1)[0];
+  bannerImages.splice(toIdx, 0, moved);
+  renderBanners();
+}
+
+function onBannerDragEnd(e) {
+  document.querySelectorAll('.banner-thumb').forEach(function (el) {
+    el.classList.remove('dragging', 'drag-over');
+  });
+  bannerDragId = null;
+}
+
+renderBanners();
+
+function extLinkRowHTML(id) {
+  return '<div class="extlink-row" id="extlink-row-' + id + '">'
+    + '<input class="extlink-name-input" type="text" id="extlink-name-' + id + '" placeholder="Label (e.g. Telegram)" />'
+    + '<input class="extlink-url-input" type="url" id="extlink-url-' + id + '" placeholder="https://…" />'
+    + '<button class="del-del-btn" onclick="removeExternalLink(' + id + ')">'
+    + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+    + '</button>'
+    + '</div>';
+}
+
+function addExternalLink() {
+  extLinkSeq++;
+  var id = extLinkSeq;
+  extLinks.push({ id: id });
+  var list = document.getElementById('extlinks-list');
+  if (list) list.insertAdjacentHTML('beforeend', extLinkRowHTML(id));
+}
+
+function removeExternalLink(id) {
+  extLinks = extLinks.filter(function (l) { return l.id !== id; });
+  var row = document.getElementById('extlink-row-' + id);
+  if (row) row.remove();
+}
+
+function copyShareLink(btn, url) {
+  navigator.clipboard.writeText(url).catch(function () {});
+  var original = btn.textContent;
+  btn.textContent = 'Copied';
+  btn.classList.add('copied');
+  setTimeout(function () { btn.textContent = original; btn.classList.remove('copied'); }, 1500);
+}
+
+/* ── Dates ── */
+function addDeliveryDate() {
+  deliveryDateSeq++;
+  var id = deliveryDateSeq;
+  deliveryDates.push({ id: id });
+  renderDeliveryDates();
+}
+
+function removeDeliveryDate(id) {
+  deliveryDates = deliveryDates.filter(function(d) { return d.id !== id; });
+  renderDeliveryDates();
+  syncDeliveryToNotes();
+}
+
+function renderDeliveryDates() {
+  var list = document.getElementById('del-dates-list');
+  list.innerHTML = deliveryDates.map(function(d, i) {
+    return '<div class="del-date-row" id="del-date-row-' + d.id + '">'
+      + '<div class="del-date-top">'
+      + '<input class="del-date-input" type="date" id="del-date-val-' + d.id + '" oninput="syncDeliveryToNotes()" />'
+      + (deliveryDates.length > 1
+        ? '<button class="del-del-btn" onclick="removeDeliveryDate(' + d.id + ')">'
+          + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+          + '</button>'
+        : '')
+      + '</div>'
+      + '<div class="del-time-row">'
+      + '<span style="font-size:11px;color:#888780;">Between</span>'
+      + '<input class="del-time-input" type="time" id="del-time-from-' + d.id + '" value="10:00" oninput="syncDeliveryToNotes()" />'
+      + '<span style="font-size:11px;color:#888780;">—</span>'
+      + '<input class="del-time-input" type="time" id="del-time-to-' + d.id + '" value="17:00" oninput="syncDeliveryToNotes()" />'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+/* ── Format time helper ── */
+function fmtTime(val) {
+  if (!val) return '';
+  var parts = val.split(':');
+  var h = parseInt(parts[0]), m = parts[1];
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return h + (m !== '00' ? ':' + m : '') + ampm;
+}
+
+/* ── Sync delivery info to Additional Notes ── */
+function syncDeliveryToNotes() {
+  var notesItem = getNotesToggleRow();
+  var notesTA   = getNotesTextarea();
+  if (!notesTA || !notesItem) return;
+
+  var sw   = notesItem.querySelector('.toggle-sw');
+  var body = notesItem.querySelector('.toggle-body');
+
+  var marker   = '<!-- delivery -->';
+  var existing = notesTA.value;
+
+  // Build delivery summary sentence
+  var lines = [];
+
+  // Choice
+  var choiceText = deliveryChoice === 'delivery' ? 'Delivery only.'
+    : deliveryChoice === 'collect' ? 'Self-collect only.'
+    : 'Delivery and self-collect available.';
+  lines.push(choiceText);
+
+  // Fee
+  if (deliveryFeeType === 'flat') {
+    var flatAmt = parseFloat(document.getElementById('del-flat-amt') ? document.getElementById('del-flat-amt').value : '');
+    if (!isNaN(flatAmt) && flatAmt > 0) lines.push('Delivery fee: $' + flatAmt.toFixed(2) + ' per order.');
+  } else {
+    var areaLines = deliveryAreas.map(function(a) {
+      var name = document.getElementById('del-area-name-' + a.id);
+      var fee  = document.getElementById('del-area-fee-' + a.id);
+      if (!name || !fee) return null;
+      var n = name.value.trim();
+      var f = parseFloat(fee.value);
+      if (!n) return null;
+      return n + (!isNaN(f) && f > 0 ? ' ($' + f.toFixed(2) + ')' : '');
+    }).filter(Boolean);
+    if (areaLines.length) lines.push('Delivery areas: ' + areaLines.join(', ') + '.');
+  }
+
+  // Dates
+  var dateLines = deliveryDates.map(function(d) {
+    var dateEl = document.getElementById('del-date-val-' + d.id);
+    var fromEl = document.getElementById('del-time-from-' + d.id);
+    var toEl   = document.getElementById('del-time-to-' + d.id);
+    if (!dateEl || !dateEl.value) return null;
+    var dateStr = dateEl.value;
+    var timeStr = (fromEl && toEl) ? ' (' + fmtTime(fromEl.value) + '–' + fmtTime(toEl.value) + ')' : '';
+    return dateStr + timeStr;
+  }).filter(Boolean);
+  if (dateLines.length) lines.push('Delivery date' + (dateLines.length > 1 ? 's' : '') + ': ' + dateLines.join('; ') + '.');
+
+  var sentence = lines.join(' ');
+
+  // Ensure notes toggle is on
+  if (sentence && sw && body && !body.classList.contains('open')) {
+    sw.classList.add('on');
+    body.classList.add('open');
+  }
+
+  // Replace or insert
+  if (existing.includes(marker)) {
+    notesTA.value = existing.replace(/<!-- delivery -->.*?(\n|$)/, sentence ? marker + sentence + '\n' : '');
+  } else if (sentence) {
+    notesTA.value = (existing ? existing + '\n' : '') + marker + sentence;
+  }
+}
+
+/* ══════════════════════════════════════════
+   END DELIVERY
+══════════════════════════════════════════ */
+
+/* ── PUBLISH ── */
+function publishEvent() {
+  const title = document.getElementById('ev-title').value.trim();
+  if (!title) { goToStep(1); alert('Please enter an event title.'); return; }
+  alert('Event published! 🎉');
+  window.location.href = 'hosted-events.html';
+}
+
+function saveDraft() {
+  alert('Draft saved.');
+}
+
+</script>
+
+<!-- Product Catalogue Modal -->
+<div class="cat-backdrop" id="cat-backdrop" onclick="if(event.target===this)closeCatalogue()">
+  <div class="cat-modal">
+    <div class="cat-header">
+      <span class="cat-title">Product Catalogue</span>
+      <button class="cat-close" onclick="closeCatalogue()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="cat-search">
+      <div class="cat-search-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="cat-search-input" placeholder="Search products…" oninput="filterCatalogue(this.value)" id="cat-search"/>
+      </div>
+    </div>
+    <div class="cat-list" id="cat-list">
+      <!-- Items rendered by JS -->
+    </div>
+    <div class="cat-footer">
+      <span class="cat-selected-count" id="cat-count">0 selected</span>
+      <div style="display:flex;gap:8px;">
+        <button onclick="closeCatalogue()" style="height:36px;padding:0 16px;background:white;border:0.5px solid #D3D1C7;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>
+        <button class="cat-add-btn" id="cat-add-btn" onclick="addFromCatalogue()" disabled>Add to Event</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Product Catalogue Modal -->
+</body>
+</html>
