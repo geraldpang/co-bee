@@ -118,6 +118,32 @@ select:focus { border-color: #009A97; }
 .banner-upload:hover { background: #c8eeee; }
 .banner-upload-icon { width: 30px; height: 30px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; }
 
+.banner-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.banner-thumb {
+  position: relative; width: 142px; height: 80px; border-radius: 8px; overflow: hidden;
+  border: 0.5px solid #D3D1C7; cursor: grab; background: #f0f0f0; flex-shrink: 0;
+}
+.banner-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.banner-thumb.dragging { opacity: 0.4; }
+.banner-thumb.drag-over { outline: 2px solid #009A97; outline-offset: -2px; }
+.banner-thumb-order {
+  position: absolute; top: 4px; left: 4px; background: rgba(0,0,0,0.55); color: white;
+  font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 99px; pointer-events: none;
+}
+.banner-thumb-remove {
+  position: absolute; top: 4px; right: 4px; width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(0,0,0,0.55); color: white; border: none; display: flex; align-items: center;
+  justify-content: center; cursor: pointer; padding: 0;
+}
+.banner-thumb-remove:hover { background: #E24B4A; }
+.banner-add-tile {
+  width: 142px; height: 80px; border-radius: 8px; border: 0.5px dashed #80CCCB; background: #E0F5F5;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  cursor: pointer; transition: background 0.15s; flex-shrink: 0;
+}
+.banner-add-tile:hover { background: #c8eeee; }
+.banner-hint { font-size: 10px; color: #888780; margin-top: 6px; }
+
 /* Payment checkboxes */
 .check-option {
   border: 0.5px solid #e0dfd8; border-radius: 8px; padding: 10px 12px;
@@ -526,13 +552,9 @@ select:focus { border-color: #009A97; }
 
         <div class="form-group">
           <label class="form-label">Event banner</label>
-          <div class="banner-upload" onclick="alert('Upload banner')">
-            <div class="banner-upload-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            </div>
-            <div style="font-size:12px;font-weight:600;color:#009A97;">Upload event banner</div>
-            <div style="font-size:10px;color:#888780;">Recommended 16:9 · PNG or JPG</div>
-          </div>
+          <input type="file" id="banner-file-input" accept="image/*" multiple style="display:none;" onchange="addBannerFiles(this.files)" />
+          <div class="banner-grid" id="banner-grid"></div>
+          <div class="banner-hint">Recommended 16:9 · PNG or JPG · drag thumbnails to reorder</div>
         </div>
 
         <div class="form-group">
@@ -1623,18 +1645,18 @@ function addSubitemTitle(id) {
   const selRow = document.createElement('div');
   selRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:0.5px solid #e0dfd8;font-size:12px;color:#888780;';
   const selLabel = document.createElement('span');
-  selLabel.textContent = 'Member can pick';
+  selLabel.textContent = 'Selection Mode';
 
   const selToggle = document.createElement('div');
   selToggle.style.cssText = 'display:flex;border:0.5px solid #D3D1C7;border-radius:6px;overflow:hidden;';
 
   const pillSingle = document.createElement('button');
-  pillSingle.textContent = 'One';
+  pillSingle.textContent = 'Single choice';
   pillSingle.style.cssText = 'height:26px;padding:0 10px;border:none;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:#009A97;color:white;transition:background 0.12s,color 0.12s;border-right:0.5px solid #D3D1C7;';
   pillSingle.setAttribute('data-sel', 'single');
 
   const pillMulti = document.createElement('button');
-  pillMulti.textContent = 'Multiple';
+  pillMulti.textContent = 'Multiple choices';
   pillMulti.style.cssText = 'height:26px;padding:0 10px;border:none;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:white;color:#888780;transition:background 0.12s,color 0.12s;';
   pillMulti.setAttribute('data-sel', 'multiple');
 
@@ -2456,6 +2478,9 @@ var deliveryAreaSeq  = 0;
 var deliveryDateSeq  = 0;
 var extLinks         = [];        // [{id}] — rendered as DOM rows
 var extLinkSeq       = 0;
+var bannerImages     = [];        // [{id, src}] — order = display order
+var bannerSeq        = 0;
+var bannerDragId      = null;
 
 /* delivery auto-open handled inside toggleSwitch below */
 
@@ -2512,6 +2537,92 @@ function renderDeliveryAreas() {
 }
 
 /* ── External Links ── */
+/* ── Event Banners (multi-upload, drag to reorder) ── */
+function addBannerFiles(fileList) {
+  Array.prototype.forEach.call(fileList, function (file) {
+    if (!file.type.startsWith('image/')) return;
+    bannerSeq++;
+    var id = bannerSeq;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      bannerImages.push({ id: id, src: e.target.result });
+      renderBanners();
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('banner-file-input').value = '';
+}
+
+function removeBanner(id) {
+  bannerImages = bannerImages.filter(function (b) { return b.id !== id; });
+  renderBanners();
+}
+
+function renderBanners() {
+  var grid = document.getElementById('banner-grid');
+  if (!grid) return;
+
+  var thumbs = bannerImages.map(function (b, i) {
+    return '<div class="banner-thumb" draggable="true" data-id="' + b.id + '"'
+      + ' ondragstart="onBannerDragStart(event,' + b.id + ')"'
+      + ' ondragover="onBannerDragOver(event,' + b.id + ')"'
+      + ' ondragleave="onBannerDragLeave(event)"'
+      + ' ondrop="onBannerDrop(event,' + b.id + ')"'
+      + ' ondragend="onBannerDragEnd(event)">'
+      + '<img src="' + b.src + '" alt="Banner ' + (i + 1) + '" />'
+      + '<span class="banner-thumb-order">' + (i + 1) + '</span>'
+      + '<button class="banner-thumb-remove" onclick="event.stopPropagation();removeBanner(' + b.id + ')">'
+      + '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+      + '</button>'
+      + '</div>';
+  }).join('');
+
+  var addTile = '<div class="banner-add-tile" onclick="document.getElementById(\'banner-file-input\').click()">'
+    + '<div class="banner-upload-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>'
+    + '<div style="font-size:10px;font-weight:600;color:#009A97;text-align:center;">' + (bannerImages.length ? 'Add another' : 'Upload banner') + '</div>'
+    + '</div>';
+
+  grid.innerHTML = thumbs + addTile;
+}
+
+function onBannerDragStart(e, id) {
+  bannerDragId = id;
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function onBannerDragOver(e, overId) {
+  e.preventDefault();
+  if (overId !== bannerDragId) e.currentTarget.classList.add('drag-over');
+}
+
+function onBannerDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+
+function onBannerDrop(e, dropId) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (bannerDragId === null || bannerDragId === dropId) return;
+
+  var fromIdx = bannerImages.findIndex(function (b) { return b.id === bannerDragId; });
+  var toIdx = bannerImages.findIndex(function (b) { return b.id === dropId; });
+  if (fromIdx === -1 || toIdx === -1) return;
+
+  var moved = bannerImages.splice(fromIdx, 1)[0];
+  bannerImages.splice(toIdx, 0, moved);
+  renderBanners();
+}
+
+function onBannerDragEnd(e) {
+  document.querySelectorAll('.banner-thumb').forEach(function (el) {
+    el.classList.remove('dragging', 'drag-over');
+  });
+  bannerDragId = null;
+}
+
+renderBanners();
+
 function extLinkRowHTML(id) {
   return '<div class="extlink-row" id="extlink-row-' + id + '">'
     + '<input class="extlink-name-input" type="text" id="extlink-name-' + id + '" placeholder="Label (e.g. Telegram)" />'
