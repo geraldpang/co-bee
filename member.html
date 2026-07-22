@@ -77,6 +77,8 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .mef-tile .mef-card-actions { padding: 6px 9px 8px; gap: 10px; }
   .mef-card-actions button { background: none; border: none; padding: 0; font-size: 11px; font-weight: 500; color: #888780; text-decoration: underline; cursor: pointer; font-family: inherit; }
   .mef-card-actions button:hover { color: #009A97; }
+  .mef-card-actions button.mef-link-btn { display: inline-flex; align-items: center; gap: 3px; }
+  .mef-card-actions button.mef-link-btn svg { width: 10px; height: 10px; flex-shrink: 0; }
   .mef-tile-closing { font-size: 10px; color: #E87722; font-weight: 500; margin-bottom: 3px; }
   .mef-tile-title { font-size: 12px; font-weight: 600; color: #1a1a18; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .mef-sort-wrap { position: relative; }
@@ -1269,6 +1271,117 @@ select:focus { border-color: #009A97; }
 </head>
 <body>
 
+  <!-- MODAL: New Event -->
+<div class="modal-backdrop" id="new-event-modal">
+  <div class="modal lg">
+    <div class="modal-header">
+      <span class="modal-title">New event</span>
+      <button class="modal-close" onclick="closeModal('new-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px;">
+      <div class="form-group">
+        <label class="form-label">Event name</label>
+        <input class="input" type="text" placeholder="e.g. Fresh produce — May round" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="textarea" placeholder="Describe the event&hellip;"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label class="form-label">Closing date</label>
+          <input class="input" type="date" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Group</label>
+          <select class="select"><option>M6 Group</option></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-wrap">
+          <input type="checkbox" /> Allow order without login
+        </label>
+        <span class="form-hint">Members can order without a co&#xB7;bee account.</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn secondary" onclick="closeModal('new-event-modal')">Cancel</button>
+      <button class="btn primary" onclick="closeModal('new-event-modal');showToast('Event created','success')">Create event</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Edit Event -->
+<div class="modal-backdrop" id="edit-event-modal">
+  <div class="modal lg">
+    <div class="modal-header">
+      <span class="modal-title">Edit event</span>
+      <button class="modal-close" onclick="closeModal('edit-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px;">
+      <div class="form-group">
+        <label class="form-label">Event name</label>
+        <input class="input" type="text" value="order without login" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="textarea">test</textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label class="form-label">Closing date</label>
+          <input class="input" type="date" value="2026-05-02" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Group</label>
+          <select class="select"><option>M6 Group</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn danger" onclick="closeModal('edit-event-modal');openModal('delete-event-modal')">Delete event</button>
+      <button class="btn secondary" onclick="closeModal('edit-event-modal')">Cancel</button>
+      <button class="btn primary" onclick="closeModal('edit-event-modal');showToast('Event updated','success')">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Delete Event (danger) -->
+<div class="modal-backdrop" id="delete-event-modal">
+  <div class="modal sm">
+    <div class="modal-header">
+      <span class="modal-title" style="color:var(--red-dark);">Delete event</span>
+      <button class="modal-close" onclick="closeModal('delete-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="alert danger" style="margin-bottom:0.75rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        This action cannot be undone.
+      </div>
+      This will permanently delete the event and all associated order data.
+    </div>
+    <div class="modal-footer">
+      <button class="btn secondary" onclick="closeModal('delete-event-modal')">Cancel</button>
+      <button class="btn danger filled" onclick="closeModal('delete-event-modal');showToast('Event deleted','danger')">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: External Link Preview -->
+<div class="modal-backdrop" id="link-preview-modal">
+  <div class="modal sm">
+    <div class="modal-header">
+      <span class="modal-title" id="link-preview-title">Links</span>
+      <button class="modal-close" onclick="closeModal('link-preview-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" id="link-preview-body" style="display:flex;flex-direction:column;gap:10px;"></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap">
+</div>
+
+
 <div class="scroll-area">
 
   <!-- EVENT DETAIL VIEW -->
@@ -1300,6 +1413,13 @@ select:focus { border-color: #009A97; }
             <span style="color:#888780;">Collection:</span><span class="ev-info-val" style="color:#1a1a18;">22-05-2026 (10AM - 5PM)</span>
             <span style="color:#888780;">Address:</span><span class="ev-info-val" style="color:#1a1a18;">Simei Street 1</span>
           </div>
+        </div>
+        <div style="border-top:0.5px solid #f0f0f0;padding:10px 14px;display:flex;align-items:center;gap:14px;">
+          <button onclick="shareEvent(this, document.getElementById('ev1-title').textContent)" style="background:none;border:none;padding:0;font-size:12px;font-weight:500;color:#888780;text-decoration:underline;cursor:pointer;font-family:inherit;">Share</button>
+          <button id="ev1-link-btn" onclick="handleLinkClick(document.getElementById('ev1-title').textContent)" style="display:none;align-items:center;gap:4px;background:none;border:none;padding:0;font-size:12px;font-weight:500;color:#888780;text-decoration:underline;cursor:pointer;font-family:inherit;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <span id="ev1-link-label"></span>
+          </button>
         </div>
       </div>
 
@@ -1908,7 +2028,11 @@ select:focus { border-color: #009A97; }
         <div class="card-body"><div class="card-title">Groupbuy Event test</div><div class="card-desc">This is how it looks like in an actual group buy</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="showToast('Link copied','success')">Share</button>
+          <button onclick="shareEvent(this,'Groupbuy Event test')">Share</button>
+          <button class="mef-link-btn" onclick="handleLinkClick('Groupbuy Event test')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Telegram Group
+          </button>
         </div>
       </div>
       <div class="event-card" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-05-22" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
@@ -1925,7 +2049,11 @@ select:focus { border-color: #009A97; }
         <div class="card-body"><div class="card-title">New event</div><div class="card-desc">test</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="showToast('Link copied','success')">Share</button>
+          <button onclick="shareEvent(this,'New event')">Share</button>
+          <button class="mef-link-btn" onclick="handleLinkClick('New event')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            3 Links
+          </button>
         </div>
       </div>
       <div class="event-card" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-05-22" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
@@ -1942,7 +2070,11 @@ select:focus { border-color: #009A97; }
         <div class="card-body"><div class="card-title">This is a test event for Purchase with no login</div><div class="card-desc">test</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Closing:</span><span class="card-info-val">14-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span><span class="card-info-lbl">Address:</span><span class="card-info-val">Simei Street 1</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="showToast('Link copied','success')">Share</button>
+          <button onclick="shareEvent(this,'This is a test event for Purchase with no login')">Share</button>
+          <button class="mef-link-btn" onclick="handleLinkClick('This is a test event for Purchase with no login')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            3 Links
+          </button>
         </div>
       </div>
     </div>
@@ -1959,7 +2091,11 @@ select:focus { border-color: #009A97; }
           <div class="mef-tile-title">Groupbuy Event test</div>
         </div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="showToast('Link copied','success')">Share</button>
+          <button onclick="shareEvent(this,'Groupbuy Event test')">Share</button>
+          <button class="mef-link-btn" onclick="handleLinkClick('Groupbuy Event test')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Telegram
+          </button>
         </div>
       </div>
       <div class="mef-tile" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-05-22" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
@@ -1973,7 +2109,11 @@ select:focus { border-color: #009A97; }
           <div class="mef-tile-title">New event</div>
         </div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="showToast('Link copied','success')">Share</button>
+          <button onclick="shareEvent(this,'New event')">Share</button>
+          <button class="mef-link-btn" onclick="handleLinkClick('New event')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            3 Links
+          </button>
         </div>
       </div>
       <div class="mef-tile" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-05-22" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
@@ -1987,7 +2127,11 @@ select:focus { border-color: #009A97; }
           <div class="mef-tile-title">This is a test event for Purchase with no login</div>
         </div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
-          <button onclick="showToast('Link copied','success')">Share</button>
+          <button onclick="shareEvent(this,'This is a test event for Purchase with no login')">Share</button>
+          <button class="mef-link-btn" onclick="handleLinkClick('This is a test event for Purchase with no login')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            3 Links
+          </button>
         </div>
       </div>
     </div>
@@ -2915,104 +3059,6 @@ select:focus { border-color: #009A97; }
 
         <div class="footer-spacer"></div>
   </div>
-  <!-- MODAL: New Event -->
-<div class="modal-backdrop" id="new-event-modal">
-  <div class="modal lg">
-    <div class="modal-header">
-      <span class="modal-title">New event</span>
-      <button class="modal-close" onclick="closeModal('new-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px;">
-      <div class="form-group">
-        <label class="form-label">Event name</label>
-        <input class="input" type="text" placeholder="e.g. Fresh produce — May round" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Description</label>
-        <textarea class="textarea" placeholder="Describe the event&hellip;"></textarea>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div class="form-group">
-          <label class="form-label">Closing date</label>
-          <input class="input" type="date" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Group</label>
-          <select class="select"><option>M6 Group</option></select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="checkbox-wrap">
-          <input type="checkbox" /> Allow order without login
-        </label>
-        <span class="form-hint">Members can order without a co&#xB7;bee account.</span>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn secondary" onclick="closeModal('new-event-modal')">Cancel</button>
-      <button class="btn primary" onclick="closeModal('new-event-modal');showToast('Event created','success')">Create event</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Edit Event -->
-<div class="modal-backdrop" id="edit-event-modal">
-  <div class="modal lg">
-    <div class="modal-header">
-      <span class="modal-title">Edit event</span>
-      <button class="modal-close" onclick="closeModal('edit-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px;">
-      <div class="form-group">
-        <label class="form-label">Event name</label>
-        <input class="input" type="text" value="order without login" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Description</label>
-        <textarea class="textarea">test</textarea>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div class="form-group">
-          <label class="form-label">Closing date</label>
-          <input class="input" type="date" value="2026-05-02" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Group</label>
-          <select class="select"><option>M6 Group</option></select>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn danger" onclick="closeModal('edit-event-modal');openModal('delete-event-modal')">Delete event</button>
-      <button class="btn secondary" onclick="closeModal('edit-event-modal')">Cancel</button>
-      <button class="btn primary" onclick="closeModal('edit-event-modal');showToast('Event updated','success')">Save changes</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Delete Event (danger) -->
-<div class="modal-backdrop" id="delete-event-modal">
-  <div class="modal sm">
-    <div class="modal-header">
-      <span class="modal-title" style="color:var(--red-dark);">Delete event</span>
-      <button class="modal-close" onclick="closeModal('delete-event-modal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div class="modal-body">
-      <div class="alert danger" style="margin-bottom:0.75rem;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        This action cannot be undone.
-      </div>
-      This will permanently delete the event and all associated order data.
-    </div>
-    <div class="modal-footer">
-      <button class="btn secondary" onclick="closeModal('delete-event-modal')">Cancel</button>
-      <button class="btn danger filled" onclick="closeModal('delete-event-modal');showToast('Event deleted','danger')">Delete</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast-wrap" id="toast-wrap">
-</div>
 
 <!-- ══════════════════════════════════════════════
      HOSTING VIEW (3-step form)
@@ -3755,6 +3801,16 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   document.getElementById('ev1-desc').textContent = desc;
   document.getElementById('ev2-desc').textContent = desc;
   document.getElementById('ev1-days').textContent = daysLeft + ' days left';
+  var evLinksData = EVENT_LINKS[title] || { links: [] };
+  var evLinks = evLinksData.links || [];
+  var evLinkBtn = document.getElementById('ev1-link-btn');
+  var evLinkLabel = document.getElementById('ev1-link-label');
+  if (evLinks.length > 0) {
+    evLinkLabel.textContent = evLinks.length > 1 ? (evLinks.length + ' Links') : evLinks[0].name;
+    evLinkBtn.style.display = 'inline-flex';
+  } else {
+    evLinkBtn.style.display = 'none';
+  }
   if (parseInt(ordersPlaced) > 0) {
     document.getElementById('ev1-buys').textContent = ordersPlaced + ' BUY';
     document.getElementById('ev1-buys').style.display = 'inline-block';
@@ -3966,6 +4022,16 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   document.getElementById('ev1-desc').textContent = desc;
   document.getElementById('ev2-desc').textContent = desc;
   document.getElementById('ev1-days').textContent = daysLeft + ' days left';
+  var evLinksData = EVENT_LINKS[title] || { links: [] };
+  var evLinks = evLinksData.links || [];
+  var evLinkBtn = document.getElementById('ev1-link-btn');
+  var evLinkLabel = document.getElementById('ev1-link-label');
+  if (evLinks.length > 0) {
+    evLinkLabel.textContent = evLinks.length > 1 ? (evLinks.length + ' Links') : evLinks[0].name;
+    evLinkBtn.style.display = 'inline-flex';
+  } else {
+    evLinkBtn.style.display = 'none';
+  }
   if (parseInt(ordersPlaced) > 0) {
     document.getElementById('ev1-buys').textContent = ordersPlaced + ' BUY';
     document.getElementById('ev1-buys').style.display = 'inline-block';
@@ -4567,6 +4633,120 @@ function tbtExUpdate(eid) {
 function tbtExChgQty(btn, delta, id) {
   var el = document.getElementById(id);
   if (el) el.textContent = Math.max(0, parseInt(el.textContent) + delta);
+}
+
+var EVENT_LINKS = {
+  // Host left "Let buyers copy or preview" UNCHECKED (default) — link opens directly.
+  'Groupbuy Event test': {
+    allowCopyPreview: false,
+    links: [
+      { name: 'Telegram Group', url: 'https://t.me/m6grouptest' }
+    ]
+  },
+  // Host left it UNCHECKED, but added 3 links — no single destination to jump to,
+  // so it still shows a list, just without Copy buttons (tap-through only).
+  'New event': {
+    allowCopyPreview: false,
+    links: [
+      { name: 'Telegram Group', url: 'https://t.me/m6newevent' },
+      { name: 'Payment Form', url: 'https://forms.google.com/newevent' },
+      { name: 'Delivery Tracker', url: 'https://tracker.example.com/newevent' }
+    ]
+  },
+  // Host CHECKED "Let buyers copy or preview" — shows the chooser instead.
+  'This is a test event for Purchase with no login': {
+    allowCopyPreview: true,
+    links: [
+      { name: 'Telegram Group', url: 'https://t.me/m6grouptest' },
+      { name: 'Payment Form', url: 'https://forms.google.com/example' },
+      { name: 'Delivery Tracker', url: 'https://tracker.example.com/m6' }
+    ]
+  }
+};
+
+function handleLinkClick(title) {
+  var data = EVENT_LINKS[title];
+  if (!data || !data.links.length) return;
+  // Single link + host didn't opt into copy/preview -> go straight there, no modal.
+  if (!data.allowCopyPreview && data.links.length === 1) {
+    window.open(data.links[0].url, '_blank', 'noopener');
+    return;
+  }
+  showLinkPreview(title);
+}
+
+function shareEvent(btn, title) {
+  var url = 'https://co-bee.com/event/' + encodeURIComponent(title.toLowerCase().replace(/\s+/g, '-'));
+  navigator.clipboard.writeText(url).catch(function () {});
+
+  var original = btn.innerHTML;
+  btn.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Copied';
+  btn.style.color = '#009A97';
+  btn.style.textDecoration = 'none';
+  btn.disabled = true;
+
+  setTimeout(function () {
+    btn.innerHTML = original;
+    btn.style.color = '';
+    btn.style.textDecoration = '';
+    btn.disabled = false;
+  }, 1500);
+}
+
+function showLinkPreview(eventKey) {
+  var data = EVENT_LINKS[eventKey] || { allowCopyPreview: false, links: [] };
+  var links = data.links || [];
+  var body = document.getElementById('link-preview-body');
+  document.getElementById('link-preview-title').textContent = links.length > 1 ? 'Links' : 'Link';
+
+  body.innerHTML = links.map(function (l) {
+    var safeUrl = l.url.replace(/'/g, '&#39;');
+
+    if (data.allowCopyPreview) {
+      // Host opted in: show name + URL + Copy + Open.
+      return '<div style="border:0.5px solid #e0dfd8;border-radius:8px;padding:10px 12px;">'
+        + '<div style="font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:6px;">' + l.name + '</div>'
+        + '<div style="display:flex;gap:8px;align-items:center;">'
+        + '<div style="flex:1;min-width:0;font-size:11px;color:#888780;background:#FAFAF8;border:0.5px solid #e0dfd8;border-radius:6px;padding:6px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + l.url + '</div>'
+        + '<button onclick="copyLinkUrl(this,\'' + safeUrl + '\')" style="height:28px;padding:0 10px;background:#009A97;color:white;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;flex-shrink:0;">Copy</button>'
+        + '<a href="' + l.url + '" target="_blank" rel="noopener" style="height:28px;width:28px;display:flex;align-items:center;justify-content:center;border:0.5px solid #e0dfd8;border-radius:6px;color:#009A97;flex-shrink:0;">'
+        + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'
+        + '</a>'
+        + '</div>'
+        + '</div>';
+    }
+
+    // Host left it unchecked: just a plain clickable row, taps straight through.
+    return '<a href="' + l.url + '" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;border:0.5px solid #e0dfd8;border-radius:8px;padding:10px 12px;text-decoration:none;color:inherit;">'
+      + '<div style="width:28px;height:28px;border-radius:6px;background:#E0F5F5;color:#009A97;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
+      + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'
+      + '</div>'
+      + '<div style="flex:1;min-width:0;">'
+      + '<div style="font-size:13px;font-weight:600;color:#1a1a18;">' + l.name + '</div>'
+      + '<div style="font-size:11px;color:#888780;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + l.url + '</div>'
+      + '</div>'
+      + '</a>';
+  }).join('');
+
+  openModal('link-preview-modal');
+}
+
+function copyLinkUrl(btn, url) {
+  navigator.clipboard.writeText(url).catch(function () {});
+  var original = btn.textContent;
+  btn.textContent = 'Copied';
+  btn.style.background = '#27AE60';
+  setTimeout(function () { btn.textContent = original; btn.style.background = '#009A97'; }, 1500);
+}
+
+function openModal(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.add('open');
+}
+
+function closeModal(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('open');
 }
 
 function showToast(message, type) {
