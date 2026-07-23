@@ -122,7 +122,6 @@ a:hover { text-decoration: underline; }
 
 /* MAIN */
 .main { flex: 1; overflow-y: auto; padding: 2rem 1.5rem; min-width: 0; }
-.main-inner { max-width: 1100px; margin: 0 auto; }
 .page-header {
   display: flex; align-items: flex-start; justify-content: space-between;
   gap: 12px; margin-bottom: 1.75rem; flex-wrap: wrap;
@@ -287,6 +286,11 @@ a:hover { text-decoration: underline; }
   cursor: pointer;
 }
 .event-card.shared { cursor: default; }
+.event-card.closed { background: var(--page-bg, #F4F6F8); }
+.event-card.closed:hover { border-color: var(--border-light); box-shadow: none; }
+.event-card.closed .et-title { color: var(--mid); }
+.event-card.closed .et-img { background: #E4E7EA; }
+.event-card.closed .et-img svg { stroke: #B4B2A9; }
 .event-card:hover {
   border-color: var(--border);
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -322,6 +326,32 @@ a:hover { text-decoration: underline; }
 
 .card-actions { display: flex; gap: 6px; }
 .card-actions .btn { flex: 1; height: 30px; font-size: 12px; }
+
+/* Tile format — matches member.html's event card visual language (photo, host, closing, buy badge) */
+.et-img { aspect-ratio: 16/9; background: var(--teal-light); display: flex; align-items: center; justify-content: center; border-radius: var(--radius-lg) var(--radius-lg) 0 0; position: relative; margin: -1.1rem -1.25rem 0; }
+.et-host { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--mid); font-weight: 500; margin-bottom: 6px; }
+.et-avatar { width: 18px; height: 18px; border-radius: 50%; background: var(--teal); color: white; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.et-closing { font-size: 12px; font-weight: 600; color: var(--amber-dark); margin-bottom: 3px; }
+.et-closing.expired, .et-closing.closed { color: var(--faint); }
+.et-buy-badge { position: absolute; top: 8px; right: 8px; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 99px; }
+.et-buy-badge.zero { background: var(--sand); color: var(--mid); border: 0.5px solid var(--border-light); }
+.et-buy-badge.hot { background: var(--teal); color: var(--white); }
+.et-status-badge { position: absolute; top: 8px; right: 8px; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 99px; background: var(--sand); color: var(--mid); border: 0.5px solid var(--border-light); }
+.et-body { padding-top: 12px; }
+.et-title { font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.35; margin-bottom: 4px; }
+.et-desc { font-size: 13px; color: var(--mid); margin-bottom: 10px; }
+.et-info-grid { display: grid; grid-template-columns: 78px 1fr; gap: 4px 0; font-size: 12px; margin-bottom: 10px; }
+.et-info-lbl { color: var(--mid); }
+.et-info-val { color: var(--ink); }
+.et-link-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; margin-bottom: 4px; }
+.et-link-indicator { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; color: var(--mid); text-decoration: underline; cursor: pointer; background: none; border: none; font-family: inherit; }
+.et-link-indicator:hover { color: var(--teal-dark); }
+.et-link-indicator svg { width: 10px; height: 10px; flex-shrink: 0; }
+.et-icon-group { display: flex; align-items: center; gap: 6px; }
+.et-share-icon { background: none; border: none; color: var(--mid); cursor: pointer; display: flex; align-items: center; padding: 0; }
+.et-share-icon:hover { color: var(--teal-dark); }
+.et-download-icon { display: none; background: none; border: none; color: var(--mid); cursor: pointer; align-items: center; padding: 0; }
+.et-download-icon:hover { color: var(--teal-dark); }
 
 /* ══════════════════════════════════════════
    TABLE / LIST VIEW
@@ -372,6 +402,38 @@ tbody td.muted { color: var(--mid); font-size: 12px; }
   border-radius: var(--radius-sm); cursor: pointer; transition: background 0.1s; color: var(--mid);
 }
 .dot-menu:hover { background: var(--sand); color: var(--ink); }
+
+/* List view — full-width cards matching member.html's List view (photo, host, desc, info-grid) */
+.hlc-grid { display: flex; flex-direction: column; gap: 12px; }
+.hlc { background: var(--white); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; transition: all 0.15s; }
+.hlc:hover:not(.hlc-closed) { border-color: var(--teal); box-shadow: 0 2px 8px rgba(0,154,151,0.1); }
+.hlc-closed { background: var(--page-bg, #F4F6F8); }
+.hlc-host { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--mid); font-weight: 500; margin-bottom: 6px; }
+.hlc-avatar { width: 18px; height: 18px; border-radius: 50%; background: var(--teal); color: white; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.hlc-status { font-size: 12px; font-weight: 600; color: var(--amber-dark); margin-bottom: 3px; }
+.hlc-status.closed { color: var(--faint); }
+.hlc-buy-badge { position: absolute; top: 8px; right: 8px; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 99px; background: var(--teal); color: white; }
+.hlc-buy-badge.zero { background: var(--border-light); color: var(--mid); }
+.hlc-buy-badge.closed { background: #5F5E5A; color: white; }
+.hlc-img { aspect-ratio: 16/9; background: var(--teal-light); display: flex; align-items: center; justify-content: center; position: relative; }
+.hlc-body { padding: 12px 14px 0; }
+.hlc-title { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.hlc-closed .hlc-title { color: var(--mid); }
+.hlc-desc { font-size: 13px; color: var(--mid); margin-bottom: 10px; }
+.hlc-info-grid { display: grid; grid-template-columns: 84px 1fr; gap: 4px 0; font-size: 12px; padding: 0 14px 12px; }
+.hlc-info-lbl { color: var(--mid); }
+.hlc-info-val { color: var(--ink); }
+.hlc-link-row { display: flex; align-items: center; justify-content: space-between; padding: 0 14px 12px; }
+.hlc-link-indicator { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; color: var(--mid); text-decoration: underline; cursor: pointer; background: none; border: none; font-family: inherit; }
+.hlc-link-indicator:hover { color: var(--teal-dark); }
+.hlc-link-indicator svg { width: 10px; height: 10px; flex-shrink: 0; }
+.hlc-icon-group { display: flex; align-items: center; gap: 6px; }
+.hlc-share-icon { background: none; border: none; color: var(--mid); cursor: pointer; display: flex; align-items: center; padding: 0; }
+.hlc-share-icon:hover { color: var(--teal-dark); }
+.hlc-download-icon { display: none; background: none; border: none; color: var(--mid); cursor: pointer; align-items: center; padding: 0; }
+.hlc-download-icon:hover { color: var(--teal-dark); }
+.hlc-bottom { display: flex; gap: 6px; padding: 10px 14px; border-top: 0.5px solid var(--border-light); }
+.hlc-bottom .btn { flex: 1; height: 30px; font-size: 12px; }
 
 /* ── MODALS ── */
 .modal-backdrop {
@@ -465,7 +527,9 @@ tbody td.muted { color: var(--mid); font-size: 12px; }
 
 /* Override body background to match shell */
 body { background: #F4F6F8; }
-.main-inner { max-width: 900px; margin: 0 auto; padding: 20px 16px; }
+.main-inner { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
+#list-view .hlc-grid { max-width: 600px; margin: 0 auto; }
+#list-view .table-toolbar, #list-view .table-footer { max-width: 600px; margin-left: auto; margin-right: auto; }
 
 /* ══════════════════════════════════════════
    ORDER DETAIL VIEW
@@ -654,6 +718,7 @@ tr.od-row-name-cell { cursor: pointer; }
 .pp-invalid-link { display: inline-block; margin-top: 12px; font-size: 12px; color: var(--mid); cursor: pointer; background: none; border: none; font-family: inherit; text-decoration: underline; }
 .pp-invalid-link:hover { color: var(--red-dark); }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 <div class="main-inner">
@@ -711,148 +776,201 @@ tr.od-row-name-cell { cursor: pointer; }
         <!-- ══════════ TILE VIEW ══════════ -->
         <div id="tile-view">
 
-          <!-- Templates shared with me -->
-          <div class="section-label">Templates shared with me</div>
-          <div class="card-grid" style="margin-bottom:2rem;">
-
-            <div class="event-card shared">
-              <div class="shared-banner">
-                <div class="avatar sm" style="background:var(--amber);">MC</div>
-                Template shared by <strong>Minh Cong</strong>
-              </div>
-              <div class="card-top">
-                <span class="card-title">Artisan keycap set — round 3</span>
-              </div>
-              <p class="card-desc">Limited run of hand-poured resin artisan caps. Ships internationally.</p>
-              <div class="card-meta">
-                <div class="meta-row">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
-                  Template from 15/03/2026
-                </div>
-              </div>
-              <hr class="card-divider"/>
-              <div class="card-actions">
-                <button class="btn teal-outline" onclick="showToast('Template applied','success')">Use template</button>
-                <button class="btn secondary">Preview</button>
-              </div>
-            </div>
-
-          </div>
-
           <!-- My events -->
           <div class="section-label">My events</div>
           <div class="card-grid" id="cards-grid">
 
-            <div class="event-card" data-title="atea 1" onclick="openOrderDetail(this)">
-              <div class="card-top">
-                <span class="card-title">atea 1</span>
-                <span class="badge gray">Draft</span>
+            <div class="event-card" data-title="Groupbuy Event test" onclick="openOrderDetail(this)">
+              <div class="et-img">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span class="et-buy-badge hot">9 BUY</span>
               </div>
-              <div class="card-meta">
-                <div class="meta-row">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
-                  Created 09/04/2026
+              <div class="et-body">
+                <div class="et-closing">Closing in 7 days</div>
+                <div class="et-title">Groupbuy Event test</div>
+                <div class="et-desc">This is how it looks like in an actual group buy</div>
+                <div class="et-info-grid">
+                  <span class="et-info-lbl">Closing:</span><span class="et-info-val">06-05-2026</span>
+                  <span class="et-info-lbl">Collection:</span><span class="et-info-val">13-05-2026 (10AM - 5PM)</span>
+                  <span class="et-info-lbl">Address:</span><span class="et-info-val">Simei Street 1</span>
+                </div>
+              </div>
+              <div class="et-link-row" onclick="event.stopPropagation()">
+                <button class="et-link-indicator" onclick="showToast('Opening link\u2026','success')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                  Telegram Group
+                </button>
+                <div class="et-icon-group">
+                  <button class="et-download-icon" onclick="event.stopPropagation();openShareTemplateMenu(this,'Groupbuy Event test')" title="download event template">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  </button>
+                  <button class="et-share-icon" onclick="event.stopPropagation();showToast('Link copied','success')" title="share event">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg>
+                  </button>
                 </div>
               </div>
               <hr class="card-divider"/>
               <div class="card-actions">
-                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit post</button>
-                <button class="btn secondary" onclick="event.stopPropagation();showToast('Event re-hosted','success')">Re-host</button>
-                <button class="btn secondary" onclick="event.stopPropagation();showToast('Link copied','success')">Share</button>
+                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit</button>
+                <button class="btn secondary" onclick="event.stopPropagation();useAsTemplate()">Use Template</button>
+                <button class="btn secondary" data-share-template-btn onclick="event.stopPropagation();revealDownloadIcon(this)">Share Template</button>
               </div>
             </div>
 
             <div class="event-card" data-title="order without login" onclick="openOrderDetail(this)">
-              <div class="card-top">
-                <span class="card-title">order without login</span>
-                <span class="badge buy">2 buy</span>
+              <div class="et-img">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span class="et-buy-badge hot">2 BUY</span>
               </div>
-              <div class="card-meta">
-                <div class="meta-row closing">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 2"/></svg>
-                  Closing in 0 days
+              <div class="et-body">
+                <div class="et-closing">Closing in 0 days</div>
+                <div class="et-title">order without login</div>
+                <div class="et-desc">Pay-later demo — no login required to place an order.</div>
+                <div class="et-info-grid">
+                  <span class="et-info-lbl">Closing:</span><span class="et-info-val">02-05-2026</span>
+                  <span class="et-info-lbl">Collection:</span><span class="et-info-val">06-05-2026 (10AM - 5PM)</span>
+                  <span class="et-info-lbl">Address:</span><span class="et-info-val">Simei Street 1</span>
                 </div>
-                <div class="meta-row">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
-                  Created 24/04/2026
+              </div>
+              <div class="et-link-row" onclick="event.stopPropagation()">
+                <button class="et-link-indicator" onclick="showToast('Opening link\u2026','success')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                  Telegram Group
+                </button>
+                <div class="et-icon-group">
+                  <button class="et-download-icon" onclick="event.stopPropagation();openShareTemplateMenu(this,'order without login')" title="download event template">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  </button>
+                  <button class="et-share-icon" onclick="event.stopPropagation();showToast('Link copied','success')" title="share event">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg>
+                  </button>
                 </div>
               </div>
               <hr class="card-divider"/>
               <div class="card-actions">
-                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit post</button>
-                <button class="btn secondary" onclick="event.stopPropagation();showToast('Event re-hosted','success')">Re-host</button>
-                <button class="btn secondary" onclick="event.stopPropagation();showToast('Link copied','success')">Share</button>
+                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit</button>
+                <button class="btn secondary" onclick="event.stopPropagation();useAsTemplate()">Use Template</button>
+                <button class="btn secondary" data-share-template-btn onclick="event.stopPropagation();revealDownloadIcon(this)">Share Template</button>
               </div>
             </div>
 
-            <div class="event-card" data-title="test" onclick="openOrderDetail(this)">
-              <div class="card-top">
-                <span class="card-title">test</span>
-                <span class="badge buy zero">0 buy</span>
+            <div class="event-card" data-title="Test event for Purchase" onclick="openOrderDetail(this)">
+              <div class="et-img">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span class="et-buy-badge hot">6 BUY</span>
               </div>
-              <div class="card-meta">
-                <div class="meta-row expired">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 2"/></svg>
-                  Closing in 0 days
+              <div class="et-body">
+                <div class="et-closing">Closing in 11 days</div>
+                <div class="et-title">Test event for Purchase</div>
+                <div class="et-desc">test</div>
+                <div class="et-info-grid">
+                  <span class="et-info-lbl">Closing:</span><span class="et-info-val">10-05-2026</span>
+                  <span class="et-info-lbl">Collection:</span><span class="et-info-val">17-05-2026 (10AM - 5PM)</span>
+                  <span class="et-info-lbl">Address:</span><span class="et-info-val">Simei Street 1</span>
                 </div>
-                <div class="meta-row">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
-                  Created 27/04/2026
-                </div>
               </div>
-              <hr class="card-divider"/>
-              <div class="card-actions">
-                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit post</button>
-                <button class="btn secondary" onclick="event.stopPropagation();showToast('Event re-hosted','success')">Re-host</button>
-                <button class="btn secondary" onclick="event.stopPropagation();showToast('Link copied','success')">Share</button>
-              </div>
-            </div>
-
-            <div class="event-card" data-title="purchase with no login" onclick="openOrderDetail(this)">
-              <div class="card-top">
-                <span class="card-title">This is a test event for purchase with no login</span>
-                <span class="badge buy hot">6 buy</span>
-              </div>
-              <p class="card-desc">test</p>
-              <div class="card-meta">
-                <div class="meta-row">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 2"/></svg>
-                  Closing in 14 days
-                </div>
-                <div class="meta-row">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
-                  Created 29/04/2026
+              <div class="et-link-row" onclick="event.stopPropagation()">
+                <button class="et-link-indicator" onclick="showToast('Opening link\u2026','success')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                  3 Links
+                </button>
+                <div class="et-icon-group">
+                  <button class="et-download-icon" onclick="event.stopPropagation();openShareTemplateMenu(this,'Test event for Purchase')" title="download event template">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  </button>
+                  <button class="et-share-icon" onclick="event.stopPropagation();showToast('Link copied','success')" title="share event">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg>
+                  </button>
                 </div>
               </div>
               <hr class="card-divider"/>
               <div class="card-actions">
-                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit post</button>
-                <button class="btn secondary" onclick="event.stopPropagation();showToast('Event re-hosted','success')">Re-host</button>
-                <button class="btn secondary" onclick="event.stopPropagation();showToast('Link copied','success')">Share</button>
+                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit</button>
+                <button class="btn secondary" onclick="event.stopPropagation();useAsTemplate()">Use Template</button>
+                <button class="btn secondary" data-share-template-btn onclick="event.stopPropagation();revealDownloadIcon(this)">Share Template</button>
               </div>
             </div>
 
             <div class="event-card" data-title="new event" onclick="openOrderDetail(this)">
-              <div class="card-top">
-                <span class="card-title">new event</span>
-                <span class="badge buy zero">0 buy</span>
+              <div class="et-img">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span class="et-buy-badge hot">4 BUY</span>
               </div>
-              <p class="card-desc">test</p>
-              <div class="card-meta">
-                <div class="meta-row">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 2"/></svg>
-                  Closing in 15 days
+              <div class="et-body">
+                <div class="et-closing">Closing in 3 days</div>
+                <div class="et-title">new event</div>
+                <div class="et-desc">test</div>
+                <div class="et-info-grid">
+                  <span class="et-info-lbl">Closing:</span><span class="et-info-val">02-05-2026</span>
+                  <span class="et-info-lbl">Collection:</span><span class="et-info-val">06-05-2026 (10AM - 5PM)</span>
+                  <span class="et-info-lbl">Address:</span><span class="et-info-val">Simei Street 1</span>
                 </div>
-                <div class="meta-row">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
-                  Created 30/04/2026
+              </div>
+              <div class="et-link-row" onclick="event.stopPropagation()">
+                <button class="et-link-indicator" onclick="showToast('Opening link\u2026','success')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                  3 Links
+                </button>
+                <div class="et-icon-group">
+                  <button class="et-download-icon" onclick="event.stopPropagation();openShareTemplateMenu(this,'new event')" title="download event template">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  </button>
+                  <button class="et-share-icon" onclick="event.stopPropagation();showToast('Link copied','success')" title="share event">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg>
+                  </button>
                 </div>
               </div>
               <hr class="card-divider"/>
               <div class="card-actions">
-                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit post</button>
-                <button class="btn secondary" onclick="event.stopPropagation();showToast('Event re-hosted','success')">Re-host</button>
-                <button class="btn secondary" onclick="event.stopPropagation();showToast('Link copied','success')">Share</button>
+                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit</button>
+                <button class="btn secondary" onclick="event.stopPropagation();useAsTemplate()">Use Template</button>
+                <button class="btn secondary" data-share-template-btn onclick="event.stopPropagation();revealDownloadIcon(this)">Share Template</button>
+              </div>
+            </div>
+
+            <div class="event-card closed" data-title="Toothpaste bulk buy" onclick="openOrderDetail(this)">
+              <div class="et-img">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span class="hlc-buy-badge closed">3 BUY</span>
+              </div>
+              <div class="et-body">
+                <div class="et-closing closed">Closed</div>
+                <div class="et-title">Toothpaste bulk buy</div>
+                <div class="et-desc">Whitening toothpaste, pack of 3 — bulk order.</div>
+                <div class="et-info-grid">
+                  <span class="et-info-lbl">Closing:</span><span class="et-info-val">10-04-2026</span>
+                  <span class="et-info-lbl">Collection:</span><span class="et-info-val">14-04-2026 (10AM - 5PM)</span>
+                  <span class="et-info-lbl">Address:</span><span class="et-info-val">Simei Street 1</span>
+                </div>
+              </div>
+              <hr class="card-divider"/>
+              <div class="card-actions">
+                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit</button>
+                <button class="btn secondary" onclick="event.stopPropagation();useAsTemplate()">Use Template</button>
+                <button class="btn secondary" data-share-template-btn onclick="event.stopPropagation();revealDownloadIcon(this)">Share Template</button>
+              </div>
+            </div>
+
+            <div class="event-card closed" data-title="Chestnut restock" onclick="openOrderDetail(this)">
+              <div class="et-img">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span class="hlc-buy-badge closed">2 BUY</span>
+              </div>
+              <div class="et-body">
+                <div class="et-closing closed">Closed</div>
+                <div class="et-title">Chestnut restock</div>
+                <div class="et-desc">Fresh chestnuts, per case or individual pack.</div>
+                <div class="et-info-grid">
+                  <span class="et-info-lbl">Closing:</span><span class="et-info-val">02-04-2026</span>
+                  <span class="et-info-lbl">Collection:</span><span class="et-info-val">06-04-2026 (10AM - 5PM)</span>
+                  <span class="et-info-lbl">Address:</span><span class="et-info-val">Simei Street 1</span>
+                </div>
+              </div>
+              <hr class="card-divider"/>
+              <div class="card-actions">
+                <button class="btn secondary" onclick="event.stopPropagation();openModal('edit-event-modal')">Edit</button>
+                <button class="btn secondary" onclick="event.stopPropagation();useAsTemplate()">Use Template</button>
+                <button class="btn secondary" data-share-template-btn onclick="event.stopPropagation();revealDownloadIcon(this)">Share Template</button>
               </div>
             </div>
 
@@ -861,130 +979,202 @@ tr.od-row-name-cell { cursor: pointer; }
 
         <!-- ══════════ LIST VIEW ══════════ -->
         <div id="list-view" style="display:none;">
-          <div class="table-wrap">
-            <div class="table-toolbar">
-              <button class="btn secondary sm">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-                Export
-              </button>
+          <div style="padding:14px;">
+            <div class="section-label">My events</div>
+
+            <div class="hlc-grid">
+
+              <div class="hlc" data-title="Groupbuy Event test" onclick="openOrderDetail(this)">
+                <div class="hlc-img">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span class="hlc-buy-badge">9 BUY</span>
+                </div>
+                <div class="hlc-body">
+                  <div class="hlc-status">Closing in 7 days</div>
+                  <div class="hlc-title">Groupbuy Event test</div>
+                  <div class="hlc-desc">This is how it looks like in an actual group buy</div>
+                </div>
+                <div class="hlc-info-grid">
+                  <span class="hlc-info-lbl">Closing:</span><span class="hlc-info-val">06-05-2026</span>
+                  <span class="hlc-info-lbl">Collection:</span><span class="hlc-info-val">13-05-2026 (10AM - 5PM)</span>
+                  <span class="hlc-info-lbl">Address:</span><span class="hlc-info-val">Simei Street 1</span>
+                </div>
+                                <div class="hlc-link-row" onclick="event.stopPropagation()">
+                  <button class="hlc-link-indicator" onclick="showToast('Opening link\u2026','success')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    Telegram Group
+                  </button>
+                  <div class="hlc-icon-group">
+                    <button class="hlc-download-icon" onclick="event.stopPropagation();openShareTemplateMenu(this,'Groupbuy Event test')" title="download event template">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    </button>
+                    <button class="hlc-share-icon" onclick="event.stopPropagation();showToast('Link copied','success')" title="share event">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="hlc-bottom" onclick="event.stopPropagation()">
+                  <button class="btn secondary" onclick="openModal('edit-event-modal')">Edit</button>
+                  <button class="btn secondary" onclick="useAsTemplate()">Use Template</button>
+                  <button class="btn secondary" data-share-template-btn onclick="revealDownloadIcon(this)">Share Template</button>
+                </div>
+              </div>
+
+              <div class="hlc" data-title="order without login" onclick="openOrderDetail(this)">
+                <div class="hlc-img">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span class="hlc-buy-badge">2 BUY</span>
+                </div>
+                <div class="hlc-body">
+                  <div class="hlc-status">Closing in 0 days</div>
+                  <div class="hlc-title">order without login</div>
+                  <div class="hlc-desc">Pay-later demo — no login required to place an order.</div>
+                </div>
+                <div class="hlc-info-grid">
+                  <span class="hlc-info-lbl">Closing:</span><span class="hlc-info-val">02-05-2026</span>
+                  <span class="hlc-info-lbl">Collection:</span><span class="hlc-info-val">06-05-2026 (10AM - 5PM)</span>
+                  <span class="hlc-info-lbl">Address:</span><span class="hlc-info-val">Simei Street 1</span>
+                </div>
+                                <div class="hlc-link-row" onclick="event.stopPropagation()">
+                  <button class="hlc-link-indicator" onclick="showToast('Opening link\u2026','success')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    Telegram Group
+                  </button>
+                  <div class="hlc-icon-group">
+                    <button class="hlc-download-icon" onclick="event.stopPropagation();openShareTemplateMenu(this,'order without login')" title="download event template">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    </button>
+                    <button class="hlc-share-icon" onclick="event.stopPropagation();showToast('Link copied','success')" title="share event">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="hlc-bottom" onclick="event.stopPropagation()">
+                  <button class="btn secondary" onclick="openModal('edit-event-modal')">Edit</button>
+                  <button class="btn secondary" onclick="useAsTemplate()">Use Template</button>
+                  <button class="btn secondary" data-share-template-btn onclick="revealDownloadIcon(this)">Share Template</button>
+                </div>
+              </div>
+
+              <div class="hlc" data-title="Test event for Purchase" onclick="openOrderDetail(this)">
+                <div class="hlc-img">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span class="hlc-buy-badge">6 BUY</span>
+                </div>
+                <div class="hlc-body">
+                  <div class="hlc-status">Closing in 11 days</div>
+                  <div class="hlc-title">Test event for Purchase</div>
+                  <div class="hlc-desc">test</div>
+                </div>
+                <div class="hlc-info-grid">
+                  <span class="hlc-info-lbl">Closing:</span><span class="hlc-info-val">10-05-2026</span>
+                  <span class="hlc-info-lbl">Collection:</span><span class="hlc-info-val">17-05-2026 (10AM - 5PM)</span>
+                  <span class="hlc-info-lbl">Address:</span><span class="hlc-info-val">Simei Street 1</span>
+                </div>
+                                <div class="hlc-link-row" onclick="event.stopPropagation()">
+                  <button class="hlc-link-indicator" onclick="showToast('Opening link\u2026','success')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    3 Links
+                  </button>
+                  <div class="hlc-icon-group">
+                    <button class="hlc-download-icon" onclick="event.stopPropagation();openShareTemplateMenu(this,'Test event for Purchase')" title="download event template">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    </button>
+                    <button class="hlc-share-icon" onclick="event.stopPropagation();showToast('Link copied','success')" title="share event">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="hlc-bottom" onclick="event.stopPropagation()">
+                  <button class="btn secondary" onclick="openModal('edit-event-modal')">Edit</button>
+                  <button class="btn secondary" onclick="useAsTemplate()">Use Template</button>
+                  <button class="btn secondary" data-share-template-btn onclick="revealDownloadIcon(this)">Share Template</button>
+                </div>
+              </div>
+
+              <div class="hlc" data-title="new event" onclick="openOrderDetail(this)">
+                <div class="hlc-img">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span class="hlc-buy-badge">4 BUY</span>
+                </div>
+                <div class="hlc-body">
+                  <div class="hlc-status">Closing in 3 days</div>
+                  <div class="hlc-title">new event</div>
+                  <div class="hlc-desc">test</div>
+                </div>
+                <div class="hlc-info-grid">
+                  <span class="hlc-info-lbl">Closing:</span><span class="hlc-info-val">02-05-2026</span>
+                  <span class="hlc-info-lbl">Collection:</span><span class="hlc-info-val">06-05-2026 (10AM - 5PM)</span>
+                  <span class="hlc-info-lbl">Address:</span><span class="hlc-info-val">Simei Street 1</span>
+                </div>
+                                <div class="hlc-link-row" onclick="event.stopPropagation()">
+                  <button class="hlc-link-indicator" onclick="showToast('Opening link\u2026','success')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    3 Links
+                  </button>
+                  <div class="hlc-icon-group">
+                    <button class="hlc-download-icon" onclick="event.stopPropagation();openShareTemplateMenu(this,'new event')" title="download event template">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    </button>
+                    <button class="hlc-share-icon" onclick="event.stopPropagation();showToast('Link copied','success')" title="share event">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="hlc-bottom" onclick="event.stopPropagation()">
+                  <button class="btn secondary" onclick="openModal('edit-event-modal')">Edit</button>
+                  <button class="btn secondary" onclick="useAsTemplate()">Use Template</button>
+                  <button class="btn secondary" data-share-template-btn onclick="revealDownloadIcon(this)">Share Template</button>
+                </div>
+              </div>
             </div>
-            <table>
-              <thead>
-                <tr>
-                  <th class="col-check"><input type="checkbox" /></th>
-                  <th class="sortable" onclick="sortTable(0)" style="cursor:pointer;">Event name <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
-                  <th class="sortable" onclick="sortTable(1)" style="cursor:pointer;">Status <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
-                  <th class="sortable" onclick="sortTable(2)" style="cursor:pointer;">Created <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
-                  <th class="sortable" onclick="sortTable(3)" style="cursor:pointer;">Closing <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
-                  <th class="sortable" onclick="sortTable(4)" style="cursor:pointer;">Buys <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;opacity:0.4;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
-                  <th class="col-action"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style="background:#E0F5F5;border-left:3px solid #009A97;">
-                  <td class="col-check"><input type="checkbox" /></td>
-                  <td>
-                    <div style="font-weight:500;color:#009A97;">Artisan keycap set — round 3</div>
-                    <div style="font-size:11px;color:#888780;margin-top:2px;display:flex;align-items:center;gap:5px;">
-                      <div style="width:16px;height:16px;border-radius:50%;background:#E8971A;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:white;flex-shrink:0;">MC</div>
-                      Template shared by Minh Cong
-                    </div>
-                  </td>
-                  <td><span class="badge teal">Template</span></td>
-                  <td class="muted">15/03/2026</td>
-                  <td class="muted">—</td>
-                  <td><span class="badge buy zero">—</span></td>
-                  <td class="col-action">
-                    <div style="display:flex;gap:6px;">
-                      <button class="btn secondary sm" onclick="window.parent.navigate('hosting.html',null)" style="font-size:11px;padding:3px 8px;">Use</button>
-                      <button class="btn secondary sm" style="font-size:11px;padding:3px 8px;">Preview</button>
-                    </div>
-                  </td>
-                </tr>
-                <tr data-title="atea 1" onclick="openOrderDetail(this)">
-                  <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" /></td>
-                  <td><span style="font-weight:500;">atea 1</span></td>
-                  <td><span class="badge gray">Draft</span></td>
-                  <td class="muted">09/04/2026</td>
-                  <td class="muted">—</td>
-                  <td><span class="badge buy zero">0 buy</span></td>
-                  <td class="col-action" onclick="event.stopPropagation()"><div class="dot-menu-wrap" style="position:relative;">
-                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
-                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
-                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
-                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
-                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
-                  </div>
-                </div></td>
-                </tr>
-                <tr data-title="order without login" onclick="openOrderDetail(this)">
-                  <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" /></td>
-                  <td><span style="font-weight:500;">order without login</span></td>
-                  <td><span class="badge amber">Closing soon</span></td>
-                  <td class="muted">24/04/2026</td>
-                  <td style="color:var(--amber-dark);font-size:12px;">0 days left</td>
-                  <td><span class="badge buy">2 buy</span></td>
-                  <td class="col-action" onclick="event.stopPropagation()"><div class="dot-menu-wrap" style="position:relative;">
-                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
-                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
-                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
-                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
-                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
-                  </div>
-                </div></td>
-                </tr>
-                <tr data-title="test" onclick="openOrderDetail(this)">
-                  <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" /></td>
-                  <td><span style="font-weight:500;">test</span></td>
-                  <td><span class="badge red">Expired</span></td>
-                  <td class="muted">27/04/2026</td>
-                  <td style="color:var(--red-dark);font-size:12px;">Closed</td>
-                  <td><span class="badge buy zero">0 buy</span></td>
-                  <td class="col-action" onclick="event.stopPropagation()"><div class="dot-menu-wrap" style="position:relative;">
-                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
-                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
-                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
-                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
-                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
-                  </div>
-                </div></td>
-                </tr>
-                <tr data-title="purchase with no login" onclick="openOrderDetail(this)">
-                  <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" /></td>
-                  <td><span style="font-weight:500;">This is a test event for purchase with no login</span></td>
-                  <td><span class="badge teal">Active</span></td>
-                  <td class="muted">29/04/2026</td>
-                  <td class="muted">14 days left</td>
-                  <td><span class="badge buy hot">6 buy</span></td>
-                  <td class="col-action" onclick="event.stopPropagation()"><div class="dot-menu-wrap" style="position:relative;">
-                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
-                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
-                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
-                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
-                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
-                  </div>
-                </div></td>
-                </tr>
-                <tr data-title="new event" onclick="openOrderDetail(this)">
-                  <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" /></td>
-                  <td><span style="font-weight:500;">new event</span></td>
-                  <td><span class="badge teal">Active</span></td>
-                  <td class="muted">30/04/2026</td>
-                  <td class="muted">15 days left</td>
-                  <td><span class="badge buy zero">0 buy</span></td>
-                  <td class="col-action" onclick="event.stopPropagation()"><div class="dot-menu-wrap" style="position:relative;">
-                  <div class="dot-menu" onclick="toggleDotMenu(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
-                  <div class="dot-dropdown" style="display:none;position:absolute;right:0;top:100%;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:50;min-width:140px;overflow:hidden;">
-                    <div onclick="openModal('edit-event-modal');this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Edit post</div>
-                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Re-host</div>
-                    <div onclick="this.closest('.dot-dropdown').style.display='none'" style="padding:9px 14px;font-size:12px;color:#1a1a18;cursor:pointer;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">Share</div>
-                  </div>
-                </div></td>
-                </tr>
-              </tbody>
-            </table>
+
+            <div class="hlc hlc-closed" data-title="Toothpaste bulk buy" onclick="openOrderDetail(this)">
+              <div class="hlc-img">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span class="hlc-buy-badge closed">3 BUY</span>
+              </div>
+              <div class="hlc-body">
+                <div class="hlc-status closed">Closed</div>
+                <div class="hlc-title">Toothpaste bulk buy</div>
+                <div class="hlc-desc">Whitening toothpaste, pack of 3 — bulk order.</div>
+              </div>
+              <div class="hlc-info-grid">
+                <span class="hlc-info-lbl">Closing:</span><span class="hlc-info-val">10-04-2026</span>
+                <span class="hlc-info-lbl">Collection:</span><span class="hlc-info-val">14-04-2026 (10AM - 5PM)</span>
+                <span class="hlc-info-lbl">Address:</span><span class="hlc-info-val">Simei Street 1</span>
+              </div>
+              <div class="hlc-bottom" onclick="event.stopPropagation()">
+                <button class="btn secondary" onclick="openModal('edit-event-modal')">Edit</button>
+                <button class="btn secondary" onclick="useAsTemplate()">Use Template</button>
+                <button class="btn secondary" data-share-template-btn onclick="revealDownloadIcon(this)">Share Template</button>
+              </div>
+            </div>
+
+            <div class="hlc hlc-closed" data-title="Chestnut restock" onclick="openOrderDetail(this)">
+              <div class="hlc-img">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span class="hlc-buy-badge closed">2 BUY</span>
+              </div>
+              <div class="hlc-body">
+                <div class="hlc-status closed">Closed</div>
+                <div class="hlc-title">Chestnut restock</div>
+                <div class="hlc-desc">Fresh chestnuts, per case or individual pack.</div>
+              </div>
+              <div class="hlc-info-grid">
+                <span class="hlc-info-lbl">Closing:</span><span class="hlc-info-val">02-04-2026</span>
+                <span class="hlc-info-lbl">Collection:</span><span class="hlc-info-val">06-04-2026 (10AM - 5PM)</span>
+                <span class="hlc-info-lbl">Address:</span><span class="hlc-info-val">Simei Street 1</span>
+              </div>
+              <div class="hlc-bottom" onclick="event.stopPropagation()">
+                <button class="btn secondary" onclick="openModal('edit-event-modal')">Edit</button>
+                <button class="btn secondary" onclick="useAsTemplate()">Use Template</button>
+                <button class="btn secondary" data-share-template-btn onclick="revealDownloadIcon(this)">Share Template</button>
+              </div>
+            </div>
+
             <div class="table-footer">
-              <span class="table-count">Showing 5 of 5 events</span>
+              <span class="table-count">Showing 6 of 6 events</span>
               <div class="pagination">
                 <button class="page-btn">Previous</button>
                 <div class="page-num">1</div>
@@ -1304,6 +1494,21 @@ tr.od-row-name-cell { cursor: pointer; }
 </div>
 
 
+<div id="share-template-menu" style="display:none;position:fixed;background:white;border:0.5px solid #e0dfd8;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.12);z-index:200;min-width:180px;overflow:hidden;">
+  <div onclick="downloadEventExcel()" style="padding:10px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Download as Excel
+  </div>
+  <div onclick="downloadEventPDF()" style="padding:10px 14px;font-size:12px;color:#1a1a18;cursor:pointer;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Download as PDF
+  </div>
+  <div onclick="useAsTemplate()" style="padding:10px 14px;font-size:12px;color:#1a1a18;cursor:pointer;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='#f5fafa'" onmouseout="this.style.background=''">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/><path d="M9 4v16"/></svg>
+    Use as template
+  </div>
+</div>
+
 <div class="toast-wrap" id="toast-wrap">
 <script>
 
@@ -1328,9 +1533,9 @@ const orderEventData = {
       { name: 'Gerald Pang', price: 1.00, status: 'unpaid', ref: 'jq12', email: 'gerald.pang@example.com', phone: '9123 4567', orderedOn: '19 Mar 2025, 02:11', item: 'Dev c\u00f9i', qty: 1, note: '' }
     ]
   },
-  'purchase with no login': {
-    closing: '13-05-2026', collection: '17-05-2026',
-    closingNote: 'Closing in 14 days', deliveryNote: 'Delivery in 18 days', noteState: '',
+  'Test event for Purchase': {
+    closing: '10-05-2026', collection: '17-05-2026',
+    closingNote: 'Closing in 11 days', deliveryNote: 'Delivery in 18 days', noteState: '',
     orders: [
       { name: 'Minh Cong', price: 20.00, status: 'paid', ref: 'pn01', email: 'minh.cong@example.com', phone: '9821 4432', orderedOn: '29 Apr 2026, 10:14', item: 'Spec (Glasses)', qty: 1, note: '' },
       { name: 'Wei Ling Tan', price: 10.00, status: 'collected', ref: 'pn02', email: 'weiling.tan@example.com', phone: '8123 9087', orderedOn: '29 Apr 2026, 10:22', item: 'Chestnut (Individual)', qty: 1, note: 'Leave at guard house' },
@@ -1345,20 +1550,47 @@ const orderEventData = {
       { name: 'Bryan Koh', price: 15.00, status: 'unpaid', ref: 'pn06', email: 'bryan.koh@example.com', phone: '8567 3390', orderedOn: '30 Apr 2026, 14:18', item: 'Toothpaste', qty: 2, note: '' }
     ]
   },
-  'atea 1': {
-    closing: '—', collection: '—',
-    closingNote: 'Not yet published', deliveryNote: '', noteState: '',
-    orders: []
-  },
-  'test': {
-    closing: '27-04-2026', collection: '01-05-2026',
-    closingNote: 'Expired', deliveryNote: '', noteState: 'expired',
-    orders: []
+  'Groupbuy Event test': {
+    closing: '06-05-2026', collection: '13-05-2026',
+    closingNote: 'Closing in 7 days', deliveryNote: 'Delivery in 14 days', noteState: '',
+    orders: [
+      { name: 'Janet Lee', price: 18.00, status: 'paid', ref: 'gb01', email: 'janet.lee@example.com', phone: '9012 3456', orderedOn: '25 Apr 2026, 09:15', item: 'Toothpaste', qty: 3, note: '' },
+      { name: 'David Tan', price: 12.00, status: 'paid', ref: 'gb02', email: 'david.tan@example.com', phone: '9123 4567', orderedOn: '25 Apr 2026, 10:02', item: 'Chestnut (Individual)', qty: 2, note: '' },
+      { name: 'Sarah Wong', price: 20.00, status: 'unpaid', ref: 'gb03', email: 'sarah.wong@example.com', phone: '9234 5678', orderedOn: '25 Apr 2026, 11:40', item: 'Spec (Glasses)', qty: 1, note: '' },
+      { name: 'Tom Nguyen', price: 6.00, status: 'collected', ref: 'gb04', email: 'tom.nguyen@example.com', phone: '9345 6789', orderedOn: '26 Apr 2026, 08:22', item: 'Toothpaste', qty: 1, note: '' },
+      { name: 'Minh Cong', price: 30.00, status: 'paid', ref: 'gb05', email: 'minh.cong@example.com', phone: '9821 4432', orderedOn: '26 Apr 2026, 09:47', item: 'Chestnut (Case)', qty: 1, note: '' },
+      { name: 'Wei Ling Tan', price: 10.00, status: 'unpaid', ref: 'gb06', email: 'weiling.tan@example.com', phone: '8123 9087', orderedOn: '26 Apr 2026, 13:05', item: 'Chestnut (Individual)', qty: 1, note: '' },
+      { name: 'Aisha Rahman', price: 15.00, status: 'pending', ref: 'gb07', email: 'aisha.rahman@example.com', phone: '9765 2201', orderedOn: '27 Apr 2026, 09:30', item: 'Spec (Glasses)', qty: 1, note: '' },
+      { name: 'Daniel Ong', price: 12.00, status: 'paid', ref: 'gb08', email: 'daniel.ong@example.com', phone: '8890 4471', orderedOn: '27 Apr 2026, 15:12', item: 'Toothpaste', qty: 2, note: '' },
+      { name: 'Bryan Koh', price: 18.00, status: 'unpaid', ref: 'gb09', email: 'bryan.koh@example.com', phone: '8567 3390', orderedOn: '28 Apr 2026, 10:50', item: 'Spec (Glasses)', qty: 1, note: '' }
+    ]
   },
   'new event': {
-    closing: '15-05-2026', collection: '19-05-2026',
-    closingNote: 'Closing in 15 days', deliveryNote: 'Delivery in 19 days', noteState: '',
-    orders: []
+    closing: '02-05-2026', collection: '06-05-2026',
+    closingNote: 'Closing in 3 days', deliveryNote: 'Delivery in 7 days', noteState: 'closing',
+    orders: [
+      { name: 'Priya Sundaram', price: 20.00, status: 'paid', ref: 'ne01', email: 'priya.sundaram@example.com', phone: '9034 6612', orderedOn: '28 Apr 2026, 09:02', item: 'Spec (Glasses)', qty: 1, note: '' },
+      { name: 'Gerald Pang', price: 6.00, status: 'unpaid', ref: 'ne02', email: 'gerald.pang@example.com', phone: '9123 4567', orderedOn: '28 Apr 2026, 11:20', item: 'Toothpaste', qty: 1, note: '' },
+      { name: 'Minh Nguyen', price: 10.00, status: 'paid', ref: 'ne03', email: 'minh.nguyen@example.com', phone: '0962240817', orderedOn: '29 Apr 2026, 14:05', item: 'Chestnut (Individual)', qty: 1, note: '' },
+      { name: 'Janet Lee', price: 24.00, status: 'pending', ref: 'ne04', email: 'janet.lee@example.com', phone: '9012 3456', orderedOn: '29 Apr 2026, 16:48', item: 'Chestnut (Case)', qty: 1, note: '' }
+    ]
+  },
+  'Toothpaste bulk buy': {
+    closing: '10-04-2026', collection: '14-04-2026',
+    closingNote: 'Closed', deliveryNote: '', noteState: 'expired',
+    orders: [
+      { name: 'Aisha Rahman', price: 6.00, status: 'collected', ref: 'tb01', email: 'aisha.rahman@example.com', phone: '9765 2201', orderedOn: '05 Apr 2026, 10:12', item: 'Toothpaste', qty: 1, note: '' },
+      { name: 'Bryan Koh', price: 12.00, status: 'collected', ref: 'tb02', email: 'bryan.koh@example.com', phone: '8567 3390', orderedOn: '05 Apr 2026, 14:30', item: 'Toothpaste', qty: 2, note: '' },
+      { name: 'Daniel Ong', price: 6.00, status: 'collected', ref: 'tb03', email: 'daniel.ong@example.com', phone: '8890 4471', orderedOn: '06 Apr 2026, 09:45', item: 'Toothpaste', qty: 1, note: '' }
+    ]
+  },
+  'Chestnut restock': {
+    closing: '02-04-2026', collection: '06-04-2026',
+    closingNote: 'Closed', deliveryNote: '', noteState: 'expired',
+    orders: [
+      { name: 'Sarah Wong', price: 85.00, status: 'collected', ref: 'cr01', email: 'sarah.wong@example.com', phone: '9234 5678', orderedOn: '28 Mar 2026, 11:00', item: 'Chestnut (Case)', qty: 1, note: '' },
+      { name: 'Tom Nguyen', price: 10.00, status: 'collected', ref: 'cr02', email: 'tom.nguyen@example.com', phone: '9345 6789', orderedOn: '28 Mar 2026, 15:20', item: 'Chestnut (Individual)', qty: 1, note: '' }
+    ]
   }
 };
 
@@ -1781,28 +2013,31 @@ function setFilter(filter) {
   document.getElementById('filter-btn').innerHTML = svgIcon + ' ' + (filter === 'all' ? 'Filter' : labels[filter]);
 
   // Filter cards (tile view)
-  document.querySelectorAll('.event-card').forEach(card => {
-    if (filter === 'all') { card.closest('.card-col').style.display = ''; return; }
-    const badge = card.querySelector('.badge');
-    const text = badge ? badge.textContent.toLowerCase() : '';
-    const match = (filter === 'active' && text.includes('active')) ||
-                  (filter === 'draft' && text.includes('draft')) ||
-                  (filter === 'closing' && text.includes('closing')) ||
-                  (filter === 'expired' && text.includes('expired'));
-    card.closest('.card-col').style.display = match ? '' : 'none';
+  document.querySelectorAll('.card-grid .event-card').forEach(card => {
+    const statusEl = card.querySelector('.et-status-badge, .et-closing');
+    const text = statusEl ? statusEl.textContent.toLowerCase() : '';
+    const isDraft = statusEl && statusEl.classList.contains('et-status-badge');
+    const isExpired = statusEl && statusEl.classList.contains('expired');
+    const match = filter === 'all' ||
+                  (filter === 'active' && !isDraft && !isExpired) ||
+                  (filter === 'draft' && isDraft) ||
+                  (filter === 'closing' && text.includes('closing') && !isExpired) ||
+                  (filter === 'expired' && isExpired);
+    card.style.display = match ? '' : 'none';
   });
 
-  // Filter table rows (list view)
-  document.querySelectorAll('#list-view tbody tr').forEach(row => {
-    if (filter === 'all') { row.style.display = ''; return; }
-    const badge = row.querySelector('.badge');
-    const text = badge ? badge.textContent.toLowerCase() : '';
-    const match = (filter === 'active' && text.includes('active')) ||
-                  (filter === 'draft' && text.includes('draft')) ||
-                  (filter === 'closing' && text.includes('closing')) ||
-                  (filter === 'expired' && text.includes('expired')) ||
-                  (filter === 'active' && text.includes('template'));
-    row.style.display = match || filter === 'all' ? '' : 'none';
+  // Filter cards (list view)
+  document.querySelectorAll('#list-view .hlc[data-title]').forEach(card => {
+    const statusEl = card.querySelector('.hlc-status');
+    const text = statusEl ? statusEl.textContent.toLowerCase() : '';
+    const isDraft = text.includes('draft');
+    const isExpired = text.includes('expired');
+    const match = filter === 'all' ||
+                  (filter === 'active' && !isDraft && !isExpired) ||
+                  (filter === 'draft' && isDraft) ||
+                  (filter === 'closing' && text.includes('closing') && !isExpired) ||
+                  (filter === 'expired' && isExpired);
+    card.style.display = match ? '' : 'none';
   });
 
   document.getElementById('filter-menu').style.display = 'none';
@@ -1831,6 +2066,88 @@ function sortTable(colIdx) {
     return asc ? aText.localeCompare(bText) : bText.localeCompare(aText);
   });
   rows.forEach(r => tbody.appendChild(r));
+}
+
+let shareTemplateCurrentEvent = null;
+
+function revealDownloadIcon(btn) {
+  const card = btn.closest('.event-card, .hlc');
+  const downloadIcon = card && card.querySelector('.et-download-icon, .hlc-download-icon');
+  if (downloadIcon) downloadIcon.style.display = 'flex';
+}
+
+function openShareTemplateMenu(btn, eventTitle) {
+  shareTemplateCurrentEvent = eventTitle;
+  const menu = document.getElementById('share-template-menu');
+  const rect = btn.getBoundingClientRect();
+  const menuWidth = 180;
+  let left = rect.right - menuWidth;
+  if (left < 8) left = 8;
+  menu.style.display = 'block';
+  menu.style.top = (rect.bottom + 6) + 'px';
+  menu.style.left = left + 'px';
+}
+
+document.addEventListener('click', function (e) {
+  const menu = document.getElementById('share-template-menu');
+  if (menu && menu.style.display !== 'none' && !menu.contains(e.target) && !e.target.closest('[data-share-template-btn]')) {
+    menu.style.display = 'none';
+  }
+}, true);
+
+function getEventItems(title) {
+  const data = orderEventData[title];
+  if (!data || !data.orders) return [];
+  const seen = {};
+  const items = [];
+  data.orders.forEach(function (o) {
+    if (!seen[o.item]) {
+      seen[o.item] = true;
+      items.push({ name: o.item, price: o.price });
+    }
+  });
+  return items;
+}
+
+function downloadEventExcel() {
+  const title = shareTemplateCurrentEvent;
+  const items = getEventItems(title);
+  const rows = [['Item', 'Price']].concat(items.map(function (it) { return [it.name, it.price]; }));
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Event Setup');
+  XLSX.writeFile(wb, title.replace(/[^a-z0-9]/gi, '_') + '_setup.xlsx');
+  document.getElementById('share-template-menu').style.display = 'none';
+  showToast('Excel downloaded', 'success');
+}
+
+function downloadEventPDF() {
+  const title = shareTemplateCurrentEvent;
+  const items = getEventItems(title);
+  const rowsHtml = items.map(function (it) {
+    return '<tr><td style="padding:6px 10px;border-bottom:1px solid #eee;">' + it.name + '</td>'
+      + '<td style="padding:6px 10px;border-bottom:1px solid #eee;text-align:right;">$' + it.price.toFixed(2) + '</td></tr>';
+  }).join('');
+  const html = '<html><head><title>' + title + '</title></head><body style="font-family:sans-serif;padding:24px;">'
+    + '<h2>' + title + '</h2>'
+    + '<p style="color:#888;font-size:12px;">Event setup — items and prices only.</p>'
+    + '<table style="width:100%;border-collapse:collapse;margin-top:12px;">'
+    + '<thead><tr><th style="text-align:left;padding:6px 10px;border-bottom:2px solid #333;">Item</th><th style="text-align:right;padding:6px 10px;border-bottom:2px solid #333;">Price</th></tr></thead>'
+    + '<tbody>' + rowsHtml + '</tbody></table></body></html>';
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  win.print();
+  document.getElementById('share-template-menu').style.display = 'none';
+}
+
+function useAsTemplate() {
+  document.getElementById('share-template-menu').style.display = 'none';
+  showToast('Opening as new event template\u2026', 'success');
+  setTimeout(function () {
+    if (window.parent && window.parent.navigate) window.parent.navigate('hosting.html', null);
+  }, 600);
 }
 
 function toggleDotMenu(el) {
