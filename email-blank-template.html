@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>{{email_title}}</title>
+<!--[if mso]>
+<noscript>
+<xml>
+<o:OfficeDocumentSettings>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+</noscript>
+<![endif]-->
+<style>
+  /* Client resets — most email clients ignore <style>, so every real rule below is ALSO inlined.
+     This block only helps clients that do support it (Apple Mail, most modern webmail). */
+  body, table, td { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+  body { margin: 0; padding: 0; background-color: #F4F6F8; }
+  img { border: 0; line-height: 100%; outline: none; text-decoration: none; }
+  table { border-collapse: collapse; }
+  a { text-decoration: none; }
+  @media only screen and (max-width: 600px) {
+    .email-container { width: 100% !important; }
+    .stack-col { display: block !important; width: 100% !important; }
+    .px-mobile { padding-left: 20px !important; padding-right: 20px !important; }
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#F4F6F8;">
+
+  <!-- Preheader (hidden preview text shown in inbox list, not in the email body) -->
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#F4F6F8;">
+    {{preheader_text}}
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F4F6F8;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background-color:#FFFFFF;border-radius:12px;overflow:hidden;">
+
+          <!-- ══════════════════════════════════
+               HEADER — same on every co·bee email, don't modify per-template
+          ══════════════════════════════════ -->
+          <tr>
+            <td align="center" style="background-color:#009A97;padding:28px 24px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:22px;font-weight:700;color:#FFFFFF;line-height:1.2;">
+                    co<span style="color:#F5A623;">&middot;</span>bee
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.75);padding-top:2px;">
+                    Good things must share!
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══════════════════════════════════
+               OPTIONAL STATUS PILL — delete this whole row if the email doesn't need one.
+               Swap the two colors below for different tones:
+                 success/approved : bg #E0F5F5  text #007A77
+                 warning/pending  : bg #FEF2DC  text #B8720A
+                 danger/rejected  : bg #FCEBEB  text #A32D2D
+                 neutral/info     : bg #F1EFE8  text #888780
+          ══════════════════════════════════ -->
+          <tr>
+            <td class="px-mobile" style="padding:32px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="left">
+                    <div style="display:inline-block;background-color:#E0F5F5;color:#007A77;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;padding:5px 12px;border-radius:99px;">
+                      {{status_label}}
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══════════════════════════════════
+               GREETING — every email starts with this
+          ══════════════════════════════════ -->
+          <tr>
+            <td class="px-mobile" style="padding:16px 40px 0 40px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+              <p style="margin:0 0 12px 0;font-size:18px;font-weight:700;color:#1a1a18;">Hi {{recipient_name}},</p>
+              <p style="margin:0 0 8px 0;font-size:14px;line-height:1.6;color:#4a4a45;">
+                {{body_message}}
+              </p>
+            </td>
+          </tr>
+
+          <!-- ══════════════════════════════════
+               INFO BOX — the standard co·bee "details card" pattern.
+               Duplicate the <tr> row inside for as many label/value rows as needed.
+          ══════════════════════════════════ -->
+          <tr>
+            <td class="px-mobile" style="padding:20px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#E0F5F5;border-radius:10px;border-left:3px solid #009A97;">
+                <tr>
+                  <td style="padding:18px 20px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td colspan="2" style="padding-bottom:10px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#007A77;">
+                          {{info_box_title}}
+                        </td>
+                      </tr>
+                      <!-- repeat this row per label/value pair -->
+                      <tr>
+                        <td width="110" valign="top" style="padding:6px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:13px;color:#888780;">{{label}}</td>
+                        <td valign="top" style="padding:6px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:13px;font-weight:600;color:#1a1a18;">{{value}}</td>
+                      </tr>
+                      <!-- /repeat -->
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══════════════════════════════════
+               CTA BUTTON — delete this row if the email has no action button
+          ══════════════════════════════════ -->
+          <tr>
+            <td class="px-mobile" align="center" style="padding:28px 40px 8px 40px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" bgcolor="#009A97" style="border-radius:8px;">
+                    <a href="{{cta_link}}" target="_blank" style="display:inline-block;padding:14px 36px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:15px;font-weight:700;color:#FFFFFF;text-decoration:none;border-radius:8px;">
+                      {{cta_label}}
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══════════════════════════════════
+               CLOSING LINE — delete or edit freely
+          ══════════════════════════════════ -->
+          <tr>
+            <td class="px-mobile" style="padding:20px 40px 0 40px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:13px;line-height:1.6;color:#4a4a45;">
+              {{closing_message}}
+            </td>
+          </tr>
+
+          <!-- ══════════════════════════════════
+               FOOTER — same on every co·bee email, don't modify per-template
+          ══════════════════════════════════ -->
+          <tr>
+            <td class="px-mobile" align="center" style="padding:28px 40px 0 40px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+              <p style="margin:0 0 6px 0;font-size:11px;color:#B4B2A9;">
+                {{footer_note}}
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td class="px-mobile" align="center" style="padding:16px 40px 32px 40px;background-color:#FAFAF8;border-top:1px solid #E0DFD8;margin-top:20px;">
+              <p style="margin:16px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:11px;color:#B4B2A9;">
+                &copy; {{year}} Co-bee. All rights reserved.
+              </p>
+              <p style="margin:2px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:11px;color:#B4B2A9;">
+                {{footer_reason}}
+              </p>
+            </td>
+          </tr>
+
+        </table>
+        <!-- /email-container -->
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
