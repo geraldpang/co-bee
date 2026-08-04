@@ -1785,6 +1785,100 @@ select:focus { border-color: #009A97; }
       </div>
     </div>
 
+    <!-- SCREEN HITPAY: Branded HitPay checkout redirect -->
+    <div id="ev-screen-hitpay" style="display:none;background:#F4F6F8;">
+      <!-- Secure checkout strip -->
+      <div style="background:#1a1a18;padding:10px 14px;display:flex;align-items:center;gap:8px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B4B2A9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span style="font-size:11px;color:#B4B2A9;letter-spacing:0.02em;">Secure Checkout</span>
+        <button onclick="cancelHitPay()" style="margin-left:auto;background:none;border:none;color:#888780;cursor:pointer;font-size:16px;line-height:1;padding:0;">&times;</button>
+      </div>
+
+      <!-- Amount panel (co·bee branded) -->
+      <div style="background:linear-gradient(135deg,#009A97,#007A77);padding:26px 20px 30px;text-align:center;color:white;">
+        <div style="font-size:20px;font-weight:700;letter-spacing:0.01em;margin-bottom:16px;">co·bee</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.8);margin-bottom:6px;">You are paying</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:2px;">SGD</div>
+        <div id="hp-amount" style="font-size:34px;font-weight:700;line-height:1.1;">0.00</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-top:14px;background:rgba(255,255,255,0.16);border-radius:20px;padding:6px 14px;font-size:12px;max-width:100%;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span id="hp-event-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Groupbuy Event</span>
+        </div>
+      </div>
+
+      <div style="padding:0 14px 28px;margin-top:-16px;">
+
+        <!-- Payer card -->
+        <div style="background:white;border-radius:14px;border:0.5px solid #e0dfd8;box-shadow:0 4px 16px rgba(0,0,0,0.06);padding:14px;display:flex;align-items:center;gap:10px;position:relative;">
+          <div style="width:40px;height:40px;border-radius:50%;background:#E8971A;display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:13px;flex-shrink:0;">A</div>
+          <div style="min-width:0;">
+            <div style="font-size:13px;font-weight:600;color:#1a1a18;">Alex Tan</div>
+            <div style="font-size:11px;color:#888780;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">alex.tan@mail.com</div>
+          </div>
+        </div>
+
+        <!-- Payment methods -->
+        <div style="background:white;margin-top:12px;border-radius:14px;border:0.5px solid #e0dfd8;padding:16px 14px;">
+          <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:12px;">CHOOSE PAYMENT METHOD</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+            <div style="border:0.5px solid #e0dfd8;border-radius:10px;padding:8px 4px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:#009A97;">PayNow</div>
+            </div>
+            <div style="border:0.5px solid #e0dfd8;border-radius:10px;padding:8px 4px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:#00B14F;">GrabPay</div>
+            </div>
+            <div style="border:0.5px solid #e0dfd8;border-radius:10px;padding:8px 4px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:#1a1a18;">QR Ph</div>
+            </div>
+            <div style="border:0.5px solid #e0dfd8;border-radius:10px;padding:8px 4px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:#E8971A;">Atome</div>
+            </div>
+            <div style="border:0.5px solid #e0dfd8;border-radius:10px;padding:8px 4px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:#1A1F71;">Visa</div>
+            </div>
+            <div style="border:0.5px solid #e0dfd8;border-radius:10px;padding:8px 4px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:#EB001B;">Mastercard</div>
+            </div>
+            <div style="border:0.5px solid #e0dfd8;border-radius:10px;padding:8px 4px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:#1a1a18;">Apple Pay</div>
+            </div>
+            <div style="border:0.5px solid #e0dfd8;border-radius:10px;padding:8px 4px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:#4285F4;">G Pay</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- QR code -->
+        <div style="background:white;margin-top:12px;border-radius:14px;border:0.5px solid #e0dfd8;padding:20px 14px;text-align:center;">
+          <div style="border:0.5px solid #e0dfd8;border-radius:12px;padding:16px;display:inline-flex;align-items:center;justify-content:center;background:#FAFAF8;">
+            <svg width="120" height="120" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100" height="100" fill="white"/>
+              <rect x="10" y="10" width="25" height="25" fill="#1a1a18" rx="2"/><rect x="14" y="14" width="17" height="17" fill="white" rx="1"/><rect x="18" y="18" width="9" height="9" fill="#1a1a18" rx="1"/>
+              <rect x="65" y="10" width="25" height="25" fill="#1a1a18" rx="2"/><rect x="69" y="14" width="17" height="17" fill="white" rx="1"/><rect x="73" y="18" width="9" height="9" fill="#1a1a18" rx="1"/>
+              <rect x="10" y="65" width="25" height="25" fill="#1a1a18" rx="2"/><rect x="14" y="69" width="17" height="17" fill="white" rx="1"/><rect x="18" y="73" width="9" height="9" fill="#1a1a18" rx="1"/>
+              <rect x="40" y="10" width="5" height="5" fill="#009A97" rx="0.5"/><rect x="50" y="10" width="5" height="5" fill="#009A97" rx="0.5"/>
+              <rect x="40" y="20" width="5" height="5" fill="#009A97" rx="0.5"/><rect x="55" y="20" width="5" height="5" fill="#009A97" rx="0.5"/>
+              <rect x="50" y="30" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="60" y="30" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="10" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="25" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="45" y="40" width="5" height="5" fill="#009A97" rx="0.5"/><rect x="60" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="80" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="10" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="30" y="50" width="5" height="5" fill="#009A97" rx="0.5"/><rect x="50" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="70" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="20" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="40" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="65" y="60" width="5" height="5" fill="#009A97" rx="0.5"/><rect x="80" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+              <rect x="40" y="70" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="55" y="70" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="75" y="70" width="5" height="5" fill="#009A97" rx="0.5"/>
+              <rect x="45" y="80" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="60" y="80" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="80" y="80" width="5" height="5" fill="#1a1a18" rx="0.5"/>
+            </svg>
+          </div>
+          <div style="font-size:12px;color:#888780;margin-top:12px;">Scan this QR code with your banking app to complete payment</div>
+        </div>
+
+        <div style="text-align:center;margin-top:16px;font-size:11px;color:#B4B2A9;">Powered by HitPay</div>
+
+        <!-- Actions -->
+        <div style="display:flex;gap:10px;margin-top:18px;">
+          <button onclick="cancelHitPay()" style="flex:1;height:48px;border:0.5px solid #D3D1C7;border-radius:10px;background:white;font-size:14px;font-weight:600;color:#888780;cursor:pointer;font-family:inherit;">Cancel</button>
+          <button onclick="hitPayPaymentComplete()" style="flex:2;height:48px;background:#009A97;border:none;border-radius:10px;font-size:14px;font-weight:700;color:white;cursor:pointer;font-family:inherit;">I've Completed Payment</button>
+        </div>
+      </div>
+    </div>
+
     <!-- SCREEN 2: Order confirmation + payment -->
     <div id="ev-screen-2" style="display:none;padding:14px 14px 32px;">
 
@@ -1914,76 +2008,22 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-            <!-- Payment card -->
+            <!-- Payment confirmation card (paid via HitPay checkout) -->
       <div style="background:white;border-radius:14px;border:0.5px solid #e0dfd8;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 6px rgba(0,0,0,0.04);">
-
-        <!-- Step 1 -->
-        <div style="background:#E0F5F5;border-bottom:0.5px solid #80CCCB;padding:12px 14px;display:flex;align-items:center;gap:10px;">
-          <div style="width:24px;height:24px;border-radius:50%;background:#009A97;color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+        <div style="padding:18px 14px;display:flex;align-items:center;gap:12px;">
+          <div style="width:42px;height:42px;border-radius:50%;background:#E8F8EF;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
           <div>
-            <div style="font-size:13px;font-weight:600;color:#1a1a18;">Scan to Pay</div>
-            <div style="font-size:11px;color:#888780;">Pay <strong id="ev2-payamt" style="color:#1a1a18;">$0.00</strong> to <strong style="color:#1a1a18;">83062355</strong></div>
-          </div>
-        </div>
-        <div style="padding:16px 14px;">
-          <!-- Reference code -->
-          <div style="background:#f5f5f5;border-radius:8px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-            <div>
-              <div style="font-size:10px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:2px;">YOUR REFERENCE CODE</div>
-              <div style="font-size:16px;font-weight:700;color:#1a1a18;letter-spacing:0.1em;">5UV9-NO2</div>
-            </div>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          </div>
-          <!-- QR code -->
-          <div style="border:0.5px solid #e0dfd8;border-radius:12px;padding:20px;display:flex;align-items:center;justify-content:center;background:#FAFAF8;margin-bottom:10px;">
-            <svg width="140" height="140" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <rect width="100" height="100" fill="white"/>
-              <rect x="10" y="10" width="25" height="25" fill="#1a1a18" rx="2"/><rect x="14" y="14" width="17" height="17" fill="white" rx="1"/><rect x="18" y="18" width="9" height="9" fill="#1a1a18" rx="1"/>
-              <rect x="65" y="10" width="25" height="25" fill="#1a1a18" rx="2"/><rect x="69" y="14" width="17" height="17" fill="white" rx="1"/><rect x="73" y="18" width="9" height="9" fill="#1a1a18" rx="1"/>
-              <rect x="10" y="65" width="25" height="25" fill="#1a1a18" rx="2"/><rect x="14" y="69" width="17" height="17" fill="white" rx="1"/><rect x="18" y="73" width="9" height="9" fill="#1a1a18" rx="1"/>
-              <rect x="40" y="10" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="50" y="10" width="5" height="5" fill="#1a1a18" rx="0.5"/>
-              <rect x="40" y="20" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="55" y="20" width="5" height="5" fill="#1a1a18" rx="0.5"/>
-              <rect x="50" y="30" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="60" y="30" width="5" height="5" fill="#1a1a18" rx="0.5"/>
-              <rect x="10" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="25" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="45" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="60" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="80" y="40" width="5" height="5" fill="#1a1a18" rx="0.5"/>
-              <rect x="10" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="30" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="50" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="70" y="50" width="5" height="5" fill="#1a1a18" rx="0.5"/>
-              <rect x="20" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="40" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="65" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="80" y="60" width="5" height="5" fill="#1a1a18" rx="0.5"/>
-              <rect x="40" y="70" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="55" y="70" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="75" y="70" width="5" height="5" fill="#1a1a18" rx="0.5"/>
-              <rect x="45" y="80" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="60" y="80" width="5" height="5" fill="#1a1a18" rx="0.5"/><rect x="80" y="80" width="5" height="5" fill="#1a1a18" rx="0.5"/>
-            </svg>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:11px;">
-            <button style="color:#888780;background:none;border:none;cursor:pointer;font-size:11px;font-family:inherit;padding:0;display:flex;align-items:center;gap:4px;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Download QR
-            </button>
-            <button style="color:#888780;background:none;border:none;cursor:pointer;font-size:11px;font-family:inherit;padding:0;">↻ Reload</button>
-          </div>
-        </div>
-
-        <!-- Step 2 -->
-        <div style="border-top:0.5px solid #e0dfd8;">
-          <div style="background:#E0F5F5;border-bottom:0.5px solid #80CCCB;padding:12px 14px;display:flex;align-items:center;gap:10px;">
-            <div style="width:24px;height:24px;border-radius:50%;background:#009A97;color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
-            <div>
-              <div style="font-size:13px;font-weight:600;color:#007A77;">Upload Payment Proof</div>
-              <div style="font-size:11px;color:#888780;">Attach your PayNow screenshot (do not attach SMS)</div>
-            </div>
-          </div>
-          <div style="padding:14px;">
-            <div onclick="alert('Upload screenshot')" style="border:1.5px dashed #D3D1C7;border-radius:12px;padding:22px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;background:#FAFAF8;">
-              <div style="width:40px;height:40px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-              </div>
-              <div style="font-size:13px;font-weight:600;color:#1a1a18;">Tap to upload screenshot</div>
-              <div style="font-size:11px;color:#888780;">PNG, JPG or PDF</div>
-            </div>
+            <div style="font-size:14px;font-weight:700;color:#1a1a18;">Payment Successful</div>
+            <div style="font-size:11px;color:#888780;">Paid <strong id="ev2-payamt" style="color:#1a1a18;">$0.00</strong> via HitPay</div>
           </div>
         </div>
       </div>
 
             <!-- Confirm button -->
       <button onclick="confirmPayment()" style="width:100%;height:52px;background:#009A97;border:none;border-radius:12px;font-size:15px;font-weight:700;color:white;cursor:pointer;font-family:inherit;letter-spacing:0.05em;box-shadow:0 4px 14px rgba(0,154,151,0.3);">
-        Confirm Payment
+        Done
       </button>
 
     </div>
@@ -3999,14 +4039,32 @@ function placeOrder2() {
   if (finalEl) finalEl.textContent = '$' + total.toFixed(2);
   if (payEl) payEl.textContent = '$' + total.toFixed(2);
   document.getElementById('ev2-ordernum').textContent = Math.floor(Math.random() * 10) + 1;
-  // Switch to screen 2
+  // Populate + redirect to HitPay checkout
+  var hpAmount = document.getElementById('hp-amount');
+  var hpTitle = document.getElementById('hp-event-title');
+  if (hpAmount) hpAmount.textContent = total.toFixed(2);
+  if (hpTitle) hpTitle.textContent = document.getElementById('ev1-title').textContent;
   document.getElementById('ev-screen-1').style.display = 'none';
-  document.getElementById('ev-screen-2').style.display = 'block';
+  document.getElementById('ev-screen-2').style.display = 'none';
+  document.getElementById('ev-screen-hitpay').style.display = 'block';
   document.getElementById('view-event-detail').scrollTop = 0;
 }
 
+function cancelHitPay() {
+  document.getElementById('ev-screen-hitpay').style.display = 'none';
+  document.getElementById('ev-screen-1').style.display = 'block';
+  document.getElementById('view-event-detail').scrollTop = 0;
+}
+
+function hitPayPaymentComplete() {
+  document.getElementById('ev-screen-hitpay').style.display = 'none';
+  document.getElementById('ev-screen-2').style.display = 'block';
+  document.getElementById('view-event-detail').scrollTop = 0;
+  showToast('Payment received via HitPay', 'success');
+}
+
 function confirmPayment() {
-  showToast('Payment confirmed!', 'success');
+  showToast('Order complete!', 'success');
   switchTab('purchase');
 }
 
