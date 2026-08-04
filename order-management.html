@@ -76,6 +76,11 @@ tr:hover td { background: #FAFAF8; }
 .badge.refunded   { background: #FEF2DC; color: #BA7517; }
 .badge.pay-verified { background: #E0F5F5; color: #007A77; }
 .badge.collected  { background: #e8f5e9; color: #2e7d32; }
+.badge.hitpay-paid { background: #E0F5F5; color: #007A77; }
+/* Reconciliation statuses */
+.badge.settled { background: #e8f5e9; color: #2e7d32; }
+.badge.pending-settle { background: #FEF2DC; color: #BA7517; }
+.badge.txn-failed { background: #FCEBEB; color: #A32D2D; }
 /* Fulfilment */
 /* Fulfilment select */
 .ful-select { height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px; font-size: 11px; font-family: inherit; color: #1a1a18; background: white; padding: 0 22px 0 8px; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; width: 170px; }
@@ -151,6 +156,23 @@ tr:hover td { background: #FAFAF8; }
 .consol-name { font-size:13px; font-weight:600; color:#1a1a18; margin-bottom:4px; }
 .consol-events { font-size:12px; color:#888780; margin-bottom:2px; }
 .consol-total { font-size:13px; font-weight:600; color:#009A97; }
+
+/* ── HITPAY RECONCILIATION TAB ── */
+.recon-banner { display:flex; gap:12px; align-items:flex-start; background:#E0F5F5; border:0.5px solid #80CCCB; border-radius:10px; padding:14px 16px; margin-bottom:18px; }
+.recon-banner svg { flex-shrink:0; margin-top:1px; color:#007A77; }
+.recon-banner-title { font-size:13px; font-weight:700; color:#007A77; margin-bottom:3px; }
+.recon-banner-text { font-size:12px; color:#1a1a18; line-height:1.5; }
+.recon-banner-close { margin-left:auto; background:none; border:none; color:#007A77; cursor:pointer; font-size:16px; line-height:1; flex-shrink:0; padding:0; }
+
+.recon-subtabs { display:flex; gap:18px; border-bottom:0.5px solid #e0dfd8; margin-bottom:14px; }
+.recon-subtab { padding:8px 0; font-size:12px; color:#888780; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; }
+.recon-subtab.active { color:#009A97; border-bottom-color:#009A97; font-weight:600; }
+.recon-section-hint { font-size:11px; color:#888780; }
+
+.match-ok { display:inline-flex; align-items:center; gap:4px; color:#2e7d32; font-size:11px; font-weight:600; white-space:nowrap; }
+.match-warn { display:inline-flex; align-items:center; gap:4px; color:#A32D2D; font-size:11px; font-weight:600; white-space:nowrap; }
+
+.mono-id { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; color:#888780; }
 </style>
 </head>
 <body>
@@ -218,6 +240,7 @@ tr:hover td { background: #FAFAF8; }
     <select class="filter-select wide" onchange="filterTable()" id="filter-payment">
       <option value="">Payment Status</option>
       <option>Not Paid</option>
+      <option>Paid</option>
       <option>Refunded</option>
       <option>Verified</option>
       <option>Collected</option>
@@ -231,13 +254,14 @@ tr:hover td { background: #FAFAF8; }
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
       for Payment Details.
     </div>
-    <div class="total-orders">Total orders: <span id="total-count">12</span></div>
+    <div class="total-orders">Total orders: <span id="total-count">10</span></div>
   </div>
 
   <!-- TABS -->
   <div class="tabs-row" id="tabs-row">
     <div class="tab active" onclick="setTab('all', this)" id="tab-all">All</div>
     <div class="tab" onclick="setTab('unpaid', this)" id="tab-unpaid">Unpaid Orders</div>
+    <div class="tab" onclick="showReconTab(this)" id="tab-recon">Payment Reconciliation</div>
     <label class="tab-check">
       <input type="checkbox" checked onchange="filterTable()" id="excl-cancelled" />
       Exclude cancelled orders
@@ -261,6 +285,46 @@ tr:hover td { background: #FAFAF8; }
         </tr>
       </thead>
       <tbody id="orders-body">
+        <tr data-event-status="Open" data-payment="Paid" data-fulfilment="Submitted & Paid" data-cancelled="false">
+          <td><span class="name-link">Alex Tan</span></td>
+          <td>91234567</td>
+          <td class="col-event"><span class="event-text" title="Groupbuy Event test">Groupbuy Event test</span></td>
+          <td>15/05/2026</td>
+          <td>04/05/2026</td>
+          <td class="purchase-cell"><div class="purchase-inline">Spec (qty:1)</div></td>
+          <td><span class="price-bold">$47.00</span></td>
+          <td><span class="badge open">Open</span></td>
+          <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+          <td><select class="ful-select">
+              <option>Cancelled</option>
+              <option>Unpaid</option>
+              <option>Submitted & Unpaid</option>
+              <option selected>Submitted & Paid</option>
+              <option>Submitted & Collected</option>
+              <option>Verified</option>
+              <option>Collected</option>
+              </select></td>
+        </tr>
+        <tr data-event-status="Open" data-payment="Paid" data-fulfilment="Submitted & Paid" data-cancelled="false">
+          <td><span class="name-link">Priya Nair</span></td>
+          <td>98761234</td>
+          <td class="col-event"><span class="event-text" title="new event">new event</span></td>
+          <td>15/05/2026</td>
+          <td>03/05/2026</td>
+          <td class="purchase-cell"><div class="purchase-inline">Item 1 (qty:2)</div></td>
+          <td><span class="price-bold">$20.00</span></td>
+          <td><span class="badge open">Open</span></td>
+          <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+          <td><select class="ful-select">
+              <option>Cancelled</option>
+              <option>Unpaid</option>
+              <option>Submitted & Unpaid</option>
+              <option selected>Submitted & Paid</option>
+              <option>Submitted & Collected</option>
+              <option>Verified</option>
+              <option>Collected</option>
+              </select></td>
+        </tr>
         <tr data-event-status="Closed" data-payment="Verified" data-fulfilment="Verified" data-cancelled="false">
           <td><span class="name-link">Gerald Pang</span></td>
           <td>0469787098</td>
@@ -447,6 +511,315 @@ tr:hover td { background: #FAFAF8; }
 
   <!-- Consolidated Table Views -->
   <div id="consol-tables-wrap"></div>
+
+  <!-- ══════════ HITPAY RECONCILIATION PANEL ══════════ -->
+  <div id="recon-panel" style="display:none;">
+
+    <!-- Explainer banner (dismissible) -->
+    <div class="recon-banner" id="recon-banner">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <div>
+        <div class="recon-banner-title">What is this tab?</div>
+        <div class="recon-banner-text">Reconciliation just means checking that money in matches money out. Every time a buyer pays through the HitPay checkout, HitPay takes a small processing fee, then pays the rest to your bank account in a batch ("payout") every few days. This tab lines up each buyer payment against those payouts, so you can see exactly what was collected, what HitPay kept as fees, and what actually landed in your bank — useful for your own records or for handing to an accountant/bookkeeper.</div>
+      </div>
+      <button class="recon-banner-close" onclick="document.getElementById('recon-banner').style.display='none'" title="Dismiss">&times;</button>
+    </div>
+
+    <!-- Sub-tabs: Transactions / Payouts -->
+    <div class="recon-subtabs">
+      <div class="recon-subtab active" onclick="showReconSubtab('txn', this)" id="recon-subtab-txn">Transactions</div>
+      <div class="recon-subtab" onclick="showReconSubtab('payout', this)" id="recon-subtab-payout">Payouts to Bank</div>
+      <div class="recon-subtab" onclick="showReconSubtab('close', this)" id="recon-subtab-close">Daily / Weekly Close</div>
+    </div>
+
+    <!-- Filters (transactions) -->
+    <div class="filters-row" id="recon-txn-filters">
+      <div class="search-wrap" style="width:240px;">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" type="text" placeholder="Search name / txn ID" oninput="filterRecon()" id="recon-search" />
+      </div>
+      <select class="filter-select" onchange="filterRecon()" id="recon-status-filter">
+        <option value="">Status</option>
+        <option>Paid</option>
+        <option>Failed</option>
+      </select>
+      <select class="filter-select" onchange="filterRecon()" id="recon-payout-filter">
+        <option value="">Payout Status</option>
+        <option>Settled</option>
+        <option>Pending</option>
+      </select>
+      <button class="btn-clear" onclick="clearReconFilters()">Clear Filter</button>
+      <button class="btn-outline" style="margin-left:auto;" onclick="alert('Exporting payment reconciliation report as CSV — ready to send to your accounting team.')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export for Accounting
+      </button>
+    </div>
+
+    <!-- Transactions table -->
+    <div id="recon-view-txn">
+      <div id="recon-drilldown-bar" style="display:none;align-items:center;gap:8px;background:#FEF2DC;border:0.5px solid #F4D9A6;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#8a5a0a;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Filtered to <strong id="recon-drilldown-label"></strong> — showing linked transactions only</span>
+        <button onclick="clearDrilldown()" style="margin-left:auto;background:none;border:none;color:#8a5a0a;font-weight:600;cursor:pointer;font-size:12px;">Clear ×</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Buyer</th>
+              <th>Event / Order</th>
+              <th>Date &amp; Time</th>
+              <th>Method</th>
+              <th>Amount</th>
+              <th>Fee</th>
+              <th>Net</th>
+              <th>Txn ID</th>
+              <th>Status</th>
+              <th>Payout</th>
+              <th>Match</th>
+              <th style="width:36px;"></th>
+            </tr>
+          </thead>
+          <tbody id="recon-txn-body">
+            <tr data-status="Paid" data-payout="Settled" data-payout-id="P-1042" data-date="2026-05-04" data-txn="hp_8f3a2b1c">
+              <td><span class="name-link">Alex Tan</span></td>
+              <td class="col-event"><span class="event-text" title="Groupbuy Event test">Groupbuy Event test</span></td>
+              <td>04/05/2026<div class="date-row">10:14 AM</div></td>
+              <td>PayNow</td>
+              <td><span class="price-bold">$47.00</span></td>
+              <td>$1.41</td>
+              <td>$45.59</td>
+              <td class="mono-id">hp_8f3a2b1c</td>
+              <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+              <td><span class="badge settled">Settled</span><div class="date-row">Payout #P-1042</div></td>
+              <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
+            <td><button title="Download receipt" onclick="downloadTransaction('hp_8f3a2b1c')" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></td>
+            </tr>
+            <tr data-status="Paid" data-payout="Settled" data-payout-id="P-1042" data-date="2026-05-03" data-txn="hp_2c9d77ea">
+              <td><span class="name-link">Priya Nair</span></td>
+              <td class="col-event"><span class="event-text" title="new event">new event</span></td>
+              <td>03/05/2026<div class="date-row">4:02 PM</div></td>
+              <td>Visa •• 4242</td>
+              <td><span class="price-bold">$20.00</span></td>
+              <td>$0.88</td>
+              <td>$19.12</td>
+              <td class="mono-id">hp_2c9d77ea</td>
+              <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+              <td><span class="badge settled">Settled</span><div class="date-row">Payout #P-1042</div></td>
+              <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
+            <td><button title="Download receipt" onclick="downloadTransaction('hp_2c9d77ea')" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></td>
+            </tr>
+            <tr data-status="Paid" data-payout="Settled" data-payout-id="P-1042" data-date="2026-05-01" data-txn="hp_a51fe903">
+              <td><span class="name-link">Wei Ming Koh</span></td>
+              <td class="col-event"><span class="event-text" title="atea 1">atea 1</span></td>
+              <td>01/05/2026<div class="date-row">9:47 AM</div></td>
+              <td>GrabPay</td>
+              <td><span class="price-bold">$34.00</span></td>
+              <td>$1.02</td>
+              <td>$32.98</td>
+              <td class="mono-id">hp_a51fe903</td>
+              <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+              <td><span class="badge settled">Settled</span><div class="date-row">Payout #P-1042</div></td>
+              <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
+            <td><button title="Download receipt" onclick="downloadTransaction('hp_a51fe903')" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></td>
+            </tr>
+            <tr data-status="Paid" data-payout="Pending" data-payout-id="P-1043" data-date="2026-05-05" data-txn="hp_66b0cd4f">
+              <td><span class="name-link">Serena Lim</span></td>
+              <td class="col-event"><span class="event-text" title="new event">new event</span></td>
+              <td>05/05/2026<div class="date-row">11:20 AM</div></td>
+              <td>PayNow</td>
+              <td><span class="price-bold">$59.00</span></td>
+              <td>$1.77</td>
+              <td>$57.23</td>
+              <td class="mono-id">hp_66b0cd4f</td>
+              <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+              <td><span class="badge pending-settle">Pending</span><div class="date-row">Payout #P-1043</div></td>
+              <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
+            <td><button title="Download receipt" onclick="downloadTransaction('hp_66b0cd4f')" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></td>
+            </tr>
+            <tr data-status="Paid" data-payout="Settled" data-payout-id="P-1042" data-date="2026-05-04" data-txn="hp_ff10ab22">
+              <td><span style="color:#888780;">— (no order link)</span></td>
+              <td class="col-event"><span style="color:#B4B2A9;">—</span></td>
+              <td>04/05/2026<div class="date-row">6:40 PM</div></td>
+              <td>PayNow</td>
+              <td><span class="price-bold">$15.00</span></td>
+              <td>$0.45</td>
+              <td>$14.55</td>
+              <td class="mono-id">hp_ff10ab22</td>
+              <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+              <td><span class="badge settled">Settled</span><div class="date-row">Payout #P-1042</div></td>
+              <td><span class="match-warn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>No order found</span></td>
+            <td><button title="Download receipt" onclick="downloadTransaction('hp_ff10ab22')" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="recon-section-hint" style="margin-top:8px;">"Match" checks whether a HitPay payment can be linked to an order in co·bee. A "No order found" flag usually means a buyer paid without completing checkout properly, or an order was deleted after payment — worth a quick look.</div>
+    </div>
+
+    <!-- Payouts table -->
+    <div id="recon-view-payout" style="display:none;">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Payout ID</th>
+              <th>Bank Account</th>
+              <th>Payout Date</th>
+              <th>Gross Amount</th>
+              <th>Fees Deducted</th>
+              <th>Net Payout</th>
+              <th>Transactions</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono-id">P-1042</td>
+              <td>OCBC •• 1234</td>
+              <td>06/05/2026</td>
+              <td><span class="price-bold">$116.00</span></td>
+              <td>$3.76</td>
+              <td><span class="price-bold">$112.24</span></td>
+              <td>4</td>
+              <td><span class="badge settled">Completed</span></td>
+              <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForPayout('P-1042')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForPayout('P-1042')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+            </tr>
+            <tr>
+              <td class="mono-id">P-1043</td>
+              <td>OCBC •• 1234</td>
+              <td>Est. 08/05/2026</td>
+              <td><span class="price-bold">$59.00</span></td>
+              <td>$1.77</td>
+              <td><span class="price-bold">$57.23</span></td>
+              <td>1</td>
+              <td><span class="badge pending-settle">Processing</span></td>
+              <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForPayout('P-1043')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForPayout('P-1043')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="recon-section-hint" style="margin-top:8px;">A payout is one bank transfer from HitPay covering several transactions at once. Use "View Transactions" to jump straight to the linked list in the Transactions tab.</div>
+    </div>
+
+    <!-- Daily / Weekly Close -->
+    <div id="recon-view-close" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+        <div class="recon-section-hint" style="max-width:520px;">A simple end-of-day (or end-of-week) checklist: tally up what came in, what HitPay kept as fees, and tick it off once you've checked it against your bank. Good habit to do this regularly rather than only at month-end.</div>
+        <div style="display:flex;border:0.5px solid #D3D1C7;border-radius:8px;overflow:hidden;flex-shrink:0;">
+          <button class="page-btn active" id="close-btn-daily" onclick="setClosePeriod('daily')" style="border:none;border-radius:0;">Daily</button>
+          <button class="page-btn" id="close-btn-weekly" onclick="setClosePeriod('weekly')" style="border:none;border-radius:0;border-left:0.5px solid #D3D1C7;">Weekly</button>
+        </div>
+      </div>
+
+      <!-- Daily close table -->
+      <div id="close-table-daily">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Transactions</th>
+                <th>Gross Received</th>
+                <th>Fees</th>
+                <th>Net</th>
+                <th>Payout Status</th>
+                <th>Reconciled</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>01 May 2026</td>
+                <td>1</td>
+                <td><span class="price-bold">$34.00</span></td>
+                <td>$1.02</td>
+                <td>$32.98</td>
+                <td><span class="badge settled">Settled</span></td>
+                <td id="close-daily-1"><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reconciled</span><div class="date-row">by you, 07 May, 9:04 AM</div></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-01','01 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-01','01 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+              </tr>
+              <tr>
+                <td>03 May 2026</td>
+                <td>1</td>
+                <td><span class="price-bold">$20.00</span></td>
+                <td>$0.88</td>
+                <td>$19.12</td>
+                <td><span class="badge settled">Settled</span></td>
+                <td id="close-daily-2"><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reconciled</span><div class="date-row">by you, 07 May, 9:05 AM</div></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-03','03 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-03','03 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+              </tr>
+              <tr>
+                <td>04 May 2026</td>
+                <td>2</td>
+                <td><span class="price-bold">$62.00</span></td>
+                <td>$1.86</td>
+                <td>$60.14</td>
+                <td><span class="badge settled">Settled</span></td>
+                <td id="close-daily-3"><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reconciled</span><div class="date-row">by you, 07 May, 9:05 AM</div></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-04','04 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-04','04 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+              </tr>
+              <tr>
+                <td>05 May 2026</td>
+                <td>1</td>
+                <td><span class="price-bold">$59.00</span></td>
+                <td>$1.77</td>
+                <td>$57.23</td>
+                <td><span class="badge pending-settle">Pending</span></td>
+                <td id="close-daily-4"><button class="btn-outline" style="height:28px;" onclick="markReconciled('close-daily-4', this)">Mark as Reconciled</button></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-05','05 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-05','05 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Weekly close table -->
+      <div id="close-table-weekly" style="display:none;">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Week</th>
+                <th>Transactions</th>
+                <th>Gross Received</th>
+                <th>Fees</th>
+                <th>Net</th>
+                <th>Payout Status</th>
+                <th>Reconciled</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>28 Apr – 04 May 2026</td>
+                <td>4</td>
+                <td><span class="price-bold">$116.00</span></td>
+                <td>$3.76</td>
+                <td>$112.24</td>
+                <td><span class="badge settled">Settled</span><div class="date-row">Payout #P-1042</div></td>
+                <td id="close-weekly-1"><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reconciled</span><div class="date-row">by you, 07 May, 9:10 AM</div></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForWeek('2026-04-28','2026-05-04','28 Apr – 04 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForWeek('2026-04-28','2026-05-04','28 Apr – 04 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+              </tr>
+              <tr>
+                <td>05 – 11 May 2026</td>
+                <td>1 <span style="color:#888780;">so far</span></td>
+                <td><span class="price-bold">$59.00</span></td>
+                <td>$1.77</td>
+                <td>$57.23</td>
+                <td><span class="badge pending-settle">Pending</span><div class="date-row">Payout #P-1043</div></td>
+                <td id="close-weekly-2"><button class="btn-outline" style="height:28px;" onclick="markReconciled('close-weekly-2', this)">Mark as Reconciled</button></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForWeek('2026-05-05','2026-05-11','05 – 11 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForWeek('2026-05-05','2026-05-11','05 – 11 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- ══════════ END PAYMENT RECONCILIATION PANEL ══════════ -->
 
 </div>
 
@@ -757,6 +1130,7 @@ function switchToConsolTab(listId, tabEl) {
   document.querySelector('.pagination').style.display = 'none';
   document.querySelectorAll('[id^="consol-table-"]').forEach(t => t.style.display = 'none');
   document.getElementById('consol-table-' + listId).style.display = 'block';
+  const rp = document.getElementById('recon-panel'); if (rp) rp.style.display = 'none';
 
   // Update active tab
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -768,8 +1142,131 @@ function setTabMain(tabEl) {
   document.getElementById('orders-table').style.display = '';
   document.querySelector('.pagination').style.display = '';
   document.querySelectorAll('[id^="consol-table-"]').forEach(t => t.style.display = 'none');
+  const rp = document.getElementById('recon-panel'); if (rp) rp.style.display = 'none';
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   tabEl.classList.add('active');
+}
+
+// ── HITPAY RECONCILIATION TAB ──
+function showReconTab(tabEl) {
+  document.getElementById('orders-table').style.display = 'none';
+  document.querySelector('.pagination').style.display = 'none';
+  document.querySelectorAll('[id^="consol-table-"]').forEach(t => t.style.display = 'none');
+  document.getElementById('recon-panel').style.display = 'block';
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tabEl.classList.add('active');
+}
+
+function showReconSubtab(which, el) {
+  document.getElementById('recon-subtab-txn').classList.toggle('active', which === 'txn');
+  document.getElementById('recon-subtab-payout').classList.toggle('active', which === 'payout');
+  document.getElementById('recon-subtab-close').classList.toggle('active', which === 'close');
+  document.getElementById('recon-view-txn').style.display = which === 'txn' ? 'block' : 'none';
+  document.getElementById('recon-view-payout').style.display = which === 'payout' ? 'block' : 'none';
+  document.getElementById('recon-view-close').style.display = which === 'close' ? 'block' : 'none';
+  document.getElementById('recon-txn-filters').style.display = which === 'txn' ? 'flex' : 'none';
+}
+
+function setClosePeriod(period) {
+  document.getElementById('close-btn-daily').classList.toggle('active', period === 'daily');
+  document.getElementById('close-btn-weekly').classList.toggle('active', period === 'weekly');
+  document.getElementById('close-table-daily').style.display = period === 'daily' ? 'block' : 'none';
+  document.getElementById('close-table-weekly').style.display = period === 'weekly' ? 'block' : 'none';
+}
+
+function markReconciled(rowId, btn) {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit' });
+  const cell = document.getElementById(rowId);
+  if (cell) {
+    cell.innerHTML = '<span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reconciled</span><div class="date-row">by you, ' + timeStr + '</div>';
+  }
+}
+
+function filterRecon() {
+  const q = (document.getElementById('recon-search').value || '').toLowerCase();
+  const statusFilter = document.getElementById('recon-status-filter').value;
+  const payoutFilter = document.getElementById('recon-payout-filter').value;
+  const rows = document.querySelectorAll('#recon-txn-body tr');
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    const status = row.dataset.status || '';
+    const payout = row.dataset.payout || '';
+    const payoutId = row.dataset.payoutId || '';
+    const date = row.dataset.date || '';
+    const txnId = row.dataset.txn || '';
+
+    let matchDrilldown = true;
+    if (reconDrilldown) {
+      if (reconDrilldown.type === 'payout') matchDrilldown = payoutId === reconDrilldown.value;
+      else if (reconDrilldown.type === 'date') matchDrilldown = date === reconDrilldown.value;
+      else if (reconDrilldown.type === 'week') matchDrilldown = date >= reconDrilldown.value.start && date <= reconDrilldown.value.end;
+      else if (reconDrilldown.type === 'txn') matchDrilldown = txnId === reconDrilldown.value;
+    }
+
+    const matchQ = !q || text.includes(q);
+    const matchStatus = !statusFilter || status === statusFilter;
+    const matchPayout = !payoutFilter || payout === payoutFilter;
+    row.style.display = (matchQ && matchStatus && matchPayout && matchDrilldown) ? '' : 'none';
+  });
+}
+
+function clearReconFilters() {
+  document.getElementById('recon-search').value = '';
+  document.getElementById('recon-status-filter').value = '';
+  document.getElementById('recon-payout-filter').value = '';
+  clearDrilldown();
+}
+
+// ── CROSS-LINKING: Payouts / Daily-Weekly Close → Transactions ──
+let reconDrilldown = null; // { type: 'payout'|'date'|'week'|'txn', value, label }
+
+function applyDrilldownAndShow(type, value, label) {
+  reconDrilldown = { type, value, label };
+  showReconSubtab('txn', document.getElementById('recon-subtab-txn'));
+  const bar = document.getElementById('recon-drilldown-bar');
+  const lbl = document.getElementById('recon-drilldown-label');
+  if (lbl) lbl.textContent = label;
+  if (bar) bar.style.display = 'flex';
+  filterRecon();
+  const wrap = document.getElementById('recon-view-txn');
+  if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function goToTransactionsForPayout(payoutId) {
+  applyDrilldownAndShow('payout', payoutId, 'Payout #' + payoutId);
+}
+function goToTransactionsForDate(dateISO, label) {
+  applyDrilldownAndShow('date', dateISO, label);
+}
+function goToTransactionsForWeek(startISO, endISO, label) {
+  applyDrilldownAndShow('week', { start: startISO, end: endISO }, 'Week of ' + label);
+}
+function goToTransactionsForTxn(txnId) {
+  applyDrilldownAndShow('txn', txnId, 'Transaction ' + txnId);
+}
+
+function clearDrilldown() {
+  reconDrilldown = null;
+  const bar = document.getElementById('recon-drilldown-bar');
+  if (bar) bar.style.display = 'none';
+  filterRecon();
+}
+
+function downloadTransaction(txnId) {
+  alert('Downloading receipt for transaction ' + txnId + ' (PDF)...');
+}
+
+function downloadTransactionsForPayout(payoutId) {
+  alert('Downloading CSV of all transactions in Payout #' + payoutId + '...');
+}
+
+function downloadTransactionsForDate(dateISO, label) {
+  alert('Downloading CSV of transactions for ' + label + '...');
+}
+
+function downloadTransactionsForWeek(startISO, endISO, label) {
+  alert('Downloading CSV of transactions for week of ' + label + '...');
 }
 
 function confirmPackingName() {
