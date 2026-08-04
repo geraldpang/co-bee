@@ -84,6 +84,7 @@ tr:hover td { background: #FAFAF8; }
 .badge.pending-settle { background: #FEF2DC; color: #BA7517; }
 .badge.txn-failed { background: #FCEBEB; color: #A32D2D; }
 .badge.reconciled { background: #e8f5e9; color: #2e7d32; }
+.badge.unreconciled { background: #f0f0f0; color: #888780; }
 /* Fulfilment */
 /* Fulfilment select */
 .ful-select { height: 30px; border: 0.5px solid #D3D1C7; border-radius: 6px; font-size: 11px; font-family: inherit; color: #1a1a18; background: white; padding: 0 22px 0 8px; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; width: 170px; }
@@ -578,7 +579,8 @@ tr:hover td { background: #FAFAF8; }
               <th>Net</th>
               <th>Txn ID</th>
               <th>Status</th>
-              <th>Payout</th>
+              <th>Payout Status</th>
+              <th>Reconciled</th>
               <th>Match</th>
               <th style="width:36px;"></th>
             </tr>
@@ -594,7 +596,8 @@ tr:hover td { background: #FAFAF8; }
               <td>$45.59</td>
               <td class="mono-id">hp_8f3a2b1c</td>
               <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
-              <td><span class="badge reconciled payout-status-badge">Reconciled</span><div class="date-row">Payout #P-1042</div></td>
+              <td><span class="badge settled payout-status-badge">Settled</span><div class="date-row">Payout #P-1042</div></td>
+              <td><span class="badge reconciled reconciled-badge">Reconciled</span></td>
               <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
             <td><button title="Download receipt" onclick="downloadTransaction('hp_8f3a2b1c')" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></td>
             </tr>
@@ -608,7 +611,8 @@ tr:hover td { background: #FAFAF8; }
               <td>$19.12</td>
               <td class="mono-id">hp_2c9d77ea</td>
               <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
-              <td><span class="badge reconciled payout-status-badge">Reconciled</span><div class="date-row">Payout #P-1042</div></td>
+              <td><span class="badge settled payout-status-badge">Settled</span><div class="date-row">Payout #P-1042</div></td>
+              <td><span class="badge reconciled reconciled-badge">Reconciled</span></td>
               <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
             <td><button title="Download receipt" onclick="downloadTransaction('hp_2c9d77ea')" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></td>
             </tr>
@@ -622,7 +626,8 @@ tr:hover td { background: #FAFAF8; }
               <td>$32.98</td>
               <td class="mono-id">hp_a51fe903</td>
               <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
-              <td><span class="badge reconciled payout-status-badge">Reconciled</span><div class="date-row">Payout #P-1042</div></td>
+              <td><span class="badge settled payout-status-badge">Settled</span><div class="date-row">Payout #P-1042</div></td>
+              <td><span class="badge reconciled reconciled-badge">Reconciled</span></td>
               <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
             <td><button title="Download receipt" onclick="downloadTransaction('hp_a51fe903')" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></td>
             </tr>
@@ -637,27 +642,14 @@ tr:hover td { background: #FAFAF8; }
               <td class="mono-id">hp_66b0cd4f</td>
               <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
               <td><span class="badge pending-settle payout-status-badge">Pending</span><div class="date-row">Payout #P-1043</div></td>
+              <td><span class="badge unreconciled reconciled-badge">Unreconciled</span></td>
               <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
             <td><button title="Download receipt" onclick="downloadTransaction('hp_66b0cd4f')" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></td>
-            </tr>
-            <tr data-status="Paid" data-payout="Settled" data-payout-id="P-1042" data-date="2026-05-04" data-txn="hp_ff10ab22">
-              <td><span style="color:#888780;">— (no order link)</span></td>
-              <td class="col-event"><span style="color:#B4B2A9;">—</span></td>
-              <td>04/05/2026<div class="date-row">6:40 PM</div></td>
-              <td>PayNow</td>
-              <td><span class="price-bold">$15.00</span></td>
-              <td>$0.45</td>
-              <td>$14.55</td>
-              <td class="mono-id">hp_ff10ab22</td>
-              <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
-              <td><span class="badge reconciled payout-status-badge">Reconciled</span><div class="date-row">Payout #P-1042</div></td>
-              <td><span class="match-warn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>No order found</span></td>
-            <td><button title="Download receipt" onclick="downloadTransaction('hp_ff10ab22')" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="recon-section-hint" style="margin-top:8px;">"Match" checks whether a HitPay payment can be linked to an order in co·bee. A "No order found" flag usually means a buyer paid without completing checkout properly, or an order was deleted after payment — worth a quick look.</div>
+      <div class="recon-section-hint" style="margin-top:8px;">"Payout Status" reflects whether HitPay has settled the money to your bank yet. "Reconciled" is independent — it tracks whether <em>you've</em> checked this transaction against your bank statement. "Match" checks whether a HitPay payment can be linked to an order in co·bee.</div>
     </div>
 
     <!-- Payouts table -->
@@ -673,7 +665,8 @@ tr:hover td { background: #FAFAF8; }
               <th>Fees Deducted</th>
               <th>Net Payout</th>
               <th>Transactions</th>
-              <th>Status</th>
+              <th>Payout Status</th>
+              <th>Reconciled</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -682,12 +675,13 @@ tr:hover td { background: #FAFAF8; }
               <td class="mono-id">P-1042</td>
               <td>OCBC •• 1234</td>
               <td>06/05/2026</td>
-              <td><span class="price-bold">$116.00</span></td>
-              <td>$3.76</td>
-              <td><span class="price-bold">$112.24</span></td>
-              <td>4</td>
-              <td><span class="badge reconciled" id="payout-status-P-1042">Reconciled</span></td>
-              <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForPayout('P-1042')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForPayout('P-1042')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+              <td><span class="price-bold">$101.00</span></td>
+              <td>$3.31</td>
+              <td><span class="price-bold">$97.69</span></td>
+              <td>3</td>
+              <td><span class="badge settled" id="payout-status-P-1042">Settled</span></td>
+              <td><span class="badge reconciled" id="payout-reconciled-P-1042">Reconciled</span></td>
+              <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForPayout('P-1042')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;justify-content:center;" title="Download transactions" onclick="downloadTransactionsForPayout('P-1042')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
             </tr>
             <tr>
               <td class="mono-id">P-1043</td>
@@ -697,8 +691,9 @@ tr:hover td { background: #FAFAF8; }
               <td>$1.77</td>
               <td><span class="price-bold">$57.23</span></td>
               <td>1</td>
-              <td><span class="badge pending-settle" id="payout-status-P-1043">Processing</span></td>
-              <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForPayout('P-1043')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForPayout('P-1043')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+              <td><span class="badge pending-settle" id="payout-status-P-1043">Pending</span><button class="simulate-settle-P-1043" onclick="simulatePayoutSettlement('P-1043')" title="Demo only: simulate HitPay settling this payout" style="background:none;border:none;color:#888780;font-size:10px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:0;margin-left:6px;">simulate settlement</button></td>
+              <td><span class="badge unreconciled" id="payout-reconciled-P-1043">Unreconciled</span></td>
+              <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForPayout('P-1043')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;justify-content:center;" title="Download transactions" onclick="downloadTransactionsForPayout('P-1043')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
             </tr>
           </tbody>
         </table>
@@ -739,9 +734,9 @@ tr:hover td { background: #FAFAF8; }
                 <td><span class="price-bold">$34.00</span></td>
                 <td>$1.02</td>
                 <td>$32.98</td>
-                <td><span class="badge reconciled">Reconciled</span></td>
+                <td><span class="badge settled">Settled</span></td>
                 <td id="close-daily-1"><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reconciled</span><div class="date-row">by you, 07 May, 9:04 AM</div></td>
-                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-01','01 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-01','01 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-01','01 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;justify-content:center;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-01','01 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
               </tr>
               <tr>
                 <td>03 May 2026</td>
@@ -749,19 +744,19 @@ tr:hover td { background: #FAFAF8; }
                 <td><span class="price-bold">$20.00</span></td>
                 <td>$0.88</td>
                 <td>$19.12</td>
-                <td><span class="badge reconciled">Reconciled</span></td>
+                <td><span class="badge settled">Settled</span></td>
                 <td id="close-daily-2"><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reconciled</span><div class="date-row">by you, 07 May, 9:05 AM</div></td>
-                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-03','03 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-03','03 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-03','03 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;justify-content:center;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-03','03 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
               </tr>
               <tr>
                 <td>04 May 2026</td>
-                <td>2</td>
-                <td><span class="price-bold">$62.00</span></td>
-                <td>$1.86</td>
-                <td>$60.14</td>
-                <td><span class="badge reconciled">Reconciled</span></td>
+                <td>1</td>
+                <td><span class="price-bold">$47.00</span></td>
+                <td>$1.41</td>
+                <td>$45.59</td>
+                <td><span class="badge settled">Settled</span></td>
                 <td id="close-daily-3"><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reconciled</span><div class="date-row">by you, 07 May, 9:05 AM</div></td>
-                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-04','04 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-04','04 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-04','04 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;justify-content:center;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-04','04 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
               </tr>
               <tr>
                 <td>05 May 2026</td>
@@ -769,9 +764,9 @@ tr:hover td { background: #FAFAF8; }
                 <td><span class="price-bold">$59.00</span></td>
                 <td>$1.77</td>
                 <td>$57.23</td>
-                <td><span class="badge pending-settle" id="close-daily-4-payout-status">Pending</span></td>
-                <td id="close-daily-4"><button class="btn-outline" style="height:28px;" onclick="markReconciled('close-daily-4', this, 'P-1043', ['close-daily-4-payout-status'])">Mark as Reconciled</button></td>
-                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-05','05 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-05','05 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+                <td><span class="badge pending-settle" id="close-daily-4-payout-status">Pending</span><button class="simulate-settle-P-1043" onclick="simulatePayoutSettlement('P-1043')" title="Demo only: simulate HitPay settling this payout" style="background:none;border:none;color:#888780;font-size:10px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:0;margin-left:6px;">simulate settlement</button></td>
+                <td id="close-daily-4"><button class="btn-outline" id="close-daily-4-btn" disabled title="Available once this payout settles to your bank" style="height:28px;opacity:0.45;cursor:not-allowed;" onclick="markReconciled('close-daily-4', this, 'P-1043')">Mark as Reconciled</button></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-05','05 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;justify-content:center;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-05','05 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
               </tr>
             </tbody>
           </table>
@@ -797,13 +792,13 @@ tr:hover td { background: #FAFAF8; }
             <tbody>
               <tr>
                 <td>28 Apr – 04 May 2026</td>
-                <td>4</td>
-                <td><span class="price-bold">$116.00</span></td>
-                <td>$3.76</td>
-                <td>$112.24</td>
-                <td><span class="badge reconciled">Reconciled</span><div class="date-row">Payout #P-1042</div></td>
+                <td>3</td>
+                <td><span class="price-bold">$101.00</span></td>
+                <td>$3.31</td>
+                <td>$97.69</td>
+                <td><span class="badge settled">Settled</span><div class="date-row">Payout #P-1042</div></td>
                 <td id="close-weekly-1"><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reconciled</span><div class="date-row">by you, 07 May, 9:10 AM</div></td>
-                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForWeek('2026-04-28','2026-05-04','28 Apr – 04 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForWeek('2026-04-28','2026-05-04','28 Apr – 04 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForWeek('2026-04-28','2026-05-04','28 Apr – 04 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;justify-content:center;" title="Download transactions" onclick="downloadTransactionsForWeek('2026-04-28','2026-05-04','28 Apr – 04 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
               </tr>
               <tr>
                 <td>05 – 11 May 2026</td>
@@ -811,9 +806,9 @@ tr:hover td { background: #FAFAF8; }
                 <td><span class="price-bold">$59.00</span></td>
                 <td>$1.77</td>
                 <td>$57.23</td>
-                <td><span class="badge pending-settle" id="close-weekly-2-payout-status">Pending</span><div class="date-row">Payout #P-1043</div></td>
-                <td id="close-weekly-2"><button class="btn-outline" style="height:28px;" onclick="markReconciled('close-weekly-2', this, 'P-1043', ['close-weekly-2-payout-status'])">Mark as Reconciled</button></td>
-                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForWeek('2026-05-05','2026-05-11','05 – 11 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;" title="Download transactions" onclick="downloadTransactionsForWeek('2026-05-05','2026-05-11','05 – 11 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
+                <td><span class="badge pending-settle" id="close-weekly-2-payout-status">Pending</span><div class="date-row">Payout #P-1043</div><button class="simulate-settle-P-1043" onclick="simulatePayoutSettlement('P-1043')" title="Demo only: simulate HitPay settling this payout" style="background:none;border:none;color:#888780;font-size:10px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:0;margin-top:2px;">simulate settlement</button></td>
+                <td id="close-weekly-2"><button class="btn-outline" id="close-weekly-2-btn" disabled title="Available once this payout settles to your bank" style="height:28px;opacity:0.45;cursor:not-allowed;" onclick="markReconciled('close-weekly-2', this, 'P-1043')">Mark as Reconciled</button></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForWeek('2026-05-05','2026-05-11','05 – 11 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;justify-content:center;" title="Download transactions" onclick="downloadTransactionsForWeek('2026-05-05','2026-05-11','05 – 11 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
               </tr>
             </tbody>
           </table>
@@ -1177,7 +1172,16 @@ function setClosePeriod(period) {
   document.getElementById('close-table-weekly').style.display = period === 'weekly' ? 'block' : 'none';
 }
 
-function markReconciled(rowId, btn, payoutId, extraIds) {
+function markReconciled(rowId, btn, payoutId) {
+  // Guard: a payout can't be reconciled until HitPay has actually settled it to the bank
+  if (payoutId) {
+    const bankStatusBadge = document.getElementById('payout-status-' + payoutId);
+    const isSettled = bankStatusBadge && bankStatusBadge.textContent.trim() === 'Settled';
+    if (!isSettled) {
+      alert('This payout hasn\'t settled to your bank yet — you can mark it reconciled once HitPay pays it out.');
+      return;
+    }
+  }
   const now = new Date();
   const timeStr = now.toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit' });
   const cell = document.getElementById(rowId);
@@ -1185,20 +1189,43 @@ function markReconciled(rowId, btn, payoutId, extraIds) {
     cell.innerHTML = '<span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reconciled</span><div class="date-row">by you, ' + timeStr + '</div>';
   }
   if (payoutId) {
-    // Transactions tab: flip this payout's "Payout" column badge to Reconciled
-    document.querySelectorAll('#recon-txn-body tr[data-payout-id="' + payoutId + '"] .payout-status-badge').forEach(function (el) {
+    // Transactions tab: flip this payout's independent Reconciled badge — Payout Status (Settled/Pending) is untouched
+    document.querySelectorAll('#recon-txn-body tr[data-payout-id="' + payoutId + '"] .reconciled-badge').forEach(function (el) {
       el.textContent = 'Reconciled';
-      el.className = 'badge reconciled payout-status-badge';
+      el.className = 'badge reconciled reconciled-badge';
     });
-    // Payouts to Bank tab: flip this payout's Status badge to Reconciled
-    const bankBadge = document.getElementById('payout-status-' + payoutId);
-    if (bankBadge) { bankBadge.textContent = 'Reconciled'; bankBadge.className = 'badge reconciled'; }
+    // Payouts to Bank tab: flip this payout's independent Reconciled badge — Payout Status is untouched
+    const bankReconciledBadge = document.getElementById('payout-reconciled-' + payoutId);
+    if (bankReconciledBadge) { bankReconciledBadge.textContent = 'Reconciled'; bankReconciledBadge.className = 'badge reconciled'; }
   }
-  // Any other badges tied to this close row (e.g. its own Payout Status column)
-  (extraIds || []).forEach(function (id) {
-    const el = document.getElementById(id);
-    if (el) { el.textContent = 'Reconciled'; el.className = 'badge reconciled'; }
+}
+
+// Demo-only helper: simulates HitPay settling a payout to the bank, which unlocks
+// "Mark as Reconciled" for that payout everywhere it appears.
+const PAYOUT_CLOSE_STATUS_IDS = { 'P-1043': ['close-daily-4-payout-status', 'close-weekly-2-payout-status'] };
+const PAYOUT_CLOSE_RECONCILE_BTN_IDS = { 'P-1043': ['close-daily-4-btn', 'close-weekly-2-btn'] };
+
+function simulatePayoutSettlement(payoutId) {
+  // Transactions tab
+  document.querySelectorAll('#recon-txn-body tr[data-payout-id="' + payoutId + '"] .payout-status-badge').forEach(function (el) {
+    el.textContent = 'Settled';
+    el.className = 'badge settled payout-status-badge';
   });
+  // Payouts to Bank tab
+  const bankBadge = document.getElementById('payout-status-' + payoutId);
+  if (bankBadge) { bankBadge.textContent = 'Settled'; bankBadge.className = 'badge settled'; }
+  // Daily/Weekly Close: Payout Status badges tied to this payout
+  (PAYOUT_CLOSE_STATUS_IDS[payoutId] || []).forEach(function (id) {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = 'Settled'; el.className = 'badge settled'; }
+  });
+  // Unlock "Mark as Reconciled" now that the payout has settled
+  (PAYOUT_CLOSE_RECONCILE_BTN_IDS[payoutId] || []).forEach(function (id) {
+    const btn = document.getElementById(id);
+    if (btn) { btn.disabled = false; btn.title = ''; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; }
+  });
+  // Hide the simulate-settlement trigger(s) for this payout since it's no longer needed
+  document.querySelectorAll('.simulate-settle-' + payoutId).forEach(function (el) { el.style.display = 'none'; });
 }
 
 function filterRecon() {
@@ -1277,15 +1304,17 @@ function downloadTransaction(txnId) {
 
 // ── PAYMENT DETAIL (clicking a "Paid" badge in Order Management) ──
 const PAYMENT_DETAILS = {
-  'hp_8f3a2b1c': { buyer: 'Alex Tan', event: 'Groupbuy Event test', amount: '$47.00', method: 'PayNow', fee: '$1.41', net: '$45.59', date: '04 May 2026', time: '10:14 AM', payoutId: 'P-1042', payoutStatus: 'Reconciled' },
-  'hp_2c9d77ea': { buyer: 'Priya Nair', event: 'new event', amount: '$20.00', method: 'Visa •• 4242', fee: '$0.88', net: '$19.12', date: '03 May 2026', time: '4:02 PM', payoutId: 'P-1042', payoutStatus: 'Reconciled' }
+  'hp_8f3a2b1c': { buyer: 'Alex Tan', event: 'Groupbuy Event test', amount: '$47.00', method: 'PayNow', fee: '$1.41', net: '$45.59', date: '04 May 2026', time: '10:14 AM', payoutId: 'P-1042', payoutStatus: 'Settled', reconciled: true },
+  'hp_2c9d77ea': { buyer: 'Priya Nair', event: 'new event', amount: '$20.00', method: 'Visa •• 4242', fee: '$0.88', net: '$19.12', date: '03 May 2026', time: '4:02 PM', payoutId: 'P-1042', payoutStatus: 'Settled', reconciled: true }
 };
 
 function showPaymentDetail(txnId) {
   const d = PAYMENT_DETAILS[txnId];
   const body = document.getElementById('payment-detail-body');
   if (!d || !body) return;
-  const statusBadgeClass = d.payoutStatus === 'Reconciled' ? 'badge reconciled' : (d.payoutStatus === 'Settled' ? 'badge settled' : 'badge pending-settle');
+  const payoutBadgeClass = d.payoutStatus === 'Settled' ? 'badge settled' : 'badge pending-settle';
+  const reconciledBadgeClass = d.reconciled ? 'badge reconciled' : 'badge unreconciled';
+  const reconciledLabel = d.reconciled ? 'Reconciled' : 'Unreconciled';
   const row = function (label, valueHtml) {
     return '<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid #f5f5f5;">'
       + '<span style="font-size:12px;color:#888780;">' + label + '</span>'
@@ -1301,7 +1330,8 @@ function showPaymentDetail(txnId) {
     + row('Net Amount', d.net)
     + row('Date &amp; Time', d.date + ', ' + d.time)
     + row('Transaction ID', '<span class="mono-id">' + txnId + '</span>')
-    + row('Payout', '<span class="' + statusBadgeClass + '">' + d.payoutStatus + '</span> <span style="font-size:11px;color:#888780;">#' + d.payoutId + '</span>')
+    + row('Payout Status', '<span class="' + payoutBadgeClass + '">' + d.payoutStatus + '</span> <span style="font-size:11px;color:#888780;">#' + d.payoutId + '</span>')
+    + row('Reconciled', '<span class="' + reconciledBadgeClass + '">' + reconciledLabel + '</span>')
     + '<button class="btn-outline" style="width:100%;justify-content:center;margin-top:14px;" onclick="closeModal(\'payment-detail-modal\');showReconTab(document.getElementById(\'tab-recon\'));setTimeout(function(){goToTransactionsForTxn(\'' + txnId + '\');},50);">View in Payment Reconciliation →</button>';
   openModal('payment-detail-modal');
 }
