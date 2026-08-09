@@ -2061,6 +2061,7 @@ select:focus { border-color: #009A97; }
         </button>
         <div class="mef-sort-menu" id="mef-sort-menu">
           <div class="mef-sort-item" data-sort="closing" onclick="setSortBy('closing')">Closing Soon</div>
+          <div class="mef-sort-item" data-sort="collection" onclick="setSortBy('collection')">Collection Date</div>
           <div class="mef-sort-item" data-sort="newest" onclick="setSortBy('newest')">Newest Event</div>
           <div class="mef-sort-item" data-sort="active" onclick="setSortBy('active')">Most Active</div>
         </div>
@@ -4890,7 +4891,7 @@ document.addEventListener('click', function (e) {
 });
 
 function setSortBy(criteria) {
-  var labels = { closing: 'Closing Soon', newest: 'Newest Event', active: 'Most Active' };
+  var labels = { closing: 'Closing Soon', collection: 'Collection Date', newest: 'Newest Event', active: 'Most Active' };
   document.getElementById('mef-sort-label').textContent = labels[criteria] || 'Sort';
   document.querySelectorAll('.mef-sort-item').forEach(function (item) {
     item.classList.toggle('active', item.dataset.sort === criteria);
@@ -4902,6 +4903,8 @@ function setSortBy(criteria) {
     var cards = Array.prototype.slice.call(container.children);
     if (criteria === 'closing') {
       cards.sort(function (a, b) { return (parseInt(a.dataset.closing) || 0) - (parseInt(b.dataset.closing) || 0); });
+    } else if (criteria === 'collection') {
+      cards.sort(function (a, b) { return new Date(a.dataset.eventdate || 0) - new Date(b.dataset.eventdate || 0); });
     } else if (criteria === 'newest') {
       cards.sort(function (a, b) { return (parseInt(b.dataset.order) || 0) - (parseInt(a.dataset.order) || 0); });
     } else if (criteria === 'active') {
