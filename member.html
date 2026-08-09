@@ -840,7 +840,7 @@ a:hover { text-decoration: underline; }
   margin-bottom: 2rem;
 }
 
-.event-card { cursor:pointer;
+#hosted-events-view .event-card { cursor:pointer;
   background: var(--white);
   border: 0.5px solid var(--border-light);
   border-radius: var(--radius-lg);
@@ -849,12 +849,12 @@ a:hover { text-decoration: underline; }
   transition: border-color 0.15s, box-shadow 0.15s;
   cursor: default;
 }
-.event-card:hover {
+#hosted-events-view .event-card:hover {
   border-color: var(--border);
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-.event-card.shared { border-color: var(--teal-mid); }
-.event-card.shared:hover { border-color: var(--teal); }
+#hosted-events-view .event-card.shared { border-color: var(--teal-mid); }
+#hosted-events-view .event-card.shared:hover { border-color: var(--teal); }
 
 /* Shared-by banner inside card */
 .shared-banner {
@@ -867,23 +867,23 @@ a:hover { text-decoration: underline; }
 }
 .shared-banner strong { font-weight: 600; }
 
-.card-top {
+#hosted-events-view .card-top {
   display: flex; justify-content: space-between;
   align-items: flex-start; gap: 10px;
 }
-.card-title { font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.35; }
-.card-desc { font-size: 13px; color: var(--mid); line-height: 1.45; }
+#hosted-events-view .card-title { font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.35; }
+#hosted-events-view .card-desc { font-size: 13px; color: var(--mid); line-height: 1.45; }
 
-.card-meta { display: flex; flex-direction: column; gap: 4px; }
-.meta-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--mid); }
-.meta-row svg { width: 12px; height: 12px; flex-shrink: 0; }
-.meta-row.closing { color: var(--amber-dark); }
-.meta-row.expired { color: var(--red-dark); }
+#hosted-events-view .card-meta { display: flex; flex-direction: column; gap: 4px; }
+#hosted-events-view .meta-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--mid); }
+#hosted-events-view .meta-row svg { width: 12px; height: 12px; flex-shrink: 0; }
+#hosted-events-view .meta-row.closing { color: var(--amber-dark); }
+#hosted-events-view .meta-row.expired { color: var(--red-dark); }
 
-.card-divider { border: none; border-top: 0.5px solid var(--border-light); }
+#hosted-events-view .card-divider { border: none; border-top: 0.5px solid var(--border-light); }
 
-.card-actions { display: flex; gap: 6px; }
-.card-actions .btn { flex: 1; height: 30px; font-size: 12px; }
+#hosted-events-view .card-actions { display: flex; gap: 6px; }
+#hosted-events-view .card-actions .btn { flex: 1; height: 30px; font-size: 12px; }
 
 /* ══════════════════════════════════════════
    TABLE / LIST VIEW
