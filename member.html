@@ -157,6 +157,10 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .prod-name  { font-size: 13px; font-weight: 600; color: #1a1a18; }
   .prod-desc2 { font-size: 11px; color: #888780; margin-top: 1px; }
   .prod-price2 { font-size: 13px; font-weight: 700; color: #1a1a18; margin-top: 3px; }
+  .prod-price-row { display: flex; align-items: baseline; gap: 6px; margin-top: 3px; }
+  .prod-price-strike { font-size: 12px; color: #B4B2A9; text-decoration: line-through; font-weight: 500; }
+  .prod-price-disc { font-size: 13px; font-weight: 700; color: #009A97; }
+  .prod-disc-tag { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 600; color: #009A97; background: #E0F5F5; border: 0.5px solid #80CCCB; border-radius: 99px; padding: 2px 7px; margin-top: 4px; width: fit-content; }
   .prod-orders { font-size: 11px; color: #888780; margin-top: 2px; }
   .prod-need  { font-size: 11px; color: #E24B4A; margin-top: 3px; }
   .prod-stepper { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
@@ -1437,6 +1441,15 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
+      <!-- Per-event / order discount info card -->
+      <div style="display:flex;align-items:center;gap:10px;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:10px;padding:10px 12px;margin:10px 14px 0;">
+        <span style="font-size:16px;flex-shrink:0;">🏷</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#007A77;">Spend $5.00+</div>
+          <div style="font-size:12px;font-weight:500;color:#009A97;margin-top:1px;">Discount 10% off</div>
+        </div>
+      </div>
+
             <!-- Search -->
       <div style="margin:10px 14px 0;position:relative;">
         <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#B4B2A9;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -1584,9 +1597,13 @@ select:focus { border-color: #009A97; }
               <div style="flex:1;min-width:0;">
                 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">
                   <div style="font-size:13px;font-weight:600;color:#1a1a18;">Bubble Tea</div>
-                  <div style="font-size:14px;font-weight:700;color:#009A97;" id="bt-hd-price">$5.00</div>
+                  <div style="display:flex;align-items:baseline;gap:6px;flex-shrink:0;">
+                    <span id="bt-hd-price-strike" style="font-size:12px;color:#B4B2A9;text-decoration:line-through;font-weight:500;display:none;">$5.00</span>
+                    <span style="font-size:14px;font-weight:700;color:#009A97;" id="bt-hd-price">$5.00</span>
+                  </div>
                 </div>
                 <div style="font-size:11px;color:#888780;margin-top:1px;">This is an example allowing multiple selection of sub-items</div>
+                <div id="bt-hd-disc-tag" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#009A97;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 7px;margin-top:5px;width:fit-content;">🏷 Buy 3+ → 15% off</div>
               </div>
             </div>
             <!-- Toppings -->
@@ -1598,7 +1615,7 @@ select:focus { border-color: #009A97; }
               <span style="font-size:11px;color:#B4B2A9;">3 order(s) made</span>
               <div style="display:flex;align-items:center;gap:10px;">
                 <button onclick="changeQty2('p5',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
-                <span id="p5" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                <span id="p5" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">3</span>
                 <button onclick="changeQty2('p5',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
               </div>
             </div>
@@ -1625,9 +1642,13 @@ select:focus { border-color: #009A97; }
                 <!-- Name + price row -->
                 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">
                   <div style="font-size:13px;font-weight:600;color:#1a1a18;">Spec</div>
-                  <div style="font-size:14px;font-weight:700;color:#009A97;flex-shrink:0;" id="spec-price">$20.00</div>
+                  <div style="display:flex;align-items:baseline;gap:6px;flex-shrink:0;">
+                    <span id="spec-price-strike" style="font-size:12px;color:#B4B2A9;text-decoration:line-through;font-weight:500;display:none;">$20.00</span>
+                    <span style="font-size:14px;font-weight:700;color:#009A97;" id="spec-price">$20.00</span>
+                  </div>
                 </div>
                 <div style="font-size:11px;color:#888780;margin-top:1px;">This is an example allowing single selection of sub-items</div>
+                <div id="spec-disc-tag" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#009A97;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 7px;margin-top:5px;width:fit-content;">🏷 Buy 3+ → 15% off</div>
               </div>
             </div>
           </div>
@@ -1663,7 +1684,7 @@ select:focus { border-color: #009A97; }
               <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
               <div style="display:flex;align-items:center;gap:10px;">
                 <button onclick="changeQty2('p1',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
-                <span id="p1" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                <span id="p1" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">3</span>
                 <button onclick="changeQty2('p1',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
               </div>
             </div>
@@ -1679,14 +1700,18 @@ select:focus { border-color: #009A97; }
             <div style="flex:1;min-width:0;">
               <div style="display:flex;justify-content:space-between;align-items:baseline;">
                 <div style="font-size:13px;font-weight:600;color:#1a1a18;">Toothpaste</div>
-                <div style="font-size:14px;font-weight:700;color:#009A97;">$2.00</div>
+                <div style="display:flex;align-items:baseline;gap:6px;flex-shrink:0;">
+                  <span id="p2-price-strike" style="font-size:12px;color:#B4B2A9;text-decoration:line-through;font-weight:500;display:none;">$2.00</span>
+                  <span id="p2-price" style="font-size:14px;font-weight:700;color:#009A97;">$2.00</span>
+                </div>
               </div>
               <div style="font-size:11px;color:#888780;margin-top:1px;">Clean teeth</div>
+              <div id="p2-disc-tag" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#009A97;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 7px;margin-top:5px;width:fit-content;">🏷 Buy 3+ → 15% off</div>
               <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
                 <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
                 <div style="display:flex;align-items:center;gap:10px;">
                   <button onclick="changeQty2('p2',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
-                  <span id="p2" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                  <span id="p2" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">3</span>
                   <button onclick="changeQty2('p2',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
                 </div>
               </div>
@@ -1703,14 +1728,18 @@ select:focus { border-color: #009A97; }
             <div style="flex:1;min-width:0;">
               <div style="display:flex;justify-content:space-between;align-items:baseline;">
                 <div style="font-size:13px;font-weight:600;color:#1a1a18;">Chestnut</div>
-                <div style="font-size:14px;font-weight:700;color:#009A97;">$10.00</div>
+                <div style="display:flex;align-items:baseline;gap:6px;flex-shrink:0;">
+                  <span id="p3-price-strike" style="font-size:12px;color:#B4B2A9;text-decoration:line-through;font-weight:500;display:none;">$10.00</span>
+                  <span id="p3-price" style="font-size:14px;font-weight:700;color:#009A97;">$10.00</span>
+                </div>
               </div>
               <div style="font-size:11px;color:#888780;margin-top:1px;">6 per case/carton</div>
+              <div id="p3-disc-tag" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#009A97;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 7px;margin-top:5px;width:fit-content;">🏷 Buy 3+ → 15% off</div>
               <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
                 <span style="font-size:11px;color:#B4B2A9;">1 order(s) made</span>
                 <div style="display:flex;align-items:center;gap:10px;">
                   <button onclick="changeQty2('p3',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
-                  <span id="p3" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                  <span id="p3" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">3</span>
                   <button onclick="changeQty2('p3',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
                 </div>
               </div>
@@ -1727,9 +1756,13 @@ select:focus { border-color: #009A97; }
             <div style="flex:1;min-width:0;">
               <div style="display:flex;justify-content:space-between;align-items:baseline;">
                 <div style="font-size:13px;font-weight:600;color:#1a1a18;">Chestnut</div>
-                <div style="font-size:14px;font-weight:700;color:#009A97;">$3.00</div>
+                <div style="display:flex;align-items:baseline;gap:6px;flex-shrink:0;">
+                  <span id="p4-price-strike" style="font-size:12px;color:#B4B2A9;text-decoration:line-through;font-weight:500;display:none;">$3.00</span>
+                  <span id="p4-price" style="font-size:14px;font-weight:700;color:#009A97;">$3.00</span>
+                </div>
               </div>
               <div style="font-size:11px;color:#888780;margin-top:1px;">Individual pieces (split case)</div>
+              <div id="p4-disc-tag" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#009A97;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 7px;margin-top:5px;width:fit-content;">🏷 Buy 3+ → 15% off</div>
               <div style="margin-top:6px;">
                 <div style="display:flex;justify-content:space-between;font-size:10px;color:#888780;margin-bottom:3px;max-width:140px;">
                   <span>Case fill</span><span style="font-weight:600;">0 / 6</span>
@@ -1743,8 +1776,36 @@ select:focus { border-color: #009A97; }
                 <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
                 <div style="display:flex;align-items:center;gap:10px;">
                   <button onclick="changeQty2('p4',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
-                  <span id="p4" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
+                  <span id="p4" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">3</span>
                   <button onclick="changeQty2('p4',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 5: Notebook — per-product discount example (tier: Buy 3+ → 15% off that item) -->
+        <div style="padding:20px 14px;border-bottom:0.5px solid #f0f0f0;">
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div style="width:88px;height:88px;border-radius:10px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                <div style="font-size:13px;font-weight:600;color:#1a1a18;">Notebook</div>
+                <div style="display:flex;align-items:baseline;gap:6px;flex-shrink:0;">
+                  <span id="p6-price-strike" style="font-size:12px;color:#B4B2A9;text-decoration:line-through;font-weight:500;display:none;">$5.00</span>
+                  <span id="p6-price" style="font-size:14px;font-weight:700;color:#009A97;">$5.00</span>
+                </div>
+              </div>
+              <div style="font-size:11px;color:#888780;margin-top:1px;">A5 dotted, 120 pages</div>
+              <div id="p6-disc-tag" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#009A97;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 7px;margin-top:5px;width:fit-content;">🏷 Buy 3+ → 15% off</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+                <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <button onclick="changeQty2('p6',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
+                  <span id="p6" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">3</span>
+                  <button onclick="changeQty2('p6',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
                 </div>
               </div>
             </div>
@@ -2043,7 +2104,7 @@ select:focus { border-color: #009A97; }
   <!-- ALL EVENTS VIEW -->
   <div id="view-all">
     <div class="feed-header">
-      <span class="feed-header-count">3 EVENTS</span>
+      <span class="feed-header-count">4 EVENTS</span>
       <div class="mef-view-toggle">
         <button class="active" id="mef-btn-list" onclick="setFeedView('list')" title="List view">
           <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect y="1" width="14" height="2" rx="1"/><rect y="6" width="14" height="2" rx="1"/><rect y="11" width="14" height="2" rx="1"/></svg>
@@ -2132,6 +2193,28 @@ select:focus { border-color: #009A97; }
           </button>
         </div>
       </div>
+      <div class="event-card" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" onclick="showDetail('Per-product discount demo','Buy 3+ of a product to see the per-product discount applied automatically.','Minh Cong','M6 group','20','0','false')">
+        <div class="card-header">
+          <div class="card-host">
+            <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
+            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Per-product discount demo</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+          </div>
+          <div class="card-badges">
+            <span class="closing-text">Closing in 20 days</span>
+            <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+          </div>
+        </div>
+        <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="card-body"><div class="card-desc">Buy 3+ of a product to see the per-product discount applied automatically.</div></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Deal open:</span><span class="card-info-val">10-05-2026</span><span class="card-info-lbl">Deal close:</span><span class="card-info-val">28-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">04-06-2026 (10AM - 5PM)</span></div>
+        <div class="mef-card-actions" onclick="event.stopPropagation()">
+          <button class="mef-share-btn" onclick="shareEvent(this,'Per-product discount demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+          <button class="mef-link-btn" onclick="handleLinkClick('Per-product discount demo')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Telegram Group
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="mef-grid" id="mef-tile-grid" style="display:none;">
@@ -2204,6 +2287,30 @@ select:focus { border-color: #009A97; }
           <button class="mef-link-btn" onclick="handleLinkClick('This is a test event for Purchase with no login')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             3 Links
+          </button>
+        </div>
+      </div>
+      <div class="mef-tile" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" onclick="showDetail('Per-product discount demo','Buy 3+ of a product to see the per-product discount applied automatically.','Minh Cong','M6 group','20','0','false')">
+        <div class="mef-tile-hd">
+          <span class="mef-tile-avatar2">M6</span>
+          <div class="mef-tile-hdtext"><div class="mef-tile-name">Per-product discount demo</div><div class="mef-tile-createdby">Created by M6 group</div></div>
+        </div>
+        <div class="mef-tile-img">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+        </div>
+        <div class="mef-tile-dates">
+          <div class="mef-tile-daterow">
+            <div><span>Deal open</span><span>10-05</span></div>
+            <div><span>Deal close</span><span>28-05</span></div>
+            <div><span>Collection</span><span>04-06</span></div>
+          </div>
+        </div>
+        <div class="mef-card-actions" onclick="event.stopPropagation()">
+          <button class="mef-share-btn" onclick="shareEvent(this,'Per-product discount demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+          <button class="mef-link-btn" onclick="handleLinkClick('Per-product discount demo')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Telegram
           </button>
         </div>
       </div>
@@ -2705,6 +2812,24 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div class="prod-stepper"><div class="psbtn">−</div><span class="psval">0</span><div class="psbtn">+</div></div>
+      </div>
+    </div>
+
+    <!-- Product 4: Notebook — per-product discount example (tier: Buy 3+ → 15% off that item) -->
+    <div class="prod-row">
+      <div class="prod-row-main">
+        <div class="prod-thumb"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="prod-info">
+          <div class="prod-name">Notebook</div>
+          <div class="prod-desc2">A5 dotted, 120 pages</div>
+          <div class="prod-price-row">
+            <span class="prod-price-strike">$5.00</span>
+            <span class="prod-price-disc">$4.25</span>
+          </div>
+          <div class="prod-disc-tag">🏷 Buy 3+ → 15% off applied</div>
+          <div class="prod-orders">0 order(s) made</div>
+        </div>
+        <div class="prod-stepper"><div class="psbtn">−</div><span class="psval">3</span><div class="psbtn">+</div></div>
       </div>
     </div>
 
@@ -3891,12 +4016,10 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
     document.getElementById('ev1-buys').style.display = 'inline-block';
     document.getElementById('ev2-buys').textContent = ordersPlaced + ' BUY';
   }
-  // Reset qtys
-  ['p1','p2','p3','p4'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = '0';
-  });
-  document.getElementById('ev1-total').textContent = '$0.00 SGD';
+  // Products kept at their preset qty (3) so the per-product discount tier
+  // demos consistently across every product (Spec, Bubble Tea, Toothpaste,
+  // Chestnut x2, Notebook) whenever an event is opened.
+  updateTotal2();
   // Show screen 1
   document.getElementById('ev-screen-1').style.display = 'block';
   document.getElementById('ev-screen-2').style.display = 'none';
@@ -4026,19 +4149,49 @@ function changeQty2(id, delta) {
 }
 
 function updateTotal2() {
-  const prices = { p1: 20, p2: 2, p3: 10, p4: 3 };
   let total = 0;
-  Object.keys(prices).forEach(id => {
-    const el = document.getElementById(id);
-    if (el) total += parseInt(el.textContent || 0) * prices[id];
-  });
-  // Dynamic spec entries (ps2, ps3...)
+  // Flat-priced products — same "Buy 3+ → 15% off" tier applied uniformly to every product
+  total += updateFlatProductDiscount('p2', 'p2-price-strike', 'p2-price', 'p2-disc-tag', 2.00);
+  total += updateFlatProductDiscount('p3', 'p3-price-strike', 'p3-price', 'p3-disc-tag', 10.00);
+  total += updateFlatProductDiscount('p4', 'p4-price-strike', 'p4-price', 'p4-disc-tag', 3.00);
+  total += updateFlatProductDiscount('p6', 'p6-price-strike', 'p6-price', 'p6-disc-tag', 5.00);
+  // Spec (p1) and Bubble Tea (p5) have add-on pricing — discount applied on top via their own price functions
+  total += updateSpecPrice();
+  total += btUpdatePrice();
+  // Dynamic spec entries (ps2, ps3...) — not covered by per-product discount (separate order lines)
   document.querySelectorAll('[id^="ps"]').forEach(el => {
     total += parseInt(el.textContent || 0) * 20;
   });
   const el = document.getElementById('ev1-total');
   if (el) el.textContent = '$' + total.toFixed(2);
   return total;
+}
+
+/* Same discount rule for every flat-priced product: qty 3+ unlocks 15% off that product's line */
+function tierUnitPrice(qty, basePrice) {
+  return qty >= 3 ? basePrice * 0.85 : basePrice;
+}
+/* Tag is always visible — wording switches from "available" to "applied" once the tier is met */
+function setDiscTagState(tagEl, tierMet) {
+  if (!tagEl) return;
+  tagEl.textContent = tierMet ? '🏷 Buy 3+ → 15% off applied' : '🏷 Buy 3+ → 15% off';
+  tagEl.style.opacity = tierMet ? '1' : '0.7';
+}
+function updateFlatProductDiscount(qtyId, strikeId, priceId, tagId, basePrice) {
+  const qtyEl = document.getElementById(qtyId);
+  if (!qtyEl) return 0;
+  const qty = parseInt(qtyEl.textContent || 0);
+  const tierMet = qty >= 3;
+  const unitPrice = tierUnitPrice(qty, basePrice);
+
+  const strikeEl = document.getElementById(strikeId);
+  const priceEl = document.getElementById(priceId);
+  const tagEl = document.getElementById(tagId);
+  if (strikeEl) strikeEl.style.display = tierMet ? 'inline' : 'none';
+  if (priceEl) priceEl.textContent = '$' + unitPrice.toFixed(2);
+  setDiscTagState(tagEl, tierMet);
+
+  return qty * unitPrice;
 }
 
 function placeOrder2() {
@@ -4132,12 +4285,10 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
     document.getElementById('ev1-buys').style.display = 'inline-block';
     document.getElementById('ev2-buys').textContent = ordersPlaced + ' BUY';
   }
-  // Reset qtys
-  ['p1','p2','p3','p4'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = '0';
-  });
-  document.getElementById('ev1-total').textContent = '$0.00 SGD';
+  // Products kept at their preset qty (3) so the per-product discount tier
+  // demos consistently across every product (Spec, Bubble Tea, Toothpaste,
+  // Chestnut x2, Notebook) whenever an event is opened.
+  updateTotal2();
   // Show screen 1
   document.getElementById('ev-screen-1').style.display = 'block';
   document.getElementById('ev-screen-2').style.display = 'none';
@@ -4384,8 +4535,20 @@ function btUpdatePrice() {
     var qty   = parseInt(row.querySelector('.bt-val').textContent) || 0;
     addons += addon * qty;
   });
+  var unitBase = BT_BASE + addons;
+  var qtyEl = document.getElementById('p5');
+  var qty5 = qtyEl ? parseInt(qtyEl.textContent || 0) : 0;
+  var tierMet = qty5 >= 3;
+  var unitPrice = tierMet ? unitBase * 0.85 : unitBase;
+
+  var strikeEl = document.getElementById('bt-hd-price-strike');
   var dp = document.getElementById('bt-hd-price');
-  if (dp) dp.textContent = '$' + (BT_BASE + addons).toFixed(2);
+  var tagEl = document.getElementById('bt-hd-disc-tag');
+  if (strikeEl) { strikeEl.textContent = '$' + unitBase.toFixed(2); strikeEl.style.display = tierMet ? 'inline' : 'none'; }
+  if (dp) dp.textContent = '$' + unitPrice.toFixed(2);
+  setDiscTagState(tagEl, tierMet);
+
+  return qty5 * unitPrice;
 }
 function listSpecPill(btn) {
   var group = btn.getAttribute('data-group');
@@ -4395,6 +4558,7 @@ function listSpecPill(btn) {
   });
   if (!isSelected) btn.classList.add('sel');
   updateSpecPrice();
+  updateTotal2();
 }
 
 function updateSpecPrice() {
@@ -4403,8 +4567,20 @@ function updateSpecPrice() {
   var lensBtn  = document.querySelector('[data-group="list-lens"].sel');
   var fv = frameBtn ? parseFloat(frameBtn.getAttribute('data-val')) : 0;
   var lv = lensBtn  ? parseFloat(lensBtn.getAttribute('data-val'))  : 0;
+  var unitBase = base + fv + lv;
+  var qtyEl = document.getElementById('p1');
+  var qty1 = qtyEl ? parseInt(qtyEl.textContent || 0) : 0;
+  var tierMet = qty1 >= 3;
+  var unitPrice = tierMet ? unitBase * 0.85 : unitBase;
+
+  var strikeEl = document.getElementById('spec-price-strike');
   var el = document.getElementById('spec-price');
-  if (el) el.textContent = '$' + (base + fv + lv).toFixed(2);
+  var tagEl = document.getElementById('spec-disc-tag');
+  if (strikeEl) { strikeEl.textContent = '$' + unitBase.toFixed(2); strikeEl.style.display = tierMet ? 'inline' : 'none'; }
+  if (el) el.textContent = '$' + unitPrice.toFixed(2);
+  setDiscTagState(tagEl, tierMet);
+
+  return qty1 * unitPrice;
 }
 function tileSpecPill(btn) {
   var group = btn.getAttribute('data-group');
