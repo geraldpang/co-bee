@@ -653,6 +653,14 @@ select:focus { border-color: #009A97; }
               </div>
               <div class="toggle-body" id="discount-section">
                 <div class="discount-body" style="margin-top:4px;">
+                  <div class="tf-row two-col" style="margin-bottom:2px;">
+                    <span class="tf-lbl">Apply</span>
+                    <div class="type-toggle" id="scope-toggle-wrap">
+                      <button class="type-pill active" id="scope-pill-order" onclick="setDiscountScope('order')">Per order</button>
+                      <button class="type-pill" id="scope-pill-product" onclick="setDiscountScope('product')">Per product</button>
+                    </div>
+                  </div>
+                  <div style="font-size:11px;color:#888780;line-height:1.4;margin-top:-2px;" id="scope-help-text">Threshold and discount are based on the buyer's whole order.</div>
                   <div id="tiers-list"></div>
                   <div id="tier-form-wrap" style="display:none;"></div>
                   <div id="add-tier-wrap">
@@ -2035,8 +2043,21 @@ function populatePreview() {
 var discountTiers = [];   // [{id, condType, condVal, discType, discAmt, capAmt, noCap}]
 var tierIdSeq = 0;
 var editingTierId = null; // null = new, number = editing existing
+var discountScope = 'order'; // 'order' | 'product' — governs how ALL tiers in this section are evaluated
 
 /* toggleDiscountSection now handled by toggleSwitch via toggle-item pattern */
+
+/* ── Switch Per order / Per product scope ── */
+function setDiscountScope(scope) {
+  discountScope = scope;
+  document.getElementById('scope-pill-order').classList.toggle('active', scope === 'order');
+  document.getElementById('scope-pill-product').classList.toggle('active', scope === 'product');
+  document.getElementById('scope-help-text').textContent = scope === 'product'
+    ? 'Evaluated separately per product — a buyer can unlock the same tier on multiple products.'
+    : "Threshold and discount are based on the buyer's whole order.";
+  renderTiers();
+  syncDiscountToNotes();
+}
 
 /* ── Render all tier summaries ── */
 function renderTiers() {
@@ -2075,12 +2096,13 @@ function renderTiers() {
 
 /* Human-readable summary for a tier */
 function tierSummaryText(t) {
+  var isProduct = discountScope === 'product';
   var condLabel = t.condType === 'spend'
-    ? 'Spend $' + parseFloat(t.condVal).toFixed(2) + '+'
-    : 'Order ' + t.condVal + '+ items';
+    ? 'Spend $' + parseFloat(t.condVal).toFixed(2) + '+' + (isProduct ? ' on a product' : '')
+    : (isProduct ? 'Buy ' + t.condVal + '+ of a product' : 'Order ' + t.condVal + '+ items');
   var discLabel = t.discType === 'fixed'
-    ? '$' + parseFloat(t.discAmt).toFixed(2) + ' off'
-    : t.discAmt + '% off';
+    ? '$' + parseFloat(t.discAmt).toFixed(2) + ' off' + (isProduct ? ' that item' : '')
+    : t.discAmt + '% off' + (isProduct ? ' that item' : '');
   var capLabel = '';
   if (t.discType === 'pct' && !t.noCap && t.capAmt) {
     capLabel = ' (capped at $' + parseFloat(t.capAmt).toFixed(2) + ')';
@@ -2137,16 +2159,18 @@ function renderTierForm(defaults) {
   var isPct  = defaults.discType === 'pct';
   var isQty  = defaults.condType === 'qty';
 
+  var scopeTag = discountScope === 'product' ? 'Per product' : 'Per order';
+
   wrap.innerHTML =
     '<div class="tier-form">'
-    + '<div class="tier-form-title">' + (isEdit ? 'Edit tier' : 'New discount tier') + '</div>'
+    + '<div class="tier-form-title">' + (isEdit ? 'Edit tier' : 'New discount tier') + ' · ' + scopeTag + '</div>'
 
     // Row: Condition type
     + '<div class="tf-row">'
     +   '<span class="tf-lbl">Condition</span>'
     +   '<select class="tier-select" id="tf-condType" onchange="onCondTypeChange()" style="grid-column:span 2;">'
-    +     '<option value="spend"' + (!isQty ? ' selected' : '') + '>Min. spend</option>'
-    +     '<option value="qty"'   + ( isQty ? ' selected' : '') + '>Min. quantity</option>'
+    +     '<option value="spend"' + (!isQty ? ' selected' : '') + '>' + (discountScope === 'product' ? 'Min. spend per product' : 'Min. spend') + '</option>'
+    +     '<option value="qty"'   + ( isQty ? ' selected' : '') + '>' + (discountScope === 'product' ? 'Min. quantity per product' : 'Min. quantity') + '</option>'
     +   '</select>'
     + '</div>'
 
@@ -2289,13 +2313,14 @@ function closeTierForm() {
 /* ── Generate note text from tiers — order discounts only, no cap ── */
 function generateDiscountNote() {
   if (discountTiers.length === 0) return '';
+  var isProduct = discountScope === 'product';
   var parts = discountTiers.map(function(t) {
     var condPart = t.condType === 'spend'
-      ? 'spend $' + parseFloat(t.condVal).toFixed(2) + ' or more'
-      : 'order ' + t.condVal + ' or more items';
+      ? (isProduct ? 'spend $' + parseFloat(t.condVal).toFixed(2) + ' or more on any single product' : 'spend $' + parseFloat(t.condVal).toFixed(2) + ' or more')
+      : (isProduct ? 'buy ' + t.condVal + ' or more of any single product' : 'order ' + t.condVal + ' or more items');
     var discPart = t.discType === 'fixed'
-      ? '$' + parseFloat(t.discAmt).toFixed(2) + ' off your order'
-      : t.discAmt + '% off your order';
+      ? '$' + parseFloat(t.discAmt).toFixed(2) + (isProduct ? ' off that item' : ' off your order')
+      : t.discAmt + '%' + (isProduct ? ' off that item' : ' off your order');
     return condPart + ' and get ' + discPart;
   });
 
