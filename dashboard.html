@@ -166,6 +166,8 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
 .reminder-row:last-of-type{border-bottom:none;}
 .reminder-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
 .reminder-name{font-size:12px;font-weight:500;color:var(--ink);}
+.reminder-sent-note{font-size:10px;color:var(--teal-dark);margin-top:2px;display:none;align-items:center;gap:3px;}
+.reminder-sent-note svg{width:10px;height:10px;flex-shrink:0;}
 .reminder-owed{font-size:13px;font-weight:700;color:var(--red-dark);width:60px;text-align:right;flex-shrink:0;}
 .reminder-days{width:60px;text-align:right;flex-shrink:0;padding-left:10px;font-size:11px;font-weight:600;}
 .remind-btn{height:26px;padding:0 10px;border-radius:99px;border:0.5px solid var(--teal-mid);background:var(--white);color:var(--teal-dark);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;transition:background 0.12s;}
@@ -584,10 +586,11 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
               <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;width:60px;text-align:right;padding-left:10px;">Days</div>
               <div style="font-size:10px;font-weight:600;color:var(--faint);letter-spacing:0.05em;text-transform:uppercase;width:78px;text-align:right;padding-left:10px;">Action</div>
             </div>
-            <div class="reminder-row">
+            <div class="reminder-row" data-phone="1XXXXXXXXXX" data-event="Groupbuy Event test" data-link="https://co-bee.com/payment-order?ref=d0ow8bt1786968580039&uid=T7AmVaWfVg1GWZRVU8X2">
               <div class="reminder-avatar" style="background:#E24B4A;">G</div>
               <div style="flex:1;min-width:0;">
                 <div class="reminder-name">Gerald Pang</div>
+                <div class="reminder-sent-note"></div>
               </div>
               <div class="reminder-owed">$55.00</div>
               <div class="reminder-days" style="color:var(--red-dark);">21d</div>
@@ -598,10 +601,11 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
                 </button>
               </div>
             </div>
-            <div class="reminder-row">
+            <div class="reminder-row" data-phone="1XXXXXXXXXX" data-event="Groupbuy Event test" data-link="https://co-bee.com/payment-order?ref=d0ow8bt1786968580040&uid=T7AmVaWfVg1GWZRVU8X2">
               <div class="reminder-avatar" style="background:#009A97;">T</div>
               <div style="flex:1;min-width:0;">
                 <div class="reminder-name">Tom Nguyen</div>
+                <div class="reminder-sent-note"></div>
               </div>
               <div class="reminder-owed">$60.00</div>
               <div class="reminder-days" style="color:var(--red-dark);">18d</div>
@@ -612,10 +616,11 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
                 </button>
               </div>
             </div>
-            <div class="reminder-row">
+            <div class="reminder-row" data-phone="1XXXXXXXXXX" data-event="Groupbuy Event test" data-link="https://co-bee.com/payment-order?ref=d0ow8bt1786968580041&uid=T7AmVaWfVg1GWZRVU8X2">
               <div class="reminder-avatar" style="background:#E8971A;">A</div>
               <div style="flex:1;min-width:0;">
                 <div class="reminder-name">Aisha Rahman</div>
+                <div class="reminder-sent-note"></div>
               </div>
               <div class="reminder-owed">$95.00</div>
               <div class="reminder-days" style="color:var(--amber-dark);">12d</div>
@@ -626,10 +631,11 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
                 </button>
               </div>
             </div>
-            <div class="reminder-row">
+            <div class="reminder-row" data-phone="1XXXXXXXXXX" data-event="Groupbuy Event test" data-link="https://co-bee.com/payment-order?ref=d0ow8bt1786968580042&uid=T7AmVaWfVg1GWZRVU8X2">
               <div class="reminder-avatar" style="background:#3498DB;">B</div>
               <div style="flex:1;min-width:0;">
                 <div class="reminder-name">Bryan Koh</div>
+                <div class="reminder-sent-note"></div>
               </div>
               <div class="reminder-owed">$75.00</div>
               <div class="reminder-days" style="color:var(--amber-dark);">9d</div>
@@ -640,10 +646,11 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
                 </button>
               </div>
             </div>
-            <div class="reminder-row">
+            <div class="reminder-row" data-phone="1XXXXXXXXXX" data-event="Groupbuy Event test" data-link="https://co-bee.com/payment-order?ref=d0ow8bt1786968580043&uid=T7AmVaWfVg1GWZRVU8X2">
               <div class="reminder-avatar" style="background:#9B59B6;">D</div>
               <div style="flex:1;min-width:0;">
                 <div class="reminder-name">Daniel Ong</div>
+                <div class="reminder-sent-note"></div>
               </div>
               <div class="reminder-owed">$55.00</div>
               <div class="reminder-days" style="color:var(--mid);">6d</div>
@@ -654,13 +661,9 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
                 </button>
               </div>
             </div>
-            <!-- Remind All CTA -->
-            <div style="padding:10px 16px;border-top:0.5px solid var(--border-light);background:#FAFAF8;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <!-- Total outstanding summary -->
+            <div style="padding:10px 16px;border-top:0.5px solid var(--border-light);background:#FAFAF8;">
               <span style="font-size:11px;color:var(--mid);">Total outstanding: <strong style="color:var(--red-dark);">$340.00</strong></span>
-              <button onclick="remindAll(this)" style="height:32px;padding:0 14px;background:white;border:0.5px solid #009A97;border-radius:8px;font-size:12px;font-weight:600;color:#009A97;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;white-space:nowrap;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
-                Remind All (5)
-              </button>
             </div>
           </div>
 
@@ -925,35 +928,59 @@ function showToast(message, type) {
   setTimeout(function () { t.remove(); }, 3000);
 }
 
-function sendReminder(btn, name) {
-  btn.disabled = true;
-  btn.classList.add('sent');
-  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sent';
-
-  var row = btn.closest('.reminder-row');
-  var amount = row ? row.querySelector('.reminder-owed').textContent : '';
-
-  document.getElementById('reminder-modal-title').textContent = 'Reminder Sent';
-  document.getElementById('reminder-modal-text').innerHTML =
-    'An email reminder for <strong>' + amount + '</strong> outstanding has been sent to <strong>' + name + '</strong>.';
-  openReminderModal();
+// Builds the WhatsApp reminder text for a given reminder-row element
+function buildReminderMessage(row) {
+  var event  = row.getAttribute('data-event') || '';
+  var amount = row.querySelector('.reminder-owed').textContent.trim();
+  var link   = row.getAttribute('data-link') || '';
+  return 'Please help to make this payment for the below order and upload the screenshot\uD83D\uDCBB in Cobee. Thank you very much \u2763\uFE0F\n\n' +
+         'Event Name: ' + event + '\n' +
+         'Payment Amount: ' + amount + '\n' +
+         '\uD83D\uDCB3Payment link:\n' + link;
 }
 
-function remindAll(btn) {
-  var buttons = document.querySelectorAll('.remind-btn:not(.sent)');
-  var count = buttons.length;
-  buttons.forEach(function (b) {
-    b.disabled = true;
-    b.classList.add('sent');
-    b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sent';
-  });
-  btn.disabled = true;
-  btn.innerHTML = 'All reminders sent';
+// Opens the WhatsApp deep link (wa.me) with the message pre-filled
+function openWhatsAppReminder(row) {
+  var phone = (row.getAttribute('data-phone') || '').replace(/[^0-9]/g, '');
+  var text = buildReminderMessage(row);
+  var url = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(text);
+  window.open(url, '_blank');
+}
 
-  document.getElementById('reminder-modal-title').textContent = 'Reminders Sent';
-  document.getElementById('reminder-modal-text').innerHTML =
-    'Email reminders have been sent to <strong>' + count + ' buyer' + (count === 1 ? '' : 's') + '</strong> with outstanding balances.';
-  openReminderModal();
+// Formats a Date as a short date + time, e.g. "25 Aug, 3:42 PM"
+function formatSentTime(d) {
+  var datePart = d.toLocaleDateString([], { day: 'numeric', month: 'short' });
+  var timePart = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  return datePart + ', ' + timePart;
+}
+
+// Shows/updates the "Sent HH:MM" note under a buyer's name
+function markRowSent(row) {
+  var note = row.querySelector('.reminder-sent-note');
+  if (!note) return;
+  note.style.display = 'flex';
+  note.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sent ' + formatSentTime(new Date());
+}
+
+// Briefly flashes a button to a "Sent" state, then reverts it back to "Remind" so it can be clicked again
+function flashButtonSent(btn) {
+  var original = btn.innerHTML;
+  btn.classList.add('sent');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sent';
+  setTimeout(function () {
+    btn.classList.remove('sent');
+    btn.innerHTML = original;
+  }, 1500);
+}
+
+function sendReminder(btn, name) {
+  var row = btn.closest('.reminder-row');
+
+  if (row) {
+    openWhatsAppReminder(row);
+    markRowSent(row);
+  }
+  flashButtonSent(btn);
 }
 
 function openReminderModal() {
