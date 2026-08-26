@@ -278,6 +278,24 @@ select:focus { border-color: #009A97; }
 .pd-toggle input:checked ~ .pd-toggle-track::after { left: 15px; }
 .pd-link { font-size: 11px; font-weight: 600; color: #009A97; cursor: pointer; white-space: nowrap; }
 .pd-rule-row { display: flex; align-items: center; justify-content: space-between; width: 100%; flex-wrap: wrap; gap: 10px; font-size: 12px; color: #1a1a18; }
+
+/* ── Sub-item mode preview strip — shows illustration only for the currently selected mode ── */
+.subprev-radio { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid #D3D1C7; position: relative; margin: 1.5px 0; }
+.subprev-radio.on { border-color: #009A97; }
+.subprev-radio.on::after { content: ''; position: absolute; top: 2px; left: 2px; width: 5px; height: 5px; border-radius: 50%; background: #009A97; }
+.subprev-chk-row { display: flex; align-items: center; gap: 4px; padding: 1.5px 0; }
+.subprev-chk { width: 11px; height: 11px; border-radius: 3px; background: #E8971A; flex-shrink: 0; }
+.subprev-mv { font-size: 9px; font-weight: 700; color: #8A5A0A; }
+.subprev-ov { display: flex; align-items: center; gap: 5px; margin-top: 4px; padding-top: 4px; border-top: 0.5px dashed #D3D1C7; }
+.subprev-bc { width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+.subprev-bc.minus { border: 1px solid #D3D1C7; color: #1a1a18; }
+.subprev-bc.plus { background: #009A97; color: white; }
+.subprev-bv { font-size: 10px; font-weight: 700; }
+.subprev-sp-row { display: flex; align-items: center; gap: 4px; padding: 1.5px 0; }
+.subprev-sc { width: 10px; height: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 7px; font-weight: 700; flex-shrink: 0; }
+.subprev-sc.minus { border: 1px solid #D3D1C7; color: #1a1a18; }
+.subprev-sc.plus { background: #009A97; color: white; }
+.subprev-sv { font-size: 8px; font-weight: 700; color: #6B21A8; }
 .pd-cond-group, .pd-reward-group { display: flex; align-items: center; gap: 7px; }
 .tier-amt-input.pd-rule-in { width: 52px; height: 34px; flex: none; text-align: center; }
 .pd-compound { display: flex; align-items: stretch; height: 34px; border: 0.5px solid #D3D1C7; border-radius: 6px; overflow: hidden; }
@@ -1950,7 +1968,7 @@ function addSubitemGroup(id) {
     const subHelpPop = document.createElement('div');
     subHelpPop.className = 'help-popover';
     subHelpPop.id = subHelpId;
-    subHelpPop.innerHTML = 'Lets buyers pick options for this product before ordering — like Frame Color, Size, or Toppings. Give the group a title, then add its options underneath. Each row below (Selection Mode, Overall quantity, Required) has its own "?" with more detail.';
+    subHelpPop.innerHTML = 'Lets buyers pick options for this product before ordering — like Frame Color, Size, or Toppings. Give the group a title, then add its options underneath. Each row below (Selection Mode, Required) has its own "?" with more detail.';
     subHelpIcon.appendChild(subHelpPop);
     lbl.appendChild(subHelpIcon);
 
@@ -2051,67 +2069,79 @@ function addSubitemTitle(id) {
   addChoicesBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg> Add choices';
   addChoicesBtn.addEventListener('click', function() { addChoiceRow(gid); });
 
-  // Selection type row (Single / Multiple)
+  // Selection mode row — Single / Combo / Split, three-way pill toggle
   const selRow = document.createElement('div');
   selRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:0.5px solid #e0dfd8;font-size:12px;color:#888780;';
   const selLabel = makeLabelWithHelp('Selection Mode',
-    '<strong>Single choice</strong>: the buyer can only pick one option from this group (e.g. one Frame Color). '
-    + '<strong>Multiple choices</strong>: the buyer can pick more than one option at once (e.g. several toppings).');
+    '<strong>Choose One</strong>: the buyer picks one option from this group, then sets how many of it they want (e.g. one Frame Color, then a quantity). '
+    + '<strong>Build a Combo</strong>: the buyer picks several options, then sets one overall quantity for that combination (e.g. 2 pearl + 2 jelly, then ×2 teas). '
+    + '<strong>Choose Quantities</strong>: the buyer sets a separate quantity for each option — no overall total to set, they just add up (e.g. 10 small + 2 medium + 5 large = 17 total).');
 
   const selToggle = document.createElement('div');
   selToggle.style.cssText = 'display:flex;border:0.5px solid #D3D1C7;border-radius:6px;overflow:hidden;';
 
-  const pillSingle = document.createElement('button');
-  pillSingle.textContent = 'Single choice';
-  pillSingle.style.cssText = 'height:26px;padding:0 10px;border:none;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:#009A97;color:white;transition:background 0.12s,color 0.12s;border-right:0.5px solid #D3D1C7;';
-  pillSingle.setAttribute('data-sel', 'single');
+  function makeModePill(label, mode) {
+    const p = document.createElement('button');
+    p.textContent = label;
+    p.style.cssText = 'height:26px;padding:0 10px;border:none;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:white;color:#888780;transition:background 0.12s,color 0.12s;border-right:0.5px solid #D3D1C7;';
+    p.setAttribute('data-sel', mode);
+    return p;
+  }
+  const pillSingle = makeModePill('Choose One', 'single');
+  const pillCombo  = makeModePill('Build a Combo', 'combo');
+  const pillSplit  = makeModePill('Choose Quantities', 'split');
+  pillSplit.style.borderRight = 'none';
 
-  const pillMulti = document.createElement('button');
-  pillMulti.textContent = 'Multiple choices';
-  pillMulti.style.cssText = 'height:26px;padding:0 10px;border:none;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:white;color:#888780;transition:background 0.12s,color 0.12s;';
-  pillMulti.setAttribute('data-sel', 'multiple');
+  // Preview strip — shows the illustration only for the currently selected mode, not all three at once
+  const previewWrap = document.createElement('div');
+  previewWrap.style.cssText = 'margin-top:8px;padding:8px 10px;background:#FAFAF8;border-radius:8px;border:0.5px solid #f0f0f0;height:74px;display:flex;align-items:center;box-sizing:border-box;overflow:hidden;';
 
-  function setSelType(type) {
-    if (type === 'single') {
-      pillSingle.style.background = '#009A97';
-      pillSingle.style.color = 'white';
-      pillMulti.style.background = 'white';
-      pillMulti.style.color = '#888780';
-    } else {
-      pillMulti.style.background = '#009A97';
-      pillMulti.style.color = 'white';
-      pillSingle.style.background = 'white';
-      pillSingle.style.color = '#888780';
-    }
-    selToggle.setAttribute('data-selection-type', type);
+  const PREVIEWS = {
+    single: '<div style="display:flex;align-items:center;gap:10px;">'
+      + '<div>'
+      +   '<div class="subprev-chk-row"><div class="subprev-radio"></div></div>'
+      +   '<div class="subprev-chk-row"><div class="subprev-radio on"></div></div>'
+      +   '<div class="subprev-ov"><div class="subprev-bc minus">−</div><span class="subprev-bv">2</span><div class="subprev-bc plus">+</div></div>'
+      + '</div>'
+      + '<span style="font-size:10px;color:#888780;line-height:1.4;">Choose one option for this product, then set how many of this combination you want.</span>'
+      + '</div>',
+    combo: '<div style="display:flex;align-items:center;gap:10px;">'
+      + '<div>'
+      +   '<div class="subprev-chk-row"><div class="subprev-chk"></div><span class="subprev-mv">2</span></div>'
+      +   '<div class="subprev-chk-row"><div class="subprev-chk"></div><span class="subprev-mv">2</span></div>'
+      +   '<div class="subprev-ov"><div class="subprev-bc minus">−</div><span class="subprev-bv">2</span><div class="subprev-bc plus">+</div></div>'
+      + '</div>'
+      + '<span style="font-size:10px;color:#888780;line-height:1.4;">Choose multiple options, then set how many of this combination you want.</span>'
+      + '</div>',
+    split: '<div style="display:flex;align-items:center;gap:10px;">'
+      + '<div>'
+      +   '<div class="subprev-sp-row"><div class="subprev-sc minus">−</div><span class="subprev-sv">10</span><div class="subprev-sc plus">+</div></div>'
+      +   '<div class="subprev-sp-row"><div class="subprev-sc minus">−</div><span class="subprev-sv">2</span><div class="subprev-sc plus">+</div></div>'
+      +   '<div class="subprev-sp-row"><div class="subprev-sc minus">−</div><span class="subprev-sv">5</span><div class="subprev-sc plus">+</div></div>'
+      + '</div>'
+      + '<span style="font-size:10px;color:#888780;line-height:1.4;">Set a separate quantity for each option.</span>'
+      + '</div>'
+  };
+
+  function setSubMode(mode) {
+    [pillSingle, pillCombo, pillSplit].forEach(function(p) {
+      var active = p.getAttribute('data-sel') === mode;
+      p.style.background = active ? '#009A97' : 'white';
+      p.style.color = active ? 'white' : '#888780';
+    });
+    selToggle.setAttribute('data-sel-mode', mode);
+    previewWrap.innerHTML = PREVIEWS[mode];
   }
 
-  selToggle.setAttribute('data-selection-type', 'single');
-  pillSingle.addEventListener('click', function() { setSelType('single'); });
-  pillMulti.addEventListener('click', function() { setSelType('multiple'); });
+  pillSingle.addEventListener('click', function() { setSubMode('single'); });
+  pillCombo.addEventListener('click', function() { setSubMode('combo'); });
+  pillSplit.addEventListener('click', function() { setSubMode('split'); });
 
   selToggle.appendChild(pillSingle);
-  selToggle.appendChild(pillMulti);
+  selToggle.appendChild(pillCombo);
+  selToggle.appendChild(pillSplit);
   selRow.appendChild(selLabel);
   selRow.appendChild(selToggle);
-
-  // Overall quantity row — only relevant for Multiple choices; no divider, reads as
-  // dependent on Selection Mode above rather than a separate peer setting.
-  const qtyModeRow = document.createElement('div');
-  qtyModeRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-size:12px;color:#888780;display:none;';
-  const qtyModeLabel = makeLabelWithHelp('Overall quantity',
-    'When on, this quantity acts as a multiplier across the whole combo — like ordering several bubble teas with the same toppings. '
-    + 'When off, each choice gets its own quantity that adds up to the total — like ordering shirts by size.');
-  const qtyModeToggle = document.createElement('div');
-  qtyModeToggle.className = 'toggle-sw';
-  qtyModeToggle.style.cssText = 'pointer-events:auto;cursor:pointer;';
-  qtyModeToggle.setAttribute('data-overall-qty', 'off');
-  qtyModeToggle.addEventListener('click', function() {
-    this.classList.toggle('on');
-    this.setAttribute('data-overall-qty', this.classList.contains('on') ? 'on' : 'off');
-  });
-  qtyModeRow.appendChild(qtyModeLabel);
-  qtyModeRow.appendChild(qtyModeToggle);
 
   // Required row
   const reqRow = document.createElement('div');
@@ -2125,19 +2155,14 @@ function addSubitemTitle(id) {
   reqRow.appendChild(reqLabel);
   reqRow.appendChild(reqToggle);
 
-  // Show/hide Overall quantity based on Selection Mode
-  var originalSetSelType = setSelType;
-  setSelType = function(type) {
-    originalSetSelType(type);
-    qtyModeRow.style.display = type === 'multiple' ? 'flex' : 'none';
-  };
+  setSubMode('single');
 
   div.appendChild(titleRow);
   div.appendChild(colHd);
   div.appendChild(rowsWrap);
   div.appendChild(addChoicesBtn);
   div.appendChild(selRow);
-  div.appendChild(qtyModeRow);
+  div.appendChild(previewWrap);
   div.appendChild(reqRow);
   gw.appendChild(div);
   addChoiceRow(gid);
