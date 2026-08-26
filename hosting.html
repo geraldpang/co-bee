@@ -242,6 +242,52 @@ select:focus { border-color: #009A97; }
 .opt-dd-item { padding: 10px 14px; font-size: 12px; color: #1a1a18; cursor: pointer; border-bottom: 0.5px solid #f0f0f0; transition: background 0.1s; }
 .opt-dd-item:last-child { border-bottom: none; }
 .opt-dd-item:hover { background: #f5fafa; }
+.opt-dd-item-disabled { opacity: 0.4; pointer-events: none; cursor: not-allowed; }
+
+/* ── Toast notifications — standard format for all toast messages in this app ──
+   Usage: showToast('Message text', 'info' | 'success' | 'warning' | 'error')
+   - info:    neutral confirmations (dark, teal icon)
+   - success: positive outcomes (teal)
+   - warning: non-blocking issues, e.g. a conflict that auto-resolved (amber)
+   - error:   failed actions (red)
+*/
+.toast { display: flex; align-items: center; gap: 8px; max-width: 320px; padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 500; line-height: 1.4; color: white; box-shadow: 0 4px 16px rgba(0,0,0,0.18); opacity: 0; transform: translateY(8px); transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: auto; }
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast-info    { background: #1a1a18; }
+.toast-success { background: #009A97; }
+.toast-warning { background: #E8971A; }
+.toast-error   { background: #E24B4A; }
+.toast-icon { flex-shrink: 0; font-size: 13px; line-height: 1; }
+
+/* ── Help icon + popover — standard format for "learn more" details throughout this app ──
+   Usage (markup): <span class="help-icon" onclick="event.stopPropagation();toggleHelp('some-id')">?
+     <div class="help-popover" id="some-id">Longer explanation text goes here.</div>
+   </span>
+*/
+.help-icon { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 50%; background: #e0dfd8; color: #5F5E5A; font-size: 10px; font-weight: 700; cursor: pointer; flex-shrink: 0; position: relative; vertical-align: middle; }
+.help-icon:hover { background: #D3D1C7; }
+.help-popover { display: none; position: absolute; z-index: 30; top: 20px; left: 0; width: 240px; background: white; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 10px 12px; font-size: 11px; color: #5F5E5A; line-height: 1.5; font-weight: 400; box-shadow: 0 4px 16px rgba(0,0,0,0.12); cursor: default; }
+.help-popover.show { display: block; }
+
+/* ── Product Discount condensed panel ── */
+.pd-toggle { display: inline-flex; align-items: center; cursor: pointer; position: relative; }
+.pd-toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+.pd-toggle-track { width: 30px; height: 17px; border-radius: 10px; background: #D3D1C7; position: relative; transition: background 0.15s; flex-shrink: 0; display: inline-block; }
+.pd-toggle-track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 13px; height: 13px; border-radius: 50%; background: white; transition: left 0.15s; }
+.pd-toggle input:checked ~ .pd-toggle-track { background: #009A97; }
+.pd-toggle input:checked ~ .pd-toggle-track::after { left: 15px; }
+.pd-link { font-size: 11px; font-weight: 600; color: #009A97; cursor: pointer; white-space: nowrap; }
+.pd-rule-row { display: flex; align-items: center; justify-content: space-between; width: 100%; flex-wrap: wrap; gap: 10px; font-size: 12px; color: #1a1a18; }
+.pd-cond-group, .pd-reward-group { display: flex; align-items: center; gap: 7px; }
+.tier-amt-input.pd-rule-in { width: 52px; height: 34px; flex: none; text-align: center; }
+.pd-compound { display: flex; align-items: stretch; height: 34px; border: 0.5px solid #D3D1C7; border-radius: 6px; overflow: hidden; }
+.pd-unit-wrap { position: relative; display: flex; align-items: center; border-right: 0.5px solid #D3D1C7; background: #FAFAF8; }
+.pd-compound select.pd-unit-inline { appearance: none; -webkit-appearance: none; -moz-appearance: none; border: none; border-radius: 0; height: 100%; width: 40px; background: transparent; font-weight: 700; font-size: 12px; text-align: center; padding: 0 14px 0 6px; cursor: pointer; }
+.pd-unit-chevron { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #5F5E5A; font-size: 12px; line-height: 1; }
+.pd-compound input.pd-amt-inline { border: none; border-radius: 0; height: 100%; width: 60px; text-align: center; font-weight: 600; }
+.pd-scope-wrap-inner { position: relative; display: inline-flex; align-items: center; }
+.pd-scope-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; border: none; background: transparent; color: #009A97; font-weight: 600; font-size: 11px; cursor: pointer; padding: 0 16px 0 0; font-family: inherit; }
+.pd-scope-chevron { position: absolute; right: 0; top: 50%; transform: translateY(-50%); pointer-events: none; color: #009A97; font-size: 12px; line-height: 1; }
 .opt-dd-sub { font-size: 10px; color: #888780; margin-top: 1px; }
 .option-panel { background: #FAFAF8; border: 0.5px solid #e0dfd8; border-radius: 8px; padding: 12px; margin-top: 6px; display: flex; flex-direction: column; gap: 8px; }
 .option-body { display: flex; flex-direction: column; gap: 8px; }
@@ -910,7 +956,7 @@ select:focus { border-color: #009A97; }
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         <div class="add-item-btn" onclick="addItem()">
           <svg width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-          Add Item
+          Add Product
         </div>
         <div class="add-item-btn" onclick="openCatalogue()" style="border-color:#E8971A;color:#E8971A;background:#FFFBF4;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
@@ -1279,7 +1325,7 @@ function addFromCatalogue() {
     var div = document.createElement('div');
     div.className = 'product-item';
     div.id = 'item-' + iid;
-    div.innerHTML = '<div class="product-item-hd"><span class="product-item-num">Item ' + iid + '</span>'
+    div.innerHTML = '<div class="product-item-hd"><span class="product-item-num">Product ' + iid + '</span>'
       + '<div class="product-item-actions">'
       + '<div class="icon-btn" onclick="moveItem(' + iid + ',-1)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></div>'
       + '<div class="icon-btn" onclick="moveItem(' + iid + ',1)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'
@@ -1304,7 +1350,7 @@ function addItem() {
   div.id = 'item-' + id;
   div.innerHTML = `
     <div class="product-item-hd">
-      <span class="product-item-num">Item ${id}</span>
+      <span class="product-item-num">Product ${id}</span>
       <div class="product-item-actions">
         <div class="icon-btn" title="Move up" onclick="moveItem(${id},-1)">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
@@ -1331,7 +1377,7 @@ function addItem() {
       </div>
       <div class="field-row">
         <span class="field-lbl">Name <span style="color:#E24B4A;">*</span></span>
-        <div class="field-val"><input type="text" placeholder="Item name" /></div>
+        <div class="field-val"><input type="text" placeholder="Product name" /></div>
       </div>
       <div class="field-row">
         <span class="field-lbl">Description</span>
@@ -1357,13 +1403,17 @@ function addItem() {
                 Order Settings
                 <div class="opt-dd-sub">Available stock, limits per order</div>
               </div>
-              <div class="opt-dd-item" onclick="event.stopPropagation();addSplitCase(${id})">
+              <div class="opt-dd-item" id="opt-dd-item-splitcase-${id}" onclick="event.stopPropagation();addSplitCase(${id})">
                 Split Case Purchase
                 <div class="opt-dd-sub">Allow partial case orders</div>
               </div>
               <div class="opt-dd-item" onclick="event.stopPropagation();addSubitemGroup(${id})">
                 Add sub-item
                 <div class="opt-dd-sub">e.g. Frame Color, Lens Color</div>
+              </div>
+              <div class="opt-dd-item" id="opt-dd-item-proddisc-${id}" onclick="event.stopPropagation();addProductDiscount(${id})">
+                Product Discount
+                <div class="opt-dd-sub">Reward bulk quantity/spend</div>
               </div>
             </div>
           </div>
@@ -1373,6 +1423,8 @@ function addItem() {
     </div>`;
   wrap.appendChild(div);
   renumberItems();
+  // Auto-join the shared Product Discount template, if one is currently active
+  if (pdTemplate) addProductDiscount(id, true);
 }
 
 function removeItem(id) {
@@ -1383,7 +1435,7 @@ function removeItem(id) {
 
 function renumberItems() {
   document.querySelectorAll('.product-item').forEach((el, i) => {
-    el.querySelector('.product-item-num').textContent = 'Item ' + (i + 1);
+    el.querySelector('.product-item-num').textContent = 'Product ' + (i + 1);
   });
 }
 
@@ -1419,13 +1471,28 @@ document.addEventListener('click', function(e) {
   }
 });
 
-function makeOptionHeader(title, resetFn, panelClass) {
+function makeOptionHeader(title, resetFn, panelClass, onRemove, helpHtml) {
   const hd = document.createElement('div');
   hd.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;';
 
   const lbl = document.createElement('div');
   lbl.className = 'option-panel-title';
-  lbl.textContent = title;
+  lbl.style.cssText = 'display:flex;align-items:center;gap:6px;';
+  lbl.appendChild(document.createTextNode(title));
+
+  if (helpHtml) {
+    const helpId = 'help-' + Math.random().toString(36).slice(2, 8);
+    const helpIcon = document.createElement('span');
+    helpIcon.className = 'help-icon';
+    helpIcon.textContent = '?';
+    helpIcon.onclick = function(e) { e.stopPropagation(); toggleHelp(helpId); };
+    const pop = document.createElement('div');
+    pop.className = 'help-popover';
+    pop.id = helpId;
+    pop.innerHTML = helpHtml;
+    helpIcon.appendChild(pop);
+    lbl.appendChild(helpIcon);
+  }
 
   const actions = document.createElement('div');
   actions.style.cssText = 'display:flex;align-items:center;gap:10px;';
@@ -1451,6 +1518,7 @@ function makeOptionHeader(title, resetFn, panelClass) {
   delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
   delBtn.addEventListener('click', function() {
     delBtn.closest('.option-panel, .subitem-container').remove();
+    if (onRemove) onRemove();
   });
 
   actions.appendChild(resetBtn);
@@ -1482,18 +1550,62 @@ function addOrderSettings(id) {
     body.appendChild(row);
   });
 
+  const orderSettingsHelp =
+    '<strong>Available stock</strong>: the total number of this product you have to sell across the whole event. '
+    + '<strong>Limit per order</strong>: the most a single buyer can get in one order. '
+    + '<strong>Minimum per order</strong>: the smallest amount someone has to buy if they want any at all.';
+
   const hd = makeOptionHeader('Order Settings', function() {
     const inputs = div.querySelectorAll('input[type="number"]');
     inputs[0].value = '1000'; inputs[1].value = '1000'; inputs[2].value = '1';
-  });
+  }, undefined, undefined, orderSettingsHelp);
 
   div.appendChild(hd);
   div.appendChild(body);
   panels.appendChild(div);
 }
 
+/* ── Help icon popover — standard format, reused wherever a longer explanation is needed ── */
+function toggleHelp(popoverId) {
+  const pop = document.getElementById(popoverId);
+  document.querySelectorAll('.help-popover').forEach(p => { if (p !== pop) p.classList.remove('show'); });
+  if (pop) pop.classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.help-icon')) {
+    document.querySelectorAll('.help-popover').forEach(p => p.classList.remove('show'));
+  }
+});
+
+/* ── Toast notifications — standard format, reused for all future notices ── */
+function showToast(message, type) {
+  type = type || 'info';
+  var icons = { info: 'ℹ', success: '✓', warning: '⚠', error: '✕' };
+  var container = document.getElementById('toast-container');
+  if (!container) return;
+  var t = document.createElement('div');
+  t.className = 'toast toast-' + type;
+  t.innerHTML = '<span class="toast-icon">' + (icons[type] || icons.info) + '</span><span>' + message + '</span>';
+  container.appendChild(t);
+  requestAnimationFrame(function() { t.classList.add('show'); });
+  setTimeout(function() {
+    t.classList.remove('show');
+    setTimeout(function() { t.remove(); }, 250);
+  }, 3500);
+}
+
+/* ── Mutual exclusion between Split Case Purchase and Product Discount ── */
+function setOptionDisabled(id, key, disabled) {
+  var el = document.getElementById('opt-dd-item-' + key + '-' + id);
+  if (el) el.classList.toggle('opt-dd-item-disabled', disabled);
+}
+
 function addSplitCase(id) {
   document.getElementById('opt-dd-' + id).style.display = 'none';
+
+  // Mutual exclusion: remove any active Product Discount on this item first
+  removeProductDiscount(id, true);
+
   const panels = document.getElementById('opt-panels-' + id);
   const div = document.createElement('div');
   div.className = 'option-panel';
@@ -1527,15 +1639,265 @@ function addSplitCase(id) {
   body.appendChild(r2);
   body.appendChild(ack);
 
+  const splitCaseHelp =
+    'Sell this product in cases or cartons instead of single units. Buyers can order less than a full case, and it fills up as more people order it. '
+    + 'Choose whether to fulfil an order only once its case is completely full, or go ahead even if it isn\'t. '
+    + 'Turning this on also switches this product to Pay Later automatically.';
+
   const hd = makeOptionHeader('Split Case Purchase', function() {
     div.querySelectorAll('input[type="number"]').forEach((inp, i) => inp.value = i === 2 ? '1' : '');
     div.querySelectorAll('input[type="radio"]')[0].checked = true;
     div.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-  });
+  }, undefined, function() { setOptionDisabled(id, 'proddisc', false); }, splitCaseHelp);
 
   div.appendChild(hd);
   div.appendChild(body);
   panels.appendChild(div);
+  setOptionDisabled(id, 'proddisc', true);
+}
+
+/* ── Product Discount: global sync state ──
+   pdTemplate: {condVal, discType, discAmt, capAmt, noCap} once established, else null
+   (condition is always Min. quantity — spend-based condition was removed)
+   pdSyncedItems: Set of item ids currently mirroring pdTemplate exactly
+*/
+var pdTemplate = null;
+var pdSyncedItems = new Set();
+
+function addProductDiscount(id, autoJoin) {
+  const dd = document.getElementById('opt-dd-' + id);
+  if (dd) dd.style.display = 'none';
+  const panels = document.getElementById('opt-panels-' + id);
+  const div = document.createElement('div');
+  div.className = 'option-panel';
+  div.id = 'pd-panel-' + id;
+
+  const body = document.createElement('div');
+  body.className = 'option-body';
+  body.style.cssText = 'display:flex;flex-direction:column;gap:8px;';
+
+  // Two-cluster rule sentence: [Buy 3 or more]  ⟷  [→ $2 off · per unit]
+  // justify-content:space-between fills the row width without trailing dead space,
+  // and reinforces the "condition then reward" split.
+  const ruleRow = document.createElement('div');
+  ruleRow.className = 'pd-rule-row';
+  ruleRow.innerHTML =
+    '<div class="pd-cond-group">'
+    +   '<span>Buy</span>'
+    +   '<input class="tier-amt-input pd-rule-in" type="number" id="pd-condVal-' + id + '" min="0" step="1" placeholder="0" />'
+    +   '<span>or more</span>'
+    + '</div>'
+    + '<div class="pd-reward-group">'
+    +   '<span style="color:#B4B2A9;font-size:14px;">&#8594;</span>'
+    +   '<div class="pd-compound">'
+    +     '<span class="pd-unit-wrap">'
+    +       '<select class="pd-unit-inline" id="pd-discType-' + id + '" onchange="setPdDiscType(' + id + ', this.value)">'
+    +         '<option value="fixed">$</option>'
+    +         '<option value="pct">%</option>'
+    +       '</select>'
+    +       '<span class="pd-unit-chevron">&#9662;</span>'
+    +     '</span>'
+    +     '<input class="pd-amt-inline" type="number" id="pd-discAmt-' + id + '" min="0" step="0.50" placeholder="0" />'
+    +   '</div>'
+    +   '<span>off</span>'
+    +   '<span id="pd-scope-wrap-' + id + '">'
+    +     '<span class="pd-scope-wrap-inner">'
+    +       '<select class="pd-scope-select" id="pd-discScope-' + id + '">'
+    +         '<option value="unit">per unit</option>'
+    +         '<option value="family">per product</option>'
+    +       '</select>'
+    +       '<span class="pd-scope-chevron">&#9662;</span>'
+    +     '</span>'
+    +   '</span>'
+    + '</div>';
+
+  // Footer: sync toggle + Save, combined into one row
+  const footerRow = document.createElement('div');
+  footerRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;border-top:0.5px solid #e0dfd8;padding-top:8px;';
+  footerRow.innerHTML =
+    '<div style="display:flex;align-items:center;gap:7px;">'
+    +   '<label class="pd-toggle">'
+    +     '<input type="checkbox" id="pd-syncAll-' + id + '" onchange="onPdSyncToggle(' + id + ')" />'
+    +     '<span class="pd-toggle-track"></span>'
+    +   '</label>'
+    +   '<span style="font-size:11px;font-weight:600;color:#1a1a18;display:inline-flex;align-items:center;gap:4px;">'
+    +     'Apply to all products'
+    +     '<span class="help-icon" style="width:12px;height:12px;font-size:9px;" onclick="event.stopPropagation();toggleHelp(\'pd-synchelp-' + id + '\')">?'
+    +       '<div class="help-popover" id="pd-synchelp-' + id + '" style="width:210px;">Copies this discount to every other product right now. You can still change any of them separately afterward.</div>'
+    +     '</span>'
+    +   '</span>'
+    + '</div>'
+    + '<button class="tier-save-btn" style="height:34px;padding:0 18px;" onclick="savePd(' + id + ')">Save</button>';
+
+  // Inline replicate-confirmation prompt — shown after Save when relevant
+  const confirmRow = document.createElement('div');
+  confirmRow.id = 'pd-confirm-' + id;
+  confirmRow.style.cssText = 'display:none;background:#FEF6E8;border:0.5px solid #F0C878;border-radius:8px;padding:10px 12px;font-size:12px;color:#7A5A10;';
+
+  body.appendChild(ruleRow);
+  body.appendChild(confirmRow);
+  body.appendChild(footerRow);
+
+  const pdHelpHtml =
+    'If this product has variants (like colors or sizes), we count them all together toward the quantity — e.g. 2 red + 1 blue = 3. '
+    + '<strong>Per unit</strong> gives the discount for every item they buy (3 items at $2 off = $6 off total). '
+    + '<strong>Per product</strong> gives the discount once, no matter how many they buy. '
+    + 'Once the quantity is reached, every item gets the discount — not just the extra ones past the minimum. '
+    + 'This can be used together with an overall event discount, but not with Split Case Purchase.';
+
+  const hd = makeOptionHeader('Product Discount', function() {
+    document.getElementById('pd-condVal-' + id).value = '';
+    document.getElementById('pd-discAmt-' + id).value = '';
+    setPdDiscType(id, 'fixed');
+  }, undefined, function() { pdSyncedItems.delete(id); setOptionDisabled(id, 'splitcase', false); }, pdHelpHtml);
+
+  div.appendChild(hd);
+  div.appendChild(body);
+  panels.appendChild(div);
+  setOptionDisabled(id, 'splitcase', true);
+  setPdDiscType(id, 'fixed');
+
+  // Auto-join: a shared template already exists — pre-fill and mark synced immediately
+  if (pdTemplate) {
+    applyPdValuesToItem(id, pdTemplate);
+    pdSyncedItems.add(id);
+    document.getElementById('pd-syncAll-' + id).checked = true;
+    if (!autoJoin) showToast('Applied the shared discount config to this product.', 'success');
+  }
+}
+
+/* Remove a product's discount panel entirely (used by Split Case conflict + manual delete) */
+function removeProductDiscount(id, notify) {
+  var panel = document.getElementById('pd-panel-' + id);
+  if (!panel) return;
+  panel.remove();
+  pdSyncedItems.delete(id);
+  setOptionDisabled(id, 'splitcase', false);
+  if (notify) showToast('Product Discount removed — not available with Split Case Purchase.', 'warning');
+}
+
+function setPdDiscType(id, type) {
+  var sel = document.getElementById('pd-discType-' + id);
+  if (sel.value !== type) sel.value = type;
+  var scopeWrap = document.getElementById('pd-scope-wrap-' + id);
+  if (scopeWrap) scopeWrap.style.display = type === 'fixed' ? 'inline' : 'none';
+}
+
+/* Read the current field values for an item's Product Discount panel */
+function readPdValues(id) {
+  return {
+    condVal:   document.getElementById('pd-condVal-' + id).value,
+    discType:  document.getElementById('pd-discType-' + id).value,
+    discAmt:   document.getElementById('pd-discAmt-' + id).value,
+    discScope: document.getElementById('pd-discScope-' + id).value,
+  };
+}
+
+/* Write values onto an item's panel fields without triggering the replicate prompt */
+function applyPdValuesToItem(id, values) {
+  document.getElementById('pd-condVal-' + id).value = values.condVal;
+  document.getElementById('pd-discAmt-' + id).value = values.discAmt;
+  document.getElementById('pd-discScope-' + id).value = values.discScope || 'unit';
+  setPdDiscType(id, values.discType);
+}
+
+/* Direct checkbox toggle (not via Save) — no data-loss decision needed, so no prompt */
+function onPdSyncToggle(id) {
+  var cb = document.getElementById('pd-syncAll-' + id);
+  if (cb.checked) {
+    if (!pdTemplate) { cb.checked = false; return; }
+    applyPdValuesToItem(id, pdTemplate);
+    pdSyncedItems.add(id);
+  } else {
+    pdSyncedItems.delete(id);
+  }
+}
+
+/* Save button handler — this is where the replicate/diverge decision happens */
+function savePd(id) {
+  var values = readPdValues(id);
+  if (!values.condVal || !values.discAmt) { showToast('Enter a threshold and discount amount first.', 'error'); return; }
+
+  if (!pdTemplate) {
+    // First Product Discount ever saved in this event — offer to establish the shared template
+    showPdConfirm(id,
+      'Apply this discount to all products in this event?',
+      function() { // Yes
+        pdTemplate = values;
+        pdSyncedItems = new Set([id]);
+        document.getElementById('pd-syncAll-' + id).checked = true;
+        var result = applyPdToAllProducts(values, id);
+        showToast('Applied to ' + result.applied + ' product' + (result.applied === 1 ? '' : 's') + (result.skipped ? ' — ' + result.skipped + ' skipped (Split Case Purchase)' : '') + '.', 'success');
+      },
+      function() { // No
+        document.getElementById('pd-syncAll-' + id).checked = false;
+        showToast('Saved for this product only.', 'success');
+      }
+    );
+    return;
+  }
+
+  // Template already exists — every Save is an edit decision
+  showPdConfirm(id,
+    'Replicate this change to all products in this event?',
+    function() { // Yes — becomes the new template; re-syncs only items currently in sync
+      var previouslySynced = new Set(pdSyncedItems);
+      pdTemplate = values;
+      pdSyncedItems = new Set([id]);
+      previouslySynced.forEach(function(otherId) {
+        if (otherId === id) return;
+        applyPdValuesToItem(otherId, values);
+        pdSyncedItems.add(otherId);
+        var cb = document.getElementById('pd-syncAll-' + otherId);
+        if (cb) cb.checked = true;
+      });
+      document.getElementById('pd-syncAll-' + id).checked = true;
+      showToast('Replicated to ' + pdSyncedItems.size + ' product' + (pdSyncedItems.size === 1 ? '' : 's') + '.', 'success');
+    },
+    function() { // No — this item diverges
+      pdSyncedItems.delete(id);
+      document.getElementById('pd-syncAll-' + id).checked = false;
+      showToast('Saved for this product only.', 'success');
+    }
+  );
+}
+
+/* Inline Yes/No confirmation, rendered inside the panel's confirmRow */
+function showPdConfirm(id, message, onYes, onNo) {
+  var row = document.getElementById('pd-confirm-' + id);
+  if (!row) return;
+  row.style.display = 'block';
+  row.innerHTML =
+    '<div style="margin-bottom:8px;">' + message + '</div>'
+    + '<div style="display:flex;gap:8px;justify-content:flex-end;">'
+    +   '<button class="tier-cancel-btn" id="pd-confirm-no-' + id + '">No</button>'
+    +   '<button class="tier-save-btn" id="pd-confirm-yes-' + id + '">Yes</button>'
+    + '</div>';
+  document.getElementById('pd-confirm-yes-' + id).onclick = function() { row.style.display = 'none'; onYes(); };
+  document.getElementById('pd-confirm-no-' + id).onclick  = function() { row.style.display = 'none'; onNo(); };
+}
+
+/* Apply the template to every eligible item in the event (skips items with Split Case active) */
+function applyPdToAllProducts(values, sourceId) {
+  var applied = 0, skipped = 0;
+  document.querySelectorAll('.product-item').forEach(function(el) {
+    var otherId = parseInt(el.id.replace('item-', ''), 10);
+    if (otherId === sourceId) return;
+    // If this item's Split Case option is currently active, its "Product Discount" dropdown entry is disabled — skip it
+    var splitCaseActive = document.getElementById('opt-dd-item-proddisc-' + otherId) &&
+                           document.getElementById('opt-dd-item-proddisc-' + otherId).classList.contains('opt-dd-item-disabled');
+    if (splitCaseActive) { skipped++; return; }
+
+    if (!document.getElementById('pd-panel-' + otherId)) {
+      addProductDiscount(otherId, true);
+    }
+    applyPdValuesToItem(otherId, values);
+    pdSyncedItems.add(otherId);
+    var cb = document.getElementById('pd-syncAll-' + otherId);
+    if (cb) cb.checked = true;
+    applied++;
+  });
+  return { applied: applied, skipped: skipped };
 }
 
 function addSubitemGroup(id) {
@@ -1555,7 +1917,20 @@ function addSubitemGroup(id) {
 
     const lbl = document.createElement('div');
     lbl.className = 'option-panel-title';
-    lbl.textContent = 'Sub-Items';
+    lbl.style.cssText = 'display:flex;align-items:center;gap:6px;';
+    lbl.appendChild(document.createTextNode('Sub-Items'));
+
+    const subHelpId = 'help-subitem-' + id;
+    const subHelpIcon = document.createElement('span');
+    subHelpIcon.className = 'help-icon';
+    subHelpIcon.textContent = '?';
+    subHelpIcon.onclick = function(e) { e.stopPropagation(); toggleHelp(subHelpId); };
+    const subHelpPop = document.createElement('div');
+    subHelpPop.className = 'help-popover';
+    subHelpPop.id = subHelpId;
+    subHelpPop.innerHTML = '<strong>Single choice</strong>: the buyer can only pick one option from this group (e.g. one Frame Color). <strong>Multiple choices</strong>: the buyer can pick more than one option at once (e.g. several toppings).';
+    subHelpIcon.appendChild(subHelpPop);
+    lbl.appendChild(subHelpIcon);
 
     const actions = document.createElement('div');
     actions.style.cssText = 'display:flex;align-items:center;gap:10px;';
@@ -2815,5 +3190,8 @@ function saveDraft() {
 
 
 <!-- Product Catalogue Modal -->
+  <!-- Toast notification container — standard format for all toast messages -->
+  <div id="toast-container" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column-reverse;gap:8px;align-items:center;pointer-events:none;"></div>
+
 </body>
 </html>
