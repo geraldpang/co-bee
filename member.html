@@ -492,9 +492,9 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .ps-pending  .pcard-sdot   { background: #009A97; }
   .ps-pending  .pcard-stxt   { color: #005f5d; }
 
-  .ps-fulfill  .pcard-status { background: #E6F1FB; }
-  .ps-fulfill  .pcard-sdot   { background: #378ADD; }
-  .ps-fulfill  .pcard-stxt   { color: #0C447C; }
+  .ps-fulfill  .pcard-status { background: #F2F7EC; }
+  .ps-fulfill  .pcard-sdot   { background: #8FB56B; }
+  .ps-fulfill  .pcard-stxt   { color: #45611F; }
 
   .ps-ready    .pcard-status { background: #EAF3DE; }
   .ps-ready    .pcard-sdot   { background: #639922; }
@@ -511,11 +511,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .ps-closed   .pcard-stxt   { color: #5F5E5A; }
   .ps-closed   { opacity: 0.65; }
 
-  /* New order states — split-case filling, payment rejected, cancelled/refunded */
-  .ps-filling   .pcard-status { background: #FAFAF8; }
-  .ps-filling   .pcard-sdot   { background: #80CCCB; }
-  .ps-filling   .pcard-stxt   { color: #4a4a46; }
-
+  /* New order states — payment rejected, cancelled/refunded */
   .ps-rejected  .pcard-status { background: #FBEAEA; }
   .ps-rejected  .pcard-sdot   { background: #E24B4A; }
   .ps-rejected  .pcard-stxt   { color: #96302E; }
@@ -2656,12 +2652,12 @@ select:focus { border-color: #009A97; }
         </div>
         <div class="pcard-action">
           <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">To be delivered · Tue 3 Mar · 2PM – 5PM</span></div>
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">To be Fulfilled · Delivery · Tue 3 Mar · 2PM – 5PM</span></div>
         </div>
       </div>
 
-      <!-- 4. Split case filling -->
-      <div class="pcard ps-filling">
+      <!-- 4. Pending confirmation — split case still filling (detail shown in order) -->
+      <div class="pcard ps-pending">
         <div class="pcard-head">
           <div class="pcard-host"><div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div><div><div class="pcard-hname">M6 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
           <div class="pcard-meta">20-02-2026<br/>9AM – 4PM</div>
@@ -2689,7 +2685,7 @@ select:focus { border-color: #009A97; }
         </div>
         <div class="pcard-action">
           <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Split case filling — waiting for others to join</span></div>
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Pending confirmation</span></div>
         </div>
       </div>
 
@@ -2742,7 +2738,7 @@ select:focus { border-color: #009A97; }
         </div>
         <div class="pcard-action">
           <button class="view-order-btn" style="color:#B4B2A9;cursor:default;" onclick="" disabled aria-disabled="true" tabindex="-1">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Order cancelled — event did not meet minimum</span></div>
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Order cancelled</span></div>
         </div>
       </div>
 
