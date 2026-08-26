@@ -1437,6 +1437,15 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
+      <!-- Per-event / order discount info card -->
+      <div style="display:flex;align-items:center;gap:10px;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:10px;padding:10px 12px;margin:10px 14px 0;">
+        <span style="font-size:16px;flex-shrink:0;">🏷</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#007A77;">Spend $5.00+</div>
+          <div style="font-size:12px;font-weight:500;color:#009A97;margin-top:1px;">Discount 10% off</div>
+        </div>
+      </div>
+
             <!-- Search -->
       <div style="margin:10px 14px 0;position:relative;">
         <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#B4B2A9;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -1574,102 +1583,6 @@ select:focus { border-color: #009A97; }
         <!-- LIST VIEW (original, shown by default) -->
         <div id="items-list-view">
 
-        <!-- Item 5: Bubble Tea — toppings -->
-        <div style="border-top:0.5px solid #f0f0f0;border-bottom:0.5px solid #f0f0f0;">
-          <div style="padding:14px 14px 0;">
-            <div style="display:flex;gap:16px;align-items:flex-start;">
-              <div style="width:88px;height:88px;border-radius:10px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l1 6H7L8 2z"/><path d="M7 8c0 8 2 12 5 12s5-4 5-12"/><line x1="5" y1="11" x2="19" y2="11"/></svg>
-              </div>
-              <div style="flex:1;min-width:0;">
-                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">
-                  <div style="font-size:13px;font-weight:600;color:#1a1a18;">Bubble Tea</div>
-                  <div style="font-size:14px;font-weight:700;color:#009A97;" id="bt-hd-price">$5.00</div>
-                </div>
-                <div style="font-size:11px;color:#888780;margin-top:1px;">This is an example allowing multiple selection of sub-items</div>
-              </div>
-            </div>
-            <!-- Toppings -->
-            <div style="margin:8px 0 4px;padding:8px 10px;background:#FAFAF8;border-radius:8px;border:0.5px solid #f0f0f0;">
-              <div style="font-size:9px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">TOPPINGS <span style="color:#B4B2A9;font-weight:400;">· Pick any</span></div>
-              <div id="bt-topping-rows"></div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0 12px;">
-              <span style="font-size:11px;color:#B4B2A9;">3 order(s) made</span>
-              <div style="display:flex;align-items:center;gap:10px;">
-                <button onclick="changeQty2('p5',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
-                <span id="p5" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
-                <button onclick="changeQty2('p5',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
-              </div>
-            </div>
-          </div>
-          <!-- Extra BT entries spawned here -->
-          <div id="bt-extra-entries"></div>
-          <!-- Add another order -->
-          <button onclick="addBtEntry()" style="display:inline-flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-size:12px;font-weight:500;color:#80CCCB;font-family:inherit;padding:4px 14px 12px;">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-            Add another order with different options
-          </button>
-        </div>
-
-        <!-- Item 1: Spec with 2 options -->
-        <div id="spec-entries" style="border-bottom:0.5px solid #f0f0f0;">
-          <div class="item-entry" style="padding:20px 14px 8px;">
-            <div style="display:flex;gap:16px;align-items:flex-start;">
-              <!-- Image -->
-              <div style="width:88px;height:88px;border-radius:10px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              </div>
-              <!-- Content -->
-              <div style="flex:1;min-width:0;">
-                <!-- Name + price row -->
-                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">
-                  <div style="font-size:13px;font-weight:600;color:#1a1a18;">Spec</div>
-                  <div style="font-size:14px;font-weight:700;color:#009A97;flex-shrink:0;" id="spec-price">$20.00</div>
-                </div>
-                <div style="font-size:11px;color:#888780;margin-top:1px;">This is an example allowing single selection of sub-items</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sub-items box — full width below image row -->
-          <div style="margin:0 14px 8px;padding:8px 10px;background:#FAFAF8;border-radius:8px;border:0.5px solid #f0f0f0;">
-            <!-- Frame Color option -->
-            <div style="margin-bottom:10px;">
-              <div style="font-size:9px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">FRAME COLOR <span style="color:#E24B4A;">· Required</span></div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                <button class="spec-pill" data-group="list-frame" data-val="5"  onclick="listSpecPill(this)">Blue +$5</button>
-                <button class="spec-pill" data-group="list-frame" data-val="6"  onclick="listSpecPill(this)">Red +$6</button>
-                <button class="spec-pill" data-group="list-frame" data-val="10" onclick="listSpecPill(this)">Green +$10</button>
-              </div>
-            </div>
-            <!-- Lens option -->
-            <div>
-              <div style="font-size:9px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">LENS COLOR <span style="color:#E24B4A;">· Required</span></div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                <button class="spec-pill" data-group="list-lens" data-val="0"  onclick="listSpecPill(this)">Clear +$0</button>
-                <button class="spec-pill" data-group="list-lens" data-val="20" onclick="listSpecPill(this)">Tinted +$20</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Add with different option + qty row -->
-          <div style="padding:0 14px 14px;">
-            <button onclick="addSpecEntry()" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-size:12px;font-weight:500;color:#80CCCB;font-family:inherit;padding:0;margin-bottom:8px;">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-              Add another order with different options
-            </button>
-            <div style="display:flex;align-items:center;justify-content:space-between;">
-              <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
-              <div style="display:flex;align-items:center;gap:10px;">
-                <button onclick="changeQty2('p1',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
-                <span id="p1" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
-                <button onclick="changeQty2('p1',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- Item 2: Toothpaste (no options) -->
         <div style="padding:20px 14px;border-bottom:0.5px solid #f0f0f0;">
           <div style="display:flex;gap:16px;align-items:center;">
@@ -1745,6 +1658,60 @@ select:focus { border-color: #009A97; }
                   <button onclick="changeQty2('p4',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
                   <span id="p4" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
                   <button onclick="changeQty2('p4',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 5: Tote Bag — Product Discount demo (Buy 3 or more → $2 off each, per unit) -->
+        <div style="padding:20px 14px;border-top:0.5px solid #f0f0f0;">
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div style="width:88px;height:88px;border-radius:10px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                <div style="font-size:13px;font-weight:600;color:#1a1a18;">Tote Bag</div>
+                <div style="display:flex;align-items:baseline;gap:6px;flex-shrink:0;">
+                  <span id="p6-price-strike" style="font-size:12px;color:#B4B2A9;text-decoration:line-through;font-weight:500;display:none;">$10.00</span>
+                  <span id="p6-price" style="font-size:14px;font-weight:700;color:#009A97;">$10.00</span>
+                </div>
+              </div>
+              <div style="font-size:11px;color:#888780;margin-top:1px;">Canvas, natural</div>
+              <div id="p6-disc-tag" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#009A97;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 7px;margin-top:5px;width:fit-content;">🏷 Buy 3 or more → $2 off each</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+                <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <button onclick="changeQty2('p6',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
+                  <span id="p6" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">3</span>
+                  <button onclick="changeQty2('p6',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 6: Sticker Pack — Product Discount demo (Buy 3 or more → $3 off, per product) -->
+        <div style="padding:20px 14px;border-top:0.5px solid #f0f0f0;">
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div style="width:88px;height:88px;border-radius:10px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7v10l10 5 10-5V7Z"/><path d="M2 7l10 5 10-5"/><path d="M12 22V12"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                <div style="font-size:13px;font-weight:600;color:#1a1a18;">Sticker Pack</div>
+                <div style="font-size:14px;font-weight:700;color:#009A97;">$4.00</div>
+              </div>
+              <div style="font-size:11px;color:#888780;margin-top:1px;">Set of 5 vinyl stickers</div>
+              <div id="p7-disc-tag" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#009A97;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 7px;margin-top:5px;width:fit-content;">🏷 Buy 3 or more → $3 off</div>
+              <div id="p7-applied-note" style="display:none;font-size:10px;color:#009A97;font-weight:600;margin-top:3px;">✓ $3.00 off applied to this order</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+                <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <button onclick="changeQty2('p7',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
+                  <span id="p7" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">3</span>
+                  <button onclick="changeQty2('p7',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
                 </div>
               </div>
             </div>
@@ -2043,7 +2010,7 @@ select:focus { border-color: #009A97; }
   <!-- ALL EVENTS VIEW -->
   <div id="view-all">
     <div class="feed-header">
-      <span class="feed-header-count">3 EVENTS</span>
+      <span class="feed-header-count">4 EVENTS</span>
       <div class="mef-view-toggle">
         <button class="active" id="mef-btn-list" onclick="setFeedView('list')" title="List view">
           <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect y="1" width="14" height="2" rx="1"/><rect y="6" width="14" height="2" rx="1"/><rect y="11" width="14" height="2" rx="1"/></svg>
@@ -2132,6 +2099,29 @@ select:focus { border-color: #009A97; }
           </button>
         </div>
       </div>
+
+      <div class="event-card" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false')">
+        <div class="card-header">
+          <div class="card-host">
+            <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
+            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Product &amp; Event Discount Demo</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+          </div>
+          <div class="card-badges">
+            <span class="closing-text">Closing in 20 days</span>
+            <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+          </div>
+        </div>
+        <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="card-body"><div class="card-desc">See how Product Discount and the event-wide discount look to buyers.</div></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Deal open:</span><span class="card-info-val">10-05-2026</span><span class="card-info-lbl">Deal close:</span><span class="card-info-val">28-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">04-06-2026 (10AM - 5PM)</span></div>
+        <div class="mef-card-actions" onclick="event.stopPropagation()">
+          <button class="mef-share-btn" onclick="shareEvent(this,'Product &amp; Event Discount Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+          <button class="mef-link-btn" onclick="handleLinkClick('Product &amp; Event Discount Demo')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Telegram Group
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="mef-grid" id="mef-tile-grid" style="display:none;">
@@ -2204,6 +2194,30 @@ select:focus { border-color: #009A97; }
           <button class="mef-link-btn" onclick="handleLinkClick('This is a test event for Purchase with no login')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             3 Links
+          </button>
+        </div>
+      </div>
+      <div class="mef-tile" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false')">
+        <div class="mef-tile-hd">
+          <span class="mef-tile-avatar2">M6</span>
+          <div class="mef-tile-hdtext"><div class="mef-tile-name">Product &amp; Event Discount Demo</div><div class="mef-tile-createdby">Created by M6 group</div></div>
+        </div>
+        <div class="mef-tile-img">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+        </div>
+        <div class="mef-tile-dates">
+          <div class="mef-tile-daterow">
+            <div><span>Deal open</span><span>10-05</span></div>
+            <div><span>Deal close</span><span>28-05</span></div>
+            <div><span>Collection</span><span>04-06</span></div>
+          </div>
+        </div>
+        <div class="mef-card-actions" onclick="event.stopPropagation()">
+          <button class="mef-share-btn" onclick="shareEvent(this,'Product &amp; Event Discount Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+          <button class="mef-link-btn" onclick="handleLinkClick('Product &amp; Event Discount Demo')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Telegram
           </button>
         </div>
       </div>
@@ -3891,12 +3905,12 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
     document.getElementById('ev1-buys').style.display = 'inline-block';
     document.getElementById('ev2-buys').textContent = ordersPlaced + ' BUY';
   }
-  // Reset qtys
-  ['p1','p2','p3','p4'].forEach(id => {
+  // Reset qtys — p6 (Tote Bag) and p7 (Sticker Pack) are kept at their preset qty to demo Product Discount
+  ['p2','p3','p4'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = '0';
   });
-  document.getElementById('ev1-total').textContent = '$0.00 SGD';
+  updateTotal2();
   // Show screen 1
   document.getElementById('ev-screen-1').style.display = 'block';
   document.getElementById('ev-screen-2').style.display = 'none';
@@ -4026,7 +4040,7 @@ function changeQty2(id, delta) {
 }
 
 function updateTotal2() {
-  const prices = { p1: 20, p2: 2, p3: 10, p4: 3 };
+  const prices = { p2: 2, p3: 10, p4: 3 };
   let total = 0;
   Object.keys(prices).forEach(id => {
     const el = document.getElementById(id);
@@ -4036,9 +4050,53 @@ function updateTotal2() {
   document.querySelectorAll('[id^="ps"]').forEach(el => {
     total += parseInt(el.textContent || 0) * 20;
   });
+  // p6 Tote Bag — Product Discount demo: Buy 3+ -> $2 off each (per unit)
+  total += updateToteBagDiscount();
+  // p7 Sticker Pack — Product Discount demo: Buy 3+ -> $3 off (per product, once)
+  total += updateStickerPackDiscount();
   const el = document.getElementById('ev1-total');
   if (el) el.textContent = '$' + total.toFixed(2);
   return total;
+}
+
+/* Product Discount demo (matches host builder spec): quantity-only condition,
+   $ Fixed discount applied per unit once the threshold is met. */
+function updateToteBagDiscount() {
+  const qtyEl = document.getElementById('p6');
+  if (!qtyEl) return 0;
+  const qty = parseInt(qtyEl.textContent || 0);
+  const basePrice = 10.00;
+  const perUnitOff = 2.00;
+  const tierMet = qty >= 3;
+  const unitPrice = tierMet ? basePrice - perUnitOff : basePrice;
+
+  const strikeEl = document.getElementById('p6-price-strike');
+  const priceEl = document.getElementById('p6-price');
+  const tagEl = document.getElementById('p6-disc-tag');
+  if (strikeEl) strikeEl.style.display = tierMet ? 'inline' : 'none';
+  if (priceEl) priceEl.textContent = '$' + unitPrice.toFixed(2);
+  if (tagEl) tagEl.textContent = tierMet ? '🏷 Buy 3 or more → $2 off each · applied' : '🏷 Buy 3 or more → $2 off each';
+
+  return qty * unitPrice;
+}
+
+/* Product Discount demo — "per product" scope: the $ amount is given once for the
+   whole line, no matter the quantity (unlike Tote Bag's per-unit scope above). */
+function updateStickerPackDiscount() {
+  const qtyEl = document.getElementById('p7');
+  if (!qtyEl) return 0;
+  const qty = parseInt(qtyEl.textContent || 0);
+  const basePrice = 4.00;
+  const flatOff = 3.00;
+  const tierMet = qty >= 3;
+  const lineTotal = Math.max(0, qty * basePrice - (tierMet ? flatOff : 0));
+
+  const tagEl = document.getElementById('p7-disc-tag');
+  const appliedNoteEl = document.getElementById('p7-applied-note');
+  if (tagEl) tagEl.textContent = tierMet ? '🏷 Buy 3 or more → $3 off · applied' : '🏷 Buy 3 or more → $3 off';
+  if (appliedNoteEl) appliedNoteEl.style.display = tierMet ? 'block' : 'none';
+
+  return lineTotal;
 }
 
 function placeOrder2() {
@@ -4132,12 +4190,12 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
     document.getElementById('ev1-buys').style.display = 'inline-block';
     document.getElementById('ev2-buys').textContent = ordersPlaced + ' BUY';
   }
-  // Reset qtys
-  ['p1','p2','p3','p4'].forEach(id => {
+  // Reset qtys — p6 (Tote Bag) and p7 (Sticker Pack) are kept at their preset qty to demo Product Discount
+  ['p2','p3','p4'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = '0';
   });
-  document.getElementById('ev1-total').textContent = '$0.00 SGD';
+  updateTotal2();
   // Show screen 1
   document.getElementById('ev-screen-1').style.display = 'block';
   document.getElementById('ev-screen-2').style.display = 'none';
