@@ -58,7 +58,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .card-img { background: #E0F5F5; height: 200px; width: 100%; display: flex; align-items: center; justify-content: center; }
   .card-body { padding: 12px 14px 6px; }
   .card-title { font-size: 15px; font-weight: 700; color: #1a1a18; margin-bottom: 4px; }
-  .card-desc { font-size: 13px; color: #666; line-height: 1.5; }
+  .card-desc { font-size: 13px; color: #1a1a18; line-height: 1.5; }
 
   /* MEMBER EVENTS FEED — LIST/TILE TOGGLE + SORT (namespaced mef- to avoid clashing with .event-card/.card-* used elsewhere in this file) */
   .mef-view-toggle { display: flex; border: 0.5px solid #d3d1c7; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: white; }
@@ -68,18 +68,26 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .mef-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; padding: 4px 14px 16px; max-width: 600px; margin: 0 auto; }
   .mef-tile { cursor: pointer; background: white; border: 0.5px solid #e0dfd8; border-radius: 12px; overflow: hidden; transition: border-color 0.15s; box-shadow: 0 1px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
   .mef-tile:hover { border-color: #009A97; }
-  .mef-tile-hd { padding: 8px 9px 6px; display: flex; gap: 4px; height: 52px; box-sizing: border-box; }
+  .mef-tile-hd { padding: 8px 9px 6px; display: flex; gap: 4px; height: 46px; box-sizing: border-box; }
   .mef-tile-avatar2 { width: 14px; height: 14px; border-radius: 50%; background: #009A97; color: white; font-size: 7px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
   .mef-tile-hdtext { min-width: 0; }
   .mef-tile-name { font-size: 12px; font-weight: 600; color: #1a1a18; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .mef-tile-createdby { font-size: 10px; color: #888780; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .mef-tile-img { width: 100%; aspect-ratio: 1 / 1; background: #E0F5F5; display: flex; align-items: center; justify-content: center; position: relative; }
   .mef-tile-buy { position: absolute; top: 6px; right: 6px; font-size: 10px; font-weight: 600; border-radius: 10px; padding: 2px 7px; color: white; }
-  .mef-tile-dates { padding: 8px 10px 0; flex: 1; }
-  .mef-tile-daterow { display: flex; flex-direction: column; gap: 2px; font-size: 10px; }
-  .mef-tile-daterow div { display: flex; justify-content: space-between; }
-  .mef-tile-daterow span:first-child { color: #888780; }
-  .mef-tile-daterow span:last-child { color: #1a1a18; font-weight: 500; }
+  .mef-tile-desc { padding: 7px 10px 0; font-size: 10px; color: #1a1a18; line-height: 1.4; min-height: 34px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .mef-tile-dates { padding: 6px 10px 0; flex: 1; }
+  .mef-tile-daterow { display: flex; flex-direction: column; gap: 3px; font-size: 10px; }
+  .mef-tile-daterow div { display: flex; justify-content: space-between; align-items: baseline; }
+  .mef-tile-lbl { color: #888780; flex-shrink: 0; }
+  .mef-tile-dateval-wrap { display: flex; align-items: baseline; gap: 4px; }
+  .mef-tile-dateval { color: #5F5E5A; font-weight: 500; white-space: nowrap; }
+  .mef-tile-dateval.closed { color: #888780; font-weight: 500; }
+  .mef-tile-countdown { font-size: 9px; font-weight: 600; white-space: nowrap; }
+  .mef-tile-countdown.upcoming { color: #E87722; }
+  .mef-tile-countdown.closed { color: #B4B2A9; }
+  .mef-tile.is-closed { opacity: 0.55; filter: grayscale(0.6); }
+  .mef-tile.is-closed:hover { border-color: #e0dfd8; }
   .mef-tile-body { padding: 8px 9px 9px; }
   .mef-tile-host { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #888780; margin-bottom: 4px; }
   .mef-tile-avatar { width: 14px; height: 14px; border-radius: 50%; background: #009A97; color: white; font-size: 7px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -139,7 +147,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .detail-img-dot.a { background: #009A97; width: 14px; border-radius: 3px; }
   .detail-body { background: white; padding: 12px 14px; border-bottom: 0.5px solid #f0f0f0; }
   .detail-title { font-size: 15px; font-weight: 600; color: #009A97; margin-bottom: 4px; }
-  .detail-desc  { font-size: 12px; color: #888780; line-height: 1.55; margin-bottom: 10px; }
+  .detail-desc  { font-size: 12px; color: #1a1a18; line-height: 1.55; margin-bottom: 10px; }
   .detail-info-row { display: flex; gap: 8px; font-size: 12px; margin-bottom: 4px; }
   .detail-info-row:last-child { margin-bottom: 0; }
   .detail-info-lbl { color: #888780; width: 70px; flex-shrink: 0; }
@@ -438,7 +446,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
 
   .card-info-grid { display:grid;grid-template-columns:72px 1fr;gap:3px 0;font-size:11px;padding:0 14px 8px;}
   .card-info-lbl { color:#888780; }
-  .card-info-val { color:#1a1a18; }
+  .card-info-val { color:#5F5E5A; }
 
 
   /* PURCHASE CARDS  */
@@ -1154,7 +1162,7 @@ select:focus { border-color: #009A97; }
 .preview-banner { background: #E0F5F5; height: 120px; display: flex; align-items: center; justify-content: center; }
 .preview-body { padding: 12px 14px; }
 .preview-title { font-size: 15px; font-weight: 600; color: #009A97; margin-bottom: 4px; }
-.preview-desc { font-size: 12px; color: #888780; line-height: 1.5; margin-bottom: 10px; }
+.preview-desc { font-size: 12px; color: #1a1a18; line-height: 1.5; margin-bottom: 10px; }
 .preview-info-row { display: flex; gap: 8px; font-size: 12px; margin-bottom: 4px; }
 .preview-info-lbl { color: #888780; width: 70px; flex-shrink: 0; }
 .preview-info-val { color: #888780; }
@@ -1429,12 +1437,12 @@ select:focus { border-color: #009A97; }
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
         <div style="padding:14px;">
-          <div id="ev1-desc" style="font-size:13px;color:#888780;margin-bottom:12px;"></div>
+          <div id="ev1-desc" style="font-size:13px;color:#1a1a18;margin-bottom:12px;"></div>
           <div style="display:grid;grid-template-columns:80px 1fr;gap:6px 0;font-size:12px;margin-bottom:12px;">
-            <span style="color:#888780;">Deal open</span><span class="ev-info-val" style="color:#1a1a18;font-weight:500;">09-05-2026</span>
-            <span style="color:#888780;">Deal close</span><span class="ev-info-val" style="color:#1a1a18;font-weight:500;">15-05-2026</span>
-            <span style="color:#888780;">Collection</span><span class="ev-info-val" style="color:#1a1a18;font-weight:500;">22-05-2026 (10AM - 5PM)</span>
-            <span style="color:#888780;">Address</span><span class="ev-info-val" style="color:#1a1a18;font-weight:500;">Simei Street 1</span>
+            <span style="color:#888780;">Event open</span><span class="ev-info-val" style="color:#5F5E5A;font-weight:500;">09-05-2026</span>
+            <span style="color:#888780;">Event close</span><span class="ev-info-val" style="color:#5F5E5A;font-weight:500;">15-05-2026</span>
+            <span style="color:#888780;">Collection</span><span class="ev-info-val" style="color:#5F5E5A;font-weight:500;">22-05-2026 (10AM - 5PM)</span>
+            <span style="color:#888780;">Address</span><span class="ev-info-val" style="color:#5F5E5A;font-weight:500;">Simei Street 1</span>
           </div>
         </div>
         <div style="border-top:0.5px solid #f0f0f0;padding:10px 14px;display:flex;align-items:center;gap:14px;">
@@ -1890,7 +1898,7 @@ select:focus { border-color: #009A97; }
         </div>
         <div style="border-top:0.5px solid #f0f0f0;padding:12px 14px;">
           <div id="ev2-title" style="font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:3px;"></div>
-          <div id="ev2-desc" style="font-size:12px;color:#888780;margin-bottom:10px;"></div>
+          <div id="ev2-desc" style="font-size:12px;color:#1a1a18;margin-bottom:10px;"></div>
           <div style="display:grid;grid-template-columns:80px 1fr;gap:5px 0;font-size:12px;">
             <span style="color:#888780;">Closing:</span><span style="color:#1a1a18;">15-05-2026</span>
             <span style="color:#888780;">Collection:</span><span style="color:#1a1a18;">29-05-2026</span>
@@ -2060,7 +2068,7 @@ select:focus { border-color: #009A97; }
         </div>
         <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
         <div class="card-body"><div class="card-desc">This is how it looks like in an actual group buy</div></div>
-        <div class="card-info-grid"><span class="card-info-lbl">Deal open:</span><span class="card-info-val">09-05-2026</span><span class="card-info-lbl">Deal close:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">09-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
           <button class="mef-share-btn" onclick="shareEvent(this,'Groupbuy Event test')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
           <button class="mef-link-btn" onclick="handleLinkClick('Groupbuy Event test')">
@@ -2081,7 +2089,7 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div class="card-body"><div class="card-desc">test</div></div>
-        <div class="card-info-grid"><span class="card-info-lbl">Deal open:</span><span class="card-info-val">09-05-2026</span><span class="card-info-lbl">Deal close:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">09-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
           <button class="mef-share-btn" onclick="shareEvent(this,'New event')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
           <button class="mef-link-btn" onclick="handleLinkClick('New event')">
@@ -2102,7 +2110,7 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div class="card-body"><div class="card-desc">test</div></div>
-        <div class="card-info-grid"><span class="card-info-lbl">Deal open:</span><span class="card-info-val">08-05-2026</span><span class="card-info-lbl">Deal close:</span><span class="card-info-val">14-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">08-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">14-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
           <button class="mef-share-btn" onclick="shareEvent(this,'This is a test event for Purchase with no login')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
           <button class="mef-link-btn" onclick="handleLinkClick('This is a test event for Purchase with no login')">
@@ -2125,7 +2133,7 @@ select:focus { border-color: #009A97; }
         </div>
         <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
         <div class="card-body"><div class="card-desc">See how Product Discount and the event-wide discount look to buyers.</div></div>
-        <div class="card-info-grid"><span class="card-info-lbl">Deal open:</span><span class="card-info-val">10-05-2026</span><span class="card-info-lbl">Deal close:</span><span class="card-info-val">28-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">04-06-2026 (10AM - 5PM)</span></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">10-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">28-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">04-06-2026 (10AM - 5PM)</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
           <button class="mef-share-btn" onclick="shareEvent(this,'Product &amp; Event Discount Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
           <button class="mef-link-btn" onclick="handleLinkClick('Product &amp; Event Discount Demo')">
@@ -2148,25 +2156,26 @@ select:focus { border-color: #009A97; }
         </div>
         <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
         <div class="card-body"><div class="card-desc">Three products showing Choose One, Build a Combo, and Choose Quantities sub-items.</div></div>
-        <div class="card-info-grid"><span class="card-info-lbl">Deal open:</span><span class="card-info-val">14-05-2026</span><span class="card-info-lbl">Deal close:</span><span class="card-info-val">02-06-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">09-06-2026 (10AM - 5PM)</span></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">14-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">02-06-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">09-06-2026 (10AM - 5PM)</span></div>
       </div>
     </div>
 
     <div class="mef-grid" id="mef-tile-grid" style="display:none;">
-      <div class="mef-tile" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-05-22" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
+      <div class="mef-tile" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-05-22" data-close="2026-05-15" data-collect="2026-05-22" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
         <div class="mef-tile-hd">
           <span class="mef-tile-avatar2">M6</span>
-          <div class="mef-tile-hdtext"><div class="mef-tile-name">Groupbuy Event test</div><div class="mef-tile-createdby">Created by M6 group</div></div>
+          <div class="mef-tile-hdtext"><div class="mef-tile-name">Groupbuy Event test</div></div>
         </div>
         <div class="mef-tile-img">
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
         </div>
+        <div class="mef-tile-desc">This is how it looks like in an actual group buy</div>
         <div class="mef-tile-dates">
           <div class="mef-tile-daterow">
-            <div><span>Deal open</span><span>09-05</span></div>
-            <div><span>Deal close</span><span>15-05</span></div>
-            <div><span>Collection</span><span>22-05</span></div>
+            <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">09 MAY</span></span></div>
+            <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">15 MAY</span></span></div>
+            <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">22 MAY</span></span></div>
           </div>
         </div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
@@ -2177,20 +2186,21 @@ select:focus { border-color: #009A97; }
           </button>
         </div>
       </div>
-      <div class="mef-tile" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-05-22" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
+      <div class="mef-tile" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-05-22" data-close="2026-05-15" data-collect="2026-05-22" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
         <div class="mef-tile-hd">
           <span class="mef-tile-avatar2">M6</span>
-          <div class="mef-tile-hdtext"><div class="mef-tile-name">New event</div><div class="mef-tile-createdby">Created by M6 group</div></div>
+          <div class="mef-tile-hdtext"><div class="mef-tile-name">New event</div></div>
         </div>
         <div class="mef-tile-img">
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
         </div>
+        <div class="mef-tile-desc">test</div>
         <div class="mef-tile-dates">
           <div class="mef-tile-daterow">
-            <div><span>Deal open</span><span>09-05</span></div>
-            <div><span>Deal close</span><span>15-05</span></div>
-            <div><span>Collection</span><span>22-05</span></div>
+            <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">09 MAY</span></span></div>
+            <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">15 MAY</span></span></div>
+            <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">22 MAY</span></span></div>
           </div>
         </div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
@@ -2201,20 +2211,21 @@ select:focus { border-color: #009A97; }
           </button>
         </div>
       </div>
-      <div class="mef-tile" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-05-22" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
+      <div class="mef-tile" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-05-22" data-close="2026-05-14" data-collect="2026-05-22" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
         <div class="mef-tile-hd">
           <span class="mef-tile-avatar2">M6</span>
-          <div class="mef-tile-hdtext"><div class="mef-tile-name">This is a test event for Purchase with no login</div><div class="mef-tile-createdby">Created by M6 group</div></div>
+          <div class="mef-tile-hdtext"><div class="mef-tile-name">This is a test event for Purchase with no login</div></div>
         </div>
         <div class="mef-tile-img">
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           <span class="mef-tile-buy" style="background:#009A97;">6 BUY</span>
         </div>
+        <div class="mef-tile-desc">test</div>
         <div class="mef-tile-dates">
           <div class="mef-tile-daterow">
-            <div><span>Deal open</span><span>08-05</span></div>
-            <div><span>Deal close</span><span>14-05</span></div>
-            <div><span>Collection</span><span>22-05</span></div>
+            <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">08 MAY</span></span></div>
+            <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">14 MAY</span></span></div>
+            <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">22 MAY</span></span></div>
           </div>
         </div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
@@ -2225,20 +2236,21 @@ select:focus { border-color: #009A97; }
           </button>
         </div>
       </div>
-      <div class="mef-tile" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false')">
+      <div class="mef-tile" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" data-close="2026-09-02" data-collect="2026-09-09" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false')">
         <div class="mef-tile-hd">
           <span class="mef-tile-avatar2">M6</span>
-          <div class="mef-tile-hdtext"><div class="mef-tile-name">Product &amp; Event Discount Demo</div><div class="mef-tile-createdby">Created by M6 group</div></div>
+          <div class="mef-tile-hdtext"><div class="mef-tile-name">Product &amp; Event Discount Demo</div></div>
         </div>
         <div class="mef-tile-img">
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
         </div>
+        <div class="mef-tile-desc">See how Product Discount and the event-wide discount look to buyers.</div>
         <div class="mef-tile-dates">
           <div class="mef-tile-daterow">
-            <div><span>Deal open</span><span>10-05</span></div>
-            <div><span>Deal close</span><span>28-05</span></div>
-            <div><span>Collection</span><span>04-06</span></div>
+            <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">20 AUG</span></span></div>
+            <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">02 SEP</span></span></div>
+            <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">09 SEP</span></span></div>
           </div>
         </div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
@@ -2249,20 +2261,21 @@ select:focus { border-color: #009A97; }
           </button>
         </div>
       </div>
-      <div class="mef-tile" data-closing="25" data-buy="0" data-order="0" data-eventdate="2026-06-02" onclick="showView('view-subitem-demo')">
+      <div class="mef-tile" data-closing="25" data-buy="0" data-order="0" data-eventdate="2026-06-02" data-close="2026-08-20" data-collect="2026-09-10" onclick="showView('view-subitem-demo')">
         <div class="mef-tile-hd">
           <span class="mef-tile-avatar2">M6</span>
-          <div class="mef-tile-hdtext"><div class="mef-tile-name">Sub-Item Configurations Demo</div><div class="mef-tile-createdby">Created by M6 group</div></div>
+          <div class="mef-tile-hdtext"><div class="mef-tile-name">Sub-Item Configurations Demo</div></div>
         </div>
         <div class="mef-tile-img">
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
         </div>
+        <div class="mef-tile-desc">Three products, three sub-item setups to compare.</div>
         <div class="mef-tile-dates">
           <div class="mef-tile-daterow">
-            <div><span>Deal open</span><span>14-05</span></div>
-            <div><span>Deal close</span><span>02-06</span></div>
-            <div><span>Collection</span><span>09-06</span></div>
+            <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">10 AUG</span></span></div>
+            <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">20 AUG</span></span></div>
+            <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">10 SEP</span></span></div>
           </div>
         </div>
       </div>
@@ -2292,8 +2305,8 @@ select:focus { border-color: #009A97; }
       <div style="padding:14px;">
         <div style="font-size:13px;color:#888780;margin-bottom:12px;">Three products, three sub-item setups — Choose One, Build a Combo, and Choose Quantities — side by side so you can compare how each behaves.</div>
         <div style="display:grid;grid-template-columns:80px 1fr;gap:6px 0;font-size:12px;margin-bottom:12px;">
-          <span style="color:#888780;">Deal open</span><span style="color:#1a1a18;font-weight:500;">14-05-2026</span>
-          <span style="color:#888780;">Deal close</span><span style="color:#1a1a18;font-weight:500;">02-06-2026</span>
+          <span style="color:#888780;">Event open</span><span style="color:#1a1a18;font-weight:500;">14-05-2026</span>
+          <span style="color:#888780;">Event close</span><span style="color:#1a1a18;font-weight:500;">02-06-2026</span>
           <span style="color:#888780;">Collection</span><span style="color:#1a1a18;font-weight:500;">09-06-2026 (10AM - 5PM)</span>
           <span style="color:#888780;">Address</span><span style="color:#1a1a18;font-weight:500;">Simei Street 1</span>
         </div>
@@ -5276,6 +5289,50 @@ function setSortBy(criteria) {
 
   toggleSortMenu();
 }
+
+/* ── Tile-view close/collection countdown & closed state ──
+   Tile view has no header "Closing in N days" badge (unlike list view, which keeps its own),
+   so the countdown lives inline next to the Event close / Collection dates instead. */
+function daysUntil(dateStr) {
+  var target = new Date(dateStr + 'T23:59:59');
+  var now = new Date();
+  return Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+}
+
+function initTileCountdowns() {
+  document.querySelectorAll('.mef-tile[data-close]').forEach(function (tile) {
+    var closeDays = daysUntil(tile.getAttribute('data-close'));
+    var collectDays = daysUntil(tile.getAttribute('data-collect'));
+
+    var closeValEl = tile.querySelector('.tile-close-val');
+    var closeCdEl = tile.querySelector('.tile-close-countdown');
+    var collectValEl = tile.querySelector('.tile-collect-val');
+    var collectCdEl = tile.querySelector('.tile-collect-countdown');
+
+    var eventClosed = closeDays <= 0;
+
+    // Event close: date is always shown. Prefix is "(in N days)" while open, "(Closed)" once passed —
+    // and the date itself greys out too once closed, not just the prefix.
+    if (!eventClosed) {
+      if (closeCdEl) { closeCdEl.textContent = '(in ' + closeDays + ' day' + (closeDays === 1 ? '' : 's') + ')'; closeCdEl.className = 'mef-tile-countdown upcoming'; }
+    } else {
+      if (closeCdEl) { closeCdEl.textContent = '(Closed)'; closeCdEl.className = 'mef-tile-countdown closed'; }
+      if (closeValEl) closeValEl.classList.add('closed');
+    }
+
+    // Collection: no prefix at all until the event closes, then follows the same pattern.
+    if (!eventClosed) {
+      if (collectCdEl) collectCdEl.textContent = '';
+    } else if (collectDays > 0) {
+      if (collectCdEl) { collectCdEl.textContent = '(in ' + collectDays + ' day' + (collectDays === 1 ? '' : 's') + ')'; collectCdEl.className = 'mef-tile-countdown upcoming'; }
+    } else {
+      if (collectCdEl) { collectCdEl.textContent = '(Closed)'; collectCdEl.className = 'mef-tile-countdown closed'; }
+      if (collectValEl) collectValEl.classList.add('closed');
+      tile.classList.add('is-closed');
+    }
+  });
+}
+initTileCountdowns();
 </script>
 </body>
 </html>
