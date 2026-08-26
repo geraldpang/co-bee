@@ -2147,7 +2147,7 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-        <div class="card-body"><div class="card-desc">Three products showing Single choice, Combo, and Split quantity sub-items.</div></div>
+        <div class="card-body"><div class="card-desc">Three products showing Choose One, Build a Combo, and Choose Quantities sub-items.</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Deal open:</span><span class="card-info-val">14-05-2026</span><span class="card-info-lbl">Deal close:</span><span class="card-info-val">02-06-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">09-06-2026 (10AM - 5PM)</span></div>
       </div>
     </div>
@@ -2290,7 +2290,7 @@ select:focus { border-color: #009A97; }
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       </div>
       <div style="padding:14px;">
-        <div style="font-size:13px;color:#888780;margin-bottom:12px;">Three products, three sub-item setups — Single choice, Combo, and Split quantity — side by side so you can compare how each behaves.</div>
+        <div style="font-size:13px;color:#888780;margin-bottom:12px;">Three products, three sub-item setups — Choose One, Build a Combo, and Choose Quantities — side by side so you can compare how each behaves.</div>
         <div style="display:grid;grid-template-columns:80px 1fr;gap:6px 0;font-size:12px;margin-bottom:12px;">
           <span style="color:#888780;">Deal open</span><span style="color:#1a1a18;font-weight:500;">14-05-2026</span>
           <span style="color:#888780;">Deal close</span><span style="color:#1a1a18;font-weight:500;">02-06-2026</span>
@@ -2317,10 +2317,10 @@ select:focus { border-color: #009A97; }
         <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;">ITEMS</div>
       </div>
 
-      <!-- Item 1: Spec Frames — Single choice -->
+      <!-- Item 1: Spec Frames — Choose One -->
       <div style="border-bottom:0.5px solid #f0f0f0;">
         <div style="padding:16px 14px 0;">
-          <span style="display:inline-flex;font-size:9px;font-weight:700;color:#007A77;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 8px;">SINGLE CHOICE — price fixed regardless of option</span>
+          <span style="display:inline-flex;font-size:9px;font-weight:700;color:#007A77;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 8px;">CHOOSE ONE — price fixed regardless of option</span>
         </div>
         <div id="spec-entries">
           <div class="item-entry" style="padding:8px 14px 8px;">
@@ -2372,9 +2372,9 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-      <!-- Item 2: Bubble Tea — Multiple choices, Combo -->
+      <!-- Item 2: Bubble Tea — Build a Combo -->
       <div style="border-bottom:0.5px solid #f0f0f0;padding:16px 14px 0;">
-        <span style="display:inline-flex;font-size:9px;font-weight:700;color:#8A5A0A;background:#FEF2DC;border:0.5px solid #F0C878;border-radius:99px;padding:2px 8px;">MULTIPLE CHOICES — (overall quantity ON)</span>
+        <span style="display:inline-flex;font-size:9px;font-weight:700;color:#8A5A0A;background:#FEF2DC;border:0.5px solid #F0C878;border-radius:99px;padding:2px 8px;">BUILD A COMBO</span>
         <div style="padding:8px 0 0;">
           <div style="display:flex;gap:16px;align-items:flex-start;">
             <div style="width:88px;height:88px;border-radius:10px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
@@ -2408,9 +2408,9 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-      <!-- Item 3: T-Shirt — Multiple choices, Split quantity -->
+      <!-- Item 3: T-Shirt — Choose Quantities -->
       <div style="padding:16px 14px 0;">
-        <span style="display:inline-flex;font-size:9px;font-weight:700;color:#6B21A8;background:#F3E8FF;border:0.5px solid #D8B4FE;border-radius:99px;padding:2px 8px;">MULTIPLE CHOICES — (overall quantity OFF)</span>
+        <span style="display:inline-flex;font-size:9px;font-weight:700;color:#6B21A8;background:#F3E8FF;border:0.5px solid #D8B4FE;border-radius:99px;padding:2px 8px;">CHOOSE QUANTITIES</span>
         <div style="padding:8px 0 0;">
           <div style="display:flex;gap:16px;align-items:flex-start;">
             <div style="width:88px;height:88px;border-radius:10px;background:#F3E8FF;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
@@ -4720,7 +4720,7 @@ function updateSpecPrice() {
   if (typeof updateSubitemDemoTotal === 'function') updateSubitemDemoTotal();
 }
 
-/* ── T-Shirt demo: Multiple choices, Split quantity ──
+/* ── T-Shirt demo: Choose Quantities ──
    No overall stepper — each size's own quantity IS the purchased count.
    Price = Σ (size qty × base price), never a combo × multiplier. */
 var TSHIRT_BASE = 10.00;
