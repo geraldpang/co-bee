@@ -1684,7 +1684,7 @@ select:focus { border-color: #009A97; }
                 <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
                 <div style="display:flex;align-items:center;gap:10px;">
                   <button onclick="changeQty2('p6',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
-                  <span id="p6" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">3</span>
+                  <span id="p6" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
                   <button onclick="changeQty2('p6',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
                 </div>
               </div>
@@ -1705,12 +1705,11 @@ select:focus { border-color: #009A97; }
               </div>
               <div style="font-size:11px;color:#888780;margin-top:1px;">Set of 5 vinyl stickers</div>
               <div id="p7-disc-tag" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#009A97;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 7px;margin-top:5px;width:fit-content;">🏷 Buy 3 or more → $3 off</div>
-              <div id="p7-applied-note" style="display:none;font-size:10px;color:#009A97;font-weight:600;margin-top:3px;">✓ $3.00 off applied to this order</div>
               <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
                 <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
                 <div style="display:flex;align-items:center;gap:10px;">
                   <button onclick="changeQty2('p7',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
-                  <span id="p7" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">3</span>
+                  <span id="p7" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
                   <button onclick="changeQty2('p7',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
                 </div>
               </div>
@@ -3905,7 +3904,7 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
     document.getElementById('ev1-buys').style.display = 'inline-block';
     document.getElementById('ev2-buys').textContent = ordersPlaced + ' BUY';
   }
-  // Reset qtys — p6 (Tote Bag) and p7 (Sticker Pack) are kept at their preset qty to demo Product Discount
+  // Reset qtys — p6 (Tote Bag) and p7 (Sticker Pack) start at 0 like everything else
   ['p2','p3','p4'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = '0';
@@ -4075,7 +4074,7 @@ function updateToteBagDiscount() {
   const tagEl = document.getElementById('p6-disc-tag');
   if (strikeEl) strikeEl.style.display = tierMet ? 'inline' : 'none';
   if (priceEl) priceEl.textContent = '$' + unitPrice.toFixed(2);
-  if (tagEl) tagEl.textContent = tierMet ? '🏷 Buy 3 or more → $2 off each · applied' : '🏷 Buy 3 or more → $2 off each';
+  if (tagEl) tagEl.textContent = tierMet ? '🏷 Buy 3 or more → $2 off each · applied ✓' : '🏷 Buy 3 or more → $2 off each';
 
   return qty * unitPrice;
 }
@@ -4092,9 +4091,7 @@ function updateStickerPackDiscount() {
   const lineTotal = Math.max(0, qty * basePrice - (tierMet ? flatOff : 0));
 
   const tagEl = document.getElementById('p7-disc-tag');
-  const appliedNoteEl = document.getElementById('p7-applied-note');
-  if (tagEl) tagEl.textContent = tierMet ? '🏷 Buy 3 or more → $3 off · applied' : '🏷 Buy 3 or more → $3 off';
-  if (appliedNoteEl) appliedNoteEl.style.display = tierMet ? 'block' : 'none';
+  if (tagEl) tagEl.textContent = tierMet ? '🏷 Buy 3 or more → $3 off · applied ✓' : '🏷 Buy 3 or more → $3 off';
 
   return lineTotal;
 }
@@ -4190,7 +4187,7 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
     document.getElementById('ev1-buys').style.display = 'inline-block';
     document.getElementById('ev2-buys').textContent = ordersPlaced + ' BUY';
   }
-  // Reset qtys — p6 (Tote Bag) and p7 (Sticker Pack) are kept at their preset qty to demo Product Discount
+  // Reset qtys — p6 (Tote Bag) and p7 (Sticker Pack) start at 0 like everything else
   ['p2','p3','p4'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = '0';
