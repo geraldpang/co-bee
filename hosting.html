@@ -1577,6 +1577,28 @@ document.addEventListener('click', function(e) {
   }
 });
 
+/* Build a "label text + help icon" element — reused for individual row-level help
+   (as opposed to the one panel-level help icon next to a section title). */
+function makeLabelWithHelp(text, helpHtml) {
+  const wrap = document.createElement('span');
+  wrap.style.cssText = 'display:inline-flex;align-items:center;gap:5px;';
+  wrap.appendChild(document.createTextNode(text));
+  const helpId = 'help-row-' + Math.random().toString(36).slice(2, 8);
+  const icon = document.createElement('span');
+  icon.className = 'help-icon';
+  icon.style.cssText = 'width:13px;height:13px;font-size:9px;';
+  icon.textContent = '?';
+  icon.onclick = function(e) { e.stopPropagation(); toggleHelp(helpId); };
+  const pop = document.createElement('div');
+  pop.className = 'help-popover';
+  pop.id = helpId;
+  pop.style.width = '220px';
+  pop.innerHTML = helpHtml;
+  icon.appendChild(pop);
+  wrap.appendChild(icon);
+  return wrap;
+}
+
 /* ── Toast notifications — standard format, reused for all future notices ── */
 function showToast(message, type) {
   type = type || 'info';
@@ -1928,12 +1950,24 @@ function addSubitemGroup(id) {
     const subHelpPop = document.createElement('div');
     subHelpPop.className = 'help-popover';
     subHelpPop.id = subHelpId;
-    subHelpPop.innerHTML = '<strong>Single choice</strong>: the buyer can only pick one option from this group (e.g. one Frame Color). <strong>Multiple choices</strong>: the buyer can pick more than one option at once (e.g. several toppings).';
+    subHelpPop.innerHTML = 'Lets buyers pick options for this product before ordering — like Frame Color, Size, or Toppings. Give the group a title, then add its options underneath. Each row below (Selection Mode, Overall quantity, Required) has its own "?" with more detail.';
     subHelpIcon.appendChild(subHelpPop);
     lbl.appendChild(subHelpIcon);
 
     const actions = document.createElement('div');
     actions.style.cssText = 'display:flex;align-items:center;gap:10px;';
+
+    const resetBtn = document.createElement('span');
+    resetBtn.textContent = 'Reset';
+    resetBtn.style.cssText = 'font-size:11px;font-weight:600;color:#888780;cursor:pointer;';
+    resetBtn.addEventListener('click', function() {
+      // Clear every field across all groups back to blank
+      subContainer.querySelectorAll('input[type="text"], input[type="number"]').forEach(function(inp) { inp.value = ''; });
+      // Selection Mode back to Single choice (also collapses Overall quantity row via its own handler)
+      subContainer.querySelectorAll('button[data-sel="single"]').forEach(function(btn) { btn.click(); });
+      // Overall quantity / Required back to off
+      subContainer.querySelectorAll('.toggle-sw').forEach(function(t) { t.classList.remove('on'); });
+    });
 
     const hideBtn = document.createElement('span');
     hideBtn.textContent = 'Hide';
@@ -1950,6 +1984,7 @@ function addSubitemGroup(id) {
     delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
     delBtn.addEventListener('click', function() { subContainer.remove(); });
 
+    actions.appendChild(resetBtn);
     actions.appendChild(hideBtn);
     actions.appendChild(delBtn);
     hd.appendChild(lbl);
@@ -1962,10 +1997,10 @@ function addSubitemGroup(id) {
     subContainer.appendChild(hd);
     subContainer.appendChild(groupsWrap);
 
-    // "+ Add sub-item title" button outside the box in white background
+    // "+ Add another group" button outside the box in white background
     const addTitleBtn = document.createElement('div');
-    addTitleBtn.style.cssText = 'font-size:12px;font-weight:600;color:#009A97;cursor:pointer;display:flex;align-items:center;gap:4px;padding:8px 12px;background:white;border:0.5px solid #e0dfd8;border-top:none;border-radius:0 0 8px 8px;justify-content:flex-end;';
-    addTitleBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg> Add sub-item';
+    addTitleBtn.style.cssText = 'font-size:12px;font-weight:500;color:#009A97;cursor:pointer;display:flex;align-items:center;gap:4px;padding:8px 12px;background:white;border:0.5px solid #e0dfd8;border-top:none;border-radius:0 0 8px 8px;justify-content:flex-end;';
+    addTitleBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg> Add another group';
     addTitleBtn.addEventListener('click', function() { addSubitemTitle(id); });
     subContainer.appendChild(addTitleBtn);
     panels.appendChild(subContainer);
@@ -2019,8 +2054,9 @@ function addSubitemTitle(id) {
   // Selection type row (Single / Multiple)
   const selRow = document.createElement('div');
   selRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:0.5px solid #e0dfd8;font-size:12px;color:#888780;';
-  const selLabel = document.createElement('span');
-  selLabel.textContent = 'Selection Mode';
+  const selLabel = makeLabelWithHelp('Selection Mode',
+    '<strong>Single choice</strong>: the buyer can only pick one option from this group (e.g. one Frame Color). '
+    + '<strong>Multiple choices</strong>: the buyer can pick more than one option at once (e.g. several toppings).');
 
   const selToggle = document.createElement('div');
   selToggle.style.cssText = 'display:flex;border:0.5px solid #D3D1C7;border-radius:6px;overflow:hidden;';
@@ -2059,11 +2095,29 @@ function addSubitemTitle(id) {
   selRow.appendChild(selLabel);
   selRow.appendChild(selToggle);
 
+  // Overall quantity row — only relevant for Multiple choices; no divider, reads as
+  // dependent on Selection Mode above rather than a separate peer setting.
+  const qtyModeRow = document.createElement('div');
+  qtyModeRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-size:12px;color:#888780;display:none;';
+  const qtyModeLabel = makeLabelWithHelp('Overall quantity',
+    'When on, this quantity acts as a multiplier across the whole combo — like ordering several bubble teas with the same toppings. '
+    + 'When off, each choice gets its own quantity that adds up to the total — like ordering shirts by size.');
+  const qtyModeToggle = document.createElement('div');
+  qtyModeToggle.className = 'toggle-sw';
+  qtyModeToggle.style.cssText = 'pointer-events:auto;cursor:pointer;';
+  qtyModeToggle.setAttribute('data-overall-qty', 'off');
+  qtyModeToggle.addEventListener('click', function() {
+    this.classList.toggle('on');
+    this.setAttribute('data-overall-qty', this.classList.contains('on') ? 'on' : 'off');
+  });
+  qtyModeRow.appendChild(qtyModeLabel);
+  qtyModeRow.appendChild(qtyModeToggle);
+
   // Required row
   const reqRow = document.createElement('div');
-  reqRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:6px;border-top:0.5px solid #e0dfd8;font-size:12px;color:#888780;';
-  const reqLabel = document.createElement('span');
-  reqLabel.textContent = 'Required';
+  reqRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-size:12px;color:#888780;';
+  const reqLabel = makeLabelWithHelp('Required',
+    'If on, the buyer must select at least one option from this group before they can complete their order.');
   const reqToggle = document.createElement('div');
   reqToggle.className = 'toggle-sw';
   reqToggle.style.cssText = 'pointer-events:auto;cursor:pointer;';
@@ -2071,11 +2125,19 @@ function addSubitemTitle(id) {
   reqRow.appendChild(reqLabel);
   reqRow.appendChild(reqToggle);
 
+  // Show/hide Overall quantity based on Selection Mode
+  var originalSetSelType = setSelType;
+  setSelType = function(type) {
+    originalSetSelType(type);
+    qtyModeRow.style.display = type === 'multiple' ? 'flex' : 'none';
+  };
+
   div.appendChild(titleRow);
   div.appendChild(colHd);
   div.appendChild(rowsWrap);
   div.appendChild(addChoicesBtn);
   div.appendChild(selRow);
+  div.appendChild(qtyModeRow);
   div.appendChild(reqRow);
   gw.appendChild(div);
   addChoiceRow(gid);
