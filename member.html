@@ -480,6 +480,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .pcard-sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
   .pcard-stxt { font-size: 12px; font-weight: 500; flex: 1; line-height: 1.4; }
   .pcard-cta { width: 100%; padding: 11px 14px; font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 0.5px solid rgba(0,0,0,0.06); font-family: inherit; }
+  .pcard-confirm { width: 100%; padding: 11px 14px; font-size: 13px; font-weight: 600; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 0.5px solid rgba(0,0,0,0.06); background: #BFE8E6; color: #013F3D; }
 
   /* Status colour variants */
   .ps-unpaid   .pcard-status { background: #FEF5E7; }
@@ -492,7 +493,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .ps-pending  .pcard-sdot   { background: #009A97; }
   .ps-pending  .pcard-stxt   { color: #005f5d; }
 
-  .ps-fulfill  .pcard-status { background: #BFE8E6; }
+  .ps-fulfill  .pcard-status { background: #DFF4F2; }
   .ps-fulfill  .pcard-sdot   { background: #00726F; }
   .ps-fulfill  .pcard-stxt   { color: #013F3D; }
 
@@ -2650,7 +2651,8 @@ select:focus { border-color: #009A97; }
         </div>
         <div class="pcard-action">
           <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Order Confirmed · Delivery · Tue 3 Mar · 2PM – 5PM</span></div>
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Delivery · Tue 3 Mar · 2PM – 5PM</span></div>
+          <div class="pcard-confirm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Order Confirmed</div>
         </div>
       </div>
 
