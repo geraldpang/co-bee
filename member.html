@@ -441,8 +441,8 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gec-edit-btn { font-size: 10px; font-weight: 600; color: #009A97; background: #E0F5F5; border: none; border-radius: 5px; padding: 2px 7px; cursor: pointer; font-family: inherit; }
   .gec-closed .gec-edit-btn { color: #B4B2A9; background: #f0f0f0; }
   /* VIEW ORDER LINK  */
-  .view-order-btn { display: flex; width: 100%; padding: 9px 14px; font-size: 12px; font-weight: 600; color: #888780; background: none; border: none; border-top: 0.5px solid #e0dfd8; text-align: right; cursor: pointer; font-family: inherit; align-items: center; justify-content: flex-end; gap: 6px; }
-  .view-order-btn:hover { background: #FAFAF8; }
+  .pcard-view-details { display: flex; width: 100%; padding: 9px 14px; font-size: 12px; font-weight: 600; color: #888780; text-align: right; cursor: pointer; align-items: center; justify-content: flex-end; gap: 6px; border-top: 0.5px solid #f0f0f0; margin-top: 4px; }
+  .pcard-view-details:hover { background: #FAFAF8; }
 
   .card-info-grid { display:grid;grid-template-columns:72px 1fr;gap:3px 0;font-size:11px;padding:0 14px 8px;}
   .card-info-lbl { color:#888780; }
@@ -480,10 +480,6 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .pcard-sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
   .pcard-stxt { font-size: 12px; font-weight: 500; flex: 1; line-height: 1.4; }
   .pcard-cta { width: 100%; padding: 11px 14px; font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 0.5px solid rgba(0,0,0,0.06); font-family: inherit; }
-  .pcard-order-row { padding: 9px 14px; border-top: 0.5px solid #e0dfd8; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-family: inherit; font-size: 12px; }
-  .pcard-order-row:hover { background: #FAFAF8; }
-  .pcard-order-row-left { display: flex; align-items: center; gap: 7px; font-weight: 500; }
-  .pcard-order-row-right { display: flex; align-items: center; gap: 6px; font-weight: 600; color: #888780; }
   .pcard-thumb { width: 36px; height: 36px; border-radius: 8px; background: #E0F5F5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .pcard-confirm { width: 100%; padding: 11px 14px; font-size: 13px; font-weight: 600; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 0.5px solid #e0dfd8; background: #BFE8E6; color: #013F3D; }
 
@@ -2584,9 +2580,9 @@ select:focus { border-color: #009A97; }
             <div class="pcard-breakdown-row"><span>Delivery <span class="pcard-tbc">TBC</span></span><span>$0.00</span></div>
             <div class="pcard-breakdown-row total"><span>Total</span><span>$44.00</span></div>
           </div>
+          <div class="pcard-view-details" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
         </div>
         <div class="pcard-action">
-          <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
           <button class="pcard-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Make payment</button>
         </div>
       </div>
@@ -2622,9 +2618,9 @@ select:focus { border-color: #009A97; }
             <div class="pcard-breakdown-row"><span>Delivery <span class="pcard-tbc">TBC</span></span><span>$0.00</span></div>
             <div class="pcard-breakdown-row total"><span>Total</span><span>$8.50</span></div>
           </div>
+          <div class="pcard-view-details" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
         </div>
         <div class="pcard-action">
-          <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
           <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Pending confirmation</span></div>
         </div>
       </div>
@@ -2651,12 +2647,9 @@ select:focus { border-color: #009A97; }
             <div class="pcard-breakdown-row"><span>Delivery (Northside)</span><span>$5.00</span></div>
             <div class="pcard-breakdown-row total"><span>Total</span><span>$45.00</span></div>
           </div>
+          <div class="pcard-view-details" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
         </div>
         <div class="pcard-action">
-          <div class="pcard-order-row" onclick="alert('Order detail view coming')">
-            <span class="pcard-order-row-left"><span class="pcard-sdot" style="background:#009A97;"></span><span style="color:#005f5d;">Delivery</span></span>
-            <span class="pcard-order-row-right">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-          </div>
           <div class="pcard-confirm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Order Confirmed</div>
         </div>
       </div>
@@ -2680,9 +2673,9 @@ select:focus { border-color: #009A97; }
           <div class="pcard-breakdown">
             <div class="pcard-breakdown-row total"><span>Total</span><span>$12.00</span></div>
           </div>
+          <div class="pcard-view-details" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
         </div>
         <div class="pcard-action">
-          <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
           <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Payment rejected — please resubmit</span></div>
           <button class="pcard-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Make payment</button>
         </div>
@@ -2699,7 +2692,7 @@ select:focus { border-color: #009A97; }
           <div class="pcard-summary-right">
             <span class="pcard-total" style="color:#888780;">$10.00</span>
             <span class="pcard-icount">1 item</span>
-            <svg class="pcard-chevron" id="pcard-chev-p6" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="pcard-chevron" id="pcard-chev-p5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
         <div class="pcard-items" id="pcard-p5">
@@ -2707,9 +2700,9 @@ select:focus { border-color: #009A97; }
           <div class="pcard-breakdown">
             <div class="pcard-breakdown-row total"><span>Total</span><span>$10.00</span></div>
           </div>
+          <div class="pcard-view-details" style="color:#B4B2A9;cursor:default;" aria-disabled="true">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
         </div>
         <div class="pcard-action">
-          <button class="view-order-btn" style="color:#B4B2A9;cursor:default;" onclick="" disabled aria-disabled="true" tabindex="-1">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
           <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Order cancelled</span></div>
         </div>
       </div>
@@ -2725,7 +2718,7 @@ select:focus { border-color: #009A97; }
           <div class="pcard-summary-right">
             <span class="pcard-total">$18.00</span>
             <span class="pcard-icount">1 item</span>
-            <svg class="pcard-chevron" id="pcard-chev-p7" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="pcard-chevron" id="pcard-chev-p6" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
         <div class="pcard-items" id="pcard-p6">
@@ -2733,9 +2726,9 @@ select:focus { border-color: #009A97; }
           <div class="pcard-breakdown">
             <div class="pcard-breakdown-row total"><span>Total</span><span>$18.00</span></div>
           </div>
+          <div class="pcard-view-details" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
         </div>
         <div class="pcard-action">
-          <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
           <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Collection today · 27 Feb · 1PM – 8PM</span></div>
           <button class="pcard-cta" onclick="acknowledgeCollection(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Acknowledge collection</button>
         </div>
@@ -2752,7 +2745,7 @@ select:focus { border-color: #009A97; }
           <div class="pcard-summary-right">
             <span class="pcard-total" style="color:#888780;">$12.00</span>
             <span class="pcard-icount">1 item</span>
-            <svg class="pcard-chevron" id="pcard-chev-p8" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="pcard-chevron" id="pcard-chev-p7" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
         <div class="pcard-items" id="pcard-p7">
@@ -2760,9 +2753,9 @@ select:focus { border-color: #009A97; }
           <div class="pcard-breakdown">
             <div class="pcard-breakdown-row total"><span>Total</span><span>$12.00</span></div>
           </div>
+          <div class="pcard-view-details" style="color:#B4B2A9;cursor:default;" aria-disabled="true">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
         </div>
         <div class="pcard-action">
-          <button class="view-order-btn" style="color:#B4B2A9;cursor:default;" onclick="" disabled aria-disabled="true" tabindex="-1">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
           <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Event closed</span></div>
         </div>
       </div>
