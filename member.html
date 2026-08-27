@@ -548,12 +548,6 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .pcard-delivery-to { padding: 8px 14px; font-size: 11px; color: #888780; border-bottom: 0.5px solid #f8f8f8; }
   .pcard-delivery-to strong { color: #1a1a18; font-weight: 600; }
 
-  /* Split-case order-level progress */
-  .pcard-progress-wrap { padding: 8px 14px 10px; }
-  .pcard-progress-track { height: 6px; background: #F1EFE8; border-radius: 3px; overflow: hidden; }
-  .pcard-progress-fill { height: 100%; background: #009A97; border-radius: 3px; }
-  .pcard-progress-lbl { font-size: 11px; color: #888780; margin-top: 5px; }
-
 
   /* SWITCH VIEW DRAWER  */
   .drawer-overlay {
@@ -2545,7 +2539,7 @@ select:focus { border-color: #009A97; }
   <!-- MY PURCHASE VIEW -->
   <div id="view-purchase" style="display:none;">
     <div class="feed-header">
-      <span class="feed-header-count">8 ORDERS</span>
+      <span class="feed-header-count">7 ORDERS</span>
       <div class="feed-chips">
         <div class="chip active">All</div>
         <div class="chip">Unpaid</div>
@@ -2563,8 +2557,8 @@ select:focus { border-color: #009A97; }
         <div class="pcard-summary" onclick="togglePcard('pcard-p1')">
           <div class="pcard-title">Moi nua</div>
           <div class="pcard-summary-right">
-            <span class="pcard-total">$42.00</span>
-            <span class="pcard-icount">2 items</span>
+            <span class="pcard-total">$44.00</span>
+            <span class="pcard-icount">3 items</span>
             <svg class="pcard-chevron" id="pcard-chev-p1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
@@ -2577,10 +2571,14 @@ select:focus { border-color: #009A97; }
             <div class="pcard-item-info"><div class="pcard-item-title">Toothpaste</div><div class="pcard-item-desc">Clean teeth</div></div>
             <div class="pcard-item-meta"><div class="pcard-item-qty2">QTY: 1</div><div class="pcard-item-price2">$2.00</div></div>
           </div>
+          <div class="pcard-item-row2">
+            <div class="pcard-item-info"><div class="pcard-item-title">Chestnut</div><div class="pcard-item-desc">Individual (split case)</div></div>
+            <div class="pcard-item-meta"><div class="pcard-item-qty2">QTY: 1</div><div class="pcard-item-price2">$2.00</div></div>
+          </div>
           <div class="pcard-breakdown">
-            <div class="pcard-breakdown-row"><span>Subtotal</span><span>$42.00</span></div>
+            <div class="pcard-breakdown-row"><span>Subtotal</span><span>$44.00</span></div>
             <div class="pcard-breakdown-row"><span>Delivery <span class="pcard-tbc">TBC</span></span><span>$0.00</span></div>
-            <div class="pcard-breakdown-row total"><span>Total</span><span>$42.00</span></div>
+            <div class="pcard-breakdown-row total"><span>Total</span><span>$44.00</span></div>
           </div>
         </div>
         <div class="pcard-action">
@@ -2652,58 +2650,25 @@ select:focus { border-color: #009A97; }
         </div>
         <div class="pcard-action">
           <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">To be Fulfilled · Delivery · Tue 3 Mar · 2PM – 5PM</span></div>
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt"><strong>Order Confirmed</strong><br><span style="font-weight:400;opacity:0.85;">Delivery · Tue 3 Mar · 2PM – 5PM</span></span></div>
         </div>
       </div>
 
-      <!-- 4. Pending confirmation — split case still filling (detail shown in order) -->
-      <div class="pcard ps-pending">
-        <div class="pcard-head">
-          <div class="pcard-host"><div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div><div><div class="pcard-hname">M6 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
-          <div class="pcard-meta">20-02-2026<br/>9AM – 4PM</div>
-        </div>
-        <div class="pcard-summary" onclick="togglePcard('pcard-p4')">
-          <div class="pcard-title">Bubble Tea</div>
-          <div class="pcard-summary-right">
-            <span class="pcard-total">$3.00</span>
-            <span class="pcard-icount">1 item</span>
-            <svg class="pcard-chevron" id="pcard-chev-p4" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-        </div>
-        <div class="pcard-items" id="pcard-p4">
-          <div class="pcard-item-row2">
-            <div class="pcard-item-info"><div class="pcard-item-title">Chestnut</div><div class="pcard-item-desc">Individual (split case)</div></div>
-            <div class="pcard-item-meta"><div class="pcard-item-qty2">QTY: 1</div><div class="pcard-item-price2">$3.00</div></div>
-          </div>
-          <div class="pcard-breakdown">
-            <div class="pcard-breakdown-row total"><span>Total</span><span>$3.00</span></div>
-          </div>
-          <div class="pcard-progress-wrap">
-            <div class="pcard-progress-track"><div class="pcard-progress-fill" style="width:50%;"></div></div>
-            <div class="pcard-progress-lbl">3 of 6 portions collected</div>
-          </div>
-        </div>
-        <div class="pcard-action">
-          <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Pending confirmation</span></div>
-        </div>
-      </div>
-
-      <!-- 5. Payment rejected -->
+      <!-- 4. Payment rejected -->
       <div class="pcard ps-rejected">
         <div class="pcard-head">
           <div class="pcard-host"><div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div><div><div class="pcard-hname">M6 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
           <div class="pcard-meta">20-02-2026<br/>9AM – 4PM</div>
         </div>
-        <div class="pcard-summary" onclick="togglePcard('pcard-p5')">
+        <div class="pcard-summary" onclick="togglePcard('pcard-p4')">
           <div class="pcard-title">Bubble Tea Feb</div>
           <div class="pcard-summary-right">
             <span class="pcard-total">$12.00</span>
             <span class="pcard-icount">1 item</span>
-            <svg class="pcard-chevron" id="pcard-chev-p5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="pcard-chevron" id="pcard-chev-p4" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="pcard-items" id="pcard-p5">
+        <div class="pcard-items" id="pcard-p4">
           <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$12.00</span></div>
           <div class="pcard-breakdown">
             <div class="pcard-breakdown-row total"><span>Total</span><span>$12.00</span></div>
@@ -2716,13 +2681,13 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-      <!-- 6. Cancelled / refunded -->
+      <!-- 5. Cancelled / refunded -->
       <div class="pcard ps-cancelled">
         <div class="pcard-head">
           <div class="pcard-host"><div class="avatar lg" style="background:#B4B2A9;font-size:12px;">M6</div><div><div class="pcard-hname">M6 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
           <div class="pcard-meta">10-12-2025<br/>1PM – 8PM</div>
         </div>
-        <div class="pcard-summary" onclick="togglePcard('pcard-p6')">
+        <div class="pcard-summary" onclick="togglePcard('pcard-p5')">
           <div class="pcard-title" style="color:#888780;">December Snacks Round</div>
           <div class="pcard-summary-right">
             <span class="pcard-total" style="color:#888780;">$10.00</span>
@@ -2730,7 +2695,7 @@ select:focus { border-color: #009A97; }
             <svg class="pcard-chevron" id="pcard-chev-p6" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="pcard-items" id="pcard-p6">
+        <div class="pcard-items" id="pcard-p5">
           <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$10.00</span></div>
           <div class="pcard-breakdown">
             <div class="pcard-breakdown-row total"><span>Total</span><span>$10.00</span></div>
@@ -2742,13 +2707,13 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-      <!-- 7. Collection day -->
+      <!-- 6. Collection day -->
       <div class="pcard ps-ready">
         <div class="pcard-head">
           <div class="pcard-host"><div class="avatar lg" style="background:#009A97;font-size:12px;">M5</div><div><div class="pcard-hname">M5 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
           <div class="pcard-meta">27-02-2026<br/>1PM – 8PM</div>
         </div>
-        <div class="pcard-summary" onclick="togglePcard('pcard-p7')">
+        <div class="pcard-summary" onclick="togglePcard('pcard-p6')">
           <div class="pcard-title">M5 March round</div>
           <div class="pcard-summary-right">
             <span class="pcard-total">$18.00</span>
@@ -2756,7 +2721,7 @@ select:focus { border-color: #009A97; }
             <svg class="pcard-chevron" id="pcard-chev-p7" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="pcard-items" id="pcard-p7">
+        <div class="pcard-items" id="pcard-p6">
           <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$18.00</span></div>
           <div class="pcard-breakdown">
             <div class="pcard-breakdown-row total"><span>Total</span><span>$18.00</span></div>
@@ -2769,13 +2734,13 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-      <!-- 8. Closed -->
+      <!-- 7. Closed -->
       <div class="pcard ps-closed">
         <div class="pcard-head">
           <div class="pcard-host"><div class="avatar lg" style="background:#B4B2A9;font-size:12px;">M6</div><div><div class="pcard-hname">M6 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
           <div class="pcard-meta">01-12-2025<br/>1PM – 8PM</div>
         </div>
-        <div class="pcard-summary" onclick="togglePcard('pcard-p8')">
+        <div class="pcard-summary" onclick="togglePcard('pcard-p7')">
           <div class="pcard-title" style="color:#888780;">Moi nua (Dec round)</div>
           <div class="pcard-summary-right">
             <span class="pcard-total" style="color:#888780;">$12.00</span>
@@ -2783,7 +2748,7 @@ select:focus { border-color: #009A97; }
             <svg class="pcard-chevron" id="pcard-chev-p8" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
-        <div class="pcard-items" id="pcard-p8">
+        <div class="pcard-items" id="pcard-p7">
           <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$12.00</span></div>
           <div class="pcard-breakdown">
             <div class="pcard-breakdown-row total"><span>Total</span><span>$12.00</span></div>
