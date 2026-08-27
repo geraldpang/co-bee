@@ -480,7 +480,11 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .pcard-sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
   .pcard-stxt { font-size: 12px; font-weight: 500; flex: 1; line-height: 1.4; }
   .pcard-cta { width: 100%; padding: 11px 14px; font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 0.5px solid rgba(0,0,0,0.06); font-family: inherit; }
-  .pcard-confirm { width: 100%; padding: 11px 14px; font-size: 13px; font-weight: 600; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 0.5px solid rgba(0,0,0,0.06); background: #BFE8E6; color: #013F3D; }
+  .pcard-order-row { padding: 9px 14px; border-top: 0.5px solid #e0dfd8; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-family: inherit; font-size: 12px; }
+  .pcard-order-row:hover { background: #FAFAF8; }
+  .pcard-order-row-left { display: flex; align-items: center; gap: 7px; font-weight: 500; }
+  .pcard-order-row-right { display: flex; align-items: center; gap: 6px; font-weight: 600; color: #888780; }
+  .pcard-confirm { width: 100%; padding: 11px 14px; font-size: 13px; font-weight: 600; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 0.5px solid #e0dfd8; background: #E0F5F5; color: #005f5d; }
 
   /* Status colour variants */
   .ps-unpaid   .pcard-status { background: #FEF5E7; }
@@ -492,10 +496,6 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .ps-pending  .pcard-status { background: #E0F5F5; }
   .ps-pending  .pcard-sdot   { background: #009A97; }
   .ps-pending  .pcard-stxt   { color: #005f5d; }
-
-  .ps-fulfill  .pcard-status { background: #DFF4F2; }
-  .ps-fulfill  .pcard-sdot   { background: #00726F; }
-  .ps-fulfill  .pcard-stxt   { color: #013F3D; }
 
   .ps-ready    .pcard-status { background: #EAF3DE; }
   .ps-ready    .pcard-sdot   { background: #639922; }
@@ -2650,8 +2650,10 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div class="pcard-action">
-          <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Delivery · Tue 3 Mar · 2PM – 5PM</span></div>
+          <div class="pcard-order-row" onclick="alert('Order detail view coming')">
+            <span class="pcard-order-row-left"><span class="pcard-sdot" style="background:#009A97;"></span><span style="color:#005f5d;">Delivery · Tue 3 Mar · 2PM – 5PM</span></span>
+            <span class="pcard-order-row-right">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+          </div>
           <div class="pcard-confirm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Order Confirmed</div>
         </div>
       </div>
