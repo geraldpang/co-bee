@@ -423,21 +423,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-tab { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 99px; border: 0.5px solid #D3D1C7; background: white; color: #888780; cursor: pointer; font-family: inherit; transition: all 0.12s; }
   .gd-tab.active { background: #009A97; border-color: #009A97; color: white; }
   /* Event cards grid */
-  .gd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .gec { background: white; border: 0.5px solid #E0DFD8; border-radius: 12px; overflow: hidden; cursor: pointer; transition: border-color 0.15s; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
-  .gec:hover:not(.gec-closed) { border-color: #009A97; }
-  .gec-closed { opacity: 0.55; filter: grayscale(0.6); }
-  .gec-closed:hover { border-color: #E0DFD8; }
-  .gec-hd { padding: 8px 9px 6px; display: flex; gap: 6px; align-items: flex-start; }
-  .gec-avatar { width: 14px; height: 14px; border-radius: 50%; background: #009A97; color: white; font-size: 7px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-  .gec-title { font-size: 12px; font-weight: 600; color: #1a1a18; line-height: 1.3; }
-  .gec-img { width: 100%; aspect-ratio: 1; background: #E0F5F5; display: flex; align-items: center; justify-content: center; position: relative; }
-  .gec-buy-badge { position: absolute; top: 6px; right: 6px; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; background: #009A97; color: white; }
-  .gec-status { padding: 8px 9px 0; font-size: 10px; font-weight: 600; color: #009A97; }
-  .gec-status.closing { color: #E8971A; }
-  .gec-bottom { padding: 6px 9px 9px; display: flex; align-items: center; justify-content: space-between; }
-  .gec-host-tag { font-size: 10px; color: #888780; display: flex; align-items: center; gap: 3px; }
-  .gec-edit-btn { font-size: 10px; font-weight: 600; color: #009A97; background: #E0F5F5; border: none; border-radius: 5px; padding: 2px 7px; cursor: pointer; font-family: inherit; }
+  
   /* VIEW ORDER LINK  */
   .view-order-btn { display: block; width: 100%; padding: 9px 14px; font-size: 12px; font-weight: 600; color: #009A97; background: none; border: none; border-top: 0.5px solid #e0dfd8; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: space-between; }
   .view-order-btn:hover { background: #f5fafa; }
@@ -2804,103 +2790,135 @@ select:focus { border-color: #009A97; }
         </div>
 
         <!-- Events grid -->
-        <div class="gd-grid" id="gd-grid">
+        <div class="mef-grid" id="gd-grid" style="padding:0;max-width:none;margin:0;">
 
-          <div class="gec" data-status="active" onclick="handleGecClick(this)">
-            <div class="gec-hd">
-              <span class="gec-avatar">M6</span>
-              <div class="gec-title">Groupbuy Event test</div>
+
+          <div class="mef-tile" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-05-22" data-close="2026-05-15" data-collect="2026-05-22" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
+            <div class="mef-tile-hd">
+              <span class="mef-tile-avatar2">M6</span>
+              <div class="mef-tile-hdtext"><div class="mef-tile-name">Groupbuy Event test</div></div>
             </div>
-            <div class="gec-img">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span class="gec-buy-badge">9 BUY</span>
+            <div class="mef-tile-img">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
             </div>
-            <div class="gec-status">7 days left</div>
-            <div class="gec-bottom">
-              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
-              <button class="gec-edit-btn">Edit</button>
+            <div class="mef-tile-desc">This is how it looks like in an actual group buy</div>
+            <div class="mef-tile-dates">
+              <div class="mef-tile-daterow">
+                <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">09 MAY</span></span></div>
+                <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">15 MAY</span></span></div>
+                <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">22 MAY</span></span></div>
+              </div>
+            </div>
+            <div class="mef-card-actions" onclick="event.stopPropagation()">
+              <button class="mef-share-btn" onclick="shareEvent(this,'Groupbuy Event test')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+              <button class="mef-link-btn" onclick="handleLinkClick('Groupbuy Event test')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Telegram
+              </button>
             </div>
           </div>
 
-          <div class="gec" data-status="active" onclick="handleGecClick(this)">
-            <div class="gec-hd">
-              <span class="gec-avatar">M6</span>
-              <div class="gec-title">New event</div>
+          <div class="mef-tile" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-05-22" data-close="2026-05-15" data-collect="2026-05-22" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
+            <div class="mef-tile-hd">
+              <span class="mef-tile-avatar2">M6</span>
+              <div class="mef-tile-hdtext"><div class="mef-tile-name">New event</div></div>
             </div>
-            <div class="gec-img">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span class="gec-buy-badge">4 BUY</span>
+            <div class="mef-tile-img">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
             </div>
-            <div class="gec-status closing">3 days left</div>
-            <div class="gec-bottom">
-              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
-              <button class="gec-edit-btn">Edit</button>
+            <div class="mef-tile-desc">test</div>
+            <div class="mef-tile-dates">
+              <div class="mef-tile-daterow">
+                <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">09 MAY</span></span></div>
+                <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">15 MAY</span></span></div>
+                <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">22 MAY</span></span></div>
+              </div>
             </div>
-          </div>
-
-          <div class="gec" data-status="active" onclick="handleGecClick(this)">
-            <div class="gec-hd">
-              <span class="gec-avatar">M6</span>
-              <div class="gec-title">Test event for Purchase</div>
-            </div>
-            <div class="gec-img">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span class="gec-buy-badge">6 BUY</span>
-            </div>
-            <div class="gec-status">11 days left</div>
-            <div class="gec-bottom">
-              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
-              <button class="gec-edit-btn">Edit</button>
+            <div class="mef-card-actions" onclick="event.stopPropagation()">
+              <button class="mef-share-btn" onclick="shareEvent(this,'New event')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+              <button class="mef-link-btn" onclick="handleLinkClick('New event')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                3 Links
+              </button>
             </div>
           </div>
 
-          <div class="gec gec-closed" data-status="closed">
-            <div class="gec-hd">
-              <span class="gec-avatar" style="background:#5F5E5A;">M6</span>
-              <div class="gec-title">test</div>
+          <div class="mef-tile" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-05-22" data-close="2026-05-14" data-collect="2026-05-22" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
+            <div class="mef-tile-hd">
+              <span class="mef-tile-avatar2">M6</span>
+              <div class="mef-tile-hdtext"><div class="mef-tile-name">This is a test event for Purchase with no login</div></div>
             </div>
-            <div class="gec-img">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span class="gec-buy-badge" style="background:#5F5E5A;">0 BUY</span>
+            <div class="mef-tile-img">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span class="mef-tile-buy" style="background:#009A97;">6 BUY</span>
             </div>
-            <div class="gec-status" style="color:#B4B2A9;">Closed</div>
-            <div class="gec-bottom">
-              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
-              <button class="gec-edit-btn">Edit</button>
+            <div class="mef-tile-desc">test</div>
+            <div class="mef-tile-dates">
+              <div class="mef-tile-daterow">
+                <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">08 MAY</span></span></div>
+                <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">14 MAY</span></span></div>
+                <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">22 MAY</span></span></div>
+              </div>
             </div>
-          </div>
-
-          <div class="gec gec-closed" data-status="closed">
-            <div class="gec-hd">
-              <span class="gec-avatar" style="background:#5F5E5A;">M6</span>
-              <div class="gec-title">order without login</div>
-            </div>
-            <div class="gec-img">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span class="gec-buy-badge" style="background:#5F5E5A;">2 BUY</span>
-            </div>
-            <div class="gec-status" style="color:#B4B2A9;">Closed</div>
-            <div class="gec-bottom">
-              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
-              <button class="gec-edit-btn">Edit</button>
+            <div class="mef-card-actions" onclick="event.stopPropagation()">
+              <button class="mef-share-btn" onclick="shareEvent(this,'This is a test event for Purchase with no login')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+              <button class="mef-link-btn" onclick="handleLinkClick('This is a test event for Purchase with no login')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                3 Links
+              </button>
             </div>
           </div>
 
-          <div class="gec gec-closed" data-status="closed">
-            <div class="gec-hd">
-              <span class="gec-avatar" style="background:#5F5E5A;">M6</span>
-              <div class="gec-title">atea 1</div>
+          <div class="mef-tile" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" data-close="2026-09-02" data-collect="2026-09-09" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false')">
+            <div class="mef-tile-hd">
+              <span class="mef-tile-avatar2">M6</span>
+              <div class="mef-tile-hdtext"><div class="mef-tile-name">Product &amp; Event Discount Demo</div></div>
             </div>
-            <div class="gec-img">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span class="gec-buy-badge" style="background:#5F5E5A;">5 BUY</span>
+            <div class="mef-tile-img">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
             </div>
-            <div class="gec-status" style="color:#B4B2A9;">Closed</div>
-            <div class="gec-bottom">
-              <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
-              <button class="gec-edit-btn">Edit</button>
+            <div class="mef-tile-desc">See how Product Discount and the event-wide discount look to buyers.</div>
+            <div class="mef-tile-dates">
+              <div class="mef-tile-daterow">
+                <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">20 AUG</span></span></div>
+                <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">02 SEP</span></span></div>
+                <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">09 SEP</span></span></div>
+              </div>
+            </div>
+            <div class="mef-card-actions" onclick="event.stopPropagation()">
+              <button class="mef-share-btn" onclick="shareEvent(this,'Product &amp; Event Discount Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+              <button class="mef-link-btn" onclick="handleLinkClick('Product &amp; Event Discount Demo')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Telegram
+              </button>
             </div>
           </div>
+
+          <div class="mef-tile" data-closing="25" data-buy="0" data-order="0" data-eventdate="2026-06-02" data-close="2026-08-20" data-collect="2026-09-10" onclick="showView('view-subitem-demo')">
+            <div class="mef-tile-hd">
+              <span class="mef-tile-avatar2">M6</span>
+              <div class="mef-tile-hdtext"><div class="mef-tile-name">Sub-Item Configurations Demo</div></div>
+            </div>
+            <div class="mef-tile-img">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+            </div>
+            <div class="mef-tile-desc">Three products, three sub-item setups to compare.</div>
+            <div class="mef-tile-dates">
+              <div class="mef-tile-daterow">
+                <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">10 AUG</span></span></div>
+                <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">20 AUG</span></span></div>
+                <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">10 SEP</span></span></div>
+              </div>
+            </div>
+            <div class="mef-card-actions" onclick="event.stopPropagation()">
+              <button class="mef-share-btn" onclick="shareEvent(this,'Sub-Item Configurations Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+            </div>
+          </div>
+
 
         </div>
       </div>
@@ -4586,14 +4604,11 @@ function hideGroupDetail() {
 function filterGecEvents(filter, btn) {
   document.querySelectorAll('.gd-filter-tabs .gd-tab').forEach(function(t){ t.classList.remove('active'); });
   btn.classList.add('active');
-  document.querySelectorAll('#gd-grid .gec').forEach(function(c) {
-    var status = c.getAttribute('data-status');
+  document.querySelectorAll('#gd-grid .mef-tile').forEach(function(c) {
+    var closeValEl = c.querySelector('.tile-close-val');
+    var status = (closeValEl && closeValEl.classList.contains('closed')) ? 'closed' : 'active';
     c.style.display = (filter === 'all' || filter === status) ? '' : 'none';
   });
-}
-
-function handleGecClick(el) {
-  if (event && event.target.classList.contains('gec-edit-btn')) return;
 }
 
 function searchGroups(query) {
