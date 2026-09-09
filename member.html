@@ -395,9 +395,9 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-share:hover { background: #c8eaea; }
   /* Avatar card — no hero, just sits on page bg */
   .gd-header-card { background: white; margin: 12px 14px; border-radius: 14px; border: 0.5px solid #E0DFD8; box-shadow: 0 1px 8px rgba(0,0,0,0.06); overflow: hidden; }
-  .gd-header-banner { background: white; padding: 18px 16px 14px; }
+  .gd-header-banner { background: linear-gradient(180deg, color-mix(in srgb, var(--group-accent, #009A97) 14%, white) 0%, white 100%); padding: 18px 16px 14px; }
   .gd-avatar-wrap { display: flex; align-items: flex-start; gap: 14px; }
-  .gd-avatar { width: 56px; height: 56px; border-radius: 50%; background: #009A97; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,154,151,0.25); }
+  .gd-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--group-accent, #009A97); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,154,151,0.25); }
   .gd-info { flex: 1; min-width: 0; }
   .gd-name { font-size: 17px; font-weight: 700; color: #1a1a18; }
   .gd-desc { font-size: 12px; color: #5F5E5A; line-height: 1.5; margin-top: 3px; }
@@ -2748,7 +2748,7 @@ select:focus { border-color: #009A97; }
       </div>
 
       <!-- Header card: avatar + info + stats, unified -->
-      <div class="gd-header-card">
+      <div class="gd-header-card" style="--group-accent:#009A97;">
         <div class="gd-header-banner">
           <div class="gd-avatar-wrap">
             <div class="gd-avatar">M6</div>
