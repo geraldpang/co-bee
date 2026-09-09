@@ -424,22 +424,20 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-tab.active { background: #009A97; border-color: #009A97; color: white; }
   /* Event cards grid */
   .gd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .gec { background: white; border: 0.5px solid #E0DFD8; border-radius: 10px; padding: 11px 12px; cursor: pointer; transition: all 0.15s; }
-  .gec:hover:not(.gec-closed) { border-color: #009A97; box-shadow: 0 2px 8px rgba(0,154,151,0.1); }
-  .gec-closed { background: #F4F6F8; border-color: #E0DFD8; }
-  .gec-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
-  .gec-status { font-size: 10px; font-weight: 600; color: #009A97; }
+  .gec { background: white; border: 0.5px solid #E0DFD8; border-radius: 12px; overflow: hidden; cursor: pointer; transition: border-color 0.15s; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+  .gec:hover:not(.gec-closed) { border-color: #009A97; }
+  .gec-closed { opacity: 0.55; filter: grayscale(0.6); }
+  .gec-closed:hover { border-color: #E0DFD8; }
+  .gec-hd { padding: 8px 9px 6px; display: flex; gap: 6px; align-items: flex-start; }
+  .gec-avatar { width: 14px; height: 14px; border-radius: 50%; background: #009A97; color: white; font-size: 7px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .gec-title { font-size: 12px; font-weight: 600; color: #1a1a18; line-height: 1.3; }
+  .gec-img { width: 100%; aspect-ratio: 1; background: #E0F5F5; display: flex; align-items: center; justify-content: center; position: relative; }
+  .gec-buy-badge { position: absolute; top: 6px; right: 6px; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; background: #009A97; color: white; }
+  .gec-status { padding: 8px 9px 0; font-size: 10px; font-weight: 600; color: #009A97; }
   .gec-status.closing { color: #E8971A; }
-  .gec-status.closed { color: #B4B2A9; }
-  .gec-buy-badge { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; background: #009A97; color: white; }
-  .gec-buy-badge.zero { background: #E0DFD8; color: #888780; }
-  .gec-title { font-size: 12px; font-weight: 600; color: #1a1a18; line-height: 1.35; margin-bottom: 6px; }
-  .gec-closed .gec-title { color: #888780; }
-  .gec-closed .gec-buy-badge { background: #5F5E5A; color: white; }
-  .gec-bottom { display: flex; align-items: center; justify-content: space-between; }
+  .gec-bottom { padding: 6px 9px 9px; display: flex; align-items: center; justify-content: space-between; }
   .gec-host-tag { font-size: 10px; color: #888780; display: flex; align-items: center; gap: 3px; }
   .gec-edit-btn { font-size: 10px; font-weight: 600; color: #009A97; background: #E0F5F5; border: none; border-radius: 5px; padding: 2px 7px; cursor: pointer; font-family: inherit; }
-  .gec-closed .gec-edit-btn { color: #B4B2A9; background: #f0f0f0; }
   /* VIEW ORDER LINK  */
   .view-order-btn { display: block; width: 100%; padding: 9px 14px; font-size: 12px; font-weight: 600; color: #009A97; background: none; border: none; border-top: 0.5px solid #e0dfd8; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: space-between; }
   .view-order-btn:hover { background: #f5fafa; }
@@ -2809,11 +2807,15 @@ select:focus { border-color: #009A97; }
         <div class="gd-grid" id="gd-grid">
 
           <div class="gec" data-status="active" onclick="handleGecClick(this)">
-            <div class="gec-top">
-              <span class="gec-status">7 days left</span>
+            <div class="gec-hd">
+              <span class="gec-avatar">M6</span>
+              <div class="gec-title">Groupbuy Event test</div>
+            </div>
+            <div class="gec-img">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
               <span class="gec-buy-badge">9 BUY</span>
             </div>
-            <div class="gec-title">Groupbuy Event test</div>
+            <div class="gec-status">7 days left</div>
             <div class="gec-bottom">
               <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
               <button class="gec-edit-btn">Edit</button>
@@ -2821,11 +2823,15 @@ select:focus { border-color: #009A97; }
           </div>
 
           <div class="gec" data-status="active" onclick="handleGecClick(this)">
-            <div class="gec-top">
-              <span class="gec-status closing">3 days left</span>
+            <div class="gec-hd">
+              <span class="gec-avatar">M6</span>
+              <div class="gec-title">New event</div>
+            </div>
+            <div class="gec-img">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
               <span class="gec-buy-badge">4 BUY</span>
             </div>
-            <div class="gec-title">New event</div>
+            <div class="gec-status closing">3 days left</div>
             <div class="gec-bottom">
               <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
               <button class="gec-edit-btn">Edit</button>
@@ -2833,11 +2839,15 @@ select:focus { border-color: #009A97; }
           </div>
 
           <div class="gec" data-status="active" onclick="handleGecClick(this)">
-            <div class="gec-top">
-              <span class="gec-status">11 days left</span>
+            <div class="gec-hd">
+              <span class="gec-avatar">M6</span>
+              <div class="gec-title">Test event for Purchase</div>
+            </div>
+            <div class="gec-img">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
               <span class="gec-buy-badge">6 BUY</span>
             </div>
-            <div class="gec-title">Test event for Purchase</div>
+            <div class="gec-status">11 days left</div>
             <div class="gec-bottom">
               <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
               <button class="gec-edit-btn">Edit</button>
@@ -2845,11 +2855,15 @@ select:focus { border-color: #009A97; }
           </div>
 
           <div class="gec gec-closed" data-status="closed">
-            <div class="gec-top">
-              <span class="gec-status closed">Closed</span>
-              <span class="gec-buy-badge zero">0 BUY</span>
+            <div class="gec-hd">
+              <span class="gec-avatar" style="background:#5F5E5A;">M6</span>
+              <div class="gec-title">test</div>
             </div>
-            <div class="gec-title">test</div>
+            <div class="gec-img">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span class="gec-buy-badge" style="background:#5F5E5A;">0 BUY</span>
+            </div>
+            <div class="gec-status" style="color:#B4B2A9;">Closed</div>
             <div class="gec-bottom">
               <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
               <button class="gec-edit-btn">Edit</button>
@@ -2857,11 +2871,15 @@ select:focus { border-color: #009A97; }
           </div>
 
           <div class="gec gec-closed" data-status="closed">
-            <div class="gec-top">
-              <span class="gec-status closed">Closed</span>
-              <span class="gec-buy-badge">2 BUY</span>
+            <div class="gec-hd">
+              <span class="gec-avatar" style="background:#5F5E5A;">M6</span>
+              <div class="gec-title">order without login</div>
             </div>
-            <div class="gec-title">order without login</div>
+            <div class="gec-img">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span class="gec-buy-badge" style="background:#5F5E5A;">2 BUY</span>
+            </div>
+            <div class="gec-status" style="color:#B4B2A9;">Closed</div>
             <div class="gec-bottom">
               <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
               <button class="gec-edit-btn">Edit</button>
@@ -2869,11 +2887,15 @@ select:focus { border-color: #009A97; }
           </div>
 
           <div class="gec gec-closed" data-status="closed">
-            <div class="gec-top">
-              <span class="gec-status closed">Closed</span>
-              <span class="gec-buy-badge">5 BUY</span>
+            <div class="gec-hd">
+              <span class="gec-avatar" style="background:#5F5E5A;">M6</span>
+              <div class="gec-title">atea 1</div>
             </div>
-            <div class="gec-title">atea 1</div>
+            <div class="gec-img">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.5" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span class="gec-buy-badge" style="background:#5F5E5A;">5 BUY</span>
+            </div>
+            <div class="gec-status" style="color:#B4B2A9;">Closed</div>
             <div class="gec-bottom">
               <span class="gec-host-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Minh Cong</span>
               <button class="gec-edit-btn">Edit</button>
