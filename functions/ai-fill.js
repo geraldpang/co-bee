@@ -36,6 +36,7 @@ Return ONLY valid JSON — no markdown fences, no commentary, no leading/trailin
       "description": string | null,
       "price": number | null,
       "unit": string | null,
+      "imageIndex": number | null,
       "options": [
         { "name": string, "priceDelta": number | null, "required": boolean }
       ]
@@ -51,13 +52,14 @@ Rules:
 - Prices: strip currency symbols and thousands separators, return as a plain number (e.g. 18.90, not "$18.90" or "S$18.90").
 - "unit" captures what the price is per, when the source states it (e.g. "per case (10 packs)", "per kg", "per pack of 3"). Use null if the source just gives a single flat price with no unit stated.
 - "options" captures variant choices with their own naming and price difference from the base item price (e.g. a menu listing "Small $8 / Large $12" for one item → base item price 8.00, then one option {"name": "Large", "priceDelta": 4, "required": false}). Mark an option "required": true only if the source clearly states buyers must choose one (e.g. "please select a size"). Use an empty array if no variants are mentioned.
+- "imageIndex" matches an item to one specific attached photo, when more than one photo was uploaded and one of them clearly and primarily shows just that item (e.g. a dedicated photo of one dish, or one photo per menu item). Reference photos by the number in their "Photo N:" label, which appears immediately before that image in this request. Use null whenever there's any doubt — in particular, never set imageIndex to a photo that shows multiple different items together (a whole menu, a spread of dishes, a poster with several products) or a photo that isn't primarily about that specific item (e.g. a general venue/location photo). Only set it when a single photo is unambiguously "the photo of this item."
 - If multiple photos are provided, treat them as one combined source (e.g. a poster plus a separate price list, or several pages of the same menu) and merge details across them — unless they clearly show unrelated, separately-hosted group buys, in which case follow the single-event rule below.
 - If the source is a screenshot of a chat conversation, focus on the single message that actually describes the group buy, not surrounding chatter.
 - If the pasted text or photo(s) clearly contain more than one unrelated group buy (different hosts, different unrelated products with no shared closing/collection details), extract only the most complete and clearly-described one. Do not merge items from unrelated group buys into a single event.
 
 Example — input text: "Chestnuts group buy! Closing this Sat, collect next Tue 6-8pm at Blk 22 void deck. $10/pack or $85 for a case of 10 packs."
 Example output:
-{"title":"Chestnuts Group Buy","description":null,"address":"Blk 22 void deck","closingDate":"<the resolved Saturday date>","collectionDate":"<the resolved Tuesday date>","timeFrom":"18:00","timeTo":"20:00","items":[{"name":"Chestnuts","description":null,"price":10,"unit":"per pack","options":[{"name":"Case (10 packs)","priceDelta":75,"required":false}]}]}`;
+{"title":"Chestnuts Group Buy","description":null,"address":"Blk 22 void deck","closingDate":"<the resolved Saturday date>","collectionDate":"<the resolved Tuesday date>","timeFrom":"18:00","timeTo":"20:00","items":[{"name":"Chestnuts","description":null,"price":10,"unit":"per pack","imageIndex":null,"options":[{"name":"Case (10 packs)","priceDelta":75,"required":false}]}]}`;
 }
 
 export async function onRequestPost({ request, env }) {
@@ -90,8 +92,12 @@ export async function onRequestPost({ request, env }) {
   if (text) {
     content.push({ type: 'text', text: text.slice(0, 8000) }); // basic length guard
   }
-  imageList.forEach((img) => {
+  const labelPhotos = imageList.length > 1; // only worth labeling when there's something to disambiguate
+  imageList.forEach((img, i) => {
     if (!img || !img.base64) return;
+    if (labelPhotos) {
+      content.push({ type: 'text', text: 'Photo ' + i + ':' });
+    }
     content.push({
       type: 'image',
       source: {
@@ -153,6 +159,16 @@ export async function onRequestPost({ request, env }) {
       { error: "Couldn't understand the AI's response. Try rephrasing or a clearer photo.", raw: rawText.slice(0, 300) },
       { status: 502 }
     );
+  }
+
+  // Defensive: null out any imageIndex the model returns that doesn't point at an
+  // actually-attached photo, rather than trusting it blindly.
+  if (extracted && Array.isArray(extracted.items)) {
+    extracted.items.forEach((it) => {
+      const idx = it && it.imageIndex;
+      const valid = Number.isInteger(idx) && idx >= 0 && idx < imageList.length;
+      if (it) it.imageIndex = valid ? idx : null;
+    });
   }
 
   return Response.json({ extracted });
