@@ -3793,25 +3793,46 @@ select:focus { border-color: #009A97; }
 // The demo's logged-in host — events created by this name show an "Edit Event" option.
 var CURRENT_USER_NAME = 'Minh Cong';
 
-// Samples an image's average color via a small offscreen canvas. Note: this requires the
+// Samples an image's dominant color via a small offscreen canvas. Note: this requires the
 // image to be same-origin, or served with CORS headers (img.crossOrigin = 'anonymous' +
 // Access-Control-Allow-Origin on the response) — otherwise the canvas is "tainted" and
 // getImageData() throws a security error. For production, consider computing this once at
 // upload time server-side instead, so it doesn't depend on CORS at render time.
+//
+// This weights each pixel by its saturation rather than averaging flatly — a plain average
+// over a real photo (sky, skin tones, shadows, multiple objects) almost always collapses to
+// a muddy grey-brown, since opposite hues cancel out. Weighting by saturation lets the most
+// vivid colors dominate instead, which is much closer to what a person would call "the
+// photo's color". Near-black and near-white pixels are skipped entirely, since those are
+// usually shadow/highlight/background rather than the image's actual color identity.
 function extractImageAccentColor(imgEl, onColor) {
   try {
-    var size = 24; // small sample is plenty for an average, and keeps this fast
+    var size = 32;
     var canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
     var ctx = canvas.getContext('2d');
     ctx.drawImage(imgEl, 0, 0, size, size);
     var data = ctx.getImageData(0, 0, size, size).data;
-    var r = 0, g = 0, b = 0, count = 0;
+
+    var rSum = 0, gSum = 0, bSum = 0, weightSum = 0;
     for (var i = 0; i < data.length; i += 4) {
-      r += data[i]; g += data[i + 1]; b += data[i + 2]; count++;
+      var r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+      if (a < 128) continue; // skip transparent pixels
+
+      var max = Math.max(r, g, b), min = Math.min(r, g, b);
+      var lightness = (max + min) / 2 / 255;
+      var saturation = max === min ? 0 : (max - min) / (255 - Math.abs(max + min - 255));
+
+      if (lightness < 0.08 || lightness > 0.92) continue; // skip near-black / near-white
+
+      var weight = 0.15 + saturation; // small base weight so low-saturation pixels still count a little
+      rSum += r * weight; gSum += g * weight; bSum += b * weight;
+      weightSum += weight;
     }
-    onColor('rgb(' + Math.round(r / count) + ',' + Math.round(g / count) + ',' + Math.round(b / count) + ')');
+
+    if (weightSum === 0) { onColor('rgb(150,150,150)'); return; } // fully neutral image — fair to fall back to grey
+    onColor('rgb(' + Math.round(rSum / weightSum) + ',' + Math.round(gSum / weightSum) + ',' + Math.round(bSum / weightSum) + ')');
   } catch (e) {
     console.warn('Could not extract accent color from image (likely a CORS restriction):', e);
   }
