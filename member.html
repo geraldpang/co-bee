@@ -2776,10 +2776,24 @@ select:focus { border-color: #009A97; }
       <div class="gd-events">
         <div class="gd-events-hdr">
           <span class="gd-events-label">Events</span>
-          <button class="gd-host-btn" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-            Host an Event
-          </button>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="mef-sort-wrap">
+              <button class="mef-sort-btn" id="gd-sort-btn" onclick="toggleSortMenu('gd-sort-menu')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+                <span id="gd-sort-label">Sort</span>
+              </button>
+              <div class="mef-sort-menu" id="gd-sort-menu">
+                <div class="mef-sort-item" data-sort="closing" onclick="setGdSortBy('closing')">Closing Soon</div>
+                <div class="mef-sort-item" data-sort="collection" onclick="setGdSortBy('collection')">Collection Date</div>
+                <div class="mef-sort-item" data-sort="newest" onclick="setGdSortBy('newest')">Newest Event</div>
+                <div class="mef-sort-item" data-sort="active" onclick="setGdSortBy('active')">Most Active</div>
+              </div>
+            </div>
+            <button class="gd-host-btn" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+              Host an Event
+            </button>
+          </div>
         </div>
 
         <!-- Filter tabs -->
@@ -5322,27 +5336,27 @@ function setFeedView(mode) {
   }
 }
 
-function toggleSortMenu() {
-  var menu = document.getElementById('mef-sort-menu');
+function toggleSortMenu(menuId) {
+  var menu = document.getElementById(menuId || 'mef-sort-menu');
   if (menu) menu.classList.toggle('open');
 }
 
 document.addEventListener('click', function (e) {
   if (!e.target.closest('.mef-sort-wrap')) {
-    var menu = document.getElementById('mef-sort-menu');
-    if (menu) menu.classList.remove('open');
+    document.querySelectorAll('.mef-sort-menu').forEach(function (menu) { menu.classList.remove('open'); });
   }
 });
 
-function setSortBy(criteria) {
+function applySortBy(criteria, scopeSelector, containerSelectors, labelElId, itemsWrapSelector, menuId) {
   var labels = { closing: 'Closing Soon', collection: 'Collection Date', newest: 'Newest Event', active: 'Most Active' };
-  document.getElementById('mef-sort-label').textContent = labels[criteria] || 'Sort';
-  document.querySelectorAll('.mef-sort-item').forEach(function (item) {
+  var labelEl = document.getElementById(labelElId);
+  if (labelEl) labelEl.textContent = labels[criteria] || 'Sort';
+  document.querySelectorAll(itemsWrapSelector + ' .mef-sort-item').forEach(function (item) {
     item.classList.toggle('active', item.dataset.sort === criteria);
   });
 
-  ['.feed', '#mef-tile-grid'].forEach(function (containerSel) {
-    var container = document.querySelector('#view-all ' + containerSel);
+  containerSelectors.forEach(function (containerSel) {
+    var container = document.querySelector(scopeSelector + ' ' + containerSel);
     if (!container) return;
     var cards = Array.prototype.slice.call(container.children);
     if (criteria === 'closing') {
@@ -5359,7 +5373,15 @@ function setSortBy(criteria) {
     cards.forEach(function (card) { container.appendChild(card); });
   });
 
-  toggleSortMenu();
+  toggleSortMenu(menuId);
+}
+
+function setSortBy(criteria) {
+  applySortBy(criteria, '#view-all', ['.feed', '#mef-tile-grid'], 'mef-sort-label', '#view-all', 'mef-sort-menu');
+}
+
+function setGdSortBy(criteria) {
+  applySortBy(criteria, '#view-group-detail', ['#gd-grid'], 'gd-sort-label', '#view-group-detail', 'gd-sort-menu');
 }
 
 /* ── Tile-view close/collection countdown & closed state ──
