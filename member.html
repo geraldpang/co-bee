@@ -441,8 +441,8 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gec-edit-btn { font-size: 10px; font-weight: 600; color: #009A97; background: #E0F5F5; border: none; border-radius: 5px; padding: 2px 7px; cursor: pointer; font-family: inherit; }
   .gec-closed .gec-edit-btn { color: #B4B2A9; background: #f0f0f0; }
   /* VIEW ORDER LINK  */
-  .pcard-view-details { display: flex; width: 100%; padding: 9px 14px; font-size: 12px; font-weight: 600; color: #888780; text-align: right; cursor: pointer; align-items: center; justify-content: flex-end; gap: 6px; border-top: 0.5px solid #f0f0f0; margin-top: 4px; }
-  .pcard-view-details:hover { background: #FAFAF8; }
+  .view-order-btn { display: block; width: 100%; padding: 9px 14px; font-size: 12px; font-weight: 600; color: #009A97; background: none; border: none; border-top: 0.5px solid #e0dfd8; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: space-between; }
+  .view-order-btn:hover { background: #f5fafa; }
 
   .card-info-grid { display:grid;grid-template-columns:72px 1fr;gap:3px 0;font-size:11px;padding:0 14px 8px;}
   .card-info-lbl { color:#888780; }
@@ -461,8 +461,8 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .pcard-title { font-size: 14px; font-weight: 500; color: #009A97; }
   .pcard-summary-right { display: flex; align-items: center; gap: 8px; }
   .pcard-total { font-size: 13px; font-weight: 700; color: #1a1a18; }
-  .pcard-icount { font-size: 11px; color: #5F5E5A; }
-  .pcard-chevron { color: #5F5E5A; transition: transform 0.2s; }
+  .pcard-icount { font-size: 11px; color: #888; }
+  .pcard-chevron { color: #B4B2A9; transition: transform 0.2s; }
   .pcard-chevron.open { transform: rotate(180deg); }
   .pcard-items { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; border-top: 0.5px solid #f0f0f0; }
   .pcard-items.open { max-height: 600px; }
@@ -480,8 +480,6 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .pcard-sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
   .pcard-stxt { font-size: 12px; font-weight: 500; flex: 1; line-height: 1.4; }
   .pcard-cta { width: 100%; padding: 11px 14px; font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 0.5px solid rgba(0,0,0,0.06); font-family: inherit; }
-  .pcard-thumb { width: 36px; height: 36px; border-radius: 8px; background: #E0F5F5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .pcard-confirm { width: 100%; padding: 11px 14px; font-size: 13px; font-weight: 600; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 0.5px solid #e0dfd8; background: #BFE8E6; color: #013F3D; }
 
   /* Status colour variants */
   .ps-unpaid   .pcard-status { background: #FEF5E7; }
@@ -494,11 +492,15 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .ps-pending  .pcard-sdot   { background: #009A97; }
   .ps-pending  .pcard-stxt   { color: #005f5d; }
 
+  .ps-fulfill  .pcard-status { background: #E6F1FB; }
+  .ps-fulfill  .pcard-sdot   { background: #378ADD; }
+  .ps-fulfill  .pcard-stxt   { color: #0C447C; }
+
   .ps-ready    .pcard-status { background: #EAF3DE; }
   .ps-ready    .pcard-sdot   { background: #639922; }
   .ps-ready    .pcard-stxt   { color: #27500A; }
-  .ps-ready    .pcard-cta    { background: #5C8F2E; color: #ffffff; border-top-color: #4C7A24; }
-  .ps-ready    .pcard-cta:hover { background: #4C7A24; }
+  .ps-ready    .pcard-cta    { background: #EAF3DE; color: #27500A; border-top-color: #C0DD97; }
+  .ps-ready    .pcard-cta:hover { background: #d4ecc0; }
 
   .ps-collected .pcard-status { background: #E0F5F5; }
   .ps-collected .pcard-sdot   { background: #80CCCB; }
@@ -508,44 +510,6 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .ps-closed   .pcard-sdot   { background: #B4B2A9; }
   .ps-closed   .pcard-stxt   { color: #5F5E5A; }
   .ps-closed   { opacity: 0.65; }
-
-  /* New order states — payment rejected, cancelled/refunded */
-  .ps-rejected  .pcard-status { background: #FBEAEA; }
-  .ps-rejected  .pcard-sdot   { background: #E24B4A; }
-  .ps-rejected  .pcard-stxt   { color: #96302E; }
-  .ps-rejected  .pcard-cta    { background: #009A97; color: white; }
-  .ps-rejected  .pcard-cta:hover { background: #007A77; }
-
-  .ps-cancelled .pcard-status { background: #FBEAEA; }
-  .ps-cancelled .pcard-sdot   { background: #E24B4A; }
-  .ps-cancelled .pcard-stxt   { color: #96302E; }
-  .ps-cancelled { opacity: 0.7; }
-
-  /* Unified item-row pattern for items with a description/spec sub-line (replaces old inline-style rows) */
-  .pcard-item-row2 { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 14px; border-bottom: 0.5px solid #f8f8f8; }
-  .pcard-item-info { flex: 1; min-width: 0; }
-  .pcard-item-title { font-size: 12px; font-weight: 600; color: #1a1a18; }
-  .pcard-item-desc  { font-size: 11px; color: #888780; margin-top: 1px; }
-  .pcard-item-meta  { text-align: right; flex-shrink: 0; margin-left: 8px; }
-  .pcard-item-qty2   { font-size: 11px; color: #888780; }
-  .pcard-item-price2 { font-size: 13px; font-weight: 600; color: #1a1a18; margin-top: 1px; }
-  .pcard-item-orig   { text-decoration: line-through; color: #B4B2A9; font-weight: 500; margin-right: 5px; }
-
-  /* Sub-item rows nested under a parent item (Choose One / Combo / Choose Quantities) */
-  .pcard-item-sub { display: flex; justify-content: space-between; padding: 3px 14px 3px 26px; font-size: 11px; color: #888780; }
-  .pcard-item-sub .pcard-item-sub-name::before { content: "+ "; }
-
-  /* Unified pricing breakdown (Subtotal / Discount / Delivery / Total) — replaces old inline-style + .pcard-total-row split */
-  .pcard-breakdown { padding: 8px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 11px; background: #FAFAF8; }
-  .pcard-breakdown-row { display: flex; justify-content: space-between; color: #888780; }
-  .pcard-breakdown-row.discount { color: #009A97; }
-  .pcard-breakdown-row.total { font-weight: 700; color: #1a1a18; font-size: 12px; padding-top: 4px; border-top: 0.5px solid #e0dfd8; }
-  .pcard-tbc { background: #f0f0f0; border-radius: 3px; padding: 0 4px; }
-
-  /* Delivery address line */
-  .pcard-delivery-to { padding: 8px 14px; font-size: 11px; color: #888780; border-bottom: 0.5px solid #f8f8f8; }
-  .pcard-delivery-to strong { color: #1a1a18; font-weight: 600; }
-
 
   /* SWITCH VIEW DRAWER  */
   .drawer-overlay {
@@ -1300,7 +1264,7 @@ select:focus { border-color: #009A97; }
 .spec-pill:hover { border-color:#80CCCB;color:#1a1a18; }
 .spec-pill.sel { background:#E0F5F5;border-color:#80CCCB;color:#007A77;font-weight:600; }
 .tile-req { font-size:9px;color:#E24B4A;font-weight:500; }
-.tile-footer { padding:8px 10px;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;gap:6px; }
+.tile-footer { padding:8px 10px 8px 3px;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;gap:6px; }
 .tile-orders { font-size:10px;color:#B4B2A9; }
 .tile-stepper { display:flex;align-items:center;gap:6px; }
 .tile-stepper button { width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1;font-family:inherit;display:flex;align-items:center;justify-content:center; }
@@ -1639,7 +1603,7 @@ select:focus { border-color: #009A97; }
         <div id="items-list-view">
 
         <!-- Item 2: Toothpaste (no options) -->
-        <div style="padding:20px 14px;border-bottom:0.5px solid #f0f0f0;">
+        <div style="padding:20px 14px 30px;border-bottom:0.5px solid #f0f0f0;position:relative;">
           <div style="display:flex;gap:16px;align-items:center;">
             <div style="width:88px;height:88px;border-radius:10px;background:#f0f0f0;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4B2A9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
@@ -1650,8 +1614,11 @@ select:focus { border-color: #009A97; }
                 <div style="font-size:14px;font-weight:700;color:#009A97;">$2.00</div>
               </div>
               <div style="font-size:11px;color:#888780;margin-top:1px;">Clean teeth</div>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
-                <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+              <div style="display:inline-flex;align-items:center;gap:4px;margin-top:6px;background:#FAFAF8;border:0.5px solid #E0DFD8;border-radius:6px;padding:2px 8px 2px 6px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                <span style="font-size:10px;font-weight:600;color:#5F5E5A;">30 in stock</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:flex-end;margin-top:8px;">
                 <div style="display:flex;align-items:center;gap:10px;">
                   <button onclick="changeQty2('p2',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
                   <span id="p2" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
@@ -1660,10 +1627,11 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
           </div>
+          <span style="position:absolute;left:16px;bottom:8px;font-size:11px;color:#B4B2A9;">0 order(s) made</span>
         </div>
 
         <!-- Item 3: Chestnut case -->
-        <div style="padding:20px 14px;border-bottom:0.5px solid #f0f0f0;">
+        <div style="padding:20px 14px 30px;border-bottom:0.5px solid #f0f0f0;position:relative;">
           <div style="display:flex;gap:16px;align-items:center;">
             <div style="width:88px;height:88px;border-radius:10px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
@@ -1674,8 +1642,11 @@ select:focus { border-color: #009A97; }
                 <div style="font-size:14px;font-weight:700;color:#009A97;">$10.00</div>
               </div>
               <div style="font-size:11px;color:#888780;margin-top:1px;">6 per case/carton</div>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
-                <span style="font-size:11px;color:#B4B2A9;">1 order(s) made</span>
+              <div style="display:inline-flex;align-items:center;gap:4px;margin-top:6px;background:#FEF2DC;border-radius:6px;padding:2px 8px 2px 6px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                <span style="font-size:10px;font-weight:600;color:#854F0B;">Only 2 left</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:flex-end;margin-top:8px;">
                 <div style="display:flex;align-items:center;gap:10px;">
                   <button onclick="changeQty2('p3',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
                   <span id="p3" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
@@ -1684,10 +1655,11 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
           </div>
+          <span style="position:absolute;left:16px;bottom:8px;font-size:11px;color:#B4B2A9;">1 order(s) made</span>
         </div>
 
         <!-- Item 4: Chestnut individual (split case) -->
-        <div style="padding:20px 14px;">
+        <div style="padding:20px 14px;position:relative;">
           <div style="display:flex;gap:16px;align-items:flex-start;">
             <div style="width:88px;height:88px;border-radius:10px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
@@ -1707,8 +1679,7 @@ select:focus { border-color: #009A97; }
                 </div>
                 <div style="font-size:10px;color:#E24B4A;margin-top:3px;">Need 6 more to fulfill</div>
               </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
-                <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+              <div style="display:flex;align-items:center;justify-content:flex-end;margin-top:8px;">
                 <div style="display:flex;align-items:center;gap:10px;">
                   <button onclick="changeQty2('p4',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
                   <span id="p4" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
@@ -1717,39 +1688,40 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
           </div>
+          <span style="position:absolute;left:16px;bottom:8px;font-size:11px;color:#B4B2A9;">0 order(s) made</span>
         </div>
 
         <!-- Item 5: Tote Bag — Product Discount demo (Buy 3 or more → $2 off each, per unit) -->
-        <div style="padding:20px 14px;border-top:0.5px solid #f0f0f0;">
+        <div style="padding:20px 14px 30px;border-top:0.5px solid #f0f0f0;position:relative;">
           <div style="display:flex;gap:16px;align-items:center;">
-            <div style="width:88px;height:88px;border-radius:10px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+            <div style="width:88px;height:88px;border-radius:10px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;opacity:0.6;">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             </div>
             <div style="flex:1;min-width:0;">
               <div style="display:flex;justify-content:space-between;align-items:baseline;">
-                <div style="font-size:13px;font-weight:600;color:#1a1a18;">Tote Bag</div>
+                <div style="font-size:13px;font-weight:600;color:#888780;">Tote Bag</div>
                 <div style="display:flex;align-items:baseline;gap:6px;flex-shrink:0;">
                   <span id="p6-price-strike" style="font-size:12px;color:#B4B2A9;text-decoration:line-through;font-weight:500;display:none;">$10.00</span>
-                  <span id="p6-price" style="font-size:14px;font-weight:700;color:#009A97;">$10.00</span>
+                  <span id="p6-price" style="font-size:14px;font-weight:700;color:#B4B2A9;">$10.00</span>
                 </div>
               </div>
               <div style="font-size:11px;color:#888780;margin-top:1px;">Canvas, natural</div>
               <div style="font-size:9px;color:#B4B2A9;font-style:italic;margin-top:3px;">⚙ Dev note: <strong>per unit</strong> — discount scales with quantity (3 × $2 = $6 off)</div>
               <div id="p6-disc-tag" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#009A97;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 7px;margin-top:5px;width:fit-content;">🏷 Buy 3 or more → $2 off each</div>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
-                <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
-                <div style="display:flex;align-items:center;gap:10px;">
-                  <button onclick="changeQty2('p6',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
-                  <span id="p6" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
-                  <button onclick="changeQty2('p6',1)" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>
-                </div>
+              <div style="display:inline-flex;align-items:center;gap:4px;margin-top:6px;background:#FCEBEB;border-radius:6px;padding:2px 8px 2px 6px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A32D2D" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                <span style="font-size:10px;font-weight:600;color:#A32D2D;">Sold out</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:flex-end;margin-top:8px;">
+                <span style="font-size:11px;font-weight:600;color:#B4B2A9;">Unavailable</span>
               </div>
             </div>
           </div>
+          <span style="position:absolute;left:16px;bottom:8px;font-size:11px;color:#B4B2A9;">0 order(s) made</span>
         </div>
 
         <!-- Item 6: Sticker Pack — Product Discount demo (Buy 3 or more → $3 off, per product) -->
-        <div style="padding:20px 14px;border-top:0.5px solid #f0f0f0;">
+        <div style="padding:20px 14px 30px;border-top:0.5px solid #f0f0f0;position:relative;">
           <div style="display:flex;gap:16px;align-items:center;">
             <div style="width:88px;height:88px;border-radius:10px;background:#FEF2DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7v10l10 5 10-5V7Z"/><path d="M2 7l10 5 10-5"/><path d="M12 22V12"/></svg>
@@ -1762,8 +1734,7 @@ select:focus { border-color: #009A97; }
               <div style="font-size:11px;color:#888780;margin-top:1px;">Set of 5 vinyl stickers</div>
               <div style="font-size:9px;color:#B4B2A9;font-style:italic;margin-top:3px;">⚙ Dev note: <strong>per product</strong> — discount applies once, no matter the quantity</div>
               <div id="p7-disc-tag" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#009A97;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 7px;margin-top:5px;width:fit-content;">🏷 Buy 3 or more → $3 off</div>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
-                <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+              <div style="display:flex;align-items:center;justify-content:flex-end;margin-top:8px;">
                 <div style="display:flex;align-items:center;gap:10px;">
                   <button onclick="changeQty2('p7',-1)" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
                   <span id="p7" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
@@ -1772,6 +1743,7 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
           </div>
+          <span style="position:absolute;left:16px;bottom:8px;font-size:11px;color:#B4B2A9;">0 order(s) made</span>
         </div>
 
       </div><!-- end items card -->
@@ -2378,7 +2350,7 @@ select:focus { border-color: #009A97; }
           <span style="display:inline-flex;font-size:9px;font-weight:700;color:#007A77;background:#E0F5F5;border:0.5px solid #80CCCB;border-radius:99px;padding:2px 8px;">CHOOSE ONE — price fixed regardless of option</span>
         </div>
         <div id="spec-entries">
-          <div class="item-entry" style="padding:8px 14px 8px;">
+          <div class="item-entry" style="padding:8px 14px 8px;position:relative;">
             <div style="display:flex;gap:16px;align-items:flex-start;">
               <div style="width:88px;height:88px;border-radius:10px;background:#E0F5F5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
@@ -2414,8 +2386,7 @@ select:focus { border-color: #009A97; }
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
                 Add another order with a different color
               </button>
-              <div style="display:flex;align-items:center;justify-content:space-between;">
-                <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+              <div style="display:flex;align-items:center;justify-content:flex-end;">
                 <div style="display:flex;align-items:center;gap:10px;">
                   <button onclick="changeQty2('p1',-1);updateSubitemDemoTotal()" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
                   <span id="p1" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
@@ -2423,12 +2394,13 @@ select:focus { border-color: #009A97; }
                 </div>
               </div>
             </div>
+            <span style="position:absolute;left:16px;bottom:8px;font-size:11px;color:#B4B2A9;">0 order(s) made</span>
           </div>
         </div>
       </div>
 
       <!-- Item 2: Bubble Tea — Build a Combo -->
-      <div style="border-bottom:0.5px solid #f0f0f0;padding:16px 14px 0;">
+      <div style="border-bottom:0.5px solid #f0f0f0;padding:16px 14px 0;position:relative;">
         <span style="display:inline-flex;font-size:9px;font-weight:700;color:#8A5A0A;background:#FEF2DC;border:0.5px solid #F0C878;border-radius:99px;padding:2px 8px;">BUILD A COMBO</span>
         <div style="padding:8px 0 0;">
           <div style="display:flex;gap:16px;align-items:flex-start;">
@@ -2452,8 +2424,7 @@ select:focus { border-color: #009A97; }
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
             Add another order with different toppings
           </button>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0 12px;">
-            <span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>
+          <div style="display:flex;align-items:center;justify-content:flex-end;padding:6px 0 12px;">
             <div style="display:flex;align-items:center;gap:10px;">
               <button onclick="changeQty2('p5',-1);updateSubitemDemoTotal()" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>
               <span id="p5" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>
@@ -2461,6 +2432,7 @@ select:focus { border-color: #009A97; }
             </div>
           </div>
         </div>
+        <span style="position:absolute;left:16px;bottom:12px;font-size:11px;color:#B4B2A9;">0 order(s) made</span>
       </div>
 
       <!-- Item 3: T-Shirt — Choose Quantities -->
@@ -2537,225 +2509,179 @@ select:focus { border-color: #009A97; }
   <!-- MY PURCHASE VIEW -->
   <div id="view-purchase" style="display:none;">
     <div class="feed-header">
-      <span class="feed-header-count">7 ORDERS</span>
+      <span class="feed-header-count">3 ORDERS</span>
       <div class="feed-chips">
-        <div class="chip active" onclick="filterPurchase('all', this)">All</div>
-        <div class="chip" onclick="filterPurchase('unpaid', this)">Unpaid</div>
-        <div class="chip" onclick="filterPurchase('pending', this)">Pending</div>
-        <div class="chip" onclick="filterPurchase('fulfil', this)">To Fulfil</div>
-        <div class="chip" onclick="filterPurchase('closed', this)">Closed</div>
+        <div class="chip active">All</div>
+        <div class="chip">Unpaid</div>
+        <div class="chip">Active</div>
       </div>
     </div>
     <div class="purchase-feed">
 
       <!-- 1. Awaiting payment -->
-      <div class="pcard ps-unpaid" data-status="unpaid" data-date="2025-12-01">
+      <div class="pcard ps-unpaid">
         <div class="pcard-head">
-          <div class="pcard-host"><div class="pcard-thumb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div><div class="pcard-hname">Moi nua</div><div class="pcard-hgrp">Hosted by M6 group</div></div></div>
-          <div class="pcard-meta" style="font-weight:600;color:#1a1a18;">Collection: 1 Dec<br/>1PM – 8PM</div>
+          <div class="pcard-host"><div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div><div><div class="pcard-hname">M6 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
+          <div class="pcard-meta">01-12-2025<br/>1PM – 8PM</div>
         </div>
         <div class="pcard-summary" onclick="togglePcard('pcard-p1')">
-          <div></div>
+          <div class="pcard-title">Moi nua</div>
           <div class="pcard-summary-right">
-            <span class="pcard-total">$44.00</span>
-            <span class="pcard-icount">3 items</span>
+            <span class="pcard-total">$24.00</span>
+            <span class="pcard-icount">2 items</span>
             <svg class="pcard-chevron" id="pcard-chev-p1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
         <div class="pcard-items" id="pcard-p1">
-          <div class="pcard-item-row2">
-            <div class="pcard-item-info"><div class="pcard-item-title">Spec</div><div class="pcard-item-desc">Frame: Blue · Lens: Clear</div></div>
-            <div class="pcard-item-meta"><div class="pcard-item-qty2">QTY: 2</div><div class="pcard-item-price2">$40.00</div></div>
+          <div style="padding:10px 14px;border-bottom:0.5px solid #f0f0f0;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div><div style="font-size:12px;font-weight:600;color:#1a1a18;">Spec</div><div style="font-size:11px;color:#888780;">Frame: Blue · Lens: Clear</div></div>
+              <div style="text-align:right;"><div style="font-size:11px;color:#888780;">QTY: 2</div><div style="font-size:13px;font-weight:600;color:#1a1a18;">$40.00</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div><div style="font-size:12px;font-weight:600;color:#1a1a18;">Toothpaste</div><div style="font-size:11px;color:#888780;">Clean teeth</div></div>
+              <div style="text-align:right;"><div style="font-size:11px;color:#888780;">QTY: 1</div><div style="font-size:13px;font-weight:600;color:#1a1a18;">$2.00</div></div>
+            </div>
           </div>
-          <div class="pcard-item-row2">
-            <div class="pcard-item-info"><div class="pcard-item-title">Toothpaste</div><div class="pcard-item-desc">Clean teeth</div></div>
-            <div class="pcard-item-meta"><div class="pcard-item-qty2">QTY: 1</div><div class="pcard-item-price2">$2.00</div></div>
+          <div style="padding:8px 14px;display:flex;flex-direction:column;gap:4px;font-size:11px;background:#FAFAF8;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Subtotal</span><span style="font-weight:500;">$42.00</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Delivery <span style="background:#f0f0f0;border-radius:3px;padding:0 4px;">TBC</span></span><span style="color:#888780;">$0.00</span></div>
+            <div style="display:flex;justify-content:space-between;font-weight:700;padding-top:4px;border-top:0.5px solid #e0dfd8;"><span>Total</span><span>$42.00</span></div>
           </div>
-          <div class="pcard-item-row2">
-            <div class="pcard-item-info"><div class="pcard-item-title">Chestnut</div><div class="pcard-item-desc">Individual (split case)</div></div>
-            <div class="pcard-item-meta"><div class="pcard-item-qty2">QTY: 1</div><div class="pcard-item-price2">$2.00</div></div>
-          </div>
-          <div class="pcard-breakdown">
-            <div class="pcard-breakdown-row"><span>Subtotal</span><span>$44.00</span></div>
-            <div class="pcard-breakdown-row"><span>Delivery <span class="pcard-tbc">TBC</span></span><span>$0.00</span></div>
-            <div class="pcard-breakdown-row total"><span>Total</span><span>$44.00</span></div>
-          </div>
-          <div class="pcard-view-details" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
         </div>
         <div class="pcard-action">
+          <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
           <button class="pcard-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Make payment</button>
         </div>
       </div>
 
-      <!-- 2. Pending confirmation — sub-items + product discount + event discount -->
-      <div class="pcard ps-pending" data-status="pending" data-date="2026-02-20">
+      <!-- 2. Pending confirmation -->
+      <div class="pcard ps-pending">
         <div class="pcard-head">
-          <div class="pcard-host"><div class="pcard-thumb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div><div class="pcard-hname">Bubble Tea + Merch</div><div class="pcard-hgrp">Hosted by M6 group</div></div></div>
-          <div class="pcard-meta" style="font-weight:600;color:#1a1a18;">Collection: 20 Feb<br/>9AM – 4PM</div>
+          <div class="pcard-host"><div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div><div><div class="pcard-hname">M6 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
+          <div class="pcard-meta">20-02-2026<br/>9AM – 4PM</div>
         </div>
         <div class="pcard-summary" onclick="togglePcard('pcard-p2')">
-          <div></div>
+          <div class="pcard-title">Bubble Tea</div>
           <div class="pcard-summary-right">
-            <span class="pcard-total">$8.50</span>
-            <span class="pcard-icount">2 items</span>
+            <span class="pcard-total">$12.00</span>
+            <span class="pcard-icount">1 item</span>
             <svg class="pcard-chevron" id="pcard-chev-p2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
         <div class="pcard-items" id="pcard-p2">
-          <div class="pcard-item-row2">
-            <div class="pcard-item-info"><div class="pcard-item-title">Care Package</div><div class="pcard-item-desc">Build a Combo</div></div>
-            <div class="pcard-item-meta"><div class="pcard-item-qty2">QTY: 1</div><div class="pcard-item-price2">$5.00</div></div>
+          <div style="padding:10px 14px;border-bottom:0.5px solid #f0f0f0;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div><div style="font-size:12px;font-weight:600;color:#1a1a18;">Chestnut</div><div style="font-size:11px;color:#888780;">Individual (split case · 1/6)</div></div>
+              <div style="text-align:right;"><div style="font-size:11px;color:#888780;">QTY: 1</div><div style="font-size:13px;font-weight:600;color:#1a1a18;">$3.00</div></div>
+            </div>
           </div>
-          <div class="pcard-item-sub"><span class="pcard-item-sub-name">Chips</span><span>$1.00</span></div>
-          <div class="pcard-item-sub" style="border-bottom:0.5px solid #f8f8f8;padding-bottom:8px;"><span class="pcard-item-sub-name">Drink</span><span>$1.50</span></div>
-          <div class="pcard-item-row2">
-            <div class="pcard-item-info"><div class="pcard-item-title">Sticker Pack</div><div class="pcard-item-desc">Buy 3+ · product discount applied</div></div>
-            <div class="pcard-item-meta"><div class="pcard-item-qty2">QTY: 3</div><div class="pcard-item-price2"><span class="pcard-item-orig">$5.00</span>$2.00</div></div>
+          <div style="padding:8px 14px;display:flex;flex-direction:column;gap:4px;font-size:11px;background:#FAFAF8;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:#888780;">Subtotal</span><span style="font-weight:500;">$3.00</span></div>
+            <div style="display:flex;justify-content:space-between;font-weight:700;padding-top:4px;border-top:0.5px solid #e0dfd8;"><span>Total</span><span>$3.00</span></div>
           </div>
-          <div class="pcard-breakdown">
-            <div class="pcard-breakdown-row"><span>Subtotal</span><span>$9.50</span></div>
-            <div class="pcard-breakdown-row discount"><span>Event discount</span><span>−$1.00</span></div>
-            <div class="pcard-breakdown-row"><span>Delivery <span class="pcard-tbc">TBC</span></span><span>$0.00</span></div>
-            <div class="pcard-breakdown-row total"><span>Total</span><span>$8.50</span></div>
-          </div>
-          <div class="pcard-view-details" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
+          <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$12.00</span></div>
         </div>
         <div class="pcard-action">
+          <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
           <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Pending confirmation</span></div>
         </div>
       </div>
 
-      <!-- 3. To be fulfilled — delivery order -->
-      <div class="pcard ps-fulfill" data-status="fulfil" data-date="2026-03-03">
+      <!-- 3. To be fulfilled -->
+      <div class="pcard ps-fulfill">
         <div class="pcard-head">
-          <div class="pcard-host"><div class="pcard-thumb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div><div class="pcard-hname">M5 Delivery Round</div><div class="pcard-hgrp">Hosted by M5 group</div></div></div>
-          <div class="pcard-meta" style="font-weight:600;color:#1a1a18;">Delivery: 3 Mar<br/>2PM – 5PM</div>
+          <div class="pcard-host"><div class="avatar lg" style="background:#009A97;font-size:12px;">M5</div><div><div class="pcard-hname">M5 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
+          <div class="pcard-meta">27-02-2026<br/>1PM – 8PM</div>
         </div>
         <div class="pcard-summary" onclick="togglePcard('pcard-p3')">
-          <div></div>
+          <div class="pcard-title">M5 first event 2026</div>
           <div class="pcard-summary-right">
-            <span class="pcard-total">$45.00</span>
-            <span class="pcard-icount">1 item</span>
+            <span class="pcard-total">$66.00</span>
+            <span class="pcard-icount">4 items</span>
             <svg class="pcard-chevron" id="pcard-chev-p3" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
         <div class="pcard-items" id="pcard-p3">
-          <div class="pcard-item-row"><span class="pcard-item-name">Care Package</span><span class="pcard-item-qty">×2</span><span class="pcard-item-price">$40.00</span></div>
-          <div class="pcard-delivery-to">Deliver to: <strong>12 Example St, Melbourne</strong></div>
-          <div class="pcard-breakdown">
-            <div class="pcard-breakdown-row"><span>Subtotal</span><span>$40.00</span></div>
-            <div class="pcard-breakdown-row"><span>Delivery (Northside)</span><span>$5.00</span></div>
-            <div class="pcard-breakdown-row total"><span>Total</span><span>$45.00</span></div>
-          </div>
-          <div class="pcard-view-details" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
+          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×3</span><span class="pcard-item-price">$36.00</span></div>
+          <div class="pcard-item-row"><span class="pcard-item-name">Bundle pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$30.00</span></div>
+          <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$66.00</span></div>
         </div>
         <div class="pcard-action">
-          <div class="pcard-confirm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Order Confirmed</div>
+          <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">To be fulfilled on 27 Feb · 1PM – 8PM</span></div>
         </div>
       </div>
 
-      <!-- 4. Payment rejected -->
-      <div class="pcard ps-rejected" data-status="unpaid" data-date="2026-02-20">
+      <!-- 4. Collection day -->
+      <div class="pcard ps-ready">
         <div class="pcard-head">
-          <div class="pcard-host"><div class="pcard-thumb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div><div class="pcard-hname">Bubble Tea Feb</div><div class="pcard-hgrp">Hosted by M6 group</div></div></div>
-          <div class="pcard-meta" style="font-weight:600;color:#1a1a18;">Collection: 20 Feb<br/>9AM – 4PM</div>
+          <div class="pcard-host"><div class="avatar lg" style="background:#009A97;font-size:12px;">M5</div><div><div class="pcard-hname">M5 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
+          <div class="pcard-meta">27-02-2026<br/>1PM – 8PM</div>
         </div>
         <div class="pcard-summary" onclick="togglePcard('pcard-p4')">
-          <div></div>
+          <div class="pcard-title">M5 March round</div>
           <div class="pcard-summary-right">
-            <span class="pcard-total">$12.00</span>
+            <span class="pcard-total">$18.00</span>
             <span class="pcard-icount">1 item</span>
             <svg class="pcard-chevron" id="pcard-chev-p4" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
         <div class="pcard-items" id="pcard-p4">
-          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$12.00</span></div>
-          <div class="pcard-breakdown">
-            <div class="pcard-breakdown-row total"><span>Total</span><span>$12.00</span></div>
-          </div>
-          <div class="pcard-view-details" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
+          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$18.00</span></div>
+          <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$18.00</span></div>
         </div>
         <div class="pcard-action">
-          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Payment rejected — please resubmit</span></div>
-          <button class="pcard-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Make payment</button>
+          <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Collection today · 27 Feb · 1PM – 8PM</span></div>
+          <button class="pcard-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Acknowledge collection</button>
         </div>
       </div>
 
-      <!-- 5. Cancelled / refunded -->
-      <div class="pcard ps-cancelled" data-status="closed" data-date="2025-12-10">
+      <!-- 5. Collected awaiting host -->
+      <div class="pcard ps-collected">
         <div class="pcard-head">
-          <div class="pcard-host"><div class="pcard-thumb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div><div class="pcard-hname" style="color:#888780;">December Snacks Round</div><div class="pcard-hgrp">Hosted by M6 group</div></div></div>
-          <div class="pcard-meta" style="font-weight:600;color:#1a1a18;">Collection: 10 Dec<br/>1PM – 8PM</div>
+          <div class="pcard-host"><div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div><div><div class="pcard-hname">M6 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
+          <div class="pcard-meta">20-02-2026<br/>9AM – 4PM</div>
         </div>
         <div class="pcard-summary" onclick="togglePcard('pcard-p5')">
-          <div></div>
+          <div class="pcard-title">Bubble Tea Feb</div>
           <div class="pcard-summary-right">
-            <span class="pcard-total" style="color:#888780;">$10.00</span>
+            <span class="pcard-total">$8.00</span>
             <span class="pcard-icount">1 item</span>
             <svg class="pcard-chevron" id="pcard-chev-p5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
         <div class="pcard-items" id="pcard-p5">
-          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$10.00</span></div>
-          <div class="pcard-breakdown">
-            <div class="pcard-breakdown-row total"><span>Total</span><span>$10.00</span></div>
-          </div>
-          <div class="pcard-view-details" style="color:#B4B2A9;cursor:default;" aria-disabled="true">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
+          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$8.00</span></div>
+          <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$8.00</span></div>
         </div>
         <div class="pcard-action">
-          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Order cancelled</span></div>
+          <button class="view-order-btn" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
+          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Collected — awaiting host confirmation</span></div>
         </div>
       </div>
 
-      <!-- 6. Collection day -->
-      <div class="pcard ps-ready" data-status="fulfil" data-date="2026-02-27">
+      <!-- 6. Event closed -->
+      <div class="pcard ps-closed">
         <div class="pcard-head">
-          <div class="pcard-host"><div class="pcard-thumb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div><div class="pcard-hname">M5 March round</div><div class="pcard-hgrp">Hosted by M5 group</div></div></div>
-          <div class="pcard-meta" style="font-weight:600;color:#1a1a18;">Collection: 27 Feb<br/>1PM – 8PM</div>
+          <div class="pcard-host"><div class="avatar lg" style="background:#B4B2A9;font-size:12px;">M6</div><div><div class="pcard-hname">M6 group</div><div class="pcard-hgrp">Minh Cong</div></div></div>
+          <div class="pcard-meta">01-12-2025<br/>1PM – 8PM</div>
         </div>
         <div class="pcard-summary" onclick="togglePcard('pcard-p6')">
-          <div></div>
+          <div class="pcard-title" style="color:#888780;">Moi nua (Dec round)</div>
           <div class="pcard-summary-right">
-            <span class="pcard-total">$18.00</span>
+            <span class="pcard-total" style="color:#888780;">$12.00</span>
             <span class="pcard-icount">1 item</span>
             <svg class="pcard-chevron" id="pcard-chev-p6" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
         <div class="pcard-items" id="pcard-p6">
-          <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$18.00</span></div>
-          <div class="pcard-breakdown">
-            <div class="pcard-breakdown-row total"><span>Total</span><span>$18.00</span></div>
-          </div>
-          <div class="pcard-view-details" onclick="alert('Order detail view coming')">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
-        </div>
-        <div class="pcard-action">
-          <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Collection today · 27 Feb · 1PM – 8PM</span></div>
-          <button class="pcard-cta" onclick="acknowledgeCollection(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Acknowledge collection</button>
-        </div>
-      </div>
-
-      <!-- 7. Closed -->
-      <div class="pcard ps-closed" data-status="closed" data-date="2025-12-01">
-        <div class="pcard-head">
-          <div class="pcard-host"><div class="pcard-thumb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div><div class="pcard-hname" style="color:#888780;">Moi nua (Dec round)</div><div class="pcard-hgrp">Hosted by M6 group</div></div></div>
-          <div class="pcard-meta" style="font-weight:600;color:#1a1a18;">Collection: 1 Dec<br/>1PM – 8PM</div>
-        </div>
-        <div class="pcard-summary" onclick="togglePcard('pcard-p7')">
-          <div></div>
-          <div class="pcard-summary-right">
-            <span class="pcard-total" style="color:#888780;">$12.00</span>
-            <span class="pcard-icount">1 item</span>
-            <svg class="pcard-chevron" id="pcard-chev-p7" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-        </div>
-        <div class="pcard-items" id="pcard-p7">
           <div class="pcard-item-row"><span class="pcard-item-name">Standard pack</span><span class="pcard-item-qty">×1</span><span class="pcard-item-price">$12.00</span></div>
-          <div class="pcard-breakdown">
-            <div class="pcard-breakdown-row total"><span>Total</span><span>$12.00</span></div>
-          </div>
-          <div class="pcard-view-details" style="color:#B4B2A9;cursor:default;" aria-disabled="true">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
+          <div class="pcard-total-row"><span class="pcard-total-lbl">Total</span><span class="pcard-total-amt">$12.00</span></div>
         </div>
         <div class="pcard-action">
+          <button class="view-order-btn" style="color:#B4B2A9;cursor:default;" onclick="">View order details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
           <div class="pcard-status"><div class="pcard-sdot"></div><span class="pcard-stxt">Event closed</span></div>
         </div>
       </div>
@@ -4282,7 +4208,7 @@ function addSpecEntry() {
 
   const entry = document.createElement('div');
   entry.className = 'item-entry';
-  entry.style.cssText = 'padding:20px 14px;border-top:0.5px solid #f0f0f0;';
+  entry.style.cssText = 'padding:20px 14px;border-top:0.5px solid #f0f0f0;position:relative;';
 
   // Image
   const imgDiv = document.createElement('div');
@@ -4348,9 +4274,9 @@ function addSpecEntry() {
 
   // Qty row
   const qtyRow = document.createElement('div');
-  qtyRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;';
+  qtyRow.style.cssText = 'display:flex;align-items:center;justify-content:flex-end;margin-top:8px;';
   const ordersLbl = document.createElement('span');
-  ordersLbl.style.cssText = 'font-size:11px;color:#B4B2A9;';
+  ordersLbl.style.cssText = 'position:absolute;left:16px;bottom:8px;font-size:11px;color:#B4B2A9;';
   ordersLbl.textContent = '0 order(s) made';
   const qtyWrap = document.createElement('div');
   qtyWrap.style.cssText = 'display:flex;align-items:center;gap:10px;';
@@ -4369,7 +4295,6 @@ function addSpecEntry() {
   qtyWrap.appendChild(minusBtn);
   qtyWrap.appendChild(qtySpan);
   qtyWrap.appendChild(plusBtn);
-  qtyRow.appendChild(ordersLbl);
   qtyRow.appendChild(qtyWrap);
 
   content.appendChild(titleRow);
@@ -4383,6 +4308,7 @@ function addSpecEntry() {
   flex.appendChild(imgDiv);
   flex.appendChild(content);
   entry.appendChild(flex);
+  entry.appendChild(ordersLbl);
   container.appendChild(entry);
 }
 
@@ -4713,32 +4639,6 @@ document.addEventListener('click', function(e) {
   }
 });
 
-function filterPurchase(status, chipEl) {
-  document.querySelectorAll('.feed-chips .chip').forEach(c => c.classList.remove('active'));
-  chipEl.classList.add('active');
-  document.querySelectorAll('.purchase-feed .pcard').forEach(card => {
-    const match = status === 'all' || card.getAttribute('data-status') === status;
-    card.style.display = match ? '' : 'none';
-  });
-}
-
-function sortPurchaseFeedByDate() {
-  const feed = document.querySelector('.purchase-feed');
-  if (!feed) return;
-  const cards = Array.from(feed.querySelectorAll('.pcard'));
-  cards.sort((a, b) => a.getAttribute('data-date').localeCompare(b.getAttribute('data-date')));
-  cards.forEach(card => feed.appendChild(card));
-}
-sortPurchaseFeedByDate();
-
-function acknowledgeCollection(btn) {
-  const card = btn.closest('.pcard');
-  if (!card) return;
-  const statusText = card.querySelector('.pcard-stxt');
-  if (statusText) statusText.textContent = 'Collected';
-  btn.remove();
-}
-
 function togglePcard(id) {
   const items = document.getElementById(id);
   const chevron = document.getElementById('pcard-chev-' + id.replace('pcard-',''));
@@ -5026,14 +4926,14 @@ function addBtEntry() {
     +   '<div style="font-size:9px;font-weight:600;color:#888780;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">TOPPINGS <span style="color:#B4B2A9;font-weight:400;">· Pick any</span></div>'
     +   rowsHtml
     + '</div>'
-    + '<div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;">'
-    +   '<span style="font-size:11px;color:#B4B2A9;">0 order(s) made</span>'
+    + '<div style="display:flex;align-items:center;justify-content:flex-end;padding-bottom:12px;">'
     +   '<div style="display:flex;align-items:center;gap:10px;">'
     +     '<button onclick="btExChgItemQty(this,-1,'+eid+')" style="width:30px;height:30px;border-radius:50%;border:0.5px solid #D3D1C7;background:white;cursor:pointer;font-size:18px;line-height:1;color:#1a1a18;font-family:inherit;display:flex;align-items:center;justify-content:center;">−</button>'
     +     '<span id="bt-ex-qty-'+eid+'" style="font-size:15px;font-weight:700;min-width:20px;text-align:center;color:#1a1a18;">0</span>'
     +     '<button onclick="btExChgItemQty(this,1,'+eid+')" style="width:30px;height:30px;border-radius:50%;border:none;background:#009A97;cursor:pointer;font-size:18px;line-height:1;color:white;font-family:inherit;display:flex;align-items:center;justify-content:center;">+</button>'
     +   '</div>'
-    + '</div>';
+    + '</div>'
+    + '<span style="position:absolute;left:16px;bottom:12px;font-size:11px;color:#B4B2A9;">0 order(s) made</span>';
 
   wrap.appendChild(entry);
 }
