@@ -395,7 +395,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-share { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #009A97; cursor: pointer; background: #E0F5F5; padding: 5px 10px; border-radius: 99px; border: none; font-family: inherit; transition: background 0.15s; }
   .gd-share:hover { background: #c8eaea; }
   /* Avatar card — no hero, just sits on page bg */
-  .gd-header-card { background: linear-gradient(180deg, color-mix(in srgb, var(--group-accent, #009A97) 18%, white) 0%, #F4F6F8 100%); padding: 20px 14px 16px; margin-bottom: 8px; border-radius: 16px 16px 0 0; }
+  .gd-header-card { background: linear-gradient(180deg, color-mix(in srgb, var(--group-accent, #009A97) 18%, white) 0%, #F4F6F8 100%); padding: 20px 14px 16px; margin-bottom: 22px; border-radius: 16px 16px 0 0; }
   .gd-avatar-wrap { display: flex; align-items: flex-start; gap: 14px; }
   .gd-avatar { width: 60px; height: 60px; border-radius: 50%; background: var(--group-accent, #009A97); display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 700; color: white; flex-shrink: 0; box-shadow: 0 3px 10px rgba(0,154,151,0.3); overflow: hidden; }
   .gd-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -2787,6 +2787,17 @@ select:focus { border-color: #009A97; }
               <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
               Host an Event
             </button>
+          </div>
+        </div>
+
+        <!-- Filter tabs + Toggle + Sort -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div class="gd-filter-tabs" style="margin-bottom:0;">
+            <button class="gd-tab" onclick="filterGecEvents('all',this)">All</button>
+            <button class="gd-tab active" onclick="filterGecEvents('active',this)">Active</button>
+            <button class="gd-tab" onclick="filterGecEvents('closed',this)">Closed</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
             <div class="mef-view-toggle">
               <button id="gd-btn-list" onclick="setGdFeedView('list')" title="List view">
                 <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect y="1" width="14" height="2" rx="1"/><rect y="6" width="14" height="2" rx="1"/><rect y="11" width="14" height="2" rx="1"/></svg>
@@ -2795,26 +2806,17 @@ select:focus { border-color: #009A97; }
                 <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
               </button>
             </div>
-          </div>
-        </div>
-
-        <!-- Filter tabs + Sort -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-          <div class="gd-filter-tabs" style="margin-bottom:0;">
-            <button class="gd-tab" onclick="filterGecEvents('all',this)">All</button>
-            <button class="gd-tab active" onclick="filterGecEvents('active',this)">Active</button>
-            <button class="gd-tab" onclick="filterGecEvents('closed',this)">Closed</button>
-          </div>
-          <div class="mef-sort-wrap">
-            <button class="mef-sort-btn" id="gd-sort-btn" onclick="toggleSortMenu('gd-sort-menu')">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
-              <span id="gd-sort-label">Sort</span>
-            </button>
-            <div class="mef-sort-menu" id="gd-sort-menu">
-              <div class="mef-sort-item" data-sort="closing" onclick="setGdSortBy('closing')">Closing Soon</div>
-              <div class="mef-sort-item" data-sort="collection" onclick="setGdSortBy('collection')">Collection Date</div>
-              <div class="mef-sort-item" data-sort="newest" onclick="setGdSortBy('newest')">Newest Event</div>
-              <div class="mef-sort-item" data-sort="active" onclick="setGdSortBy('active')">Most Active</div>
+            <div class="mef-sort-wrap">
+              <button class="mef-sort-btn" id="gd-sort-btn" onclick="toggleSortMenu('gd-sort-menu')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+                <span id="gd-sort-label">Sort</span>
+              </button>
+              <div class="mef-sort-menu" id="gd-sort-menu">
+                <div class="mef-sort-item" data-sort="closing" onclick="setGdSortBy('closing')">Closing Soon</div>
+                <div class="mef-sort-item" data-sort="collection" onclick="setGdSortBy('collection')">Collection Date</div>
+                <div class="mef-sort-item" data-sort="newest" onclick="setGdSortBy('newest')">Newest Event</div>
+                <div class="mef-sort-item" data-sort="active" onclick="setGdSortBy('active')">Most Active</div>
+              </div>
             </div>
           </div>
         </div>
