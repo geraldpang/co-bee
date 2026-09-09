@@ -395,25 +395,22 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-share { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #009A97; cursor: pointer; background: #E0F5F5; padding: 5px 10px; border-radius: 99px; border: none; font-family: inherit; transition: background 0.15s; }
   .gd-share:hover { background: #c8eaea; }
   /* Avatar card — no hero, just sits on page bg */
-  .gd-header-card { background: white; margin: 12px 14px; border-radius: 14px; border: 0.5px solid #E0DFD8; box-shadow: 0 1px 8px rgba(0,0,0,0.06); overflow: hidden; }
-  .gd-header-banner { background: linear-gradient(180deg, color-mix(in srgb, var(--group-accent, #009A97) 14%, white) 0%, white 100%); padding: 18px 16px 14px; }
+  .gd-header-card { background: linear-gradient(180deg, color-mix(in srgb, var(--group-accent, #009A97) 18%, white) 0%, #F4F6F8 100%); padding: 20px 14px 16px; margin-bottom: 8px; }
   .gd-avatar-wrap { display: flex; align-items: flex-start; gap: 14px; }
-  .gd-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--group-accent, #009A97); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,154,151,0.25); overflow: hidden; }
+  .gd-avatar { width: 60px; height: 60px; border-radius: 50%; background: var(--group-accent, #009A97); display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 700; color: white; flex-shrink: 0; box-shadow: 0 3px 10px rgba(0,154,151,0.3); overflow: hidden; }
   .gd-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .gd-info { flex: 1; min-width: 0; }
-  .gd-name { font-size: 17px; font-weight: 700; color: #1a1a18; }
+  .gd-info { flex: 1; min-width: 0; padding-top: 2px; }
+  .gd-name { font-size: 18px; font-weight: 700; color: #1a1a18; }
   .gd-desc { font-size: 12px; color: #5F5E5A; line-height: 1.5; margin-top: 3px; }
   .gd-admin-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #009A97; background: white; border: 0.5px solid #80CCCB; border-radius: 6px; padding: 4px 9px; cursor: pointer; font-family: inherit; margin-top: 8px; transition: background 0.12s; }
   .gd-admin-link:hover { background: #E0F5F5; }
   /* Stats */
-  .gd-stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 0.5px solid #E0DFD8; }
-  .gd-stat { padding: 8px 8px; text-align: center; transition: background 0.12s; }
+  .gd-stats-row { display: flex; justify-content: space-around; margin-top: 18px; }
+  .gd-stat { text-align: center; transition: opacity 0.12s; }
   .gd-stat.clickable { cursor: pointer; }
-  .gd-stat.clickable:hover { background: #f5fafa; }
-  .gd-stat.clickable:hover .gd-stat-val { color: #009A97; }
-  .gd-stat + .gd-stat { border-left: 0.5px solid #E0DFD8; }
-  .gd-stat-val { font-size: 15px; font-weight: 700; color: #1a1a18; letter-spacing: -0.3px; }
-  .gd-stat-lbl { font-size: 8px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #888780; margin-top: 1px; }
+  .gd-stat.clickable:hover { opacity: 0.7; }
+  .gd-stat-val { font-size: 17px; font-weight: 700; color: #1a1a18; letter-spacing: -0.3px; }
+  .gd-stat-lbl { font-size: 9px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #5F5E5A; margin-top: 1px; }
   /* Events section */
   .gd-events { padding: 0 14px; }
   .gd-events-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
@@ -2749,22 +2746,20 @@ select:focus { border-color: #009A97; }
         </button>
       </div>
 
-      <!-- Header card: avatar + info + stats, unified -->
+      <!-- Header banner: avatar + info + stats, full-bleed -->
       <div class="gd-header-card" style="--group-accent:#009A97;">
-        <div class="gd-header-banner">
-          <div class="gd-avatar-wrap">
-            <div class="gd-avatar" title="Click to test: paste a photo URL" style="cursor:pointer;" onclick="var u=prompt('Paste an image URL to preview it as the group photo:');if(u)setGroupAvatarPhoto(u);">M6</div>
-            <div class="gd-info">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-                <div class="gd-name">M6 Group</div>
-                <!-- Admin edit link — limited settings -->
-                <button class="gd-admin-link" style="margin-top:0;flex-shrink:0;" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-                  Edit Group
-                </button>
-              </div>
-              <div class="gd-desc">Good things must share! Join M6 Group for the best group buys.</div>
+        <div class="gd-avatar-wrap">
+          <div class="gd-avatar" title="Click to test: paste a photo URL" style="cursor:pointer;" onclick="var u=prompt('Paste an image URL to preview it as the group photo:');if(u)setGroupAvatarPhoto(u);">M6</div>
+          <div class="gd-info">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+              <div class="gd-name">M6 Group</div>
+              <!-- Admin edit link — limited settings -->
+              <button class="gd-admin-link" style="margin-top:0;flex-shrink:0;" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+                Edit Group
+              </button>
             </div>
+            <div class="gd-desc">Good things must share! Join M6 Group for the best group buys.</div>
           </div>
         </div>
         <div class="gd-stats-row">
