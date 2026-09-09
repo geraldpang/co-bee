@@ -401,8 +401,8 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-info { flex: 1; min-width: 0; }
   .gd-name { font-size: 17px; font-weight: 700; color: #1a1a18; }
   .gd-desc { font-size: 12px; color: #5F5E5A; line-height: 1.5; margin-top: 3px; }
-  .gd-admin-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #009A97; background: #E0F5F5; border: none; border-radius: 6px; padding: 4px 9px; cursor: pointer; font-family: inherit; margin-top: 8px; transition: background 0.12s; }
-  .gd-admin-link:hover { background: #c8eaea; }
+  .gd-admin-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #009A97; background: white; border: 0.5px solid #80CCCB; border-radius: 6px; padding: 4px 9px; cursor: pointer; font-family: inherit; margin-top: 8px; transition: background 0.12s; }
+  .gd-admin-link:hover { background: #E0F5F5; }
   /* Stats */
   .gd-stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 0.5px solid #E0DFD8; }
   .gd-stat { padding: 12px 8px; text-align: center; transition: background 0.12s; }
@@ -416,7 +416,6 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-events { padding: 0 14px; }
   .gd-events-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .gd-events-label { font-size: 12px; font-weight: 700; color: #1a1a18; letter-spacing: 0.04em; text-transform: uppercase; }
-  .gd-host-btn { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #009A97; background: #E0F5F5; border: none; border-radius: 6px; padding: 4px 9px; cursor: pointer; font-family: inherit; transition: background 0.12s; }
   .gd-host-btn:hover { background: #cdeeee; }
   /* Filter tabs */
   .gd-filter-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
@@ -2757,7 +2756,7 @@ select:focus { border-color: #009A97; }
               <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
                 <div class="gd-name">M6 Group</div>
                 <!-- Admin edit link — limited settings -->
-                <button class="gd-admin-link" style="background:white;border:0.5px solid #80CCCB;margin-top:0;flex-shrink:0;" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">
+                <button class="gd-admin-link" style="margin-top:0;flex-shrink:0;" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
                   Edit Group
                 </button>
@@ -2799,7 +2798,7 @@ select:focus { border-color: #009A97; }
                 <div class="mef-sort-item" data-sort="active" onclick="setGdSortBy('active')">Most Active</div>
               </div>
             </div>
-            <button class="gd-host-btn" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">
+            <button class="gd-admin-link" style="margin-top:0;" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">
               <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
               Host an Event
             </button>
