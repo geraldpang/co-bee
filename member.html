@@ -1410,7 +1410,20 @@ select:focus { border-color: #009A97; }
         <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 10px;">
           <div style="display:flex;align-items:center;gap:10px;min-width:0;">
             <div style="width:40px;height:40px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;">M6</div>
-            <div style="min-width:0;"><div id="ev1-title" style="font-size:13px;font-weight:600;color:#1a1a18;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div><div id="ev1-createdby" style="font-size:11px;color:#888780;"></div></div>
+            <div style="min-width:0;">
+              <div id="ev1-title" style="font-size:13px;font-weight:600;color:#1a1a18;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+              <div id="ev1-createdby" style="font-size:11px;color:#888780;"></div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+                <button id="ev1-edit-btn" class="gd-admin-link" style="display:none;margin-top:0;" onclick="event.stopPropagation();window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : alert('Open event editor')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit Event
+                </button>
+                <button id="ev1-orders-btn" class="gd-admin-link" style="display:none;margin-top:0;" onclick="event.stopPropagation();window.parent && window.parent.navigate ? window.parent.navigate('order-management.html',null) : alert('Open order management')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                  View Orders
+                </button>
+              </div>
+            </div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
             <div id="ev1-days" style="font-size:12px;font-weight:600;color:#E8971A;"></div>
@@ -3780,6 +3793,9 @@ select:focus { border-color: #009A97; }
 </div><!-- end scroll-area -->
 <script>
 
+// The demo's logged-in host — events created by this name show an "Edit Event" option.
+var CURRENT_USER_NAME = 'Minh Cong';
+
 function handleTemplateUpload(input) {
   const file = input.files[0];
   if (!file) return;
@@ -4223,6 +4239,10 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   document.getElementById('ev2-title').textContent = title;
   var ev1CreatedBy = document.getElementById('ev1-createdby');
   if (ev1CreatedBy) ev1CreatedBy.textContent = 'Created by ' + group;
+  var ev1EditBtn = document.getElementById('ev1-edit-btn');
+  if (ev1EditBtn) ev1EditBtn.style.display = (host === CURRENT_USER_NAME) ? 'inline-flex' : 'none';
+  var ev1OrdersBtn = document.getElementById('ev1-orders-btn');
+  if (ev1OrdersBtn) ev1OrdersBtn.style.display = (host === CURRENT_USER_NAME) ? 'inline-flex' : 'none';
   document.getElementById('ev1-desc').textContent = desc;
   document.getElementById('ev2-desc').textContent = desc;
   document.getElementById('ev1-days').textContent = daysLeft + ' days left';
@@ -4506,6 +4526,10 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   document.getElementById('ev2-title').textContent = title;
   var ev1CreatedBy = document.getElementById('ev1-createdby');
   if (ev1CreatedBy) ev1CreatedBy.textContent = 'Created by ' + group;
+  var ev1EditBtn = document.getElementById('ev1-edit-btn');
+  if (ev1EditBtn) ev1EditBtn.style.display = (host === CURRENT_USER_NAME) ? 'inline-flex' : 'none';
+  var ev1OrdersBtn = document.getElementById('ev1-orders-btn');
+  if (ev1OrdersBtn) ev1OrdersBtn.style.display = (host === CURRENT_USER_NAME) ? 'inline-flex' : 'none';
   document.getElementById('ev1-desc').textContent = desc;
   document.getElementById('ev2-desc').textContent = desc;
   document.getElementById('ev1-days').textContent = daysLeft + ' days left';
