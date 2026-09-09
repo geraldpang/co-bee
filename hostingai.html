@@ -232,6 +232,11 @@ select:focus { border-color: #009A97; }
 .field-val { flex: 1; min-width: 0; }
 .img-upload { width: 64px; height: 64px; border: 0.5px dashed #80CCCB; border-radius: 8px; background: #E0F5F5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; flex-shrink: 0; }
 .img-upload-lbl { font-size: 9px; color: #009A97; font-weight: 600; }
+.img-upload-wrap { flex-shrink: 0; }
+.item-img-thumb { position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+.item-img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.item-img-remove { position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; border-radius: 50%; background: rgba(0,0,0,0.55); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
+.item-img-remove:hover { background: #E24B4A; }
 .price-row { display: flex; align-items: center; gap: 8px; }
 .price-prefix { font-size: 13px; font-weight: 600; color: #888780; }
 .options-wrap { border-top: 0.5px solid #f0f0f0; padding-top: 8px; margin-top: 2px; overflow: visible; position: relative; }
@@ -1497,6 +1502,7 @@ async function runAIFill() {
     }
 
     applyAIExtraction(data.extracted);
+    syncAIImagesToBanner();
     document.getElementById('ai-fill-status').style.display = 'flex';
   } catch (err) {
     showAIFillError(
@@ -1529,6 +1535,14 @@ function applyAIExtraction(extracted) {
     const priceInput = itemDiv.querySelector('.field-val input[type="number"]');
     if (nameInput && it.name) nameInput.value = it.name;
     if (priceInput && it.price != null) priceInput.value = it.price;
+
+    // If Claude matched this item to one specific attached photo (not a busy
+    // multi-item photo), drop that photo straight into the item's image box.
+    if (typeof it.imageIndex === 'number' && Number.isInteger(it.imageIndex)
+        && it.imageIndex >= 0 && it.imageIndex < aiFillImages.length) {
+      const wrap = itemDiv.querySelector('.img-upload-wrap');
+      if (wrap) renderItemImageFilled(wrap, aiFillImages[it.imageIndex].dataUrl);
+    }
 
     // "unit" and "options" aren't wired into the dynamic option-panel builder yet
     // (that's a separate variant/split-case UI task) — fold them into the
@@ -1676,11 +1690,13 @@ function addItem() {
     <div class="product-item-body">
       <div class="field-row">
         <span class="field-lbl">Image</span>
-        <label class="img-upload">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span class="img-upload-lbl">Upload</span>
-          <input type="file" accept="image/*" style="display:none;" />
-        </label>
+        <div class="img-upload-wrap">
+          <label class="img-upload">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span class="img-upload-lbl">Upload</span>
+            <input type="file" accept="image/*" style="display:none;" onchange="handleItemImageUpload(this)" />
+          </label>
+        </div>
       </div>
       <div class="field-row">
         <span class="field-lbl">Name <span style="color:#E24B4A;">*</span></span>
@@ -1758,6 +1774,49 @@ function duplicateItem(id) {
   clone.id = 'item-' + itemCount;
   el.parentElement.insertBefore(clone, el.nextSibling);
   renumberItems();
+}
+
+/* ── Item image (per-item Upload box) ──
+   Uses this.closest(...) rather than the item's id, so the image survives
+   duplicateItem's cloneNode(true) and stays correctly scoped after moveItem
+   reorders the DOM — neither of those functions rebind embedded literal ids. */
+function handleItemImageUpload(input) {
+  const file = input.files && input.files[0];
+  const wrap = input.closest('.img-upload-wrap');
+  if (file && wrap) setItemImageFile(wrap, file);
+  input.value = '';
+}
+
+function setItemImageFile(wrap, file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  downscaleImageForAI(file).then(function (blob) {
+    const reader = new FileReader();
+    reader.onload = function (e) { renderItemImageFilled(wrap, e.target.result); };
+    reader.readAsDataURL(blob);
+  }).catch(function () {
+    showAIFillError('Could not process that image — please try a different photo.');
+  });
+}
+
+function renderItemImageFilled(wrap, dataUrl) {
+  wrap.innerHTML = '<div class="item-img-thumb">'
+    + '<img src="' + dataUrl + '" alt="Item image" />'
+    + '<button type="button" class="item-img-remove" onclick="clearItemImage(this)" title="Remove">'
+    + '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+    + '</button></div>';
+}
+
+function clearItemImage(btn) {
+  const wrap = btn.closest('.img-upload-wrap');
+  if (wrap) renderItemImageEmpty(wrap);
+}
+
+function renderItemImageEmpty(wrap) {
+  wrap.innerHTML = '<label class="img-upload">'
+    + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>'
+    + '<span class="img-upload-lbl">Upload</span>'
+    + '<input type="file" accept="image/*" style="display:none;" onchange="handleItemImageUpload(this)" />'
+    + '</label>';
 }
 
 function toggleOptDropdown(id) {
@@ -2904,6 +2963,21 @@ function addBannerFiles(fileList) {
     reader.readAsDataURL(file);
   });
   document.getElementById('banner-file-input').value = '';
+}
+
+// Pushes every photo attached to AI Quick Fill into the Event banner grid, in the
+// order they were added. Guards against re-adding the same photo if "Fill form with
+// AI" is run more than once with the same attachments still in the composer.
+function syncAIImagesToBanner() {
+  var added = false;
+  aiFillImages.forEach(function (img) {
+    if (img.addedToBanner) return;
+    bannerSeq++;
+    bannerImages.push({ id: bannerSeq, src: img.dataUrl });
+    img.addedToBanner = true;
+    added = true;
+  });
+  if (added) renderBanners();
 }
 
 function removeBanner(id) {
