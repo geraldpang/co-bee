@@ -46,6 +46,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   /* FEED  */
   .feed { padding: 12px 0; display: flex; flex-direction: column; gap: 12px; }
   .event-card { cursor:pointer; background: white; border: 0.5px solid #e0dfd8; border-radius: 12px; overflow: hidden; transition: border-color 0.15s; box-shadow:0 1px 6px rgba(0,0,0,0.05); }
+  .event-card.is-closed { opacity: 0.55; filter: grayscale(0.6); }
   .event-card:hover { border-color: #009A97; }
   .event-card * { cursor: pointer; }
   .card-header { padding: 12px 14px 10px; display: flex; align-items: center; justify-content: space-between; }
@@ -2787,6 +2788,14 @@ select:focus { border-color: #009A97; }
         <div class="gd-events-hdr">
           <span class="gd-events-label">Events</span>
           <div style="display:flex;align-items:center;gap:8px;">
+            <div class="mef-view-toggle">
+              <button class="active" id="gd-btn-list" onclick="setGdFeedView('list')" title="List view">
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect y="1" width="14" height="2" rx="1"/><rect y="6" width="14" height="2" rx="1"/><rect y="11" width="14" height="2" rx="1"/></svg>
+              </button>
+              <button id="gd-btn-tile" onclick="setGdFeedView('tile')" title="Tile view">
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
+              </button>
+            </div>
             <div class="mef-sort-wrap">
               <button class="mef-sort-btn" id="gd-sort-btn" onclick="toggleSortMenu('gd-sort-menu')">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
@@ -2813,8 +2822,124 @@ select:focus { border-color: #009A97; }
           <button class="gd-tab" onclick="filterGecEvents('closed',this)">Closed</button>
         </div>
 
+        <!-- Events list -->
+        <div class="feed" id="gd-feed-list" style="padding:0;">
+
+          <div class="event-card" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-09-23" data-close="2026-09-16" data-collect="2026-09-23" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
+            <div class="card-header">
+              <div class="card-host">
+                <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
+                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Groupbuy Event test</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+              </div>
+              <div class="card-badges">
+                <span class="closing-text">Closing in 7 days</span>
+                <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+              </div>
+            </div>
+            <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+            <div class="card-body"><div class="card-desc">This is how it looks like in an actual group buy</div></div>
+            <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">02-09-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">16-09-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">23-09-2026</span></div>
+            <div class="mef-card-actions" onclick="event.stopPropagation()">
+              <button class="mef-share-btn" onclick="shareEvent(this,'Groupbuy Event test')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+              <button class="mef-link-btn" onclick="handleLinkClick('Groupbuy Event test')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Telegram
+              </button>
+            </div>
+          </div>
+
+          <div class="event-card" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-09-19" data-close="2026-09-12" data-collect="2026-09-19" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
+            <div class="card-header">
+              <div class="card-host">
+                <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
+                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">New event</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+              </div>
+              <div class="card-badges">
+                <span class="closing-text">Closing in 3 days</span>
+                <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+              </div>
+            </div>
+            <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+            <div class="card-body"><div class="card-desc">test</div></div>
+            <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">05-09-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">12-09-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">19-09-2026</span></div>
+            <div class="mef-card-actions" onclick="event.stopPropagation()">
+              <button class="mef-share-btn" onclick="shareEvent(this,'New event')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+              <button class="mef-link-btn" onclick="handleLinkClick('New event')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                3 Links
+              </button>
+            </div>
+          </div>
+
+          <div class="event-card" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-09-27" data-close="2026-09-20" data-collect="2026-09-27" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
+            <div class="card-header">
+              <div class="card-host">
+                <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
+                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">This is a test event for Purchase with no login</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+              </div>
+              <div class="card-badges">
+                <span class="closing-text">Closing in 11 days</span>
+                <span class="buy-badge" style="background:#009A97;">6 BUY</span>
+              </div>
+            </div>
+            <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+            <div class="card-body"><div class="card-desc">test</div></div>
+            <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">01-09-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">20-09-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">27-09-2026</span></div>
+            <div class="mef-card-actions" onclick="event.stopPropagation()">
+              <button class="mef-share-btn" onclick="shareEvent(this,'This is a test event for Purchase with no login')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+              <button class="mef-link-btn" onclick="handleLinkClick('This is a test event for Purchase with no login')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                3 Links
+              </button>
+            </div>
+          </div>
+
+          <div class="event-card" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" data-close="2026-09-02" data-collect="2026-09-09" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false')">
+            <div class="card-header">
+              <div class="card-host">
+                <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
+                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Product &amp; Event Discount Demo</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+              </div>
+              <div class="card-badges">
+                <span class="closing-text" style="color:#B4B2A9;">Closed</span>
+                <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+              </div>
+            </div>
+            <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+            <div class="card-body"><div class="card-desc">See how Product Discount and the event-wide discount look to buyers.</div></div>
+            <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">20-08-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">02-09-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">09-09-2026</span></div>
+            <div class="mef-card-actions" onclick="event.stopPropagation()">
+              <button class="mef-share-btn" onclick="shareEvent(this,'Product &amp; Event Discount Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+              <button class="mef-link-btn" onclick="handleLinkClick('Product &amp; Event Discount Demo')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Telegram
+              </button>
+            </div>
+          </div>
+
+          <div class="event-card" data-closing="25" data-buy="0" data-order="0" data-eventdate="2026-06-02" data-close="2026-08-20" data-collect="2026-09-10" onclick="showView('view-subitem-demo')">
+            <div class="card-header">
+              <div class="card-host">
+                <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
+                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Sub-Item Configurations Demo</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+              </div>
+              <div class="card-badges">
+                <span class="closing-text">Collecting in 1 day</span>
+                <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
+              </div>
+            </div>
+            <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+            <div class="card-body"><div class="card-desc">Three products, three sub-item setups to compare.</div></div>
+            <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">10-08-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">20-08-2026 <span style="color:#B4B2A9;">(Closed)</span></span><span class="card-info-lbl">Collection:</span><span class="card-info-val">10-09-2026 <span style="color:#E8971A;">(in 1 day)</span></span></div>
+            <div class="mef-card-actions" onclick="event.stopPropagation()">
+              <button class="mef-share-btn" onclick="shareEvent(this,'Sub-Item Configurations Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+            </div>
+          </div>
+
+        </div>
+
         <!-- Events grid -->
-        <div class="mef-grid" id="gd-grid" style="padding:0;max-width:none;margin:0;">
+        <div class="mef-grid" id="gd-grid" style="padding:0;max-width:none;margin:0;display:none;">
 
 
           <div class="mef-tile" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-09-23" data-close="2026-09-16" data-collect="2026-09-23" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
@@ -4706,27 +4831,28 @@ function hideGroupDetail() {
 function filterGecEvents(filter, btn) {
   document.querySelectorAll('.gd-filter-tabs .gd-tab').forEach(function(t){ t.classList.remove('active'); });
   btn.classList.add('active');
-  document.querySelectorAll('#gd-grid .mef-tile').forEach(function(c) {
+  document.querySelectorAll('#gd-grid .mef-tile, #gd-feed-list .event-card').forEach(function(c) {
     var status = c.classList.contains('is-closed') ? 'closed' : 'active';
     c.style.display = (filter === 'all' || filter === status) ? '' : 'none';
   });
 }
 
 function sortGecEvents() {
-  var grid = document.getElementById('gd-grid');
-  if (!grid) return;
-  var tiles = Array.prototype.slice.call(grid.querySelectorAll('.mef-tile'));
-  tiles.sort(function(a, b) {
-    var aClosed = a.classList.contains('is-closed');
-    var bClosed = b.classList.contains('is-closed');
-    if (aClosed === bClosed) return 0;
-    return aClosed ? 1 : -1;
+  [document.getElementById('gd-grid'), document.getElementById('gd-feed-list')].forEach(function (container) {
+    if (!container) return;
+    var cards = Array.prototype.slice.call(container.children);
+    cards.sort(function(a, b) {
+      var aClosed = a.classList.contains('is-closed');
+      var bClosed = b.classList.contains('is-closed');
+      if (aClosed === bClosed) return 0;
+      return aClosed ? 1 : -1;
+    });
+    cards.forEach(function(c) { container.appendChild(c); });
   });
-  tiles.forEach(function(t) { grid.appendChild(t); });
 }
 
 function applyDefaultGecFilter() {
-  document.querySelectorAll('#gd-grid .mef-tile').forEach(function(c) {
+  document.querySelectorAll('#gd-grid .mef-tile, #gd-feed-list .event-card').forEach(function(c) {
     var status = c.classList.contains('is-closed') ? 'closed' : 'active';
     c.style.display = (status === 'active') ? '' : 'none';
   });
@@ -5467,7 +5593,26 @@ function setSortBy(criteria) {
 }
 
 function setGdSortBy(criteria) {
-  applySortBy(criteria, '#view-group-detail', ['#gd-grid'], 'gd-sort-label', '#view-group-detail', 'gd-sort-menu');
+  applySortBy(criteria, '#view-group-detail', ['#gd-feed-list', '#gd-grid'], 'gd-sort-label', '#view-group-detail', 'gd-sort-menu');
+}
+
+function setGdFeedView(mode) {
+  var listView = document.getElementById('gd-feed-list');
+  var tileView = document.getElementById('gd-grid');
+  var btnList = document.getElementById('gd-btn-list');
+  var btnTile = document.getElementById('gd-btn-tile');
+  if (!listView || !tileView) return;
+  if (mode === 'tile') {
+    listView.style.display = 'none';
+    tileView.style.display = 'grid';
+    btnList.classList.remove('active');
+    btnTile.classList.add('active');
+  } else {
+    listView.style.display = 'flex';
+    tileView.style.display = 'none';
+    btnList.classList.add('active');
+    btnTile.classList.remove('active');
+  }
 }
 
 /* ── Tile-view close/collection countdown & closed state ──
@@ -5480,7 +5625,7 @@ function daysUntil(dateStr) {
 }
 
 function initTileCountdowns() {
-  document.querySelectorAll('.mef-tile[data-close]').forEach(function (tile) {
+  document.querySelectorAll('.mef-tile[data-close], .event-card[data-close]').forEach(function (tile) {
     var closeDays = daysUntil(tile.getAttribute('data-close'));
     var collectDays = daysUntil(tile.getAttribute('data-collect'));
 
