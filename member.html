@@ -2784,8 +2784,8 @@ select:focus { border-color: #009A97; }
 
         <!-- Filter tabs -->
         <div class="gd-filter-tabs">
-          <button class="gd-tab active" onclick="filterGecEvents('all',this)">All</button>
-          <button class="gd-tab" onclick="filterGecEvents('active',this)">Active</button>
+          <button class="gd-tab" onclick="filterGecEvents('all',this)">All</button>
+          <button class="gd-tab active" onclick="filterGecEvents('active',this)">Active</button>
           <button class="gd-tab" onclick="filterGecEvents('closed',this)">Closed</button>
         </div>
 
@@ -4611,6 +4611,27 @@ function filterGecEvents(filter, btn) {
   });
 }
 
+function sortGecEvents() {
+  var grid = document.getElementById('gd-grid');
+  if (!grid) return;
+  var tiles = Array.prototype.slice.call(grid.querySelectorAll('.mef-tile'));
+  tiles.sort(function(a, b) {
+    var aClosed = a.querySelector('.tile-close-val') && a.querySelector('.tile-close-val').classList.contains('closed');
+    var bClosed = b.querySelector('.tile-close-val') && b.querySelector('.tile-close-val').classList.contains('closed');
+    if (aClosed === bClosed) return 0;
+    return aClosed ? 1 : -1;
+  });
+  tiles.forEach(function(t) { grid.appendChild(t); });
+}
+
+function applyDefaultGecFilter() {
+  document.querySelectorAll('#gd-grid .mef-tile').forEach(function(c) {
+    var closeValEl = c.querySelector('.tile-close-val');
+    var status = (closeValEl && closeValEl.classList.contains('closed')) ? 'closed' : 'active';
+    c.style.display = (status === 'active') ? '' : 'none';
+  });
+}
+
 function searchGroups(query) {
   const preview = document.getElementById('group-search-preview');
   if (!preview) return;
@@ -5384,6 +5405,8 @@ function initTileCountdowns() {
   });
 }
 initTileCountdowns();
+sortGecEvents();
+applyDefaultGecFilter();
 </script>
 </body>
 </html>
