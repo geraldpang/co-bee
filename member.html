@@ -2793,10 +2793,10 @@ select:focus { border-color: #009A97; }
               Host an Event
             </button>
             <div class="mef-view-toggle">
-              <button class="active" id="gd-btn-list" onclick="setGdFeedView('list')" title="List view">
+              <button id="gd-btn-list" onclick="setGdFeedView('list')" title="List view">
                 <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect y="1" width="14" height="2" rx="1"/><rect y="6" width="14" height="2" rx="1"/><rect y="11" width="14" height="2" rx="1"/></svg>
               </button>
-              <button id="gd-btn-tile" onclick="setGdFeedView('tile')" title="Tile view">
+              <button class="active" id="gd-btn-tile" onclick="setGdFeedView('tile')" title="Tile view">
                 <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
               </button>
             </div>
@@ -2825,7 +2825,7 @@ select:focus { border-color: #009A97; }
         </div>
 
         <!-- Events list -->
-        <div class="feed" id="gd-feed-list" style="padding:0;">
+        <div class="feed" id="gd-feed-list" style="padding:0;display:none;">
 
           <div class="event-card" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-09-23" data-close="2026-09-16" data-collect="2026-09-23" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
             <div class="card-header">
@@ -2941,7 +2941,7 @@ select:focus { border-color: #009A97; }
         </div>
 
         <!-- Events grid -->
-        <div class="mef-grid" id="gd-grid" style="padding:0;max-width:none;margin:0;display:none;">
+        <div class="mef-grid" id="gd-grid" style="padding:0;max-width:none;margin:0;">
 
 
           <div class="mef-tile" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-09-23" data-close="2026-09-16" data-collect="2026-09-23" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
