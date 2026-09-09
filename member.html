@@ -394,17 +394,17 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-share { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #009A97; cursor: pointer; background: #E0F5F5; padding: 5px 10px; border-radius: 99px; border: none; font-family: inherit; transition: background 0.15s; }
   .gd-share:hover { background: #c8eaea; }
   /* Avatar card — no hero, just sits on page bg */
-  .gd-avatar-card { background: white; margin: 12px 14px; border-radius: 12px; padding: 16px; border: 0.5px solid #E0DFD8; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
-  .gd-avatar-wrap { display: flex; align-items: center; gap: 14px; }
-  .gd-avatar { width: 56px; height: 56px; border-radius: 50%; background: #009A97; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; position: relative; }
-  .gd-avatar-badge { position: absolute; bottom: -4px; right: -4px; width: 20px; height: 20px; background: #E8971A; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; }
+  .gd-header-card { background: white; margin: 12px 14px; border-radius: 14px; border: 0.5px solid #E0DFD8; box-shadow: 0 1px 8px rgba(0,0,0,0.06); overflow: hidden; }
+  .gd-header-banner { background: linear-gradient(180deg, #E0F5F5 0%, #ffffff 100%); padding: 18px 16px 14px; }
+  .gd-avatar-wrap { display: flex; align-items: flex-start; gap: 14px; }
+  .gd-avatar { width: 56px; height: 56px; border-radius: 50%; background: #009A97; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,154,151,0.25); }
   .gd-info { flex: 1; min-width: 0; }
-  .gd-name { font-size: 17px; font-weight: 700; color: #1a1a18; margin-bottom: 3px; }
-  .gd-desc { font-size: 12px; color: #888780; line-height: 1.5; }
+  .gd-name { font-size: 17px; font-weight: 700; color: #1a1a18; }
+  .gd-desc { font-size: 12px; color: #5F5E5A; line-height: 1.5; margin-top: 3px; }
   .gd-admin-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #009A97; background: #E0F5F5; border: none; border-radius: 6px; padding: 4px 9px; cursor: pointer; font-family: inherit; margin-top: 8px; transition: background 0.12s; }
   .gd-admin-link:hover { background: #c8eaea; }
   /* Stats */
-  .gd-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border: 0.5px solid #E0DFD8; border-radius: 10px; overflow: hidden; margin: 0 14px 14px; background: white; }
+  .gd-stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 0.5px solid #E0DFD8; }
   .gd-stat { padding: 12px 8px; text-align: center; transition: background 0.12s; }
   .gd-stat.clickable { cursor: pointer; }
   .gd-stat.clickable:hover { background: #f5fafa; }
@@ -2748,40 +2748,37 @@ select:focus { border-color: #009A97; }
         </button>
       </div>
 
-      <!-- Avatar card -->
-      <div class="gd-avatar-card">
-        <div class="gd-avatar-wrap">
-          <div class="gd-avatar">
-            M6
-            <div class="gd-avatar-badge">
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <!-- Header card: avatar + info + stats, unified -->
+      <div class="gd-header-card">
+        <div class="gd-header-banner">
+          <div class="gd-avatar-wrap">
+            <div class="gd-avatar">M6</div>
+            <div class="gd-info">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                <div class="gd-name">M6 Group</div>
+                <!-- Admin edit link — limited settings -->
+                <button class="gd-admin-link" style="background:white;border:0.5px solid #80CCCB;margin-top:0;flex-shrink:0;" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+                  Edit Group
+                </button>
+              </div>
+              <div class="gd-desc">Good things must share! Join M6 Group for the best group buys.</div>
             </div>
           </div>
-          <div class="gd-info">
-            <div class="gd-name">M6 Group</div>
-            <div class="gd-desc">Good things must share! Join M6 Group for the best group buys.</div>
-            <!-- Admin edit link — limited settings -->
-            <button class="gd-admin-link" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-              Edit Group
-            </button>
+        </div>
+        <div class="gd-stats-row">
+          <div class="gd-stat clickable" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosted-events.html',null) : null" title="View hosted events">
+            <div class="gd-stat-val">19</div>
+            <div class="gd-stat-lbl">Events Hosted ›</div>
           </div>
-        </div>
-      </div>
-
-      <!-- Stats row -->
-      <div class="gd-stats">
-        <div class="gd-stat clickable" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosted-events.html',null) : null" title="View hosted events">
-          <div class="gd-stat-val">19</div>
-          <div class="gd-stat-lbl">Events Hosted ›</div>
-        </div>
-        <div class="gd-stat clickable" onclick="window.parent && window.parent.navigate ? window.parent.navigate('members.html',null) : null" title="View members">
-          <div class="gd-stat-val">2</div>
-          <div class="gd-stat-lbl">Members ›</div>
-        </div>
-        <div class="gd-stat">
-          <div class="gd-stat-val">47</div>
-          <div class="gd-stat-lbl">Total Orders</div>
+          <div class="gd-stat clickable" onclick="window.parent && window.parent.navigate ? window.parent.navigate('members.html',null) : null" title="View members">
+            <div class="gd-stat-val">2</div>
+            <div class="gd-stat-lbl">Members ›</div>
+          </div>
+          <div class="gd-stat">
+            <div class="gd-stat-val">47</div>
+            <div class="gd-stat-lbl">Total Orders</div>
+          </div>
         </div>
       </div>
 
