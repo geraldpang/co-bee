@@ -4619,8 +4619,7 @@ function filterGecEvents(filter, btn) {
   document.querySelectorAll('.gd-filter-tabs .gd-tab').forEach(function(t){ t.classList.remove('active'); });
   btn.classList.add('active');
   document.querySelectorAll('#gd-grid .mef-tile').forEach(function(c) {
-    var closeValEl = c.querySelector('.tile-close-val');
-    var status = (closeValEl && closeValEl.classList.contains('closed')) ? 'closed' : 'active';
+    var status = c.classList.contains('is-closed') ? 'closed' : 'active';
     c.style.display = (filter === 'all' || filter === status) ? '' : 'none';
   });
 }
@@ -4630,26 +4629,17 @@ function sortGecEvents() {
   if (!grid) return;
   var tiles = Array.prototype.slice.call(grid.querySelectorAll('.mef-tile'));
   tiles.sort(function(a, b) {
-    var aClosed = a.querySelector('.tile-close-val') && a.querySelector('.tile-close-val').classList.contains('closed');
-    var bClosed = b.querySelector('.tile-close-val') && b.querySelector('.tile-close-val').classList.contains('closed');
+    var aClosed = a.classList.contains('is-closed');
+    var bClosed = b.classList.contains('is-closed');
     if (aClosed === bClosed) return 0;
     return aClosed ? 1 : -1;
   });
   tiles.forEach(function(t) { grid.appendChild(t); });
 }
 
-function applyGdClosedGreyout() {
-  document.querySelectorAll('#gd-grid .mef-tile').forEach(function (tile) {
-    var closeValEl = tile.querySelector('.tile-close-val');
-    var isClosed = closeValEl && closeValEl.classList.contains('closed');
-    tile.classList.toggle('is-closed', !!isClosed);
-  });
-}
-
 function applyDefaultGecFilter() {
   document.querySelectorAll('#gd-grid .mef-tile').forEach(function(c) {
-    var closeValEl = c.querySelector('.tile-close-val');
-    var status = (closeValEl && closeValEl.classList.contains('closed')) ? 'closed' : 'active';
+    var status = c.classList.contains('is-closed') ? 'closed' : 'active';
     c.style.display = (status === 'active') ? '' : 'none';
   });
 }
@@ -5435,7 +5425,6 @@ function initTileCountdowns() {
   });
 }
 initTileCountdowns();
-applyGdClosedGreyout();
 sortGecEvents();
 applyDefaultGecFilter();
 </script>
