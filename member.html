@@ -397,7 +397,8 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-header-card { background: white; margin: 12px 14px; border-radius: 14px; border: 0.5px solid #E0DFD8; box-shadow: 0 1px 8px rgba(0,0,0,0.06); overflow: hidden; }
   .gd-header-banner { background: linear-gradient(180deg, color-mix(in srgb, var(--group-accent, #009A97) 14%, white) 0%, white 100%); padding: 18px 16px 14px; }
   .gd-avatar-wrap { display: flex; align-items: flex-start; gap: 14px; }
-  .gd-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--group-accent, #009A97); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,154,151,0.25); }
+  .gd-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--group-accent, #009A97); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,154,151,0.25); overflow: hidden; }
+  .gd-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .gd-info { flex: 1; min-width: 0; }
   .gd-name { font-size: 17px; font-weight: 700; color: #1a1a18; }
   .gd-desc { font-size: 12px; color: #5F5E5A; line-height: 1.5; margin-top: 3px; }
@@ -2751,7 +2752,7 @@ select:focus { border-color: #009A97; }
       <div class="gd-header-card" style="--group-accent:#009A97;">
         <div class="gd-header-banner">
           <div class="gd-avatar-wrap">
-            <div class="gd-avatar">M6</div>
+            <div class="gd-avatar" title="Click to test: paste a photo URL" style="cursor:pointer;" onclick="var u=prompt('Paste an image URL to preview it as the group photo:');if(u)setGroupAvatarPhoto(u);">M6</div>
             <div class="gd-info">
               <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
                 <div class="gd-name">M6 Group</div>
@@ -3791,6 +3792,52 @@ select:focus { border-color: #009A97; }
 
 // The demo's logged-in host — events created by this name show an "Edit Event" option.
 var CURRENT_USER_NAME = 'Minh Cong';
+
+// Samples an image's average color via a small offscreen canvas. Note: this requires the
+// image to be same-origin, or served with CORS headers (img.crossOrigin = 'anonymous' +
+// Access-Control-Allow-Origin on the response) — otherwise the canvas is "tainted" and
+// getImageData() throws a security error. For production, consider computing this once at
+// upload time server-side instead, so it doesn't depend on CORS at render time.
+function extractImageAccentColor(imgEl, onColor) {
+  try {
+    var size = 24; // small sample is plenty for an average, and keeps this fast
+    var canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(imgEl, 0, 0, size, size);
+    var data = ctx.getImageData(0, 0, size, size).data;
+    var r = 0, g = 0, b = 0, count = 0;
+    for (var i = 0; i < data.length; i += 4) {
+      r += data[i]; g += data[i + 1]; b += data[i + 2]; count++;
+    }
+    onColor('rgb(' + Math.round(r / count) + ',' + Math.round(g / count) + ',' + Math.round(b / count) + ')');
+  } catch (e) {
+    console.warn('Could not extract accent color from image (likely a CORS restriction):', e);
+  }
+}
+
+// Swaps the group avatar to a photo and re-derives --group-accent (and therefore the header
+// fade) from that photo's average color, so the two always stay in sync.
+function setGroupAvatarPhoto(url) {
+  var avatarEl = document.querySelector('.gd-avatar');
+  var cardEl = document.querySelector('.gd-header-card');
+  if (!avatarEl || !cardEl || !url) return;
+  var img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function () {
+    avatarEl.innerHTML = '';
+    var imgTag = document.createElement('img');
+    imgTag.src = url;
+    imgTag.alt = '';
+    avatarEl.appendChild(imgTag);
+    extractImageAccentColor(img, function (color) {
+      cardEl.style.setProperty('--group-accent', color);
+    });
+  };
+  img.onerror = function () { console.warn('Could not load avatar image:', url); };
+  img.src = url;
+}
 
 function handleTemplateUpload(input) {
   const file = input.files[0];
