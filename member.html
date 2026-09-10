@@ -2779,9 +2779,10 @@ select:focus { border-color: #009A97; }
                   <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
                 <div class="gd-admin-menu" id="gd-admin-menu">
+                  <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">Config Group</div>
                   <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('members.html',null) : null">Manage Members</div>
-                  <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">Edit Group</div>
-                  <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">Host an Event</div>
+                  <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosted-events.html',null) : null">Events Management</div>
+                  <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">Host New Event</div>
                 </div>
               </div>
             </div>
