@@ -410,6 +410,16 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-stat-inline.clickable { cursor: pointer; }
   .gd-stat-inline.clickable:hover { color: #009A97; }
   .gd-stat-inline.clickable:hover strong { color: #009A97; }
+  .gd-new-tag { display: inline-block; font-size: 9px; font-weight: 700; color: #8A5A0A; background: #FEF2DC; border-radius: 99px; padding: 1px 6px; margin-left: 4px; vertical-align: middle; }
+  .gd-admin-row { display: flex; gap: 8px; padding: 12px 14px 4px; background: #F4F6F8; }
+  .gd-admin-row-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 11px; font-weight: 600; color: #009A97; background: white; border: 0.5px solid #80CCCB; border-radius: 8px; padding: 8px 6px; cursor: pointer; font-family: inherit; transition: background 0.12s; }
+  .gd-admin-row-btn:hover { background: #E0F5F5; }
+  /* Dev-only view toggle — lets a developer preview admin vs normal member view */
+  .dev-view-toggle { position: fixed; bottom: 14px; right: 14px; z-index: 9999; display: flex; align-items: center; gap: 6px; background: #1a1a18; color: white; font-size: 10px; font-weight: 600; border-radius: 99px; padding: 6px 6px 6px 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); cursor: pointer; font-family: inherit; user-select: none; }
+  .dev-view-toggle .dev-switch { width: 30px; height: 16px; border-radius: 99px; background: #444; position: relative; transition: background 0.15s; }
+  .dev-view-toggle .dev-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: white; transition: transform 0.15s; }
+  .dev-view-toggle.admin-on .dev-switch { background: #009A97; }
+  .dev-view-toggle.admin-on .dev-switch::after { transform: translateX(14px); }
   /* Events section */
   .gd-events { padding: 0 14px; }
   .gd-events-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
@@ -1282,6 +1292,12 @@ select:focus { border-color: #009A97; }
 </style>
 </head>
 <body>
+
+  <!-- DEV-ONLY: toggle between admin view and normal member view. Not part of the real product UI. -->
+  <div class="dev-view-toggle admin-on" id="dev-view-toggle" onclick="toggleDevAdminView()" title="Dev only: preview as admin vs normal member">
+    <span id="dev-view-toggle-label">Admin view</span>
+    <div class="dev-switch"></div>
+  </div>
 
   <!-- MODAL: New Event -->
 <div class="modal-backdrop" id="new-event-modal">
@@ -2750,34 +2766,37 @@ select:focus { border-color: #009A97; }
         <div class="gd-avatar-wrap">
           <div class="gd-avatar" title="Click to test: paste a photo URL" style="cursor:pointer;" onclick="var u=prompt('Paste an image URL to preview it as the group photo:');if(u)setGroupAvatarPhoto(u);">M6</div>
           <div class="gd-info">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-              <div class="gd-name">M6 Group</div>
-              <!-- Admin edit link — limited settings -->
-              <button class="gd-admin-link" style="margin-top:0;flex-shrink:0;" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-                Edit Group
-              </button>
-            </div>
+            <div class="gd-name">M6 Group</div>
             <div class="gd-desc">Good things must share! Join M6 Group for the best group buys.</div>
+            <div class="gd-stats-inline">
+              <span class="gd-stat-inline clickable" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosted-events.html',null) : null" title="View hosted events"><strong>19</strong> events hosted</span> ·
+              <span class="gd-stat-inline"><strong>47</strong> orders</span> ·
+              <span class="gd-stat-inline clickable" onclick="window.parent && window.parent.navigate ? window.parent.navigate('members.html',null) : null" title="View members"><strong>3</strong> members<span class="gd-new-tag">1 NEW</span></span>
+            </div>
           </div>
         </div>
-        <div class="gd-stats-inline">
-          <span class="gd-stat-inline clickable" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosted-events.html',null) : null" title="View hosted events"><strong>19</strong> events hosted</span> ·
-          <span class="gd-stat-inline clickable" onclick="window.parent && window.parent.navigate ? window.parent.navigate('members.html',null) : null" title="View members"><strong>2</strong> members</span> ·
-          <span class="gd-stat-inline"><strong>47</strong> orders</span>
-        </div>
+      </div>
+
+      <!-- Admin actions row — host-only; hidden entirely in normal user view -->
+      <div class="gd-admin-row dev-admin-only">
+        <button class="gd-admin-row-btn" onclick="window.parent && window.parent.navigate ? window.parent.navigate('members.html',null) : null">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Manage Members
+        </button>
+        <button class="gd-admin-row-btn" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          Edit Group
+        </button>
+        <button class="gd-admin-row-btn" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+          Host an Event
+        </button>
       </div>
 
       <!-- Events section -->
       <div class="gd-events">
         <div class="gd-events-hdr">
           <span class="gd-events-label">Events</span>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <button class="gd-admin-link" style="margin-top:0;" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">
-              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-              Host an Event
-            </button>
-          </div>
         </div>
 
         <!-- Filter tabs + Toggle + Sort -->
@@ -3907,6 +3926,33 @@ select:focus { border-color: #009A97; }
 // The demo's logged-in host — events created by this name show an "Edit Event" option.
 var CURRENT_USER_NAME = 'Minh Cong';
 
+// DEV-ONLY: lets a developer preview the app as an admin/host (sees Manage Members, Edit
+// Group, Host an Event, Edit Event, View Orders) vs. as a normal member (sees none of them).
+// Not a real permission system — just a UI preview toggle for this prototype.
+var DEV_ADMIN_VIEW = true;
+
+function applyDevAdminView() {
+  document.querySelectorAll('.dev-admin-only').forEach(function (el) {
+    el.style.display = DEV_ADMIN_VIEW ? '' : 'none';
+  });
+  var toggle = document.getElementById('dev-view-toggle');
+  var label = document.getElementById('dev-view-toggle-label');
+  if (toggle) toggle.classList.toggle('admin-on', DEV_ADMIN_VIEW);
+  if (label) label.textContent = DEV_ADMIN_VIEW ? 'Admin view' : 'Member view';
+  // Re-run showDetail's ownership check on whichever event is currently open, if any,
+  // so Edit Event / View Orders also respect the toggle without needing to reopen the card.
+  var ev1EditBtn = document.getElementById('ev1-edit-btn');
+  var ev1OrdersBtn = document.getElementById('ev1-orders-btn');
+  var ev1IsOwnHost = ev1EditBtn && ev1EditBtn.getAttribute('data-host') === CURRENT_USER_NAME;
+  if (ev1EditBtn) ev1EditBtn.style.display = (ev1IsOwnHost && DEV_ADMIN_VIEW) ? 'inline-flex' : 'none';
+  if (ev1OrdersBtn) ev1OrdersBtn.style.display = (ev1IsOwnHost && DEV_ADMIN_VIEW) ? 'inline-flex' : 'none';
+}
+
+function toggleDevAdminView() {
+  DEV_ADMIN_VIEW = !DEV_ADMIN_VIEW;
+  applyDevAdminView();
+}
+
 // Samples an image's dominant color via a small offscreen canvas. Note: this requires the
 // image to be same-origin, or served with CORS headers (img.crossOrigin = 'anonymous' +
 // Access-Control-Allow-Origin on the response) — otherwise the canvas is "tainted" and
@@ -4418,9 +4464,11 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   var ev1CreatedBy = document.getElementById('ev1-createdby');
   if (ev1CreatedBy) ev1CreatedBy.textContent = 'Created by ' + group;
   var ev1EditBtn = document.getElementById('ev1-edit-btn');
-  if (ev1EditBtn) ev1EditBtn.style.display = (host === CURRENT_USER_NAME) ? 'inline-flex' : 'none';
   var ev1OrdersBtn = document.getElementById('ev1-orders-btn');
-  if (ev1OrdersBtn) ev1OrdersBtn.style.display = (host === CURRENT_USER_NAME) ? 'inline-flex' : 'none';
+  if (ev1EditBtn) ev1EditBtn.setAttribute('data-host', host);
+  var ev1IsOwnHost = (host === CURRENT_USER_NAME);
+  if (ev1EditBtn) ev1EditBtn.style.display = (ev1IsOwnHost && DEV_ADMIN_VIEW) ? 'inline-flex' : 'none';
+  if (ev1OrdersBtn) ev1OrdersBtn.style.display = (ev1IsOwnHost && DEV_ADMIN_VIEW) ? 'inline-flex' : 'none';
   document.getElementById('ev1-desc').textContent = desc;
   document.getElementById('ev2-desc').textContent = desc;
   document.getElementById('ev1-days').textContent = daysLeft + ' days left';
@@ -4705,9 +4753,11 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   var ev1CreatedBy = document.getElementById('ev1-createdby');
   if (ev1CreatedBy) ev1CreatedBy.textContent = 'Created by ' + group;
   var ev1EditBtn = document.getElementById('ev1-edit-btn');
-  if (ev1EditBtn) ev1EditBtn.style.display = (host === CURRENT_USER_NAME) ? 'inline-flex' : 'none';
   var ev1OrdersBtn = document.getElementById('ev1-orders-btn');
-  if (ev1OrdersBtn) ev1OrdersBtn.style.display = (host === CURRENT_USER_NAME) ? 'inline-flex' : 'none';
+  if (ev1EditBtn) ev1EditBtn.setAttribute('data-host', host);
+  var ev1IsOwnHost = (host === CURRENT_USER_NAME);
+  if (ev1EditBtn) ev1EditBtn.style.display = (ev1IsOwnHost && DEV_ADMIN_VIEW) ? 'inline-flex' : 'none';
+  if (ev1OrdersBtn) ev1OrdersBtn.style.display = (ev1IsOwnHost && DEV_ADMIN_VIEW) ? 'inline-flex' : 'none';
   document.getElementById('ev1-desc').textContent = desc;
   document.getElementById('ev2-desc').textContent = desc;
   document.getElementById('ev1-days').textContent = daysLeft + ' days left';
@@ -5647,6 +5697,7 @@ function initTileCountdowns() {
   });
 }
 initTileCountdowns();
+applyDevAdminView();
 sortGecEvents();
 applyDefaultGecFilter();
 </script>
