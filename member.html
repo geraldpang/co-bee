@@ -411,9 +411,12 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .gd-stat-inline.clickable:hover { color: #009A97; }
   .gd-stat-inline.clickable:hover strong { color: #009A97; }
   .gd-new-tag { display: inline-block; font-size: 9px; font-weight: 700; color: #8A5A0A; background: #FEF2DC; border-radius: 99px; padding: 1px 6px; margin-left: 4px; vertical-align: middle; }
-  .gd-admin-row { display: flex; gap: 8px; padding: 12px 14px 4px; background: #F4F6F8; }
-  .gd-admin-row-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 11px; font-weight: 600; color: #009A97; background: white; border: 0.5px solid #80CCCB; border-radius: 8px; padding: 8px 6px; cursor: pointer; font-family: inherit; transition: background 0.12s; }
-  .gd-admin-row-btn:hover { background: #E0F5F5; }
+  .gd-admin-menu-wrap { position: relative; }
+  .gd-admin-menu { display: none; position: absolute; top: calc(100% + 6px); right: 0; background: white; border: 0.5px solid #E0DFD8; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); width: 170px; overflow: hidden; z-index: 20; }
+  .gd-admin-menu.open { display: block; }
+  .gd-admin-menu-item { padding: 9px 12px; font-size: 12px; font-weight: 600; color: #1a1a18; cursor: pointer; border-bottom: 0.5px solid #f0f0f0; transition: background 0.1s; }
+  .gd-admin-menu-item:last-child { border-bottom: none; }
+  .gd-admin-menu-item:hover { background: #f5fafa; color: #009A97; }
   /* Dev-only view toggle — lets a developer preview admin vs normal member view */
   .dev-view-toggle { position: fixed; bottom: 14px; right: 14px; z-index: 9999; display: flex; align-items: center; gap: 6px; background: #1a1a18; color: white; font-size: 10px; font-weight: 600; border-radius: 99px; padding: 6px 6px 6px 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); cursor: pointer; font-family: inherit; user-select: none; }
   .dev-view-toggle .dev-switch { width: 30px; height: 16px; border-radius: 99px; background: #444; position: relative; transition: background 0.15s; }
@@ -2766,7 +2769,22 @@ select:focus { border-color: #009A97; }
         <div class="gd-avatar-wrap">
           <div class="gd-avatar" title="Click to test: paste a photo URL" style="cursor:pointer;" onclick="var u=prompt('Paste an image URL to preview it as the group photo:');if(u)setGroupAvatarPhoto(u);">M6</div>
           <div class="gd-info">
-            <div class="gd-name">M6 Group</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+              <div class="gd-name">M6 Group</div>
+              <!-- Admin Tools menu — host-only; hidden entirely in normal user view -->
+              <div class="gd-admin-menu-wrap dev-admin-only" style="flex-shrink:0;">
+                <button class="gd-admin-link" style="margin-top:0;" onclick="toggleGdAdminMenu()">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+                  Admin Tools
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="gd-admin-menu" id="gd-admin-menu">
+                  <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('members.html',null) : null">Manage Members</div>
+                  <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">Edit Group</div>
+                  <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">Host an Event</div>
+                </div>
+              </div>
+            </div>
             <div class="gd-desc">Good things must share! Join M6 Group for the best group buys.</div>
             <div class="gd-stats-inline">
               <span class="gd-stat-inline clickable" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosted-events.html',null) : null" title="View hosted events"><strong>19</strong> events hosted</span> ·
@@ -2775,22 +2793,6 @@ select:focus { border-color: #009A97; }
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Admin actions row — host-only; hidden entirely in normal user view -->
-      <div class="gd-admin-row dev-admin-only">
-        <button class="gd-admin-row-btn" onclick="window.parent && window.parent.navigate ? window.parent.navigate('members.html',null) : null">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Manage Members
-        </button>
-        <button class="gd-admin-row-btn" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-          Edit Group
-        </button>
-        <button class="gd-admin-row-btn" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-          Host an Event
-        </button>
       </div>
 
       <!-- Events section -->
@@ -5592,9 +5594,18 @@ function toggleSortMenu(menuId) {
   if (menu) menu.classList.toggle('open');
 }
 
+function toggleGdAdminMenu() {
+  var menu = document.getElementById('gd-admin-menu');
+  if (menu) menu.classList.toggle('open');
+}
+
 document.addEventListener('click', function (e) {
   if (!e.target.closest('.mef-sort-wrap')) {
     document.querySelectorAll('.mef-sort-menu').forEach(function (menu) { menu.classList.remove('open'); });
+  }
+  if (!e.target.closest('.gd-admin-menu-wrap')) {
+    var gdMenu = document.getElementById('gd-admin-menu');
+    if (gdMenu) gdMenu.classList.remove('open');
   }
 });
 
