@@ -48,8 +48,9 @@
   /* ─── PAGE LAYOUT ─── */
   .page {
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding-top: 76px;
   }
 
@@ -110,7 +111,14 @@
     display: flex; align-items: center; justify-content: center;
     padding: 48px 32px;
   }
-  .form-wrap { width: 100%; max-width: 400px; }
+  .form-wrap {
+    width: 100%; max-width: 420px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 44px 40px;
+    box-shadow: 0 8px 40px rgba(26,26,46,0.06);
+  }
   .form-wrap h2 {
     font-family: 'Fraunces', serif;
     font-size: 28px; font-weight: 900; letter-spacing: -0.5px;
@@ -228,22 +236,13 @@
 <nav>
   <a href="cobee-redesign.html" class="logo">co<span>·</span>bee</a>
   <div class="nav-right">
-    Already have an account? <a href="#">Sign In</a>
+    Already have an account? <a href="signin.html">Sign In</a>
   </div>
 </nav>
 
 <div class="page">
 
-  <!-- LEFT: brand panel -->
-  <div class="side">
-    <div class="side-inner">
-      <div class="side-badge">🐝 Good things must share</div>
-      <h1>Join the <em>hive.</em><br>Start saving today.</h1>
-      <p>Create your free co·bee account to browse group buys, join community groups, and place your first order in minutes.</p>
-    </div>
-  </div>
-
-  <!-- RIGHT: form panel -->
+  <!-- FORM PANEL -->
   <div class="form-side">
 
     <form class="form-wrap" id="signupForm" novalidate>
