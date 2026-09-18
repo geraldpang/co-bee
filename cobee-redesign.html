@@ -168,8 +168,7 @@
   /* Hero visual */
   .hero-visual {
     position: relative; z-index: 2;
-    display: flex; justify-content: flex-start; align-items: center;
-    padding-right: 160px;
+    display: block;
     animation: fadeUp 0.6s 0.2s ease both;
   }
 
@@ -237,6 +236,7 @@
   .hero-map-card {
     background: white; border-radius: 28px; padding: 22px;
     box-shadow: 0 10px 40px rgba(26,26,46,0.08); border: 1px solid rgba(26,163,154,0.12);
+    width: 100%; box-sizing: border-box;
   }
   .hero-map-card .map-head { max-width: none; margin: 0 0 14px; text-align: left; }
   .hero-map-card .map-head .section-label { font-size: 12px; }
