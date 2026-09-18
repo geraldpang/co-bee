@@ -1133,17 +1133,43 @@
 
     var hostListWrap = document.getElementById('hostListWrap');
     var hostList = document.getElementById('hostList');
+    var hostListTitle = document.getElementById('hostListTitle');
+
+    function buildCard(h, subtitle, idx) {
+      var card = document.createElement('div');
+      card.className = 'host-card';
+      card.innerHTML =
+        '<div class="host-card-avatar">' + h.groupBuy.emoji + '</div>' +
+        '<div class="host-card-info">' +
+          '<div class="host-card-name">' + h.groupBuy.name + '</div>' +
+          '<div class="host-card-dist">' + subtitle + '</div>' +
+        '</div>' +
+        '<a href="signup.html" class="host-card-join">Join</a>';
+      hostList.appendChild(card);
+      setTimeout(function () { card.classList.add('show'); }, idx * 40);
+    }
+
+    function showDefaultPartners() {
+      hostList.innerHTML = '';
+      hostListTitle.textContent = 'Our partner group buys';
+      hosts.slice(0, 10).forEach(function (h, idx) {
+        buildCard(h, 'Hosted by ' + h.name, idx);
+      });
+      hostListWrap.classList.add('show');
+      resultMsg.textContent = '';
+    }
 
     function clearHighlights() {
       hosts.forEach(function (h) { h.el.style.opacity = ''; });
       nearPinsLayer.innerHTML = '';
       searchLayer.innerHTML = '';
-      hostList.innerHTML = '';
-      hostListWrap.classList.remove('show');
+      showDefaultPartners();
     }
 
     function showNearest(pos, label) {
-      clearHighlights();
+      hosts.forEach(function (h) { h.el.style.opacity = ''; });
+      nearPinsLayer.innerHTML = '';
+      searchLayer.innerHTML = '';
 
       var withDist = hosts.map(function (h) {
         return { h: h, d: haversineKm(pos[0], pos[1], h.lat, h.lng) };
@@ -1162,19 +1188,9 @@
 
       // Build the clickable list of the same 10 hosts, nearest first
       hostList.innerHTML = '';
+      hostListTitle.textContent = 'Closest hosts near you';
       nearest10.forEach(function (item, idx) {
-        var h = item.h;
-        var card = document.createElement('div');
-        card.className = 'host-card';
-        card.innerHTML =
-          '<div class="host-card-avatar">' + h.groupBuy.emoji + '</div>' +
-          '<div class="host-card-info">' +
-            '<div class="host-card-name">' + h.groupBuy.name + '</div>' +
-            '<div class="host-card-dist">Hosted by ' + h.name + ' · ' + item.d.toFixed(1) + ' km</div>' +
-          '</div>' +
-          '<a href="signup.html" class="host-card-join">Join</a>';
-        hostList.appendChild(card);
-        setTimeout(function () { card.classList.add('show'); }, idx * 40);
+        buildCard(item.h, 'Hosted by ' + item.h.name + ' · ' + item.d.toFixed(1) + ' km', idx);
       });
       hostListWrap.classList.add('show');
 
@@ -1216,9 +1232,11 @@
         showNearest(AREAS[key], label);
       } else {
         clearHighlights();
-        resultMsg.textContent = key.length > 0 ? 'Keep typing or pick a suggestion below…' : '';
+        if (key.length > 0) resultMsg.textContent = 'Keep typing or pick a suggestion below…';
       }
     });
+
+    showDefaultPartners();
   })();
 </script>
 </body>
