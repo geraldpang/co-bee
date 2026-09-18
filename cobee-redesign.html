@@ -233,6 +233,83 @@
     font-size: 13px; font-weight: 600;
   }
 
+  /* ─── HOST MAP ─── */
+  .map-section { background: var(--cream); padding: 90px 24px; border-bottom: 1px solid rgba(26,163,154,0.1); }
+  .map-inner { max-width: 1100px; margin: 0 auto; }
+  .map-head { text-align: center; max-width: 620px; margin: 0 auto 40px; }
+  .map-head .section-title { text-align: center; margin-bottom: 12px; color: var(--dark); }
+  .map-head p { font-size: 16px; color: var(--mid); line-height: 1.7; }
+
+  .map-search-wrap { max-width: 460px; margin: 0 auto 36px; position: relative; }
+  .map-search {
+    width: 100%; padding: 15px 20px; border-radius: 100px;
+    border: 1.5px solid rgba(26,163,154,0.25); background: white;
+    font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--dark);
+    outline: none; box-shadow: 0 4px 20px rgba(26,26,46,0.05);
+  }
+  .map-search:focus { border-color: var(--teal); }
+  .map-search-hint { text-align: center; font-size: 12.5px; color: var(--mid); margin-top: 10px; }
+  .map-result-msg {
+    text-align: center; font-size: 14px; font-weight: 600; color: var(--teal-dark);
+    margin-top: 14px; min-height: 20px;
+  }
+
+  .map-stage {
+    background: white; border: 1px solid rgba(26,163,154,0.15);
+    border-radius: 24px; padding: 20px; box-shadow: 0 4px 30px rgba(26,26,46,0.05);
+    max-width: 640px; margin: 0 auto;
+  }
+  .map-stage svg { width: 100%; height: auto; display: block; }
+  .sg-outline { fill: var(--teal-light); stroke: var(--teal); stroke-width: 2; }
+  .host-pin { fill: var(--honey); opacity: 0.55; transition: fill 0.2s, opacity 0.2s, r 0.2s; cursor: default; }
+  .host-pin.near { fill: var(--teal-dark); opacity: 1; }
+  .search-pin { fill: #E24B4A; stroke: white; stroke-width: 1.5; }
+  .search-pin-ring { fill: none; stroke: #E24B4A; stroke-width: 1.5; opacity: 0.5; }
+
+  .near-pin { opacity: 0; transform: translateY(-4px); transition: opacity 0.25s ease, transform 0.25s ease; }
+  .near-pin.show { opacity: 1; transform: translateY(0); }
+  .near-pin-path { fill: var(--teal-dark); stroke: white; stroke-width: 1.2; }
+  .near-pin-dot { fill: white; }
+
+  .map-legend { display: flex; justify-content: center; gap: 24px; margin-top: 18px; font-size: 12.5px; color: var(--mid); }
+  .map-legend-item { display: flex; align-items: center; gap: 6px; }
+  .map-legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .map-count-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--teal-light); color: var(--teal-dark);
+    padding: 5px 14px; border-radius: 100px; font-size: 12.5px; font-weight: 600;
+    margin-top: 16px;
+  }
+  .map-count-wrap { text-align: center; }
+
+  .host-list-wrap { max-width: 640px; margin: 28px auto 0; display: none; }
+  .host-list-wrap.show { display: block; }
+  .host-list-title { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 12px; text-align: center; }
+  .host-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .host-card {
+    background: white; border: 1px solid rgba(26,163,154,0.15); border-radius: 14px;
+    padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    box-shadow: 0 2px 10px rgba(26,26,46,0.04);
+    opacity: 0; transform: translateY(6px); transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .host-card.show { opacity: 1; transform: translateY(0); }
+  .host-card-avatar {
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+    background: var(--teal-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .host-card-info { display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; }
+  .host-card-name { font-size: 12.5px; font-weight: 700; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .host-card-dist { font-size: 10.5px; color: var(--mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .host-card-join {
+    background: var(--teal); color: white; border: none;
+    padding: 7px 14px; border-radius: 100px; font-size: 11.5px; font-weight: 600;
+    text-decoration: none; white-space: nowrap; flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .host-card-join:hover { background: var(--teal-dark); }
+
   /* ─── HOW IT WORKS ─── */
   .how-section {
     background: var(--dark);
@@ -502,6 +579,7 @@
   </div>
   <div class="nav-right">
     <a href="#groupbuy" class="nav-link">What is Group-Buy</a>
+    <a href="#hosts" class="nav-link">Find Hosts</a>
     <a href="#how" class="nav-link">How it works</a>
     <a href="#story" class="nav-link">Our Story</a>
     <a href="#partner" class="nav-link">Be Our Partner</a>
@@ -588,6 +666,46 @@
           <span class="pill">🎁 Seasonal Items</span>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOST MAP -->
+<section class="map-section" id="hosts">
+  <div class="map-inner">
+    <div class="map-head">
+      <div class="section-label" style="color:var(--teal);">Find hosts near you</div>
+      <div class="groupbuy-title" style="font-size:clamp(28px,3vw,40px);">150 hosts, islandwide.</div>
+      <p>Type your postal code or neighbourhood below and we'll highlight the 10 closest co·bee hosts on the map.</p>
+    </div>
+
+    <div class="map-search-wrap">
+      <input type="text" class="map-search" id="hostSearch" list="sgAreas" inputmode="text" placeholder="Postal code or neighbourhood, e.g. 520201 or Tampines">
+      <datalist id="sgAreas"></datalist>
+      <div class="map-search-hint">Enter your 6-digit postal code, or try an area like Tampines, Jurong East, Bishan, Woodlands, or Bedok.</div>
+      <div class="map-result-msg" id="hostResultMsg"></div>
+    </div>
+
+    <div class="map-stage">
+      <svg id="sgMapSvg" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
+        <g id="outlineLayer"></g>
+        <g id="hostPinsLayer"></g>
+        <g id="nearPinsLayer"></g>
+        <g id="searchPinLayer"></g>
+      </svg>
+    </div>
+
+    <div class="map-count-wrap">
+      <div class="map-legend">
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:var(--honey);opacity:0.55;"></span>Host</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:var(--teal-dark);"></span>Closest 10</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#E24B4A;"></span>Your area</div>
+      </div>
+    </div>
+
+    <div class="host-list-wrap" id="hostListWrap">
+      <div class="host-list-title" id="hostListTitle">Closest hosts near you</div>
+      <div class="host-list" id="hostList"></div>
     </div>
   </div>
 </section>
@@ -754,6 +872,354 @@
       if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
     });
   });
+
+  // ─── HOST MAP: real Singapore outline, from URA Master Plan boundary data ───
+  (function () {
+    // Simplified real coastline (lng, lat) — derived from URA Master Plan 2025
+    // Planning Area boundaries (data.gov.sg), Douglas-Peucker simplified.
+    var MAINLAND = [[103.714,1.29124],[103.725,1.28956],[103.74,1.27285],[103.726,1.27161],[103.734,1.26626],[103.723,1.25988],[103.706,1.26835],[103.714,1.25902],[103.694,1.25026],[103.685,1.2684],[103.68,1.26306],[103.69,1.24003],[103.672,1.22271],[103.671,1.22369],[103.67,1.22838],[103.672,1.22358],[103.677,1.22875],[103.663,1.24498],[103.654,1.27291],[103.691,1.2913],[103.697,1.29066],[103.684,1.27653],[103.688,1.27275],[103.696,1.27689],[103.704,1.29089],[103.712,1.2916],[103.711,1.30724],[103.702,1.30184],[103.695,1.30795],[103.699,1.29953],[103.695,1.30786],[103.694,1.30094],[103.684,1.29907],[103.681,1.30918],[103.678,1.29661],[103.669,1.30632],[103.674,1.29544],[103.667,1.28868],[103.65,1.30169],[103.656,1.31147],[103.645,1.30078],[103.65,1.28352],[103.64,1.27908],[103.643,1.26085],[103.617,1.26085],[103.617,1.25398],[103.644,1.25398],[103.644,1.24796],[103.638,1.24503],[103.617,1.24503],[103.617,1.23815],[103.65,1.23815],[103.65,1.2292],[103.617,1.2292],[103.617,1.2216],[103.657,1.22161],[103.659,1.21717],[103.642,1.21024],[103.607,1.22063],[103.606,1.24368],[103.612,1.24639],[103.606,1.26113],[103.61,1.26113],[103.611,1.27633],[103.62,1.28449],[103.617,1.29409],[103.618,1.29673],[103.627,1.3183],[103.623,1.31405],[103.621,1.31968],[103.634,1.33782],[103.633,1.3508],[103.638,1.35046],[103.66,1.38526],[103.662,1.40553],[103.673,1.41379],[103.674,1.42518],[103.717,1.45054],[103.729,1.45075],[103.737,1.43873],[103.743,1.43871],[103.744,1.44629],[103.767,1.44418],[103.769,1.45249],[103.771,1.44849],[103.809,1.47057],[103.821,1.46924],[103.823,1.46102],[103.828,1.46859],[103.834,1.46471],[103.833,1.45996],[103.837,1.46481],[103.858,1.45486],[103.855,1.45249],[103.865,1.43372],[103.858,1.42653],[103.864,1.42382],[103.879,1.43176],[103.897,1.42062],[103.898,1.41473],[103.913,1.42111],[103.93,1.3997],[103.937,1.40181],[103.941,1.39776],[103.936,1.39339],[103.941,1.39524],[103.949,1.38299],[103.967,1.38086],[103.982,1.39372],[103.997,1.39029],[104.007,1.37396],[104.008,1.38163],[104.044,1.35259],[104.06,1.32599],[104.033,1.32407],[104.033,1.31618],[104.023,1.32021],[104.012,1.30948],[103.984,1.31202],[103.984,1.31666],[103.963,1.31468],[103.893,1.29357],[103.871,1.28049],[103.861,1.2647],[103.852,1.26811],[103.851,1.26073],[103.846,1.26684],[103.846,1.26154],[103.832,1.26741],[103.824,1.26308],[103.836,1.26385],[103.842,1.2579],[103.836,1.25481],[103.824,1.26016],[103.825,1.25527],[103.848,1.25211],[103.833,1.23781],[103.807,1.25947],[103.822,1.25827],[103.823,1.26307],[103.811,1.26258],[103.815,1.26451],[103.812,1.26644],[103.805,1.2623],[103.794,1.26921],[103.786,1.25501],[103.779,1.25918],[103.787,1.27279],[103.777,1.27867],[103.771,1.26824],[103.75,1.28049],[103.756,1.28585],[103.769,1.27831],[103.772,1.28365],[103.761,1.2906],[103.759,1.29929],[103.728,1.30004],[103.712,1.30844],[103.723,1.29967],[103.712,1.29961],[103.714,1.29124]];
+    var UBIN = [[103.934,1.4281],[103.946,1.42387],[103.948,1.42263],[103.949,1.42036],[103.953,1.41868],[103.955,1.41908],[103.956,1.4177],[103.961,1.41766],[103.97,1.41969],[103.979,1.41763],[103.984,1.41789],[103.986,1.41911],[103.995,1.41906],[103.999,1.41525],[104.003,1.40365],[104.002,1.4028],[103.996,1.40406],[103.989,1.4041],[103.988,1.40273],[103.987,1.40411],[103.978,1.40417],[103.975,1.40247],[103.973,1.40347],[103.968,1.40112],[103.958,1.39946],[103.955,1.4049],[103.953,1.40578],[103.95,1.40556],[103.949,1.40995],[103.934,1.41566],[103.934,1.41723],[103.931,1.41718],[103.928,1.41899],[103.927,1.42183],[103.926,1.42238],[103.926,1.42365],[103.929,1.42433],[103.934,1.4281]];
+    var TEKONG = [[104.055,1.43161],[104.07,1.42709],[104.081,1.41899],[104.085,1.41014],[104.084,1.40718],[104.088,1.40393],[104.088,1.39622],[104.08,1.38115],[104.075,1.36308],[104.076,1.35482],[104.084,1.34052],[104.083,1.33761],[104.081,1.33804],[104.022,1.38873],[104.016,1.40123],[104.029,1.40314],[104.03,1.40471],[104.028,1.40812],[104.03,1.4114],[104.027,1.41195],[104.022,1.40863],[104.014,1.409],[104.012,1.41081],[104.009,1.41883],[104.01,1.42545],[104.021,1.4354],[104.036,1.44036],[104.043,1.4398],[104.047,1.43504],[104.054,1.43376],[104.055,1.43161]];
+
+    // Approximate real coordinates [lat, lng] for common Singapore neighbourhoods
+    var AREAS = {
+      "tuas": [1.3200, 103.6300], "jurong west": [1.3404, 103.7090],
+      "jurong east": [1.3329, 103.7436], "boon lay": [1.3389, 103.7053],
+      "choa chu kang": [1.3840, 103.7470], "bukit panjang": [1.3774, 103.7637],
+      "bukit batok": [1.3590, 103.7637], "clementi": [1.3151, 103.7649],
+      "queenstown": [1.2942, 103.8060], "bukit timah": [1.3294, 103.8021],
+      "bukit merah": [1.2819, 103.8239], "tiong bahru": [1.2860, 103.8280],
+      "orchard": [1.3048, 103.8318], "novena": [1.3203, 103.8438],
+      "toa payoh": [1.3343, 103.8563], "bishan": [1.3526, 103.8352],
+      "ang mo kio": [1.3691, 103.8454], "yishun": [1.4304, 103.8354],
+      "sembawang": [1.4491, 103.8185], "woodlands": [1.4382, 103.7890],
+      "yew tee": [1.3971, 103.7474], "sengkang": [1.3868, 103.8914],
+      "punggol": [1.4043, 103.9020], "hougang": [1.3612, 103.8863],
+      "serangoon": [1.3554, 103.8679], "kovan": [1.3600, 103.8850],
+      "pasir ris": [1.3730, 103.9490], "tampines": [1.3496, 103.9568],
+      "changi": [1.3644, 103.9915], "bedok": [1.3236, 103.9273],
+      "marine parade": [1.3020, 103.9070], "katong": [1.3050, 103.9010],
+      "geylang": [1.3182, 103.8830], "kallang": [1.3100, 103.8710],
+      "little india": [1.3066, 103.8517], "chinatown": [1.2810, 103.8440],
+      "marina bay": [1.2810, 103.8610], "pasir panjang": [1.2762, 103.7910],
+      "west coast": [1.3050, 103.7650], "harbourfront": [1.2653, 103.8200]
+    };
+
+    // Singapore's 28 postal districts, keyed by their 2-digit postal sectors
+    // (the first 2 digits of a 6-digit postal code), each with an approximate
+    // [lat, lng] anchor for that district's general location.
+    var DISTRICT_ANCHOR = {
+      1: [1.2840, 103.8510],  // Raffles Place, Marina, People's Park
+      2: [1.2760, 103.8440],  // Anson, Tanjong Pagar
+      3: [1.2942, 103.8060],  // Queenstown, Tiong Bahru
+      4: [1.2653, 103.8200],  // Telok Blangah, HarbourFront
+      5: [1.2762, 103.7910],  // Pasir Panjang, Clementi New Town
+      6: [1.2930, 103.8520],  // High Street, Beach Road
+      7: [1.2996, 103.8558],  // Middle Road, Golden Mile
+      8: [1.3066, 103.8517],  // Little India
+      9: [1.3048, 103.8318],  // Orchard, Cairnhill, River Valley
+      10: [1.3110, 103.7930], // Ardmore, Bukit Timah, Holland, Tanglin
+      11: [1.3203, 103.8438], // Watten Estate, Novena, Thomson
+      12: [1.3343, 103.8563], // Balestier, Toa Payoh, Serangoon
+      13: [1.3320, 103.8690], // Macpherson, Braddell
+      14: [1.3182, 103.8830], // Geylang, Eunos
+      15: [1.3050, 103.9010], // Katong, Joo Chiat, Amber Road
+      16: [1.3236, 103.9273], // Bedok, Upper East Coast
+      17: [1.3644, 103.9915], // Loyang, Changi
+      18: [1.3496, 103.9568], // Tampines, Pasir Ris
+      19: [1.3612, 103.8863], // Serangoon Garden, Hougang, Punggol
+      20: [1.3526, 103.8352], // Bishan, Ang Mo Kio
+      21: [1.3450, 103.7770], // Upper Bukit Timah, Clementi Park, Ulu Pandan
+      22: [1.3329, 103.7436], // Jurong
+      23: [1.3774, 103.7637], // Hillview, Dairy Farm, Bukit Panjang, Choa Chu Kang
+      24: [1.3900, 103.7100], // Lim Chu Kang, Tengah
+      25: [1.4300, 103.7620], // Kranji, Woodgrove
+      26: [1.3800, 103.8320], // Upper Thomson, Springleaf
+      27: [1.4304, 103.8354], // Yishun, Sembawang
+      28: [1.4050, 103.8680]  // Seletar
+    };
+    // Maps each 2-digit postal sector to its district number
+    var SECTOR_DISTRICT = {
+      "01":1,"02":1,"03":1,"04":1,"05":1,"06":1,
+      "07":2,"08":2,
+      "14":3,"15":3,"16":3,
+      "09":4,"10":4,
+      "11":5,"12":5,"13":5,
+      "17":6,
+      "18":7,"19":7,
+      "20":8,"21":8,
+      "22":9,"23":9,
+      "24":10,"25":10,"26":10,"27":10,
+      "28":11,"29":11,"30":11,
+      "31":12,"32":12,"33":12,
+      "34":13,"35":13,"36":13,"37":13,
+      "38":14,"39":14,"40":14,"41":14,
+      "42":15,"43":15,"44":15,"45":15,
+      "46":16,"47":16,"48":16,
+      "49":17,"50":17,"81":17,
+      "51":18,"52":18,
+      "53":19,"54":19,"55":19,"82":19,
+      "56":20,"57":20,
+      "58":21,"59":21,
+      "60":22,"61":22,"62":22,"63":22,"64":22,
+      "65":23,"66":23,"67":23,"68":23,
+      "69":24,"70":24,"71":24,
+      "72":25,"73":25,
+      "77":26,"78":26,
+      "75":27,"76":27,
+      "79":28,"80":28
+    };
+    function sectorToLatLng(sector) {
+      var district = SECTOR_DISTRICT[sector];
+      return district ? DISTRICT_ANCHOR[district] : null;
+    }
+
+    // ── project real lng/lat onto the SVG viewBox (bbox covers mainland + islands) ──
+    var W = 600, H = 360, PAD = 0.04;
+    var ALL_PTS = MAINLAND.concat(UBIN).concat(TEKONG);
+    var lngs = ALL_PTS.map(function (p) { return p[0]; });
+    var lats = ALL_PTS.map(function (p) { return p[1]; });
+    var lngMin = Math.min.apply(null, lngs), lngMax = Math.max.apply(null, lngs);
+    var latMin = Math.min.apply(null, lats), latMax = Math.max.apply(null, lats);
+    var lngPad = (lngMax - lngMin) * PAD, latPad = (latMax - latMin) * PAD;
+    lngMin -= lngPad; lngMax += lngPad; latMin -= latPad; latMax += latPad;
+
+    // Fit viewBox height to the true aspect ratio of the data (no stretching)
+    H = Math.round(W * (latMax - latMin) / (lngMax - lngMin));
+    document.getElementById('sgMapSvg').setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+
+    function project(lat, lng) {
+      var x = (lng - lngMin) / (lngMax - lngMin) * W;
+      var y = (latMax - lat) / (latMax - latMin) * H; // flip so north is up
+      return { x: x, y: y };
+    }
+
+    function haversineKm(lat1, lon1, lat2, lon2) {
+      var R = 6371;
+      var dLat = (lat2 - lat1) * Math.PI / 180;
+      var dLon = (lon2 - lon1) * Math.PI / 180;
+      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    function pointInPoly(lat, lng, poly) {
+      var x = lng, y = lat, inside = false;
+      for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        var xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+        var intersect = ((yi > y) !== (yj > y)) &&
+          (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
+    function drawOutline(poly, extraClass) {
+      var el = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+      var ptStr = poly.map(function (p) {
+        var pr = project(p[1], p[0]);
+        return pr.x.toFixed(1) + ',' + pr.y.toFixed(1);
+      }).join(' ');
+      el.setAttribute('points', ptStr);
+      el.setAttribute('class', 'sg-outline' + (extraClass ? ' ' + extraClass : ''));
+      document.getElementById('outlineLayer').appendChild(el);
+    }
+    drawOutline(MAINLAND);
+    drawOutline(UBIN);
+    drawOutline(TEKONG);
+
+    // Seeded RNG so the same 150 "hosts" render the same way on every load
+    function mulberry32(seed) {
+      return function () {
+        seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+        var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    var rng = mulberry32(2026);
+
+    var mLngs = MAINLAND.map(function (p) { return p[0]; });
+    var mLats = MAINLAND.map(function (p) { return p[1]; });
+    var mLngMin = Math.min.apply(null, mLngs), mLngMax = Math.max.apply(null, mLngs);
+    var mLatMin = Math.min.apply(null, mLats), mLatMax = Math.max.apply(null, mLats);
+
+    var hosts = [];
+    var guard = 0;
+    while (hosts.length < 150 && guard < 40000) {
+      guard++;
+      var lat = mLatMin + rng() * (mLatMax - mLatMin);
+      var lng = mLngMin + rng() * (mLngMax - mLngMin);
+      if (pointInPoly(lat, lng, MAINLAND)) {
+        hosts.push({ lat: lat, lng: lng });
+      }
+    }
+
+    var pinsLayer = document.getElementById('hostPinsLayer');
+    var nearPinsLayer = document.getElementById('nearPinsLayer');
+    var searchLayer = document.getElementById('searchPinLayer');
+
+    function createPinEl(x, y) {
+      var svgNS = 'http://www.w3.org/2000/svg';
+      // Outer group: fixed position (attribute transform, untouched by CSS)
+      var outer = document.createElementNS(svgNS, 'g');
+      outer.setAttribute('transform', 'translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ')');
+      // Inner group: CSS-driven pop-in animation (opacity + translateY)
+      var inner = document.createElementNS(svgNS, 'g');
+      inner.setAttribute('class', 'near-pin');
+      var path = document.createElementNS(svgNS, 'path');
+      path.setAttribute('d', 'M0,0 C-1,-3 -7,-10 -7,-15 A7,7 0 1 1 7,-15 C7,-10 1,-3 0,0 Z');
+      path.setAttribute('class', 'near-pin-path');
+      var dot = document.createElementNS(svgNS, 'circle');
+      dot.setAttribute('cx', 0); dot.setAttribute('cy', -15); dot.setAttribute('r', 2.6);
+      dot.setAttribute('class', 'near-pin-dot');
+      inner.appendChild(path);
+      inner.appendChild(dot);
+      outer.appendChild(inner);
+      return { outer: outer, inner: inner };
+    }
+
+    var HOST_FIRST_NAMES = ['Mei', 'Wei', 'Siti', 'Farah', 'Li Ting', 'Jun Wei', 'Amirah', 'Kai Xin',
+      'Hui Min', 'Zul', 'Priya', 'Aisyah', 'Wen Jie', 'Nur', 'Shu Hui', 'Faizal',
+      'Xin Yi', 'Rashid', 'Geok Lian', 'Benjamin'];
+    var HOST_LAST_NAMES = ['Tan', 'Lim', 'Lee', 'Wong', 'Ng', 'Abdullah', 'Kumar', 'Rahman',
+      'Chua', 'Goh', 'Yeo', 'Koh', 'Teo', 'Osman', 'Ong'];
+    function hostName(i) {
+      return HOST_FIRST_NAMES[i % HOST_FIRST_NAMES.length] + ' ' +
+        HOST_LAST_NAMES[(i * 7) % HOST_LAST_NAMES.length];
+    }
+
+    var GROUPBUY_CATEGORIES = [
+      ['🥦', 'Fresh Produce'], ['🍜', 'Korean Snacks'], ['🧴', 'Skincare'], ['🐟', 'Seafood'],
+      ['🧺', 'Household Essentials'], ['🍚', 'Bulk Rice & Grains'], ['🍰', 'Bakery Treats'],
+      ['🧻', 'Toiletries'], ['🍗', 'Frozen Meats'], ['🥤', 'Bubble Tea Supplies'],
+      ['🍲', 'Hotpot Ingredients'], ['🧀', 'Cheese & Dairy'], ['🌶️', 'Spices & Condiments'],
+      ['🍉', 'Fresh Fruits'], ['🧹', 'Cleaning Supplies'], ['👕', 'Kids Clothing'],
+      ['🧸', 'Toys & Books'], ['🌿', 'Traditional Tea & Herbs'], ['🍱', 'Instant Noodles'],
+      ['🧃', 'Snacks & Drinks']
+    ];
+    var GROUPBUY_FORMATS = ['Bundle', 'Group Buy', 'Weekly Run', 'Restock', 'Haul', 'Box'];
+    function groupBuyFor(i) {
+      var cat = GROUPBUY_CATEGORIES[i % GROUPBUY_CATEGORIES.length];
+      var fmt = GROUPBUY_FORMATS[(i * 3) % GROUPBUY_FORMATS.length];
+      return { emoji: cat[0], name: cat[1] + ' ' + fmt };
+    }
+
+    hosts.forEach(function (h, i) {
+      var pr = project(h.lat, h.lng);
+      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', pr.x.toFixed(1));
+      c.setAttribute('cy', pr.y.toFixed(1));
+      c.setAttribute('r', 3.4);
+      c.setAttribute('class', 'host-pin');
+      c.setAttribute('data-idx', i);
+      pinsLayer.appendChild(c);
+      h.el = c;
+      h.name = hostName(i);
+      h.groupBuy = groupBuyFor(i);
+    });
+
+    // Populate the datalist for autocomplete
+    var datalist = document.getElementById('sgAreas');
+    Object.keys(AREAS).forEach(function (name) {
+      var opt = document.createElement('option');
+      opt.value = name.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+      datalist.appendChild(opt);
+    });
+
+    var input = document.getElementById('hostSearch');
+    var resultMsg = document.getElementById('hostResultMsg');
+
+    var hostListWrap = document.getElementById('hostListWrap');
+    var hostList = document.getElementById('hostList');
+
+    function clearHighlights() {
+      hosts.forEach(function (h) { h.el.style.opacity = ''; });
+      nearPinsLayer.innerHTML = '';
+      searchLayer.innerHTML = '';
+      hostList.innerHTML = '';
+      hostListWrap.classList.remove('show');
+    }
+
+    function showNearest(pos, label) {
+      clearHighlights();
+
+      var withDist = hosts.map(function (h) {
+        return { h: h, d: haversineKm(pos[0], pos[1], h.lat, h.lng) };
+      }).sort(function (a, b) { return a.d - b.d; });
+
+      var nearest10 = withDist.slice(0, 10);
+      nearest10.forEach(function (item) {
+        var h = item.h;
+        h.el.style.opacity = '0'; // hide the plain dot underneath its pin
+        var pr = project(h.lat, h.lng);
+        var pinEls = createPinEl(pr.x, pr.y);
+        nearPinsLayer.appendChild(pinEls.outer);
+        // trigger the CSS pop-in transition
+        requestAnimationFrame(function () { pinEls.inner.classList.add('show'); });
+      });
+
+      // Build the clickable list of the same 10 hosts, nearest first
+      hostList.innerHTML = '';
+      nearest10.forEach(function (item, idx) {
+        var h = item.h;
+        var card = document.createElement('div');
+        card.className = 'host-card';
+        card.innerHTML =
+          '<div class="host-card-avatar">' + h.groupBuy.emoji + '</div>' +
+          '<div class="host-card-info">' +
+            '<div class="host-card-name">' + h.groupBuy.name + '</div>' +
+            '<div class="host-card-dist">Hosted by ' + h.name + ' · ' + item.d.toFixed(1) + ' km</div>' +
+          '</div>' +
+          '<a href="signup.html" class="host-card-join">Join</a>';
+        hostList.appendChild(card);
+        setTimeout(function () { card.classList.add('show'); }, idx * 40);
+      });
+      hostListWrap.classList.add('show');
+
+      // Mark the searched location
+      var pr = project(pos[0], pos[1]);
+      var ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      ring.setAttribute('cx', pr.x); ring.setAttribute('cy', pr.y);
+      ring.setAttribute('r', 11); ring.setAttribute('class', 'search-pin-ring');
+      var pin = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      pin.setAttribute('cx', pr.x); pin.setAttribute('cy', pr.y);
+      pin.setAttribute('r', 5); pin.setAttribute('class', 'search-pin');
+      searchLayer.appendChild(ring);
+      searchLayer.appendChild(pin);
+
+      var nearestKm = nearest10[0].d.toFixed(1);
+      resultMsg.textContent = 'Showing the 10 closest hosts to ' + label + ' — nearest is ' + nearestKm + ' km away.';
+    }
+
+    input.addEventListener('input', function () {
+      var raw = input.value.trim();
+      var key = raw.toLowerCase();
+      var digitsOnly = raw.replace(/\D/g, '');
+
+      if (digitsOnly.length >= 2 && digitsOnly === raw) {
+        // Looks like a postal code (or the start of one) — use its 2-digit sector
+        var sector = digitsOnly.slice(0, 2);
+        var pos = sectorToLatLng(sector);
+        if (pos) {
+          showNearest(pos, 'postal sector ' + sector);
+          return;
+        }
+        clearHighlights();
+        resultMsg.textContent = 'Sector ' + sector + " isn't a recognized postal sector.";
+        return;
+      }
+
+      if (AREAS[key]) {
+        var label = key.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+        showNearest(AREAS[key], label);
+      } else {
+        clearHighlights();
+        resultMsg.textContent = key.length > 0 ? 'Keep typing or pick a suggestion below…' : '';
+      }
+    });
+  })();
 </script>
 </body>
 </html>
