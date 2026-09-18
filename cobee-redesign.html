@@ -244,37 +244,32 @@
   .hero-map-card .map-search { padding: 12px 18px; font-size: 14px; }
   .hero-map-card .map-search-hint { text-align: left; font-size: 11.5px; }
 
-  /* #4: give the map more room relative to the list; minmax(0,..) stops content
-     from forcing the tracks wider than their fr share (fixes #1/#2 overflow) */
-  .map-split { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); gap: 16px; align-items: stretch; }
+  /* Map full-width on top, host list as a horizontal strip below it */
+  .map-split { display: block; }
 
-  /* #3: stretch the map box to match the list's height and center the map+legend
-     within it, instead of leaving a bare gap below the map */
   .hero-map-card .map-stage {
-    max-width: none; min-width: 0; padding: 14px; border-radius: 18px;
-    display: flex; flex-direction: column; justify-content: center; height: 100%;
-    box-sizing: border-box;
+    max-width: none; padding: 18px; border-radius: 18px;
   }
+  .hero-map-card .map-stage svg { max-height: 340px; }
   .hero-map-card .map-stage .map-legend {
     display: flex; gap: 14px; font-size: 11px; margin-top: 12px; justify-content: center;
   }
 
   .hero-map-card .host-list-wrap {
-    max-width: none; min-width: 0; margin: 0; height: 340px; max-height: 340px;
-    overflow-y: auto; overflow-x: hidden; padding-right: 4px;
+    max-width: none; min-width: 0; margin: 18px 0 0;
   }
-  .hero-map-card .host-list { grid-template-columns: 1fr; gap: 8px; min-width: 0; }
-  .hero-map-card .host-list-title { text-align: left; }
-
-  /* #1/#5: keep the card content on one line with ellipsis instead of wrapping
-     mid-word or pushing the Join button off the edge */
-  .hero-map-card .host-card { min-width: 0; }
+  .hero-map-card .host-list-title { text-align: left; margin-bottom: 10px; }
+  .hero-map-card .host-list {
+    display: flex; grid-template-columns: none; gap: 10px;
+    overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x proximity;
+  }
+  .hero-map-card .host-card {
+    flex: 0 0 220px; min-width: 0; scroll-snap-align: start;
+  }
   .hero-map-card .host-card-join { flex-shrink: 0; }
 
   @media (max-width: 900px) {
-    .map-split { grid-template-columns: 1fr; }
-    .hero-map-card .map-stage { height: auto; }
-    .hero-map-card .host-list-wrap { height: auto; max-height: 320px; }
+    .hero-map-card .host-card { flex-basis: 200px; }
   }
 
   /* ─── HOST MAP (legacy full-width section, kept for reference) ─── */
