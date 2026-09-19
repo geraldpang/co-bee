@@ -238,7 +238,7 @@
     box-shadow: none; border: none;
     width: 100%; min-width: 0; box-sizing: border-box;
   }
-  .hero-map-card .map-head { max-width: none; margin: 0 0 14px; text-align: left; }
+  .hero-map-card .map-head { max-width: none; margin: 18px 0 14px; text-align: left; }
   .hero-map-card .map-head .section-label { font-size: 12px; }
   .hero-map-card .map-search-wrap { max-width: 340px; margin: 0 0 16px; }
   .hero-map-card .map-search { padding: 9px 14px; font-size: 13px; }
@@ -697,6 +697,17 @@
   <div class="hero-visual" style="position:static;">
   <div class="hero-map-card" id="hosts">
 
+    <div class="map-stage">
+      <svg id="sgMapSvg" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
+        <g id="outlineLayer"></g>
+        <g id="hostPinsLayer"></g>
+        <g id="nearPinsLayer"></g>
+        <g id="searchPinLayer"></g>
+        <g id="hoverPinLayer"></g>
+      </svg>
+      <div class="host-tooltip" id="hostTooltip"></div>
+    </div>
+
     <div class="map-head">
       <div class="section-label" style="color:var(--teal);">Find hosts near you</div>
     </div>
@@ -708,17 +719,6 @@
     </div>
 
     <div class="map-split">
-      <div class="map-stage">
-        <svg id="sgMapSvg" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
-          <g id="outlineLayer"></g>
-          <g id="hostPinsLayer"></g>
-          <g id="nearPinsLayer"></g>
-          <g id="searchPinLayer"></g>
-          <g id="hoverPinLayer"></g>
-        </svg>
-        <div class="host-tooltip" id="hostTooltip"></div>
-      </div>
-
       <div class="host-list-wrap show" id="hostListWrap">
         <div class="host-list-title" id="hostListTitle">Closest hosts near you</div>
         <div class="host-list" id="hostList"></div>
@@ -1315,6 +1315,9 @@
     }
 
     function ringOnly(h) {
+      // Force-close any pin tooltip immediately — a card hover never shows
+      // the tooltip itself, so there's no reason to wait on its hide delay.
+      hideHostTooltip();
       highlightPin(h);
       highlightCard(h);
     }
