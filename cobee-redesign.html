@@ -238,9 +238,9 @@
     box-shadow: none; border: none;
     width: 100%; min-width: 0; box-sizing: border-box;
   }
-  .hero-map-card .map-head { max-width: none; margin: 18px 0 14px; text-align: left; }
+  .hero-map-card .map-head { max-width: none; margin: 0 0 14px; text-align: left; }
   .hero-map-card .map-head .section-label { font-size: 12px; }
-  .hero-map-card .map-search-wrap { max-width: 340px; margin: 0 0 16px; }
+  .hero-map-card .map-search-wrap { max-width: 340px; margin: 0 0 18px; }
   .hero-map-card .map-search { padding: 9px 14px; font-size: 13px; }
   .hero-map-card .map-search-hint { text-align: left; font-size: 11px; }
 
@@ -697,6 +697,16 @@
   <div class="hero-visual" style="position:static;">
   <div class="hero-map-card" id="hosts">
 
+    <div class="map-head">
+      <div class="section-label" style="color:var(--teal);">Find hosts near you</div>
+    </div>
+
+    <div class="map-search-wrap">
+      <input type="text" class="map-search" id="hostSearch" list="sgAreas" inputmode="text" placeholder="Postal code or neighbourhood">
+      <datalist id="sgAreas"></datalist>
+      <div class="map-search-hint">Try a 6-digit postal code, or an area like Tampines, Jurong East, Bishan, Woodlands.</div>
+    </div>
+
     <div class="map-stage">
       <svg id="sgMapSvg" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
         <g id="outlineLayer"></g>
@@ -708,18 +718,8 @@
       <div class="host-tooltip" id="hostTooltip"></div>
     </div>
 
-    <div class="map-head">
-      <div class="section-label" style="color:var(--teal);">Find hosts near you</div>
-    </div>
-
-    <div class="map-search-wrap">
-      <input type="text" class="map-search" id="hostSearch" list="sgAreas" inputmode="text" placeholder="Postal code or neighbourhood">
-      <datalist id="sgAreas"></datalist>
-      <div class="map-search-hint">Try a 6-digit postal code, or an area like Tampines, Jurong East, Bishan, Woodlands.</div>
-    </div>
-
     <div class="map-split">
-      <div class="host-list-wrap show" id="hostListWrap">
+      <div class="host-list-wrap" id="hostListWrap">
         <div class="host-list-title" id="hostListTitle">Closest hosts near you</div>
         <div class="host-list" id="hostList"></div>
       </div>
@@ -1383,15 +1383,13 @@
       setTimeout(function () { card.classList.add('show'); }, idx * 40);
     }
 
+    // Idle state: the default 9 partner pins still show on the map, but
+    // the card list stays hidden until the person actually searches.
     function showDefaultPartners() {
       hostList.innerHTML = '';
       hostCardMap.clear();
-      hostListTitle.textContent = 'Our partner group buys';
+      hostListWrap.classList.remove('show');
       var defaultPartners = hosts.slice(0, 9);
-      defaultPartners.forEach(function (h, idx) {
-        buildCard(h, 'Hosted by ' + h.name, idx);
-      });
-      hostListWrap.classList.add('show');
       renderProminentPins(defaultPartners);
     }
 
