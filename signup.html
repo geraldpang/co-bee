@@ -48,67 +48,15 @@
   /* ─── PAGE LAYOUT ─── */
   .page {
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: block;
     padding-top: 76px;
   }
-
-  /* Left: brand / value props panel */
-  .side {
-    background: linear-gradient(160deg, var(--dark) 0%, #2a2a44 100%);
-    color: white;
-    padding: 64px 56px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .side::before {
-    content: '';
-    position: absolute; top: -160px; left: -160px;
-    width: 480px; height: 480px;
-    background: radial-gradient(circle, rgba(26,163,154,0.25) 0%, transparent 70%);
-    border-radius: 50%;
-  }
-  .side::after {
-    content: '';
-    position: absolute; bottom: -120px; right: -120px;
-    width: 360px; height: 360px;
-    background: radial-gradient(circle, rgba(245,166,35,0.18) 0%, transparent 70%);
-    border-radius: 50%;
-  }
-  .side-inner { position: relative; z-index: 2; max-width: 420px; }
-  .side-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.4);
-    color: var(--honey); padding: 6px 16px; border-radius: 100px;
-    font-size: 12px; font-weight: 600; margin-bottom: 28px;
-  }
-  .side h1 {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(32px, 3.2vw, 42px);
-    font-weight: 900; line-height: 1.15; letter-spacing: -1px;
-    margin-bottom: 20px;
-  }
-  .side h1 em { color: var(--teal); font-style: italic; }
-  .side > .side-inner > p { font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.65); margin-bottom: 40px; }
-
-  .perk-list { display: flex; flex-direction: column; gap: 20px; }
-  .perk { display: flex; align-items: flex-start; gap: 14px; }
-  .perk-icon {
-    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
-    background: rgba(26,163,154,0.18);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 17px;
-  }
-  .perk-text strong { display: block; font-size: 14px; font-weight: 700; color: white; margin-bottom: 2px; }
-  .perk-text span { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; }
 
   /* Right: form panel */
   .form-side {
     display: flex; align-items: center; justify-content: center;
     padding: 48px 32px;
+    min-height: calc(100vh - 76px);
   }
   .form-wrap { width: 100%; max-width: 400px; }
   .form-wrap h2 {
@@ -226,8 +174,6 @@
   .success-wrap p strong { color: var(--dark); }
 
   @media (max-width: 860px) {
-    .page { grid-template-columns: 1fr; }
-    .side { display: none; }
     .form-side { padding: 40px 24px; }
   }
 </style>
@@ -242,29 +188,6 @@
 </nav>
 
 <div class="page">
-
-  <!-- LEFT: brand panel -->
-  <div class="side">
-    <div class="side-inner">
-      <div class="side-badge">🐝 Good things must share</div>
-      <h1>Join the <em>hive.</em><br>Start saving today.</h1>
-      <p>Create your free co·bee account to browse group buys, join community groups, and place your first order in minutes.</p>
-      <div class="perk-list">
-        <div class="perk">
-          <div class="perk-icon">💰</div>
-          <div class="perk-text"><strong>Save up to 70% off retail</strong><span>Group pricing unlocked as more members join.</span></div>
-        </div>
-        <div class="perk">
-          <div class="perk-icon">🏘️</div>
-          <div class="perk-text"><strong>215 active groups</strong><span>Find one near you or get invited by a friend.</span></div>
-        </div>
-        <div class="perk">
-          <div class="perk-icon">👆</div>
-          <div class="perk-text"><strong>Order in one click</strong><span>No spreadsheets, no chasing payments in chats.</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- RIGHT: form panel -->
   <div class="form-side">
