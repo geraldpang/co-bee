@@ -241,14 +241,14 @@
     width: 100%; min-width: 0; box-sizing: border-box;
   }
   .hero-map-card .map-head {
-    max-width: none; margin: 0 0 16px; text-align: left;
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    flex-wrap: wrap; row-gap: 10px;
+    max-width: none; margin: 0 0 12px; text-align: center;
+    display: block;
   }
-  .hero-map-card .map-head .section-label { font-size: 12px; margin-bottom: 0; flex-shrink: 0; }
-  .map-search-field { position: relative; flex: 1 1 190px; max-width: 220px; }
+  .hero-map-card .map-head .section-label { font-size: 12px; margin-bottom: 0; }
+  .hero-map-card .map-search-wrap { max-width: 320px; margin: 0 auto 16px; }
+  .map-search-field { position: relative; width: 100%; }
   .map-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--mid); pointer-events: none; }
-  .hero-map-card .map-search { padding: 8px 12px 8px 36px; font-size: 12.5px; }
+  .hero-map-card .map-search { width: 100%; padding: 10px 14px 10px 38px; font-size: 13.5px; }
   .hero-map-card .map-search-hint { text-align: left; font-size: 11px; margin: 0 0 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* Map full-width on top, host list as a horizontal strip below it */
@@ -656,7 +656,6 @@
   </div>
   <div class="nav-right">
     <a href="#groupbuy" class="nav-link">What is Group-Buy</a>
-    <a href="#hosts" class="nav-link">Find Hosts</a>
     <a href="#how" class="nav-link">How it works</a>
     <a href="#story" class="nav-link">Our Story</a>
     <a href="#partner" class="nav-link">Be Our Partner</a>
@@ -692,6 +691,9 @@
 
     <div class="map-head">
       <div class="section-label" style="color:var(--teal);">Find hosts near you</div>
+    </div>
+
+    <div class="map-search-wrap">
       <div class="map-search-field">
         <svg class="map-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" class="map-search" id="hostSearch" list="sgAreas" inputmode="text" placeholder="Postal code or neighbourhood">
