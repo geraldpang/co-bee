@@ -75,6 +75,55 @@ body {
 .form-group { display: flex; flex-direction: column; gap: 4px; }
 .form-label { font-size: 12px; font-weight: 600; color: #1a1a18; }
 .req { color: #E24B4A; font-size: 11px; }
+
+/* ── PASTE-FROM-WHATSAPP PANEL (STEP 1) ── */
+.paste-panel-chevron { transition: transform 0.2s; flex-shrink: 0; }
+.paste-panel-chevron.open { transform: rotate(180deg); }
+.paste-panel-body { display: none; background: white; border-radius: 8px; border: 0.5px solid #e0dfd8; padding: 12px 14px; margin-top: -2px; }
+.paste-panel-body.open { display: block; }
+.paste-textarea {
+  width: 100%; min-height: 140px; border: 0.5px solid #D3D1C7; border-radius: 8px;
+  padding: 10px 12px; font-size: 12.5px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #1a1a18; resize: vertical; outline: none; line-height: 1.5;
+}
+.paste-textarea:focus { border-color: #009A97; }
+.paste-panel-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; gap: 10px; }
+.paste-panel-hint { font-size: 10.5px; color: #B4B2A9; line-height: 1.5; }
+.btn-autofill {
+  background: #009A97; color: white; border: none; border-radius: 8px;
+  padding: 9px 16px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  font-family: inherit; white-space: nowrap; flex-shrink: 0; transition: background 0.15s;
+}
+.btn-autofill:hover { background: #007A77; }
+.paste-detect-summary {
+  margin-top: 12px; background: #F0FAF9; border: 0.5px solid #B7E4E1; border-radius: 8px;
+  padding: 10px 12px; font-size: 11.5px; color: #005f5d; display: none; line-height: 1.6;
+}
+.paste-detect-summary.show { display: block; }
+.paste-detect-summary strong { color: #005f5d; }
+
+/* ── ORDERS SECTION (STEP 2) ── */
+.orders-card { background: white; border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.orders-card-hd { display: flex; align-items: center; justify-content: space-between; }
+.orders-empty { text-align: center; padding: 20px 10px; color: #B4B2A9; font-size: 12px; line-height: 1.6; }
+.orders-table { width: 100%; border-collapse: collapse; }
+.orders-table th {
+  text-align: left; font-size: 10px; font-weight: 600; color: #888780; text-transform: uppercase;
+  letter-spacing: 0.05em; padding: 0 8px 6px; border-bottom: 0.5px solid #e0dfd8;
+}
+.orders-table td { padding: 6px 8px; border-bottom: 0.5px solid #f0f0f0; vertical-align: middle; }
+.orders-table tr:last-child td { border-bottom: none; }
+.order-input {
+  width: 100%; border: 0.5px solid #D3D1C7; border-radius: 6px; padding: 6px 8px;
+  font-size: 12px; font-family: inherit; color: #1a1a18; outline: none;
+}
+.order-input:focus { border-color: #009A97; }
+.order-qty-input { width: 56px; text-align: center; }
+.order-select { width: 100%; border: 0.5px solid #D3D1C7; border-radius: 6px; padding: 6px 8px; font-size: 12px; font-family: inherit; color: #1a1a18; outline: none; background: white; }
+.order-remove-btn { width: 26px; height: 26px; border-radius: 6px; border: 0.5px solid #e0dfd8; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #888780; transition: all 0.12s; }
+.order-remove-btn:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
+.orders-summary { display: flex; gap: 18px; font-size: 11.5px; color: #888780; padding-top: 2px; }
+.orders-summary strong { color: #1a1a18; }
 .form-hint { font-size: 11px; color: #888780; }
 
 input[type="text"], input[type="date"], input[type="time"],
@@ -610,6 +659,43 @@ select:focus { border-color: #009A97; }
         <div id="template-filename" style="font-size:11px;color:#009A97;display:none;margin-top:4px;"></div>
       </div>
 
+      <!-- Paste from WhatsApp / chat text — auto-fills event + orders -->
+      <div class="template-strip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B4B2A9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:10px;font-weight:600;color:#B4B2A9;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Paste from WhatsApp</div>
+          <div style="font-size:12px;color:#888780;">Copy your group-buy chat or order list — we'll fill in the details</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
+          <div style="font-size:11px;font-weight:600;color:#009A97;cursor:pointer;display:flex;align-items:center;gap:3px;" onclick="togglePastePanel()" id="paste-panel-toggle">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="paste-panel-chevron" id="paste-panel-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+            Paste text
+          </div>
+        </div>
+      </div>
+      <div class="paste-panel-body" id="paste-panel-body">
+          <textarea class="paste-textarea" id="paste-textarea" placeholder="Paste your Whatspp group-buy text or order list here e.g.
+Groupbuy Event Title
+Closing Date: 15/03/2026
+Collection Date: 18/03/2026
+
+Cookies $10
+
+1. Grace x 1
+2. Marcus x2
+
+
+Sweets $5
+
+1. Mary x 10
+2. Sweelan x2"></textarea>
+          <div class="paste-panel-actions">
+            <div class="paste-panel-hint">We'll try to detect the title, dates, product, price and order list. Nothing is published — review everything before you continue.</div>
+            <button type="button" class="btn-autofill" onclick="autofillFromPaste()">✨ Auto-fill</button>
+          </div>
+          <div class="paste-detect-summary" id="paste-detect-summary"></div>
+      </div>
+
       <!-- Event details -->
       <div class="form-card">
         <div class="form-card-title">Event details</div>
@@ -982,6 +1068,36 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
+      <!-- Orders — auto-populated from the pasted WhatsApp text in Step 1,
+           adjustable here before publishing -->
+      <div class="orders-card">
+        <div class="orders-card-hd">
+          <div>
+            <div class="form-card-title" style="margin-bottom:2px;">Orders</div>
+            <div style="font-size:11px;color:#888780;">From your pasted chat — review and adjust before publishing</div>
+          </div>
+          <div class="add-item-btn" style="width:auto;padding:6px 12px;font-size:11.5px;" onclick="addOrderRow()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+            Add order
+          </div>
+        </div>
+        <div id="orders-empty" class="orders-empty">
+          No orders yet. Paste a WhatsApp chat in Step 1 and hit Auto-fill, or add an order manually.
+        </div>
+        <table class="orders-table" id="orders-table" style="display:none;">
+          <thead>
+            <tr>
+              <th style="width:34%;">Name</th>
+              <th>Product</th>
+              <th style="width:64px;">Qty</th>
+              <th style="width:34px;"></th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+        <div class="orders-summary" id="orders-summary" style="display:none;"></div>
+      </div>
+
       <div class="action-bar">
         <button class="btn-back" onclick="goToStep(1)">← Back</button>
         <button class="btn-next" onclick="goToStep(3)">Next →</button>
@@ -1270,6 +1386,243 @@ function handleTemplateUpload(input) {
   el.style.display = 'block';
 }
 
+/* ── PASTE FROM WHATSAPP: parse + auto-fill ─────────────────────────── */
+
+function togglePastePanel() {
+  const body = document.getElementById('paste-panel-body');
+  const chevron = document.getElementById('paste-panel-chevron');
+  const open = body.classList.toggle('open');
+  chevron.classList.toggle('open', open);
+}
+
+// Turns a loose day/month reference ("26 Sep", "02/01/2026") into an
+// ISO yyyy-mm-dd string for the <input type="date"> fields. Best-effort —
+// this is a design preview, not a full date-parsing library.
+function guessDateISO(raw) {
+  if (!raw) return null;
+  raw = raw.trim();
+  const MONTHS = { jan:1, feb:2, mar:3, apr:4, may:5, jun:6, jul:7, aug:8, sep:9, oct:10, nov:11, dec:12 };
+  const today = new Date();
+
+  // dd/mm/yyyy or dd-mm-yyyy
+  let m = raw.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+  if (m) {
+    let [, d, mo, y] = m;
+    if (y.length === 2) y = '20' + y;
+    return y + '-' + String(mo).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+  }
+
+  // "26 Sep" / "26 September" / "Sep 26"
+  m = raw.match(/(\d{1,2})\s*([A-Za-z]{3,})/) || raw.match(/([A-Za-z]{3,})\s*(\d{1,2})/);
+  if (m) {
+    let day, monName;
+    if (/^\d/.test(m[0])) { day = m[1]; monName = m[2]; } else { monName = m[1]; day = m[2]; }
+    const mon = MONTHS[monName.slice(0, 3).toLowerCase()];
+    if (mon) {
+      let year = today.getFullYear();
+      // if that date already passed this year, assume next year
+      const guess = new Date(year, mon - 1, parseInt(day, 10));
+      if (guess < today) year += 1;
+      return year + '-' + String(mon).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+    }
+  }
+  return null;
+}
+
+// Tries the strict multi-product template first (blocks separated by a
+// blank line: "Product - $Price" header, then "Name [code] x Qty" lines),
+// then falls back to the loose single-product WhatsApp chat style.
+function parseGroupBuyText(raw) {
+  const result = { title: null, closingDate: null, collectionDate: null, location: null, products: [] };
+  if (!raw || !raw.trim()) return result;
+
+  const lines = raw.replace(/\r/g, '').split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+  if (!lines.length) return result;
+
+  const buyerLineRe = /^(?:\d+[.)]\s*)?(.+?)\s+([A-Za-z0-9]{2,6})?\s*x\s*(\d+)\s*$/i;
+
+  // Rule 1: the first line is always the event title, no matter what else is on it.
+  result.title = lines[0];
+
+  let datesSeen = 0;
+  let currentProduct = null;
+
+  lines.forEach(function (line) {
+    // Rule 4/5: every "$" on a line starts a new product — everything to
+    // its left is the product name, everything to its right is the price.
+    const dollarIdx = line.indexOf('$');
+    if (dollarIdx !== -1) {
+      const left = line.slice(0, dollarIdx).trim().replace(/[-:|]+$/, '').trim();
+      const priceMatch = line.slice(dollarIdx + 1).match(/(\d+(?:\.\d{1,2})?)/);
+      currentProduct = {
+        name: left || ('Product ' + (result.products.length + 1)),
+        price: priceMatch ? parseFloat(priceMatch[1]) : null,
+        buyers: []
+      };
+      result.products.push(currentProduct);
+      return;
+    }
+
+    // Rule 2/3: the first date found in the whole text is the closing
+    // date, the second is the collection date — purely by order of
+    // appearance, not by any keyword on the line.
+    const dateGuess = guessDateISO(line);
+    if (dateGuess) {
+      datesSeen++;
+      if (datesSeen === 1) result.closingDate = dateGuess;
+      else if (datesSeen === 2) result.collectionDate = dateGuess;
+      return;
+    }
+
+    // Rule 6: everything else, once a product is active, is a customer
+    // order line ("Name x Qty") belonging to the most recent "$" product.
+    if (currentProduct) {
+      const bm = line.match(buyerLineRe);
+      if (bm) currentProduct.buyers.push({ name: bm[1].trim(), code: bm[2] || '', qty: parseInt(bm[3], 10) });
+    }
+  });
+
+  return result;
+}
+
+function setProductItemFields(itemId, name, price) {
+  const el = document.getElementById('item-' + itemId);
+  if (!el) return;
+  el.querySelectorAll('.field-row').forEach(function (row) {
+    const lbl = row.querySelector('.field-lbl');
+    if (!lbl) return;
+    const labelText = lbl.textContent.trim();
+    if (labelText.indexOf('Name') === 0 && name) {
+      const inp = row.querySelector('input[type="text"]');
+      if (inp) inp.value = name;
+    } else if (labelText.indexOf('Price') === 0 && price != null && !isNaN(price)) {
+      const inp = row.querySelector('input[type="number"]');
+      if (inp) inp.value = price;
+    }
+  });
+}
+
+function autofillFromPaste() {
+  const raw = document.getElementById('paste-textarea').value;
+  if (!raw || !raw.trim()) { showToast('Paste some text first', 'warning'); return; }
+
+  const parsed = parseGroupBuyText(raw);
+  const summaryEl = document.getElementById('paste-detect-summary');
+
+  if (!parsed.products.length && !parsed.title) {
+    summaryEl.className = 'paste-detect-summary show';
+    summaryEl.innerHTML = "Couldn't detect a product list or order roster in this text — you may need to fill the form in manually.";
+    showToast("Couldn't detect a clear format", 'warning');
+    return;
+  }
+
+  // Event details
+  if (parsed.title) {
+    const titleInput = document.getElementById('ev-title');
+    if (titleInput && !titleInput.value) titleInput.value = parsed.title;
+  }
+  if (parsed.closingDate) document.getElementById('ev-closing').value = parsed.closingDate;
+  if (parsed.collectionDate) document.getElementById('ev-collection').value = parsed.collectionDate;
+
+  // Products — create one card per detected product and fill name/price
+  const createdProducts = [];
+  parsed.products.forEach(function (p) {
+    const itemId = addItem();
+    setProductItemFields(itemId, p.name, p.price);
+    createdProducts.push(p.name);
+  });
+
+  // Orders roster — flatten every product's buyers into the Orders table
+  let orderCount = 0;
+  parsed.products.forEach(function (p) {
+    p.buyers.forEach(function (b) {
+      ordersData.push({ id: ++orderIdSeq, name: b.name + (b.code ? ' (' + b.code + ')' : ''), product: p.name, qty: b.qty });
+      orderCount++;
+    });
+  });
+  renderOrders();
+
+  summaryEl.className = 'paste-detect-summary show';
+  summaryEl.innerHTML = 'Detected <strong>' + (createdProducts.join(', ') || 'no products') + '</strong>'
+    + (parsed.closingDate ? ' · Closing ' + parsed.closingDate : '')
+    + (parsed.collectionDate ? ' · Collection ' + parsed.collectionDate : '')
+    + ' · <strong>' + orderCount + '</strong> order' + (orderCount === 1 ? '' : 's') + ' added.'
+    + ' Check the details below, and review the Orders list in Step 2.';
+  showToast('Form auto-filled from pasted text', 'success');
+}
+
+/* ── ORDERS TABLE (STEP 2) ── */
+let ordersData = [];
+let orderIdSeq = 0;
+
+function getAllProductNames() {
+  const names = [];
+  document.querySelectorAll('#product-items-wrap .product-item').forEach(function (item) {
+    item.querySelectorAll('.field-row').forEach(function (row) {
+      const lbl = row.querySelector('.field-lbl');
+      if (lbl && lbl.textContent.trim().indexOf('Name') === 0) {
+        const inp = row.querySelector('input[type="text"]');
+        if (inp && inp.value) names.push(inp.value);
+      }
+    });
+  });
+  return names;
+}
+
+function addOrderRow() {
+  const products = getAllProductNames();
+  ordersData.push({ id: ++orderIdSeq, name: '', product: products[0] || '', qty: 1 });
+  renderOrders();
+}
+
+function removeOrderRow(id) {
+  ordersData = ordersData.filter(function (o) { return o.id !== id; });
+  renderOrders();
+}
+
+function updateOrderField(id, field, value) {
+  const row = ordersData.find(function (o) { return o.id === id; });
+  if (!row) return;
+  row[field] = field === 'qty' ? (parseInt(value, 10) || 0) : value;
+}
+
+function renderOrders() {
+  const tbody = document.getElementById('orders-tbody');
+  const table = document.getElementById('orders-table');
+  const empty = document.getElementById('orders-empty');
+  const summary = document.getElementById('orders-summary');
+  if (!tbody) return;
+
+  if (!ordersData.length) {
+    table.style.display = 'none';
+    empty.style.display = 'block';
+    summary.style.display = 'none';
+    return;
+  }
+  table.style.display = 'table';
+  empty.style.display = 'none';
+
+  const products = getAllProductNames();
+  tbody.innerHTML = ordersData.map(function (o) {
+    const options = (products.length ? products : [o.product || 'General']).map(function (p) {
+      return '<option value="' + p.replace(/"/g, '&quot;') + '"' + (p === o.product ? ' selected' : '') + '>' + p + '</option>';
+    }).join('');
+    return '<tr>' +
+      '<td><input class="order-input" type="text" value="' + (o.name || '').replace(/"/g, '&quot;') + '" placeholder="Buyer name" oninput="updateOrderField(' + o.id + ',\'name\',this.value)" /></td>' +
+      '<td><select class="order-select" onchange="updateOrderField(' + o.id + ',\'product\',this.value)">' + options + '</select></td>' +
+      '<td><input class="order-input order-qty-input" type="number" min="1" value="' + o.qty + '" oninput="updateOrderField(' + o.id + ',\'qty\',this.value)" /></td>' +
+      '<td><div class="order-remove-btn" onclick="removeOrderRow(' + o.id + ')" title="Remove">' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>' +
+      '</div></td>' +
+      '</tr>';
+  }).join('');
+
+  const totalQty = ordersData.reduce(function (sum, o) { return sum + (o.qty || 0); }, 0);
+  summary.style.display = 'flex';
+  summary.innerHTML = '<span><strong>' + ordersData.length + '</strong> order' + (ordersData.length === 1 ? '' : 's') + '</span>' +
+    '<span><strong>' + totalQty + '</strong> item' + (totalQty === 1 ? '' : 's') + ' total</span>';
+}
+
 /* ── PRODUCT ITEMS (STEP 2) ── */
 let itemCount = 0;
 let subitemGroupCount = 0;
@@ -1443,6 +1796,7 @@ function addItem() {
   renumberItems();
   // Auto-join the shared Product Discount template, if one is currently active
   if (pdTemplate) addProductDiscount(id, true);
+  return id;
 }
 
 function removeItem(id) {
