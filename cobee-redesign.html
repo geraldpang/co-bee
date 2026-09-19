@@ -100,7 +100,7 @@
     pointer-events: none;
   }
 
-  .hero-text { position: relative; z-index: 2; }
+  .hero-text { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
   .hero-badge {
     display: inline-flex; align-items: center; gap: 8px;
     background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.4);
@@ -133,6 +133,7 @@
   .hero-actions {
     display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
     animation: fadeUp 0.6s 0.3s ease both;
+    margin-top: auto;
   }
   .btn-primary {
     background: var(--teal); color: white;
@@ -667,7 +668,7 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hex-bg"></div>
-  <div class="container" style="display:grid;grid-template-columns:0.82fr 1.2fr;align-items:start;gap:32px;position:relative;z-index:2;">
+  <div class="container" style="display:grid;grid-template-columns:0.82fr 1.2fr;align-items:stretch;gap:32px;position:relative;z-index:2;">
   <div class="hero-text" style="position:static;">
     <div class="hero-badge">
       <span class="dot"></span>
@@ -1291,7 +1292,7 @@
     function cancelHideTooltip() { clearTimeout(tooltipHideTimer); }
     function scheduleHideTooltip() {
       clearTimeout(tooltipHideTimer);
-      tooltipHideTimer = setTimeout(hideHostTooltip, 260);
+      tooltipHideTimer = setTimeout(hideHostTooltip, 120);
     }
     tooltipEl.addEventListener('mouseenter', cancelHideTooltip);
     tooltipEl.addEventListener('mouseleave', scheduleHideTooltip);
