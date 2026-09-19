@@ -238,17 +238,23 @@
     box-shadow: none; border: none;
     width: 100%; min-width: 0; box-sizing: border-box;
   }
-  .hero-map-card .map-head { max-width: none; margin: 0 0 14px; text-align: left; }
+  .hero-map-card .map-head {
+    max-width: none; margin: 0 0 10px; text-align: left;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+  }
   .hero-map-card .map-head .section-label { font-size: 12px; }
-  .hero-map-card .map-search-wrap { max-width: 340px; margin: 0 0 18px; }
-  .hero-map-card .map-search { padding: 9px 14px; font-size: 13px; }
-  .hero-map-card .map-search-hint { text-align: left; font-size: 11px; }
+  .map-head-stat { font-size: 11.5px; font-weight: 600; color: var(--mid); white-space: nowrap; }
+  .hero-map-card .map-search-wrap { max-width: 340px; margin: 0 0 14px; }
+  .map-search-field { position: relative; }
+  .map-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--mid); pointer-events: none; }
+  .hero-map-card .map-search { padding: 9px 14px 9px 38px; font-size: 13px; }
+  .hero-map-card .map-search-hint { text-align: left; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* Map full-width on top, host list as a horizontal strip below it */
   .map-split { display: block; min-width: 0; }
 
   .hero-map-card .map-stage {
-    max-width: none; min-width: 0; padding: 8px 0; border-radius: 0;
+    max-width: none; min-width: 0; padding: 4px 0; border-radius: 0;
     background: transparent; border: none; box-shadow: none;
   }
 
@@ -286,8 +292,8 @@
     max-width: 640px; margin: 0 auto;
   }
   .map-stage svg { width: 100%; height: auto; display: block; }
-  .sg-outline { fill: var(--teal-light); stroke: rgba(26,163,154,0.32); stroke-width: 1.5; }
-  .host-pin { fill: rgba(26,163,154,0.3); opacity: 1; transition: fill 0.2s, opacity 0.2s, r 0.2s; cursor: default; pointer-events: none; }
+  .sg-outline { fill: var(--teal-light); stroke: rgba(26,163,154,0.45); stroke-width: 1.5; filter: drop-shadow(0 8px 18px rgba(26,163,154,0.12)); }
+  .host-pin { fill: rgba(26,163,154,0.22); opacity: 1; transition: fill 0.2s, opacity 0.2s, r 0.2s; cursor: default; pointer-events: none; }
   .host-pin.near { fill: var(--teal-dark); opacity: 1; }
   .search-pin { fill: #E24B4A; stroke: white; stroke-width: 1.5; }
   .search-pin-ring { fill: none; stroke: #E24B4A; stroke-width: 1.5; opacity: 0.5; }
@@ -699,12 +705,16 @@
 
     <div class="map-head">
       <div class="section-label" style="color:var(--teal);">Find hosts near you</div>
+      <div class="map-head-stat">150+ hosts islandwide</div>
     </div>
 
     <div class="map-search-wrap">
-      <input type="text" class="map-search" id="hostSearch" list="sgAreas" inputmode="text" placeholder="Postal code or neighbourhood">
+      <div class="map-search-field">
+        <svg class="map-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="map-search" id="hostSearch" list="sgAreas" inputmode="text" placeholder="Postal code or neighbourhood">
+      </div>
       <datalist id="sgAreas"></datalist>
-      <div class="map-search-hint">Try a 6-digit postal code, or an area like Tampines, Jurong East, Bishan, Woodlands.</div>
+      <div class="map-search-hint">Try a postal code, or an area like Tampines or Bishan.</div>
     </div>
 
     <div class="map-stage">
@@ -1231,7 +1241,7 @@
       var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       c.setAttribute('cx', pr.x.toFixed(1));
       c.setAttribute('cy', pr.y.toFixed(1));
-      c.setAttribute('r', 2.2);
+      c.setAttribute('r', 1.9);
       c.setAttribute('class', 'host-pin');
       c.setAttribute('data-idx', i);
       pinsLayer.appendChild(c);
@@ -1335,6 +1345,26 @@
 
     // Draws the prominent teardrop pins for the given hosts, hides the plain
     // dot underneath each one, and wires hover so ONLY these pins respond.
+    // Mobile has no hover, so pins get a tap-twice affordance: first tap
+    // highlights + shows the tooltip, a second tap on the same pin follows
+    // the Join link. Tapping elsewhere resets it.
+    var activeTapHost = null;
+    function handlePinTap(h, evt) {
+      if (activeTapHost === h) {
+        window.location.href = 'signup.html';
+        return;
+      }
+      if (evt && evt.preventDefault) evt.preventDefault();
+      activeTapHost = h;
+      showHostTooltip(h);
+    }
+    document.addEventListener('click', function (e) {
+      if (!svgEl.contains(e.target) && !tooltipEl.contains(e.target)) {
+        activeTapHost = null;
+        hideHostTooltip();
+      }
+    });
+
     function renderProminentPins(list) {
       hosts.forEach(function (h) { h.el.style.opacity = ''; });
       nearPinsLayer.innerHTML = '';
@@ -1347,6 +1377,7 @@
         pinEls.outer.style.cursor = 'pointer';
         pinEls.outer.addEventListener('mouseenter', function () { showHostTooltip(h); });
         pinEls.outer.addEventListener('mouseleave', scheduleHideTooltip);
+        pinEls.outer.addEventListener('click', function (e) { handlePinTap(h, e); });
         requestAnimationFrame(function () { pinEls.inner.classList.add('show'); });
         pinElMap.set(h, pinEls);
       });
@@ -1411,15 +1442,6 @@
       var nearest10 = withDist.slice(0, 9).map(function (item) { return item.h; });
       var distByHost = withDist.slice(0, 9);
       renderProminentPins(nearest10);
-
-      // Build the clickable list of the same 9 hosts, nearest first
-      hostList.innerHTML = '';
-      hostCardMap.clear();
-      hostListTitle.textContent = 'Closest hosts near you';
-      distByHost.forEach(function (item, idx) {
-        buildCard(item.h, 'Hosted by ' + item.h.name + ' · ' + item.d.toFixed(1) + ' km', idx);
-      });
-      hostListWrap.classList.add('show');
 
       // Searched location (used for zoom framing only — no marker drawn,
       // since geocoding an area/postal sector is only approximate)
