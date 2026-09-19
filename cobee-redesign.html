@@ -243,6 +243,7 @@
   .hero-map-card .map-head {
     max-width: none; margin: 0 0 10px; text-align: left;
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    flex-wrap: wrap; row-gap: 10px;
   }
   .hero-map-card .map-head .section-label {
     font-size: 20px; font-weight: 700; letter-spacing: -0.3px; text-transform: none;
@@ -1096,6 +1097,13 @@
       return { x: x, y: y };
     }
 
+    // Builds the signup link for a specific host, carrying which host was
+    // picked so the signup page knows to skip the "find hosts" step after.
+    function joinUrl(h) {
+      return 'signup.html?host=' + encodeURIComponent(h.groupBuy.name) +
+        '&hostname=' + encodeURIComponent(h.name);
+    }
+
     function haversineKm(lat1, lon1, lat2, lon2) {
       var R = 6371;
       var dLat = (lat2 - lat1) * Math.PI / 180;
@@ -1317,7 +1325,7 @@
           '<div class="tt-name">' + h.groupBuy.name + '</div>' +
           '<div class="tt-host">Hosted by ' + h.name + '</div>' +
         '</div>' +
-        '<a href="signup.html" class="tt-join">Join</a>';
+        '<a href="' + joinUrl(h) + '" class="tt-join">Join</a>';
       tooltipEl.style.left = px + 'px';
       tooltipEl.style.top = py + 'px';
       tooltipEl.classList.add('show');
@@ -1350,7 +1358,7 @@
     var activeTapHost = null;
     function handlePinTap(h, evt) {
       if (activeTapHost === h) {
-        window.location.href = 'signup.html';
+        window.location.href = joinUrl(h);
         return;
       }
       if (evt && evt.preventDefault) evt.preventDefault();
@@ -1405,7 +1413,7 @@
           '<div class="host-card-name">' + h.groupBuy.name + '</div>' +
           '<div class="host-card-dist">' + subtitle + '</div>' +
         '</div>' +
-        '<a href="signup.html" class="host-card-join">Join</a>';
+        '<a href="' + joinUrl(h) + '" class="host-card-join">Join</a>';
       card.addEventListener('mouseenter', function () { ringOnly(h); });
       card.addEventListener('mouseleave', clearRingOnly);
       hostList.appendChild(card);
