@@ -681,7 +681,7 @@ select:focus { border-color: #009A97; }
       <div class="template-strip">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B4B2A9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <div style="flex:1;min-width:0;">
-          <div style="font-size:10px;font-weight:600;color:#B4B2A9;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Paste from WhatsApp</div>
+          <div style="font-size:10px;font-weight:600;color:#B4B2A9;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Paste from text &amp; messages</div>
           <div style="font-size:12px;color:#888780;">Copy your group-buy chat or order list — we'll fill in the details</div>
         </div>
         <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
@@ -1438,7 +1438,42 @@ function parseGroupBuyText(raw) {
   // Rule 1: the first line is always the event title, no matter what else is on it.
   result.title = lines[0];
 
-  let datesSeen = 0;
+  // ── Dates ──
+  // Collect every date found anywhere in the text, in order of appearance,
+  // and note whether each one's own line mentions "closing" or "collection".
+  const allDates = [];
+  lines.forEach(function (line) {
+    const d = guessDateISO(line);
+    if (d) {
+      allDates.push({
+        date: d,
+        isClosing: /closing/i.test(line),
+        isCollection: /collection/i.test(line)
+      });
+    }
+  });
+
+  const hasClosingWord = /closing/i.test(raw);
+  const hasCollectionWord = /collection/i.test(raw);
+
+  if (hasClosingWord && hasCollectionWord) {
+    // Rule 2a: both words are stipulated somewhere in the text — trust
+    // the labels over position.
+    const closingHit = allDates.find(function (d) { return d.isClosing; });
+    const collectionHit = allDates.find(function (d) { return d.isCollection; });
+    if (closingHit) result.closingDate = closingHit.date;
+    if (collectionHit) result.collectionDate = collectionHit.date;
+  } else if (allDates.length === 1) {
+    // Rule 2c: neither word is stipulated, and there's only one date in
+    // the whole text — treat it as the collection date.
+    result.collectionDate = allDates[0].date;
+  } else if (allDates.length >= 2) {
+    // Rule 2b: neither word is stipulated — first date by position is
+    // closing, second is collection.
+    result.closingDate = allDates[0].date;
+    result.collectionDate = allDates[1].date;
+  }
+
   let currentProduct = null;
 
   lines.forEach(function (line) {
@@ -1457,16 +1492,9 @@ function parseGroupBuyText(raw) {
       return;
     }
 
-    // Rule 2/3: the first date found in the whole text is the closing
-    // date, the second is the collection date — purely by order of
-    // appearance, not by any keyword on the line.
-    const dateGuess = guessDateISO(line);
-    if (dateGuess) {
-      datesSeen++;
-      if (datesSeen === 1) result.closingDate = dateGuess;
-      else if (datesSeen === 2) result.collectionDate = dateGuess;
-      return;
-    }
+    // A date-shaped line was already handled above — never treat it as a
+    // buyer/order line too.
+    if (guessDateISO(line)) return;
 
     // Rule 6: everything else, once a product is active, is a customer
     // order line belonging to the most recent "$" product. The demarker
@@ -1529,6 +1557,7 @@ function autofillFromPaste() {
   // Products — create one card per detected product and fill name/price
   const createdProducts = [];
   let orderCount = 0;
+  let matchedCount = 0;
   parsed.products.forEach(function (p) {
     const itemId = addItem();
     setProductItemFields(itemId, p.name, p.price);
@@ -1540,7 +1569,12 @@ function autofillFromPaste() {
     if (p.buyers.length) {
       addOrdersOption(itemId, true);
       p.buyers.forEach(function (b) {
-        ordersData.push({ id: ++orderIdSeq, productId: itemId, name: b.name, phone: b.code || '', qty: b.qty });
+        // If this buyer's name matches exactly one member in the directory,
+        // use their real phone number instead of the guessed chat code.
+        const member = findUniqueMemberMatch(b.name);
+        const phone = member ? member.phone : (b.code || '');
+        if (member) matchedCount++;
+        ordersData.push({ id: ++orderIdSeq, productId: itemId, name: b.name, phone: phone, qty: b.qty });
         orderCount++;
       });
       renderProductOrders(itemId);
@@ -1551,7 +1585,8 @@ function autofillFromPaste() {
   summaryEl.innerHTML = 'Detected <strong>' + (createdProducts.join(', ') || 'no products') + '</strong>'
     + (parsed.closingDate ? ' · Closing ' + parsed.closingDate : '')
     + (parsed.collectionDate ? ' · Collection ' + parsed.collectionDate : '')
-    + ' · <strong>' + orderCount + '</strong> order' + (orderCount === 1 ? '' : 's') + ' added.'
+    + ' · <strong>' + orderCount + '</strong> order' + (orderCount === 1 ? '' : 's') + ' added'
+    + (matchedCount ? ' (' + matchedCount + ' matched to members — phone auto-filled)' : '') + '.'
     + ' Check the details below, and review each product\'s Orders in Step 2.';
   showToast('Form auto-filled from pasted text', 'success');
 }
@@ -1620,6 +1655,22 @@ function selectMemberSuggestion(orderId, name, phone) {
 function hideMemberSuggestions(orderId) {
   const list = document.getElementById('member-suggest-' + orderId);
   if (list) list.classList.remove('show');
+}
+
+// Used by the WhatsApp-paste auto-fill: matches a parsed buyer name
+// against the member directory, but ONLY returns a member when the match
+// is unambiguous — an exact full-name match, or a unique first-name match
+// (i.e. exactly one member starts with that name). Two "Grace"s in the
+// directory means neither gets auto-filled, since we can't tell which one.
+function findUniqueMemberMatch(name) {
+  if (!name) return null;
+  const q = name.trim().toLowerCase();
+  if (!q) return null;
+  const matches = MEMBERS_DB.filter(function (m) {
+    const mn = m.name.toLowerCase();
+    return mn === q || mn.split(' ')[0] === q;
+  });
+  return matches.length === 1 ? matches[0] : null;
 }
 
 
@@ -1860,7 +1911,7 @@ function addItem() {
               </div>
               <div class="opt-dd-item" id="opt-dd-item-orders-${id}" onclick="event.stopPropagation();addOrdersOption(${id})">
                 Orders
-                <div class="opt-dd-sub">Track buyer name, phone &amp; qty for this product</div>
+                <div class="opt-dd-sub">Add orders for buyer</div>
               </div>
             </div>
           </div>
@@ -2027,7 +2078,7 @@ function addOrdersOption(id, silent) {
   div.className = 'option-panel';
   div.id = 'orders-panel-' + id;
 
-  const ordersHelp = 'Buyer name, phone number and quantity for this product. Filled in automatically when you paste a WhatsApp chat in Step 1, or add orders manually here.';
+  const ordersHelp = 'Add Buyer name, phone number and quantity for this product. Order will automatically be added upon publishing the event.';
 
   const hd = makeOptionHeader('Orders', function () {
     ordersData = ordersData.filter(function (o) { return o.productId !== id; });
