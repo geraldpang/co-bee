@@ -352,30 +352,18 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
     text-decoration: underline; cursor: pointer;
   }
 
-  /* GROUP SEARCH BAR  */
+  /* Find hosts link (My Group) */
   .group-search-top { padding: 10px 0 6px; background: #F4F6F8; position: relative; display: flex; justify-content: center; }
   .group-search-top .inner { width: 100%; max-width: 600px; padding: 0 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .group-search-top .grp-lbl { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
-  .group-search-top .s-wrap { position: relative; width: 60%; max-width: 300px; }
-  .group-search-top .s-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #B4B2A9; }
-  .group-search-top .s-input {
-    width: 100%; height: 32px; border: 0.5px solid #D3D1C7;
-    border-radius: 8px; padding: 0 12px 0 30px;
-    font-size: 13px; font-family: inherit; color: #1a1a18;
-    outline: none; background: white; transition: border-color 0.15s;
+  .group-find-link {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: #009A97;
+    text-decoration: none; cursor: pointer; transition: color 0.12s;
   }
-  .group-search-top .s-input:focus { border-color: #009A97; }
-  .group-search-top .s-input::placeholder { color: #B4B2A9; }
+  .group-find-link:hover { color: #007A77; }
+  .group-find-link svg { flex-shrink: 0; }
 
-  /* Dropdown */
-  .group-dropdown {
-    display: none; position: absolute; left: 14px; right: 14px; top: calc(100% + 4px);
-    background: white; border: 0.5px solid #D3D1C7; border-radius: 10px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1); z-index: 50; overflow: hidden;
-    max-width: 600px; margin: 0 auto;
-  }
-  .group-dropdown.open { display: block; }
-  .group-dropdown-lbl { padding: 7px 12px 5px; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #888; border-bottom: 0.5px solid #f0f0f0; }
   .group-drop-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 0.5px solid #f0f0f0; cursor: pointer; transition: background 0.1s; }
   .group-drop-item:last-child { border-bottom: none; }
   .group-drop-item:hover { background: #f5fafa; }
@@ -2706,20 +2694,15 @@ select:focus { border-color: #009A97; }
   <!-- MY GROUP VIEW — Screen 1: Group List -->
   <div id="view-group" style="display:none;">
 
-    <!-- Search bar pinned at top -->
+    <!-- Find hosts near you — links out to the map/search page -->
     <div class="group-search-top" style="position:relative;">
       <div class="inner">
         <span class="grp-lbl">MY GROUP (2)</span>
-        <div class="s-wrap">
-          <svg class="s-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input class="s-input" id="group-search-input" placeholder="Search for a group to join…" oninput="searchGroups(this.value)" autocomplete="off" />
-          <div id="group-search-preview" style="display:none;position:absolute;top:calc(100% + 4px);left:-14px;right:-14px;background:white;border:0.5px solid #D3D1C7;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.12);z-index:100;max-height:260px;overflow-y:auto;"></div>
-        </div>
-      </div>
-      <!-- Dropdown results -->
-      <div class="group-dropdown" id="group-dropdown">
-        <div class="group-dropdown-lbl" id="group-dropdown-lbl">Results</div>
-        <div id="group-dropdown-results"></div>
+        <a class="group-find-link" href="find-hosts.html"
+           onclick="event.preventDefault(); window.parent && window.parent.navigate ? window.parent.navigate('find-hosts.html', null) : window.location.href='find-hosts.html';">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Find a group to join
+        </a>
       </div>
     </div>
 
@@ -4899,71 +4882,6 @@ function applyDefaultGecFilter() {
     c.style.display = (status === 'active') ? '' : 'none';
   });
 }
-
-function searchGroups(query) {
-  const preview = document.getElementById('group-search-preview');
-  if (!preview) return;
-  if (!query || query.trim().length < 1) { preview.style.display = 'none'; return; }
-  const allGroups = [
-    { id: 'g1', name: 'M6 Group', members: 24, admin: 'Minh Cong' },
-    { id: 'g2', name: 'Foodie Pals', members: 18, admin: 'Janet Lee' },
-    { id: 'g3', name: 'Tech Buys SG', members: 45, admin: 'David Tan' },
-    { id: 'g4', name: 'Mums Collective', members: 12, admin: 'Sarah Wong' },
-    { id: 'g5', name: 'Coffee Lovers', members: 31, admin: 'Tom Nguyen' },
-  ];
-  const q = query.toLowerCase();
-  const results = allGroups.filter(function(g) { return g.name.toLowerCase().includes(q) || g.admin.toLowerCase().includes(q); });
-  preview.innerHTML = '';
-  if (results.length === 0) {
-    const empty = document.createElement('div');
-    empty.style.cssText = 'padding:12px 14px;font-size:12px;color:#888780;';
-    empty.textContent = 'No groups found';
-    preview.appendChild(empty);
-  } else {
-    results.forEach(function(g) {
-      const row = document.createElement('div');
-      row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid #f0f0f0;cursor:pointer;';
-      row.onmouseover = function() { row.style.background = '#f5fafa'; };
-      row.onmouseout = function() { row.style.background = ''; };
-      const info = document.createElement('div');
-      const avatarEl = document.createElement('div');
-      const colors = ['#9B59B6','#009A97','#E8971A','#E74C3C','#3498DB'];
-      avatarEl.style.cssText = 'width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;margin-right:10px;background:' + colors[results.indexOf(g) % colors.length] + ';';
-      avatarEl.textContent = g.name.charAt(0).toUpperCase();
-      const nameEl = document.createElement('div');
-      nameEl.style.cssText = 'font-size:13px;font-weight:500;color:#1a1a18;';
-      nameEl.textContent = g.name;
-      const metaEl = document.createElement('div');
-      metaEl.style.cssText = 'font-size:11px;color:#888780;';
-      metaEl.textContent = g.members + ' members · Admin: ' + g.admin;
-      info.style.cssText = 'flex:1;min-width:0;';
-      info.appendChild(nameEl);
-      info.appendChild(metaEl);
-      const btn = document.createElement('button');
-      btn.style.cssText = 'height:28px;padding:0 12px;background:#009A97;color:white;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;flex-shrink:0;';
-      btn.textContent = 'Join';
-      btn.onclick = function(e) { e.stopPropagation(); joinGroup(g.id, g.name); };
-      row.appendChild(avatarEl);
-      row.appendChild(info);
-      row.appendChild(btn);
-      preview.appendChild(row);
-    });
-  }
-  preview.style.display = 'block';
-}
-
-function joinGroup(id, name) {
-  document.getElementById('group-search-input').value = '';
-  document.getElementById('group-search-preview').style.display = 'none';
-  showToast('Joined ' + name + '!', 'success');
-}
-
-document.addEventListener('click', function(e) {
-  const preview = document.getElementById('group-search-preview');
-  if (preview && !e.target.closest('#group-search-input') && !e.target.closest('#group-search-preview')) {
-    preview.style.display = 'none';
-  }
-});
 
 function togglePcard(id) {
   const items = document.getElementById(id);
