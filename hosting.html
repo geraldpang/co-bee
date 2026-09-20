@@ -122,6 +122,18 @@ body {
 .order-select { width: 100%; border: 0.5px solid #D3D1C7; border-radius: 6px; padding: 6px 8px; font-size: 12px; font-family: inherit; color: #1a1a18; outline: none; background: white; }
 .order-remove-btn { width: 26px; height: 26px; border-radius: 6px; border: 0.5px solid #e0dfd8; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #888780; transition: all 0.12s; }
 .order-remove-btn:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
+.order-suggest-list {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 20;
+  background: white; border: 0.5px solid #D3D1C7; border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.14); margin-top: 4px; max-height: 180px; overflow-y: auto;
+  display: none;
+}
+.order-suggest-list.show { display: block; }
+.order-suggest-item { padding: 7px 10px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.order-suggest-item:hover { background: #F0FAF9; }
+.order-suggest-name { font-size: 12px; font-weight: 600; color: #1a1a18; }
+.order-suggest-phone { font-size: 11px; color: #888780; }
+.order-suggest-empty { padding: 8px 10px; font-size: 11px; color: #B4B2A9; line-height: 1.4; }
 .orders-summary { display: flex; gap: 18px; font-size: 11.5px; color: #888780; padding-top: 2px; }
 .orders-summary strong { color: #1a1a18; }
 
@@ -1545,8 +1557,71 @@ function autofillFromPaste() {
 }
 
 /* ── ORDERS, PER PRODUCT (STEP 2) ── */
-let ordersData = []; // { id, productId, name, qty }
+let ordersData = []; // { id, productId, name, phone, qty }
 let orderIdSeq = 0;
+
+// Mock member directory — in the live product this comes from the real
+// members database. Typing a name below searches this list so the host
+// doesn't have to re-type a member's phone number every time.
+const MEMBERS_DB = [
+  { name: 'Grace Tan', phone: '9123 4567' },
+  { name: 'Marcus Lee', phone: '8234 1122' },
+  { name: 'Priya Nair', phone: '9876 5432' },
+  { name: 'Alice Wong', phone: '9011 2233' },
+  { name: 'Bob Koh', phone: '8123 4455' },
+  { name: 'Mary Lim', phone: '9345 6789' },
+  { name: 'Charlie Ong', phone: '8765 4321' },
+  { name: 'Sweelan Goh', phone: '9456 7890' },
+  { name: 'Amirah Teo', phone: '8890 1234' },
+  { name: 'Daniel Yeo', phone: '9678 2345' },
+  { name: 'Farhan Ismail', phone: '8321 6789' },
+  { name: 'Jasmine Koh', phone: '9567 8901' },
+  { name: 'Kevin Tan', phone: '8456 7891' },
+  { name: 'Michelle Ng', phone: '9234 5671' },
+  { name: 'Rachel Lim', phone: '8901 2345' }
+];
+
+// Shows a small dropdown of matching members below the name input as the
+// host types. If nothing matches, it says so plainly — typing continues
+// as a brand-new name, nothing is blocked.
+function filterMemberSuggestions(orderId, query) {
+  const list = document.getElementById('member-suggest-' + orderId);
+  if (!list) return;
+  query = (query || '').trim().toLowerCase();
+  if (!query) { list.classList.remove('show'); list.innerHTML = ''; return; }
+
+  const matches = MEMBERS_DB.filter(function (m) {
+    return m.name.toLowerCase().indexOf(query) !== -1;
+  }).slice(0, 6);
+
+  if (!matches.length) {
+    list.innerHTML = '<div class="order-suggest-empty">No matching member — this will be added as a new name</div>';
+    list.classList.add('show');
+    return;
+  }
+
+  list.innerHTML = matches.map(function (m) {
+    return '<div class="order-suggest-item" onmousedown="selectMemberSuggestion(' + orderId + ',\'' +
+      m.name.replace(/'/g, "\\'") + '\',\'' + m.phone.replace(/'/g, "\\'") + '\')">' +
+      '<span class="order-suggest-name">' + m.name + '</span>' +
+      '<span class="order-suggest-phone">' + m.phone + '</span>' +
+      '</div>';
+  }).join('');
+  list.classList.add('show');
+}
+
+function selectMemberSuggestion(orderId, name, phone) {
+  updateOrderField(orderId, 'name', name);
+  updateOrderField(orderId, 'phone', phone);
+  const row = ordersData.find(function (o) { return o.id === orderId; });
+  if (row) renderProductOrders(row.productId);
+}
+
+function hideMemberSuggestions(orderId) {
+  const list = document.getElementById('member-suggest-' + orderId);
+  if (list) list.classList.remove('show');
+}
+
 
 function addOrderRow(productId) {
   ordersData.push({ id: ++orderIdSeq, productId: productId, name: '', phone: '', qty: 1 });
@@ -1590,7 +1665,13 @@ function renderProductOrders(productId) {
 
   tbody.innerHTML = rows.map(function (o) {
     return '<tr>' +
-      '<td><input class="order-input" type="text" value="' + (o.name || '').replace(/"/g, '&quot;') + '" placeholder="Buyer name" oninput="updateOrderField(' + o.id + ',\'name\',this.value)" /></td>' +
+      '<td style="position:relative;">' +
+        '<input class="order-input" type="text" value="' + (o.name || '').replace(/"/g, '&quot;') + '" placeholder="Search or type a name" autocomplete="off" ' +
+          'oninput="updateOrderField(' + o.id + ',\'name\',this.value);filterMemberSuggestions(' + o.id + ',this.value)" ' +
+          'onfocus="filterMemberSuggestions(' + o.id + ',this.value)" ' +
+          'onblur="setTimeout(function(){hideMemberSuggestions(' + o.id + ')},150)" />' +
+        '<div class="order-suggest-list" id="member-suggest-' + o.id + '"></div>' +
+      '</td>' +
       '<td><input class="order-input" type="tel" value="' + (o.phone || '').replace(/"/g, '&quot;') + '" placeholder="Phone number" oninput="updateOrderField(' + o.id + ',\'phone\',this.value)" /></td>' +
       '<td><input class="order-input order-qty-input" type="number" min="1" value="' + o.qty + '" oninput="updateOrderField(' + o.id + ',\'qty\',this.value)" /></td>' +
       '<td><div class="order-remove-btn" onclick="removeOrderRow(' + o.id + ')" title="Remove">' +
