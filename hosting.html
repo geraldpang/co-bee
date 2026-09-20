@@ -124,6 +124,12 @@ body {
 .order-remove-btn:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
 .orders-summary { display: flex; gap: 18px; font-size: 11.5px; color: #888780; padding-top: 2px; }
 .orders-summary strong { color: #1a1a18; }
+
+/* Orders embedded inside each product card */
+.product-orders-wrap { border-top: 0.5px solid #f0f0f0; padding-top: 10px; margin-top: 2px; }
+.product-orders-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.product-orders-empty { padding: 12px 6px; text-align: left; }
+.product-orders-table th, .product-orders-table td { padding: 5px 6px; }
 .form-hint { font-size: 11px; color: #888780; }
 
 input[type="text"], input[type="date"], input[type="time"],
@@ -1068,36 +1074,6 @@ Sweets $5
         </div>
       </div>
 
-      <!-- Orders — auto-populated from the pasted WhatsApp text in Step 1,
-           adjustable here before publishing -->
-      <div class="orders-card">
-        <div class="orders-card-hd">
-          <div>
-            <div class="form-card-title" style="margin-bottom:2px;">Orders</div>
-            <div style="font-size:11px;color:#888780;">From your pasted chat — review and adjust before publishing</div>
-          </div>
-          <div class="add-item-btn" style="width:auto;padding:6px 12px;font-size:11.5px;" onclick="addOrderRow()">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-            Add order
-          </div>
-        </div>
-        <div id="orders-empty" class="orders-empty">
-          No orders yet. Paste a WhatsApp chat in Step 1 and hit Auto-fill, or add an order manually.
-        </div>
-        <table class="orders-table" id="orders-table" style="display:none;">
-          <thead>
-            <tr>
-              <th style="width:34%;">Name</th>
-              <th>Product</th>
-              <th style="width:64px;">Qty</th>
-              <th style="width:34px;"></th>
-            </tr>
-          </thead>
-          <tbody id="orders-tbody"></tbody>
-        </table>
-        <div class="orders-summary" id="orders-summary" style="display:none;"></div>
-      </div>
-
       <div class="action-bar">
         <button class="btn-back" onclick="goToStep(1)">← Back</button>
         <button class="btn-next" onclick="goToStep(3)">Next →</button>
@@ -1526,21 +1502,19 @@ function autofillFromPaste() {
 
   // Products — create one card per detected product and fill name/price
   const createdProducts = [];
+  let orderCount = 0;
   parsed.products.forEach(function (p) {
     const itemId = addItem();
     setProductItemFields(itemId, p.name, p.price);
     createdProducts.push(p.name);
-  });
 
-  // Orders roster — flatten every product's buyers into the Orders table
-  let orderCount = 0;
-  parsed.products.forEach(function (p) {
+    // That product's buyers become orders embedded in its own card.
     p.buyers.forEach(function (b) {
-      ordersData.push({ id: ++orderIdSeq, name: b.name + (b.code ? ' (' + b.code + ')' : ''), product: p.name, qty: b.qty });
+      ordersData.push({ id: ++orderIdSeq, productId: itemId, name: b.name + (b.code ? ' (' + b.code + ')' : ''), qty: b.qty });
       orderCount++;
     });
+    renderProductOrders(itemId);
   });
-  renderOrders();
 
   summaryEl.className = 'paste-detect-summary show';
   summaryEl.innerHTML = 'Detected <strong>' + (createdProducts.join(', ') || 'no products') + '</strong>'
@@ -1551,33 +1525,20 @@ function autofillFromPaste() {
   showToast('Form auto-filled from pasted text', 'success');
 }
 
-/* ── ORDERS TABLE (STEP 2) ── */
-let ordersData = [];
+/* ── ORDERS, PER PRODUCT (STEP 2) ── */
+let ordersData = []; // { id, productId, name, qty }
 let orderIdSeq = 0;
 
-function getAllProductNames() {
-  const names = [];
-  document.querySelectorAll('#product-items-wrap .product-item').forEach(function (item) {
-    item.querySelectorAll('.field-row').forEach(function (row) {
-      const lbl = row.querySelector('.field-lbl');
-      if (lbl && lbl.textContent.trim().indexOf('Name') === 0) {
-        const inp = row.querySelector('input[type="text"]');
-        if (inp && inp.value) names.push(inp.value);
-      }
-    });
-  });
-  return names;
-}
-
-function addOrderRow() {
-  const products = getAllProductNames();
-  ordersData.push({ id: ++orderIdSeq, name: '', product: products[0] || '', qty: 1 });
-  renderOrders();
+function addOrderRow(productId) {
+  ordersData.push({ id: ++orderIdSeq, productId: productId, name: '', qty: 1 });
+  renderProductOrders(productId);
 }
 
 function removeOrderRow(id) {
+  const row = ordersData.find(function (o) { return o.id === id; });
+  const productId = row ? row.productId : null;
   ordersData = ordersData.filter(function (o) { return o.id !== id; });
-  renderOrders();
+  if (productId != null) renderProductOrders(productId);
 }
 
 function updateOrderField(id, field, value) {
@@ -1586,14 +1547,19 @@ function updateOrderField(id, field, value) {
   row[field] = field === 'qty' ? (parseInt(value, 10) || 0) : value;
 }
 
-function renderOrders() {
-  const tbody = document.getElementById('orders-tbody');
-  const table = document.getElementById('orders-table');
-  const empty = document.getElementById('orders-empty');
-  const summary = document.getElementById('orders-summary');
+// Renders the order list embedded inside a single product card.
+function renderProductOrders(productId) {
+  const item = document.getElementById('item-' + productId);
+  if (!item) return;
+  const tbody = item.querySelector('.product-orders-tbody');
+  const table = item.querySelector('.product-orders-table');
+  const empty = item.querySelector('.product-orders-empty');
+  const summary = item.querySelector('.product-orders-summary');
   if (!tbody) return;
 
-  if (!ordersData.length) {
+  const rows = ordersData.filter(function (o) { return o.productId === productId; });
+
+  if (!rows.length) {
     table.style.display = 'none';
     empty.style.display = 'block';
     summary.style.display = 'none';
@@ -1602,14 +1568,9 @@ function renderOrders() {
   table.style.display = 'table';
   empty.style.display = 'none';
 
-  const products = getAllProductNames();
-  tbody.innerHTML = ordersData.map(function (o) {
-    const options = (products.length ? products : [o.product || 'General']).map(function (p) {
-      return '<option value="' + p.replace(/"/g, '&quot;') + '"' + (p === o.product ? ' selected' : '') + '>' + p + '</option>';
-    }).join('');
+  tbody.innerHTML = rows.map(function (o) {
     return '<tr>' +
       '<td><input class="order-input" type="text" value="' + (o.name || '').replace(/"/g, '&quot;') + '" placeholder="Buyer name" oninput="updateOrderField(' + o.id + ',\'name\',this.value)" /></td>' +
-      '<td><select class="order-select" onchange="updateOrderField(' + o.id + ',\'product\',this.value)">' + options + '</select></td>' +
       '<td><input class="order-input order-qty-input" type="number" min="1" value="' + o.qty + '" oninput="updateOrderField(' + o.id + ',\'qty\',this.value)" /></td>' +
       '<td><div class="order-remove-btn" onclick="removeOrderRow(' + o.id + ')" title="Remove">' +
         '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>' +
@@ -1617,10 +1578,19 @@ function renderOrders() {
       '</tr>';
   }).join('');
 
-  const totalQty = ordersData.reduce(function (sum, o) { return sum + (o.qty || 0); }, 0);
+  const totalQty = rows.reduce(function (sum, o) { return sum + (o.qty || 0); }, 0);
   summary.style.display = 'flex';
-  summary.innerHTML = '<span><strong>' + ordersData.length + '</strong> order' + (ordersData.length === 1 ? '' : 's') + '</span>' +
+  summary.innerHTML = '<span><strong>' + rows.length + '</strong> order' + (rows.length === 1 ? '' : 's') + '</span>' +
     '<span><strong>' + totalQty + '</strong> item' + (totalQty === 1 ? '' : 's') + ' total</span>';
+}
+
+// Re-renders every product card's order list — used after a bulk change
+// like auto-fill, or when re-entering Step 2.
+function renderAllProductOrders() {
+  document.querySelectorAll('#product-items-wrap .product-item').forEach(function (item) {
+    const id = parseInt(item.id.replace('item-', ''), 10);
+    if (!isNaN(id)) renderProductOrders(id);
+  });
 }
 
 /* ── PRODUCT ITEMS (STEP 2) ── */
@@ -1791,6 +1761,30 @@ function addItem() {
         </div>
         <div id="opt-panels-${id}"></div>
       </div>
+
+      <!-- Orders for this product — auto-populated from a pasted WhatsApp
+           chat, or added manually -->
+      <div class="product-orders-wrap">
+        <div class="product-orders-hd">
+          <span class="options-lbl">Orders</span>
+          <div class="add-option-trigger" onclick="addOrderRow(${id})">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
+            Add order
+          </div>
+        </div>
+        <div class="orders-empty product-orders-empty">No orders yet for this product.</div>
+        <table class="orders-table product-orders-table" style="display:none;">
+          <thead>
+            <tr>
+              <th style="width:60%;">Name</th>
+              <th style="width:64px;">Qty</th>
+              <th style="width:34px;"></th>
+            </tr>
+          </thead>
+          <tbody class="product-orders-tbody"></tbody>
+        </table>
+        <div class="orders-summary product-orders-summary" style="display:none;"></div>
+      </div>
     </div>`;
   wrap.appendChild(div);
   renumberItems();
@@ -1802,6 +1796,7 @@ function addItem() {
 function removeItem(id) {
   const el = document.getElementById('item-' + id);
   if (el) el.remove();
+  ordersData = ordersData.filter(function (o) { return o.productId !== id; });
   renumberItems();
 }
 
