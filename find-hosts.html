@@ -3,58 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Find Hosts Near You — co·bee</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Find Hosts — co·bee</title>
 <style>
   :root {
-    --honey: #F5A623;
-    --honey-deep: #E8891A;
-    --teal: #1AA39A;
-    --teal-dark: #0D7A72;
-    --teal-light: #E8F7F6;
-    --cream: #FFFBF4;
-    --dark: #1A1A2E;
-    --mid: #4A4A6A;
+    --teal: #009A97;
+    --teal-dark: #007A77;
+    --teal-light: #E0F5F5;
+    --teal-mid: #80CCCB;
+    --amber: #E8971A;
+    --amber-light: #FEF2DC;
+    --red: #E24B4A;
+    --ink: #1a1a18;
+    --mid: #888780;
+    --faint: #B4B2A9;
+    --border: #D3D1C7;
+    --border-light: #E0DFD8;
+    --page-bg: #F4F6F8;
     --white: #FFFFFF;
+    /* aliases so the rest of this file's existing rules (var(--dark) etc.)
+       keep working without a full find/replace */
+    --dark: var(--ink);
+    --honey: var(--amber);
+    --honey-deep: #BA7517;
+    --cream: var(--page-bg);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html, body { height: 100%; }
   body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--dark);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--page-bg);
+    color: var(--ink);
     min-height: 100vh;
   }
   .container { max-width: 1200px; margin: 0 auto; width: 100%; }
 
-  nav {
-    position: fixed; top: 0; width: 100%; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 24px;
-    background: rgba(255,251,244,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(26,163,154,0.12);
-  }
-  .logo { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 900; color: var(--teal); letter-spacing: -1px; text-decoration: none; display: inline-block; }
-  .logo span { color: var(--honey); }
-  .nav-link { font-size: 14px; color: var(--mid); text-decoration: none; font-weight: 500; transition: color 0.2s; }
-  .nav-link:hover { color: var(--teal); }
-
-  .find-page-wrap { padding: 110px 24px 80px; }
+  .find-page-wrap { padding: 20px 20px 60px; }
   .find-page-inner { max-width: 900px; margin: 0 auto; }
-  .find-page-header { text-align: center; margin-bottom: 32px; }
+  .find-page-header { text-align: left; margin-bottom: 20px; }
   .find-page-title {
-    font-family: 'Fraunces', serif; font-size: clamp(30px, 4vw, 42px); font-weight: 900;
-    letter-spacing: -1px; color: var(--dark); margin-bottom: 10px;
+    font-size: 20px; font-weight: 700;
+    letter-spacing: -0.2px; color: var(--ink); margin-bottom: 4px;
   }
-  .find-page-title em { color: var(--teal); font-style: italic; }
-  .find-page-sub { font-size: 15px; color: var(--mid); max-width: 480px; margin: 0 auto; line-height: 1.6; }
+  .find-page-title em { color: var(--teal); font-style: normal; }
+  .find-page-sub { font-size: 13px; color: var(--mid); max-width: 480px; line-height: 1.6; }
 
   /* ─── Toast ─── */
   .toast {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: var(--dark); color: white; padding: 13px 22px; border-radius: 100px;
+    background: var(--ink); color: white; padding: 13px 22px; border-radius: 100px;
     font-size: 13.5px; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease;
     z-index: 999; white-space: nowrap;
@@ -75,14 +71,14 @@
     box-shadow: 0 20px 60px rgba(0,0,0,0.25);
   }
   .join-question-title {
-    font-family: 'Fraunces', serif; font-size: 19px; font-weight: 900;
+    font-size: 16px; font-weight: 700;
     color: var(--dark); margin-bottom: 8px;
   }
   .join-question-sub { font-size: 13.5px; color: var(--mid); line-height: 1.5; margin-bottom: 16px; }
   .join-question-textarea {
     width: 100%; min-height: 90px; border: 1.5px solid rgba(26,163,154,0.2);
     border-radius: 12px; padding: 12px 14px; font-size: 14px;
-    font-family: 'DM Sans', sans-serif; color: var(--dark);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--dark);
     outline: none; resize: vertical; transition: border-color 0.15s;
     margin-bottom: 18px;
   }
@@ -147,7 +143,7 @@
   .map-search {
     width: 100%; padding: 15px 20px; border-radius: 100px;
     border: 1.5px solid rgba(26,163,154,0.25); background: white;
-    font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--dark);
+    font-size: 15px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--dark);
     outline: none; box-shadow: 0 4px 20px rgba(26,26,46,0.05);
   }
   .map-search:focus { border-color: var(--teal); }
@@ -264,18 +260,11 @@
 </head>
 <body>
 
-<nav>
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;width:100%;">
-    <a href="cobee-redesign__6_.html" class="logo" style="text-decoration:none;">co<span>·</span>bee</a>
-    <a href="cobee-redesign__6_.html" class="nav-link">← Back to co·bee</a>
-  </div>
-</nav>
-
 <div class="find-page-wrap">
   <div class="find-page-inner">
 
     <div class="find-page-header">
-      <div class="find-page-title">Find hosts <em>near you</em></div>
+      <div class="find-page-title">Find hosts near you</div>
       <div class="find-page-sub">Search a postal code or neighbourhood to see group buys happening close to you, then tap a pin to join.</div>
     </div>
 
@@ -555,7 +544,14 @@
     // main site, giving the toast a moment to be seen first.
     function redirectAfterJoin() {
       setTimeout(function () {
-        window.location.href = 'https://co-bee.pages.dev/cobee';
+        // Loaded inside the app shell's iframe (e.g. via My Group's "Find a
+        // group to join" link) — hand navigation back to the shell instead
+        // of pointing the iframe itself at an external URL.
+        if (window.parent && window.parent !== window && window.parent.navigate) {
+          window.parent.navigate('member.html', null);
+        } else {
+          window.location.href = 'https://co-bee.pages.dev/cobee';
+        }
       }, 1400);
     }
 
