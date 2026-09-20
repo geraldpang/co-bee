@@ -1422,18 +1422,66 @@ function guessDateISO(raw) {
 // Tries the strict multi-product template first (blocks separated by a
 // blank line: "Product - $Price" header, then "Name [code] x Qty" lines),
 // then falls back to the loose single-product WhatsApp chat style.
+// Parses a single roster/order line into { name, code, qty } — or null if
+// it doesn't look like an order line at all. Tokenizes by whitespace
+// instead of one big regex, so a two-word name (e.g. "Wei Ling") is never
+// mistaken for "name + code": a trailing word is only ever treated as a
+// code if it actually contains a digit, since a real name never does.
+function parseBuyerLine(line) {
+  const rest = line.replace(/^\d+[.)]\s*/, '');
+  const tokens = rest.split(/\s+/).filter(Boolean);
+  if (!tokens.length) return null;
+
+  let qty = null;
+  let bodyTokens = null;
+
+  // "x2" glued with no space between the demarker and the quantity
+  const xGluedIdx = tokens.findIndex(function (t) { return /^x\d+$/i.test(t); });
+  if (xGluedIdx !== -1) {
+    qty = parseInt(tokens[xGluedIdx].slice(1), 10);
+    bodyTokens = tokens.slice(0, xGluedIdx);
+  } else {
+    // standalone "x" token, quantity as the next token
+    const xIdx = tokens.findIndex(function (t) { return /^x$/i.test(t); });
+    if (xIdx !== -1 && tokens[xIdx + 1] && /^\d+$/.test(tokens[xIdx + 1])) {
+      qty = parseInt(tokens[xIdx + 1], 10);
+      bodyTokens = tokens.slice(0, xIdx);
+    } else {
+      // no "x" at all — the last token is the qty, if it's purely numeric
+      const last = tokens[tokens.length - 1];
+      if (/^\d+$/.test(last)) {
+        qty = parseInt(last, 10);
+        bodyTokens = tokens.slice(0, -1);
+      }
+    }
+  }
+
+  if (qty === null || !bodyTokens || !bodyTokens.length) return null;
+
+  // The word right before the demarker is only a "code" if it contains a
+  // digit — a plain word (like a second name) never does, so it stays
+  // part of the name instead.
+  let code = '';
+  if (bodyTokens.length > 1) {
+    const lastBody = bodyTokens[bodyTokens.length - 1];
+    if (/^[A-Za-z0-9]{2,6}$/.test(lastBody) && /\d/.test(lastBody)) {
+      code = lastBody;
+      bodyTokens = bodyTokens.slice(0, -1);
+    }
+  }
+
+  const name = bodyTokens.join(' ').trim();
+  if (!name) return null;
+
+  return { name: name, code: code, qty: qty };
+}
+
 function parseGroupBuyText(raw) {
   const result = { title: null, closingDate: null, collectionDate: null, location: null, products: [] };
   if (!raw || !raw.trim()) return result;
 
   const lines = raw.replace(/\r/g, '').split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
   if (!lines.length) return result;
-
-  const buyerLineRe = /^(?:\d+[.)]\s*)?(.+?)\s+([A-Za-z0-9]{2,6})?\s*x\s*(\d+)\s*$/i;
-  // Fallback when there's no "x" at all: just "Name <number>" at the end
-  // of the line. Tried only if the stricter pattern above doesn't match,
-  // so it never overrides a line that already has a code + "x Qty".
-  const buyerLineNoXRe = /^(?:\d+[.)]\s*)?(.+?)\s+(?:([A-Za-z0-9]{2,6})\s+)?(\d+)\s*$/;
 
   // Rule 1: the first line is always the event title, no matter what else is on it.
   result.title = lines[0];
@@ -1502,13 +1550,8 @@ function parseGroupBuyText(raw) {
     // it), or — if there's no "x" — the LAST number on the line is
     // always the qty, even if an earlier number (like a code) is present.
     if (currentProduct) {
-      const bm = line.match(buyerLineRe);
-      if (bm) {
-        currentProduct.buyers.push({ name: bm[1].trim(), code: bm[2] || '', qty: parseInt(bm[3], 10) });
-      } else {
-        const bmNoX = line.match(buyerLineNoXRe);
-        if (bmNoX) currentProduct.buyers.push({ name: bmNoX[1].trim(), code: bmNoX[2] || '', qty: parseInt(bmNoX[3], 10) });
-      }
+      const buyer = parseBuyerLine(line);
+      if (buyer) currentProduct.buyers.push(buyer);
     }
   });
 
