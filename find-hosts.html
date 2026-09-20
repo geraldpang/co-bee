@@ -541,12 +541,22 @@
         hideHostTooltip();
         clearRingOnly();
         refreshAllJoinButtons();
+        redirectAfterJoin();
         return;
       }
       // open
       showToast("You're in! You've joined " + h.groupBuy.name + ' — hosted by ' + h.name + '. \ud83c\udf89', 'success');
       hideHostTooltip();
       clearRingOnly();
+      redirectAfterJoin();
+    }
+
+    // Once a join is complete — instant or pending — send them back to the
+    // main site, giving the toast a moment to be seen first.
+    function redirectAfterJoin() {
+      setTimeout(function () {
+        window.location.href = 'https://co-bee.pages.dev/cobee';
+      }, 1400);
     }
 
     function openJoinQuestionModal(h) {
@@ -569,7 +579,13 @@
       hideHostTooltip();
       clearRingOnly();
       refreshAllJoinButtons();
+      redirectAfterJoin();
     }
+    // Exposed on window: the modal's buttons call these via inline onclick=""
+    // in the HTML, which resolves names in the global scope — plain function
+    // declarations inside this IIFE aren't visible there otherwise.
+    window.closeJoinQuestionModal = closeJoinQuestionModal;
+    window.submitJoinQuestion = submitJoinQuestion;
 
     // Re-renders every visible Join control so a host that just became
     // "pending" reflects that everywhere it appears (tooltip + card list).
