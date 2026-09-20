@@ -62,6 +62,46 @@
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .toast.success { background: var(--teal-dark); }
 
+  /* ─── Join-question modal ─── */
+  .join-question-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(26,26,46,0.45);
+    align-items: center; justify-content: center; padding: 24px;
+  }
+  .join-question-overlay.show { display: flex; }
+  .join-question-modal {
+    background: white; border-radius: 20px; padding: 28px 26px;
+    max-width: 380px; width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  }
+  .join-question-title {
+    font-family: 'Fraunces', serif; font-size: 19px; font-weight: 900;
+    color: var(--dark); margin-bottom: 8px;
+  }
+  .join-question-sub { font-size: 13.5px; color: var(--mid); line-height: 1.5; margin-bottom: 16px; }
+  .join-question-textarea {
+    width: 100%; min-height: 90px; border: 1.5px solid rgba(26,163,154,0.2);
+    border-radius: 12px; padding: 12px 14px; font-size: 14px;
+    font-family: 'DM Sans', sans-serif; color: var(--dark);
+    outline: none; resize: vertical; transition: border-color 0.15s;
+    margin-bottom: 18px;
+  }
+  .join-question-textarea:focus { border-color: var(--teal); }
+  .join-question-actions { display: flex; gap: 10px; }
+  .join-question-btn-cancel {
+    flex: 1; background: white; color: var(--mid);
+    border: 1.5px solid rgba(26,163,154,0.2); border-radius: 100px;
+    padding: 11px; font-size: 13.5px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: background 0.15s;
+  }
+  .join-question-btn-cancel:hover { background: var(--teal-light); }
+  .join-question-btn-submit {
+    flex: 1.4; background: var(--teal); color: white; border: none;
+    border-radius: 100px; padding: 11px; font-size: 13.5px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .join-question-btn-submit:hover { background: var(--teal-dark); }
+
   /* ─── HERO MAP CARD (sits beside hero text, map + list side by side) ─── */
   .hero-map-card {
     background: transparent; border-radius: 0; padding: 0;
@@ -177,6 +217,9 @@
     font-family: inherit; cursor: pointer;
   }
   .host-card-join:hover { background: var(--teal-dark); }
+  .host-card-join.is-pending, .host-card-join.is-pending:hover {
+    background: rgba(245,166,35,0.15); color: var(--honey-deep); cursor: not-allowed;
+  }
   .host-card:hover .host-card-join { opacity: 1; pointer-events: auto; }
   .host-card { cursor: default; transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.15s ease, border-color 0.15s ease; }
   .host-card:hover { box-shadow: 0 4px 16px rgba(26,163,154,0.18); }
@@ -212,6 +255,9 @@
     font-family: inherit; cursor: pointer;
   }
   .host-tooltip .tt-join:hover { background: var(--teal-dark); }
+  .host-tooltip .tt-join.is-pending, .host-tooltip .tt-join.is-pending:hover {
+    background: rgba(245,166,35,0.15); color: var(--honey-deep); cursor: not-allowed;
+  }
 
 
 </style>
@@ -265,6 +311,19 @@
 
     </div>
 
+  </div>
+</div>
+
+<!-- Join-question modal — shown when a host's approvalMode is 'question' -->
+<div class="join-question-overlay" id="joinQuestionOverlay">
+  <div class="join-question-modal">
+    <div class="join-question-title">One quick question</div>
+    <div class="join-question-sub" id="joinQuestionModalText"></div>
+    <textarea class="join-question-textarea" id="joinQuestionAnswer" placeholder="Type your answer..."></textarea>
+    <div class="join-question-actions">
+      <button type="button" class="join-question-btn-cancel" onclick="closeJoinQuestionModal()">Cancel</button>
+      <button type="button" class="join-question-btn-submit" onclick="submitJoinQuestion()">Submit request</button>
+    </div>
   </div>
 </div>
 
@@ -460,12 +519,68 @@
     }
 
     // On this page the visitor already has an account (they arrived here
-    // right after signing up, or via "Find Hosts" in the nav), so joining
-    // a host is instant — no signup redirect, just a confirmation toast.
+    // right after signing up, or via "Find Hosts" in the nav). Joining
+    // still depends on the host: open hosts join instantly, others need
+    // approval (and sometimes a question) before the request goes through.
+    var pendingHostKeys = {};
+    function hostKey(h) { return h.groupBuy.name + '|' + h.name; }
+    function isHostPending(h) { return !!pendingHostKeys[hostKey(h)]; }
+    function markHostPending(h) { pendingHostKeys[hostKey(h)] = true; }
+
+    var pendingJoinHost = null;
+
     function joinHost(h) {
+      if (isHostPending(h)) return; // already requested — nothing to do
+      if (h.approvalMode === 'question') {
+        openJoinQuestionModal(h);
+        return;
+      }
+      if (h.approvalMode === 'approval') {
+        markHostPending(h);
+        showToast('Request sent — awaiting approval for ' + h.groupBuy.name, 'warning');
+        hideHostTooltip();
+        clearRingOnly();
+        refreshAllJoinButtons();
+        return;
+      }
+      // open
       showToast("You're in! You've joined " + h.groupBuy.name + ' — hosted by ' + h.name + '. \ud83c\udf89', 'success');
       hideHostTooltip();
       clearRingOnly();
+    }
+
+    function openJoinQuestionModal(h) {
+      pendingJoinHost = h;
+      document.getElementById('joinQuestionModalText').textContent = h.joinQuestion;
+      document.getElementById('joinQuestionAnswer').value = '';
+      document.getElementById('joinQuestionOverlay').classList.add('show');
+    }
+    function closeJoinQuestionModal() {
+      document.getElementById('joinQuestionOverlay').classList.remove('show');
+      pendingJoinHost = null;
+    }
+    function submitJoinQuestion() {
+      if (!pendingJoinHost) return;
+      var answer = document.getElementById('joinQuestionAnswer').value.trim();
+      if (!answer) { showToast('Please answer the question first', 'warning'); return; }
+      markHostPending(pendingJoinHost);
+      showToast('Request sent — awaiting approval for ' + pendingJoinHost.groupBuy.name, 'warning');
+      closeJoinQuestionModal();
+      hideHostTooltip();
+      clearRingOnly();
+      refreshAllJoinButtons();
+    }
+
+    // Re-renders every visible Join control so a host that just became
+    // "pending" reflects that everywhere it appears (tooltip + card list).
+    function refreshAllJoinButtons() {
+      document.querySelectorAll('.host-card-join').forEach(function (btn) {
+        var h = btn.__host;
+        if (h && isHostPending(h)) {
+          btn.textContent = 'Pending approval';
+          btn.classList.add('is-pending');
+        }
+      });
     }
 
     function haversineKm(lat1, lon1, lat2, lon2) {
@@ -607,6 +722,18 @@
       return { emoji: cat[0], name: cat[1] + ' ' + fmt };
     }
 
+    // Some hosts require the host to approve a join request before it goes
+    // through; some also ask a short question first. Deterministic by index
+    // so it's consistent across reloads, not random.
+    var APPROVAL_MODES = ['open', 'open', 'open', 'approval', 'open', 'question'];
+    var JOIN_QUESTIONS = [
+      'What made you interested in this group buy?',
+      'Have you joined one of our group buys before?',
+      'Any delivery or collection notes we should know about you?'
+    ];
+    function approvalModeFor(i) { return APPROVAL_MODES[i % APPROVAL_MODES.length]; }
+    function joinQuestionFor(i) { return JOIN_QUESTIONS[i % JOIN_QUESTIONS.length]; }
+
     hosts.forEach(function (h, i) {
       var pr = project(h.lat, h.lng);
       var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -619,6 +746,8 @@
       h.el = c;
       h.name = hostName(i);
       h.groupBuy = groupBuyFor(i);
+      h.approvalMode = approvalModeFor(i); // 'open' | 'approval' | 'question'
+      if (h.approvalMode === 'question') h.joinQuestion = joinQuestionFor(i);
       // Note: the 150 background dots are NOT hoverable — only the prominent
       // pins (default partners, or the closest 9 after a search) respond to hover.
     });
@@ -670,6 +799,11 @@
     tooltipEl.addEventListener('mouseenter', cancelHideTooltip);
     tooltipEl.addEventListener('mouseleave', scheduleHideTooltip);
 
+    function tooltipJoinLabel(h) {
+      if (isHostPending(h)) return 'Pending approval';
+      return h.approvalMode === 'open' ? 'Join' : 'Request to Join';
+    }
+
     function showHostTooltip(h) {
       cancelHideTooltip();
       highlightCard(h);
@@ -683,18 +817,19 @@
       var px = (svgRect.left - stageRect.left) + (pr.x - currentViewBox.x) * scaleX;
       var py = (svgRect.top - stageRect.top) + (pinTopY - currentViewBox.y) * scaleY - 10;
 
+      var pending = isHostPending(h);
       tooltipEl.innerHTML =
         '<div class="tt-avatar">' + h.groupBuy.emoji + '</div>' +
         '<div class="tt-info">' +
           '<div class="tt-name">' + h.groupBuy.name + '</div>' +
           '<div class="tt-host">Hosted by ' + h.name + '</div>' +
         '</div>' +
-        '<button type="button" class="tt-join">Join</button>';
+        '<button type="button" class="tt-join' + (pending ? ' is-pending' : '') + '"' + (pending ? ' disabled' : '') + '>' + tooltipJoinLabel(h) + '</button>';
       tooltipEl.style.left = px + 'px';
       tooltipEl.style.top = py + 'px';
       tooltipEl.classList.add('show');
       var ttJoinBtn = tooltipEl.querySelector('.tt-join');
-      if (ttJoinBtn) ttJoinBtn.addEventListener('click', function () { joinHost(h); });
+      if (ttJoinBtn && !pending) ttJoinBtn.addEventListener('click', function () { joinHost(h); });
     }
 
     function ringOnly(h) {
@@ -773,17 +908,20 @@
     function buildCard(h, subtitle, idx) {
       var card = document.createElement('div');
       card.className = 'host-card';
+      var pending = isHostPending(h);
+      var label = pending ? 'Pending approval' : (h.approvalMode === 'open' ? 'Join' : 'Request to Join');
       card.innerHTML =
         '<div class="host-card-avatar">' + h.groupBuy.emoji + '</div>' +
         '<div class="host-card-info">' +
           '<div class="host-card-name">' + h.groupBuy.name + '</div>' +
           '<div class="host-card-dist">' + subtitle + '</div>' +
         '</div>' +
-        '<button type="button" class="host-card-join">Join</button>';
+        '<button type="button" class="host-card-join' + (pending ? ' is-pending' : '') + '"' + (pending ? ' disabled' : '') + '>' + label + '</button>';
       card.addEventListener('mouseenter', function () { ringOnly(h); });
       card.addEventListener('mouseleave', clearRingOnly);
       var cardJoinBtn = card.querySelector('.host-card-join');
-      if (cardJoinBtn) cardJoinBtn.addEventListener('click', function (e) { e.stopPropagation(); joinHost(h); });
+      cardJoinBtn.__host = h; // so refreshAllJoinButtons() can find its host after the fact
+      if (cardJoinBtn && !pending) cardJoinBtn.addEventListener('click', function (e) { e.stopPropagation(); joinHost(h); });
       hostList.appendChild(card);
       hostCardMap.set(h, card);
       setTimeout(function () { card.classList.add('show'); }, idx * 40);
