@@ -407,7 +407,8 @@
         (hostedBy ? (' hosted by <strong>' + hostedBy + '</strong>') : '') +
         ' is awaiting the host\'s approval — we\'ll email <strong>' + email + '</strong> once it\'s confirmed.';
       actionEl.textContent = 'Back to co·bee';
-      actionEl.href = 'cobee-redesign__6_.html';
+      actionEl.href = 'https://co-bee.pages.dev/cobee';
+      setTimeout(function () { window.location.href = 'https://co-bee.pages.dev/cobee'; }, 1800);
     } else if (hostName) {
       // Case 1: open host — already picked one on the map, no need to
       // send them to "find hosts" again, just confirm the join.
@@ -416,7 +417,8 @@
         (hostedBy ? (' hosted by <strong>' + hostedBy + '</strong>') : '') +
         '. We\'ve also sent a confirmation link to <strong>' + email + '</strong>.';
       actionEl.textContent = 'Back to co·bee';
-      actionEl.href = 'cobee-redesign__6_.html';
+      actionEl.href = 'https://co-bee.pages.dev/cobee';
+      setTimeout(function () { window.location.href = 'https://co-bee.pages.dev/cobee'; }, 1800);
     } else {
       // Generic signup — next step is helping them find a host to join.
       titleEl.textContent = 'Welcome to the hive!';
