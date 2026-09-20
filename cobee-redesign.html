@@ -570,6 +570,26 @@
   }
   .btn-submit:hover { background: var(--teal-dark); transform: translateY(-2px); }
 
+  .partner-pending {
+    display: none; background: white; border-radius: 24px; padding: 56px 48px;
+    box-shadow: 0 4px 40px rgba(26,26,46,0.08); text-align: center;
+  }
+  .partner-pending.show { display: block; }
+  .partner-pending-icon { font-size: 40px; margin-bottom: 14px; }
+  .partner-pending-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(245,166,35,0.12); border: 1px solid rgba(245,166,35,0.35);
+    color: var(--honey-deep); padding: 5px 14px; border-radius: 100px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .partner-pending-title {
+    font-family: 'Fraunces', serif; font-size: 26px; font-weight: 900;
+    color: var(--dark); margin-bottom: 12px;
+  }
+  .partner-pending-body { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 440px; margin: 0 auto 28px; }
+  .partner-pending-body strong { color: var(--teal-dark); }
+
 
   /* ─── BENEFITS GRID ─── */
   .benefits-grid {
@@ -923,23 +943,38 @@
       </div>
     </div>
 
-    <div class="partner-form reveal">
-      <div class="form-row">
-        <div class="form-field">
-          <label>Your name</label>
-          <input type="text" placeholder="Jane Tan">
+    <div class="partner-form reveal" id="partnerFormWrap">
+      <form id="partnerForm">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Your name</label>
+            <input type="text" id="partner-name" placeholder="Jane Tan" required>
+          </div>
+          <div class="form-field">
+            <label>Email address</label>
+            <input type="email" id="partner-email" placeholder="jane@company.com" required>
+          </div>
         </div>
-        <div class="form-field">
-          <label>Email address</label>
-          <input type="email" placeholder="jane@company.com">
+        <div class="form-field form-full">
+          <label>Tell us about your products</label>
+          <textarea rows="5" id="partner-desc" placeholder="I'd like to offer... Our products are... We'd love to reach communities in..." required></textarea>
         </div>
-      </div>
-      <div class="form-field form-full">
-        <label>Tell us about your products</label>
-        <textarea rows="5" placeholder="I'd like to offer... Our products are... We'd love to reach communities in..."></textarea>
-      </div>
-      <button class="btn-submit">Send message 🐝</button>
+        <button type="submit" class="btn-submit">Send message 🐝</button>
+      </form>
     </div>
+
+    <div class="partner-pending" id="partnerPending">
+      <div class="partner-pending-icon">⏳</div>
+      <div class="partner-pending-badge">Awaiting approval</div>
+      <div class="partner-pending-title">Application received!</div>
+      <div class="partner-pending-body">
+        Thanks for applying to host on co·bee, <span id="partner-pending-name">there</span>. We review every host
+        application to keep the community quality high — we'll email <strong id="partner-pending-email">you</strong>
+        within 2–3 business days once it's approved.
+      </div>
+      <a href="#" class="btn-submit" style="text-decoration:none;display:inline-block;width:auto;padding:14px 32px;">Back to co·bee</a>
+    </div>
+
   </div>
 </section>
 
@@ -958,6 +993,21 @@
 </footer>
 
 <script>
+  // Host applications go into review, unlike member signup which is instant —
+  // swap the form for a plain "awaiting approval" state, no redirect.
+  document.getElementById('partnerForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const name = document.getElementById('partner-name').value.trim();
+    const email = document.getElementById('partner-email').value.trim();
+    const desc = document.getElementById('partner-desc').value.trim();
+    if (!name || !email || !desc) return; // native "required" attrs already guard this
+
+    document.getElementById('partner-pending-name').textContent = name;
+    document.getElementById('partner-pending-email').textContent = email;
+    document.getElementById('partnerFormWrap').style.display = 'none';
+    document.getElementById('partnerPending').classList.add('show');
+  });
+
   // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
@@ -1151,10 +1201,22 @@
     }
 
     // Builds the signup link for a specific host, carrying which host was
-    // picked so the signup page knows to skip the "find hosts" step after.
+    // picked so the signup page knows to skip the "find hosts" step after —
+    // and whether that host needs approval (and a question) to join.
     function joinUrl(h) {
-      return 'signup.html?host=' + encodeURIComponent(h.groupBuy.name) +
-        '&hostname=' + encodeURIComponent(h.name);
+      var url = 'signup.html?host=' + encodeURIComponent(h.groupBuy.name) +
+        '&hostname=' + encodeURIComponent(h.name) +
+        '&approval=' + encodeURIComponent(h.approvalMode || 'open');
+      if (h.approvalMode === 'question' && h.joinQuestion) {
+        url += '&question=' + encodeURIComponent(h.joinQuestion);
+      }
+      return url;
+    }
+
+    // "Join" for open hosts, "Request to Join" for ones needing approval —
+    // shown wherever a host's join link is rendered.
+    function joinLabel(h) {
+      return h.approvalMode === 'open' ? 'Join' : 'Request to Join';
     }
 
     function haversineKm(lat1, lon1, lat2, lon2) {
@@ -1296,6 +1358,18 @@
       return { emoji: cat[0], name: cat[1] + ' ' + fmt };
     }
 
+    // Some hosts require the host to approve a join request before it goes
+    // through; some also ask a short question first. Deterministic by index
+    // so it's consistent across reloads, not random.
+    var APPROVAL_MODES = ['open', 'open', 'open', 'approval', 'open', 'question'];
+    var JOIN_QUESTIONS = [
+      'What made you interested in this group buy?',
+      'Have you joined one of our group buys before?',
+      'Any delivery or collection notes we should know about you?'
+    ];
+    function approvalModeFor(i) { return APPROVAL_MODES[i % APPROVAL_MODES.length]; }
+    function joinQuestionFor(i) { return JOIN_QUESTIONS[i % JOIN_QUESTIONS.length]; }
+
     hosts.forEach(function (h, i) {
       var pr = project(h.lat, h.lng);
       var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -1308,6 +1382,8 @@
       h.el = c;
       h.name = hostName(i);
       h.groupBuy = groupBuyFor(i);
+      h.approvalMode = approvalModeFor(i); // 'open' | 'approval' | 'question'
+      if (h.approvalMode === 'question') h.joinQuestion = joinQuestionFor(i);
       // Note: the 150 background dots are NOT hoverable — only the prominent
       // pins (default partners, or the closest 9 after a search) respond to hover.
     });
@@ -1378,7 +1454,7 @@
           '<div class="tt-name">' + h.groupBuy.name + '</div>' +
           '<div class="tt-host">Hosted by ' + h.name + '</div>' +
         '</div>' +
-        '<a href="' + joinUrl(h) + '" class="tt-join">Join</a>';
+        '<a href="' + joinUrl(h) + '" class="tt-join">' + joinLabel(h) + '</a>';
       tooltipEl.style.left = px + 'px';
       tooltipEl.style.top = py + 'px';
       tooltipEl.classList.add('show');
@@ -1466,7 +1542,7 @@
           '<div class="host-card-name">' + h.groupBuy.name + '</div>' +
           '<div class="host-card-dist">' + subtitle + '</div>' +
         '</div>' +
-        '<a href="' + joinUrl(h) + '" class="host-card-join">Join</a>';
+        '<a href="' + joinUrl(h) + '" class="host-card-join">' + joinLabel(h) + '</a>';
       card.addEventListener('mouseenter', function () { ringOnly(h); });
       card.addEventListener('mouseleave', clearRingOnly);
       hostList.appendChild(card);
