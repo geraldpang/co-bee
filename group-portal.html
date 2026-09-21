@@ -90,6 +90,18 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
     } catch (e) { config = null; }
   }
 
+  // First-time seed: if no settings have ever been saved for this group,
+  // fall back to a real default branding (persisted so it sticks) rather
+  // than showing "not set up" — matches what settings.html shows for a
+  // group before the host has customised anything.
+  var SEED_DEFAULTS = {
+    m6group: { slug: 'm6group', groupName: 'M6 Group', title: 'M6 Group', primary: '#7B2D8B', accent: '#E8971A', bg: '#F6F0F8', topbar: '#7B2D8B' }
+  };
+  if (!config && slug && SEED_DEFAULTS[slug]) {
+    config = SEED_DEFAULTS[slug];
+    try { localStorage.setItem('cobee_group_' + slug, JSON.stringify(config)); } catch (e) {}
+  }
+
   if (!config) {
     document.getElementById('notfound').style.display = 'flex';
   } else {
