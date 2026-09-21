@@ -149,18 +149,25 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
       <div class="two-col" style="margin-bottom:16px;">
         <div class="field">
           <label>Group Name <span class="req">*</span></label>
-          <input class="input" value="M6 Group"/>
-          <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;margin-top:14px;margin-bottom:5px;">GROUP URL</div>
+          <input class="input" id="group-name-input" value="M6 Group"/>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:14px;margin-bottom:5px;">
+            <span style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;">GROUP URL</span>
+            <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#8E44AD;background:#F3E9FA;border:0.5px solid #D9BEEA;border-radius:100px;padding:2px 8px;letter-spacing:0.03em;">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="#8E44AD" stroke="none"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.8 5.7 21l2.3-7.2-6-4.4h7.6z"/></svg>
+              Premium
+            </span>
+          </div>
+          <div style="font-size:10.5px;color:#888780;margin-bottom:6px;line-height:1.5;">Your own branded page — members go straight to your group's events and purchases, with your colors and name in the header.</div>
           <div style="display:flex;align-items:center;gap:0;border:0.5px solid #D3D1C7;border-radius:8px;overflow:hidden;background:white;height:38px;">
-            <span style="padding:0 10px;background:#F4F6F8;border-right:0.5px solid #D3D1C7;font-size:12px;font-family:monospace;color:#888780;white-space:nowrap;height:100%;display:flex;align-items:center;">https://co-bee.com/</span>
+            <span style="padding:0 10px;background:#F4F6F8;border-right:0.5px solid #D3D1C7;font-size:12px;font-family:monospace;color:#888780;white-space:nowrap;height:100%;display:flex;align-items:center;">https://co-bee.pages.dev/</span>
             <input id="subdomain-input" style="height:100%;border:none;padding:0 10px;font-size:13px;font-family:monospace;outline:none;color:#1a1a18;flex:1;min-width:120px;" value="m6group" placeholder="your-group" oninput="updateSubdomainPreview(this.value)"/>
             <span id="subdomain-status" style="padding:0 10px;font-size:11px;font-weight:600;color:#27AE60;display:flex;align-items:center;gap:4px;white-space:nowrap;border-left:0.5px solid #D3D1C7;height:100%;background:#F4F6F8;">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Available
             </span>
           </div>
-          <a id="subdomain-preview-link" href="https://co-bee.com/m6group" target="_blank" style="display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:11px;color:#009A97;text-decoration:none;font-family:monospace;">
+          <a id="subdomain-preview-link" href="group-portal.html?g=m6group" target="_blank" style="display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:11px;color:#009A97;text-decoration:none;font-family:monospace;">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            <span id="subdomain-preview-text">https://co-bee.com/m6group</span>
+            <span id="subdomain-preview-text">https://co-bee.pages.dev/m6group</span>
           </a>
         </div>
         <div class="field">
@@ -676,7 +683,7 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;bac
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
     Cancel
   </button>
-  <button class="btn primary" style="font-weight:500;" onclick="showToast('Settings saved ✓')">
+  <button class="btn primary" style="font-weight:500;" onclick="saveGroupSettings()">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13"/><polyline points="7 3 7 8 15 8"/></svg>
     Save Settings
   </button>
@@ -749,15 +756,41 @@ function updateSubdomainPreview(val) {
     status.style.color = '#27AE60';
     status.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Available';
   }
-  // Update preview link
+  // Update preview link — text shows the real-looking URL, but the link
+  // itself opens the working mockup page so "Preview" is actually clickable here.
   var link = document.getElementById('subdomain-preview-link');
   var linkText = document.getElementById('subdomain-preview-text');
   if (link && linkText && clean) {
-    var url = 'https://co-bee.com/' + clean;
-    link.href = url;
-    linkText.textContent = url;
+    linkText.textContent = 'https://co-bee.pages.dev/' + clean;
+    link.href = 'group-portal.html?g=' + encodeURIComponent(clean);
   }
 }
+// Persists this group's branding (title, colors, subdomain slug) so the
+// premium branded portal page (group-portal.html) can pick it up. In a
+// real build this would be an API call — here it's localStorage, keyed
+// by the group's slug, so the mockup portal page can actually read it.
+function saveGroupSettings() {
+  var slug = (document.getElementById('subdomain-input').value || '').trim();
+  if (!slug) { showToast('Please set a group URL first', 'warn'); return; }
+
+  var groupName = document.getElementById('group-name-input');
+  var config = {
+    slug: slug,
+    groupName: (groupName && groupName.value) || 'M6 Group',
+    title: document.getElementById('site-title-input').value || 'co·bee',
+    primary: document.getElementById('hex-primary').value || '#009A97',
+    accent: document.getElementById('hex-accent').value || '#E8971A',
+    bg: document.getElementById('hex-bg').value || '#F4F6F8',
+    topbar: document.getElementById('hex-topbar').value || '#009A97'
+  };
+  try {
+    localStorage.setItem('cobee_group_' + slug, JSON.stringify(config));
+    showToast('Settings saved ✓');
+  } catch (e) {
+    showToast('Could not save — try again', 'warn');
+  }
+}
+
 function selectViewDefault(mode) {
   var listCard = document.getElementById('view-opt-list');
   var tileCard = document.getElementById('view-opt-tile');
