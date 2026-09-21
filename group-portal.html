@@ -210,12 +210,24 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 </div>
 
 <script>
-  // Simulates path-based subdomain routing (e.g. co-bee.pages.dev/m6group)
-  // by reading a "g" query param — Cloudflare Pages static hosting can't
-  // do real per-group subdomains, so this is the closest static-site
-  // equivalent for a design mockup.
+  // Slug detection, in priority order:
+  // 1. ?g=slug query param — works when this file is opened directly
+  //    (local testing, or before the _redirects rewrite is deployed).
+  // 2. The URL path itself — this is what actually happens in production:
+  //    a Cloudflare Pages _redirects rule ("/:slug /group-portal.html?g=:slug 200")
+  //    rewrites co-bee.pages.dev/m6group to this file server-side, but that
+  //    rewrite is invisible to the browser — window.location still shows
+  //    "/m6group" with NO query string, so we fall back to reading the
+  //    path directly.
   var params = new URLSearchParams(window.location.search);
   var slug = params.get('g');
+  if (!slug) {
+    var pathSlug = window.location.pathname.replace(/^\/+|\/+$/g, '');
+    // Guard against this file being opened directly (e.g. ".../group-portal.html")
+    if (pathSlug && pathSlug.toLowerCase() !== 'group-portal.html') {
+      slug = pathSlug;
+    }
+  }
 
   var config = null;
   if (slug) {
