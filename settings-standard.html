@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Group Settings — co·bee</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F4F6F8;color:#1a1a18;font-size:13px;}
+
+.page{max-width:640px;margin:0 auto;padding:28px 24px 40px;}
+
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;}
+.field-label{font-size:14px;font-weight:600;color:#009A97;}
+.input{height:42px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 14px;font-size:14px;font-family:inherit;outline:none;color:#1a1a18;background:white;width:100%;transition:border-color 0.15s;}
+.input:focus{border-color:#009A97;}
+.textarea{border:0.5px solid #D3D1C7;border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit;outline:none;color:#1a1a18;background:white;width:100%;resize:vertical;min-height:80px;transition:border-color 0.15s;}
+.textarea:focus{border-color:#009A97;}
+
+/* Group photo + name/description row */
+.top-row{display:flex;gap:24px;margin-bottom:22px;align-items:flex-start;}
+.photo-circle{
+  width:96px;height:96px;border-radius:50%;flex-shrink:0;
+  background:#E0F5F5;border:2px dashed #80CCCB;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;overflow:hidden;position:relative;transition:border-color 0.15s;
+}
+.photo-circle:hover{border-color:#009A97;}
+.photo-circle img{width:100%;height:100%;object-fit:cover;display:none;}
+.photo-circle svg{color:#80CCCB;}
+.top-row-fields{flex:1;min-width:0;display:flex;flex-direction:column;}
+.top-row-fields .field{margin-bottom:16px;}
+.top-row-fields .field:last-child{margin-bottom:0;}
+
+.section-gap{margin-top:26px;margin-bottom:26px;}
+
+/* Group settings card */
+.settings-card{background:#E0F5F5;border-radius:12px;padding:6px 22px;display:flex;flex-direction:column;}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 0;border-bottom:0.5px solid rgba(0,154,151,0.14);flex-wrap:wrap;}
+.settings-row:last-child{border-bottom:none;}
+.settings-row-label{font-size:13px;color:#1a1a18;font-weight:500;flex-shrink:0;}
+.settings-row-options{display:flex;gap:28px;flex-wrap:wrap;flex-shrink:0;margin-left:auto;}
+.radio-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:500;color:#4A5568;letter-spacing:0.02em;}
+.radio-label input[type=radio]{accent-color:#009A97;width:17px;height:17px;cursor:pointer;}
+.radio-label.checked{color:#1a1a18;}
+
+.save-wrap{display:flex;justify-content:center;margin-top:32px;}
+.btn-save{
+  width:100%;max-width:520px;height:46px;border-radius:100px;border:none;
+  background:#1AB8B4;color:white;font-size:14px;font-weight:600;letter-spacing:0.04em;
+  text-transform:uppercase;cursor:pointer;font-family:inherit;transition:background 0.15s;
+}
+.btn-save:hover{background:#009A97;}
+
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);font-size:12.5px;font-weight:500;padding:10px 18px;border-radius:100px;box-shadow:0 4px 14px rgba(0,0,0,0.2);opacity:0;transition:opacity 0.25s;pointer-events:none;z-index:999;background:#1a1a18;color:white;}
+#toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="top-row">
+    <div class="photo-circle" onclick="document.getElementById('photo-input').click()">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <img id="photo-img" alt=""/>
+    </div>
+    <input type="file" id="photo-input" accept="image/*" style="display:none;" onchange="previewPhoto(this)"/>
+
+    <div class="top-row-fields">
+      <div class="field">
+        <div class="field-label">Group name</div>
+        <input class="input" id="group-name" value="M6 group"/>
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <div class="field-label">Group description</div>
+        <textarea class="textarea" id="group-desc">test</textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-gap">
+    <div class="field" style="margin-bottom:0;">
+      <div class="field-label">Question before joining group</div>
+      <input class="input" id="join-question" placeholder="Question?"/>
+    </div>
+  </div>
+
+  <div class="field-label" style="margin-bottom:14px;">Group settings</div>
+  <div class="settings-card">
+
+    <div class="settings-row">
+      <div class="settings-row-label">Group type</div>
+      <div class="settings-row-options">
+        <label class="radio-label"><input type="radio" name="group-type" value="private"> PRIVATE</label>
+        <label class="radio-label checked"><input type="radio" name="group-type" value="public" checked> PUBLIC</label>
+      </div>
+    </div>
+
+    <div class="settings-row">
+      <div class="settings-row-label">Default user permission</div>
+      <div class="settings-row-options">
+        <label class="radio-label"><input type="radio" name="default-perm" value="host"> HOST</label>
+        <label class="radio-label checked"><input type="radio" name="default-perm" value="member" checked> MEMBER</label>
+      </div>
+    </div>
+
+    <div class="settings-row">
+      <div class="settings-row-label">Group join verification</div>
+      <div class="settings-row-options">
+        <label class="radio-label checked"><input type="radio" name="join-verify" value="admin" checked> ADMIN APPROVAL</label>
+        <label class="radio-label"><input type="radio" name="join-verify" value="auto"> AUTO APPROVAL</label>
+      </div>
+    </div>
+
+    <div class="settings-row">
+      <div class="settings-row-label">A member can see other members</div>
+      <div class="settings-row-options">
+        <label class="radio-label checked"><input type="radio" name="see-members" value="yes" checked> Yes</label>
+        <label class="radio-label"><input type="radio" name="see-members" value="no"> No</label>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="save-wrap">
+    <button class="btn-save" onclick="saveStandardGroupSettings()">Save</button>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+function previewPhoto(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    var img = document.getElementById('photo-img');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    document.querySelector('.photo-circle svg').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+// Keeps each radio pair's ".checked" label styling in sync as the host clicks around.
+document.querySelectorAll('.radio-label input[type=radio]').forEach(function (radio) {
+  radio.addEventListener('change', function () {
+    document.querySelectorAll('input[name="' + radio.name + '"]').forEach(function (r) {
+      r.closest('.radio-label').classList.toggle('checked', r.checked);
+    });
+  });
+});
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show';
+  setTimeout(function () { t.className = ''; }, 2600);
+}
+
+// Saves this group's join settings. "Group join verification" + the join
+// question together decide the approvalMode ('open' / 'approval' /
+// 'question') used by the join flow on the landing page / find-hosts /
+// signup — same three cases as before, just authored here instead of
+// being hardcoded per mock host.
+function saveStandardGroupSettings() {
+  var joinVerify = document.querySelector('input[name="join-verify"]:checked').value;
+  var joinQuestion = document.getElementById('join-question').value.trim();
+
+  var approvalMode = 'open';
+  if (joinVerify === 'admin') {
+    approvalMode = joinQuestion ? 'question' : 'approval';
+  }
+
+  var config = {
+    groupName: document.getElementById('group-name').value,
+    groupDescription: document.getElementById('group-desc').value,
+    joinQuestion: joinQuestion,
+    groupType: document.querySelector('input[name="group-type"]:checked').value,
+    defaultPermission: document.querySelector('input[name="default-perm"]:checked').value,
+    joinVerification: joinVerify,
+    membersCanSeeMembers: document.querySelector('input[name="see-members"]:checked').value,
+    approvalMode: approvalMode
+  };
+
+  try {
+    localStorage.setItem('cobee_group_settings_standard', JSON.stringify(config));
+  } catch (e) {}
+
+  showToast('Settings saved ✓');
+}
+</script>
+
+</body>
+</html>
