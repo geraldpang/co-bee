@@ -1,0 +1,14 @@
+# Premium group pages: co-bee.pages.dev/<slug> rewrites (status 200, so the
+# URL stays as-is in the browser) to group-portal.html, which reads the
+# slug from the path and loads that group's saved branding.
+#
+# Static files always win over this rule — a request to a real file like
+# /hosting.html or /find-hosts.html is served as-is and never reaches this
+# rule, since it only applies to paths with no matching file.
+#
+# Only ONE premium group exists in this mockup (m6group) — this catch-all
+# will match ANY unrecognised path, including typos. For production, either
+# validate the slug server-side (e.g. via a Pages Function instead of this
+# static rule) or keep this narrowed to known slugs.
+
+/:slug  /group-portal.html?g=:slug  200
