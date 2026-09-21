@@ -2708,12 +2708,17 @@ select:focus { border-color: #009A97; }
 
     <!-- My groups list -->
     <div class="group-list">
-      <div class="group-list-item" onclick="showGroupDetail(this.querySelector('.group-name') ? this.querySelector('.group-name').textContent : '')" style="cursor:pointer;">
+      <div class="group-list-item" onclick="openPremiumGroup('m6group')" style="cursor:pointer;">
         <div class="group-avatar-wrap">
           <div class="group-avatar">M6</div>
         </div>
         <div class="group-info">
-          <div class="group-name">M6 group</div>
+          <div class="group-name" style="display:flex;align-items:center;gap:6px;">M6 group
+            <span style="display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;color:#8E44AD;background:#F3E9FA;border:0.5px solid #D9BEEA;border-radius:100px;padding:1px 7px;letter-spacing:0.02em;">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="#8E44AD" stroke="none"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.8 5.7 21l2.3-7.2-6-4.4h7.6z"/></svg>
+              Premium
+            </span>
+          </div>
           <div class="group-meta">2 Members &nbsp;<span>19 Organized Events</span></div>
         </div>
         <div class="group-role">Admin</div>
@@ -2762,7 +2767,7 @@ select:focus { border-color: #009A97; }
                   <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
                 <div class="gd-admin-menu" id="gd-admin-menu">
-                  <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('settings.html',null) : alert('Open settings')">Config Group</div>
+                  <div class="gd-admin-menu-item" onclick="openGroupConfig()">Config Group</div>
                   <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('members.html',null) : null">Manage Members</div>
                   <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosted-events.html',null) : null">Events Management</div>
                   <div class="gd-admin-menu-item" onclick="window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : null">Host New Event</div>
@@ -4837,7 +4842,34 @@ function tilePill(btn, group) {
   btn.classList.add('sel');
 }
 
-function showGroupDetail(groupName) {
+// Premium groups have their own branded page (a "subdomain" — simulated
+// here as a query param, since static hosting can't do real per-group
+// subdomains) instead of the in-app group detail screen.
+function openPremiumGroup(slug) {
+  var url = 'group-portal.html?g=' + encodeURIComponent(slug);
+  if (window.parent && window.parent.navigate) {
+    window.parent.navigate(url, null);
+  } else {
+    window.location.href = url;
+  }
+}
+
+// Tracks which group's detail screen is currently open, so "Config Group"
+// can route to the right settings page (premium groups get the full
+// tabbed settings.html; standard groups get the simpler settings-standard.html).
+var currentGroupIsPremium = false;
+
+function openGroupConfig() {
+  var dest = currentGroupIsPremium ? 'settings.html' : 'settings-standard.html';
+  if (window.parent && window.parent.navigate) {
+    window.parent.navigate(dest, null);
+  } else {
+    window.location.href = dest;
+  }
+}
+
+function showGroupDetail(groupName, isPremium) {
+  currentGroupIsPremium = !!isPremium;
   // Hide all views
   document.getElementById('view-all').style.display = 'none';
   document.getElementById('view-purchase').style.display = 'none';
