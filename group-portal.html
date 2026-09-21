@@ -67,6 +67,22 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .drawer-footer-av{width:34px;height:34px;border-radius:50%;background:var(--grp-primary,#009A97);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
 .drawer-footer-name{font-size:13px;font-weight:600;color:#1a1a18;}
 .drawer-footer-role{font-size:11px;color:var(--grp-primary,#009A97);}
+
+/* ── Group switcher dropdown ── */
+.group-switch-dropdown {
+  display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 20;
+  background: white; border: 0.5px solid #D3D1C7; border-radius: 0 0 10px 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+.group-switch-dropdown.open { display: block; }
+.gsw-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; transition: background 0.12s; }
+.gsw-item:hover { background: #f5fafa; }
+.gsw-item.current { background: #FAFAFA; cursor: default; }
+.gsw-av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white; flex-shrink: 0; }
+.gsw-name { font-size: 12.5px; font-weight: 600; color: #1a1a18; }
+.gsw-sub { font-size: 10.5px; color: #888780; margin-top: 1px; }
+.gsw-check { margin-left: auto; color: var(--grp-primary,#009A97); flex-shrink: 0; }
+#group-switch-chevron.open { transform: rotate(180deg); }
 </style>
 </head>
 <body>
@@ -116,11 +132,25 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
      this branded page too, since it's still their group to manage -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="side-drawer">
-  <div class="drawer-group">
+  <div class="drawer-group" id="drawer-group-header" onclick="toggleGroupSwitcher(event)" style="position:relative;cursor:pointer;">
     <div class="drawer-group-av" id="drawer-group-av">M6</div>
     <div>
       <div class="drawer-group-name" id="drawer-group-name">M6 Group</div>
       <div class="drawer-group-sub">Premium</div>
+    </div>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;flex-shrink:0;transition:transform 0.2s;color:var(--grp-primary,#7B2D8B);" id="group-switch-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+
+    <!-- Switcher — jump back to the shared co·bee platform, or stay here -->
+    <div class="group-switch-dropdown" id="group-switch-dropdown">
+      <div class="gsw-item" onclick="event.stopPropagation();window.location.href='cobee.html';">
+        <div class="gsw-av" style="background:#009A97;">🐝</div>
+        <div><div class="gsw-name">co·bee</div><div class="gsw-sub">Shared platform</div></div>
+      </div>
+      <div class="gsw-item current" id="gsw-current-group">
+        <div class="gsw-av" id="gsw-current-av" style="background:#7B2D8B;">M6</div>
+        <div><div class="gsw-name" id="gsw-current-name">M6 Group</div><div class="gsw-sub">Premium</div></div>
+        <svg class="gsw-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
     </div>
   </div>
   <nav class="drawer-nav">
@@ -226,6 +256,9 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
     document.getElementById('drawer-footer-av').textContent = initial;
     document.getElementById('drawer-group-name').textContent = config.groupName || 'Group';
     document.getElementById('drawer-footer-name').textContent = config.groupName || 'Group';
+    document.getElementById('gsw-current-name').textContent = config.groupName || 'Group';
+    document.getElementById('gsw-current-av').textContent = initial;
+    document.getElementById('gsw-current-av').style.background = primaryColor;
 
     if (config.bg) document.querySelector('.content-wrap').style.background = config.bg;
 
@@ -265,7 +298,29 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
     document.getElementById('drawer-overlay').classList.remove('open');
     document.getElementById('main-wrap').style.marginLeft = '0';
     document.getElementById('topbar-brand').style.marginLeft = '0';
+    closeGroupSwitcher();
   }
+
+  // Group switcher — lets the host jump back to the shared co·bee platform,
+  // or stay on this group's own branded page.
+  var groupSwitcherOpen = false;
+  function toggleGroupSwitcher(e) {
+    e.stopPropagation();
+    groupSwitcherOpen ? closeGroupSwitcher() : openGroupSwitcher();
+  }
+  function openGroupSwitcher() {
+    groupSwitcherOpen = true;
+    document.getElementById('group-switch-dropdown').classList.add('open');
+    document.getElementById('group-switch-chevron').classList.add('open');
+  }
+  function closeGroupSwitcher() {
+    groupSwitcherOpen = false;
+    document.getElementById('group-switch-dropdown').classList.remove('open');
+    document.getElementById('group-switch-chevron').classList.remove('open');
+  }
+  document.addEventListener('click', function (e) {
+    if (groupSwitcherOpen && !e.target.closest('#drawer-group-header')) closeGroupSwitcher();
+  });
 </script>
 
 <a href="cobee-redesign__6_.html" class="powered-by">Powered by <b>co·bee</b></a>
