@@ -4846,12 +4846,13 @@ function tilePill(btn, group) {
 // here as a query param, since static hosting can't do real per-group
 // subdomains) instead of the in-app group detail screen.
 function openPremiumGroup(slug) {
+  // A premium group's branded page is its own standalone page — not
+  // loaded inside cobee.html's regular app shell/iframe (that would show
+  // the shell's own topbar and bottom bar wrapped around it, which is
+  // wrong). window.top breaks out of the iframe entirely, same as a real
+  // subdomain redirect would behave.
   var url = 'group-portal.html?g=' + encodeURIComponent(slug);
-  if (window.parent && window.parent.navigate) {
-    window.parent.navigate(url, null);
-  } else {
-    window.location.href = url;
-  }
+  window.top.location.href = url;
 }
 
 // Tracks which group's detail screen is currently open, so "Config Group"
