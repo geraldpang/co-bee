@@ -147,7 +147,7 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
         <div><div class="gsw-name">co·bee</div><div class="gsw-sub">Shared platform</div></div>
         <svg class="gsw-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <div class="gsw-item" onclick="event.stopPropagation();window.location.href='group-portal.html?g=m6group';">
+      <div class="gsw-item" onclick="event.stopPropagation();window.location.href='group-portal.html?g=m6group&openDrawer=1';">
         <div class="gsw-av" style="background:#7B2D8B;">M6</div>
         <div><div class="gsw-name">M6 Group</div><div class="gsw-sub">Premium</div></div>
       </div>
@@ -276,6 +276,13 @@ function closeGroupSwitcher() {
 document.addEventListener('click', function (e) {
   if (groupSwitcherOpen && !e.target.closest('#drawer-group-header')) closeGroupSwitcher();
 });
+
+// Keeps the side menu open across a switch — arriving here right after
+// switching from a premium group's page opens the drawer immediately
+// instead of making the host re-click the hamburger.
+if (new URLSearchParams(window.location.search).get('openDrawer') === '1') {
+  openDrawer();
+}
 
 </script>
 </body>
