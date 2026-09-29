@@ -1295,8 +1295,8 @@ select:focus { border-color: #009A97; }
   .qr-link.teal { color:#009A97; font-weight:600; }
 
   /* Sticky cart bar (order screen) */
-  .cart-bar { position:fixed; left:0; right:0; bottom:14px; z-index:400; display:flex; justify-content:center; padding:0 14px; pointer-events:none; }
-  .cart-bar-inner { pointer-events:auto; width:100%; max-width:572px; height:56px; background:#009A97; border:none; border-radius:12px; box-shadow:0 6px 18px rgba(0,122,119,0.35); display:flex; align-items:center; gap:12px; padding:0 16px; color:white; cursor:pointer; font-family:inherit; }
+  .cart-bar { position:sticky; bottom:14px; z-index:400; display:flex; margin:12px 14px 14px; pointer-events:none; }
+  .cart-bar-inner { pointer-events:auto; width:100%; height:56px; background:#009A97; border:none; border-radius:12px; box-shadow:0 6px 18px rgba(0,122,119,0.35); display:flex; align-items:center; gap:12px; padding:0 16px; color:white; cursor:pointer; font-family:inherit; }
   .cart-bar-inner:hover { background:#007A77; }
   .cart-ic { position:relative; width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .cart-badge { position:absolute; top:-4px; right:-5px; min-width:18px; height:18px; border-radius:9px; background:#E8971A; color:white; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; padding:0 4px; border:1.5px solid #009A97; }
@@ -1791,10 +1791,7 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-      <!-- Spacer so the sticky cart bar never covers the last card -->
-      <div style="height:90px;"></div>
-
-      <!-- Sticky cart bar — hidden until an item is added; opens Checkout -->
+      <!-- Sticky cart bar — sticks to the bottom of the content column (not the window), so it always lines up with the cards; hidden until an item is added -->
       <div class="cart-bar" id="cart-bar" style="display:none;">
         <button class="cart-bar-inner" onclick="placeOrder2()">
           <span class="cart-ic">
@@ -2556,8 +2553,7 @@ select:focus { border-color: #009A97; }
 
     </div>
 
-    <!-- Spacer + sticky cart bar (mirrors the real event page; demo only, no order placed) -->
-    <div style="height:90px;"></div>
+    <!-- Sticky cart bar (mirrors the real event page; demo only, no order placed) -->
     <div class="cart-bar" id="subitem-cart-bar" style="display:none;">
       <button class="cart-bar-inner" onclick="alert('This is a demo screen — no real order is placed.')">
         <span class="cart-ic">
