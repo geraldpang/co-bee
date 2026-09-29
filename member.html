@@ -1293,6 +1293,16 @@ select:focus { border-color: #009A97; }
   .qr-ref-chip:hover { border-color:#009A97; }
   .qr-link { display:inline-flex; align-items:center; gap:4px; background:none; border:none; padding:0; font-size:11px; font-weight:500; color:#888780; cursor:pointer; font-family:inherit; }
   .qr-link.teal { color:#009A97; font-weight:600; }
+
+  /* Sticky cart bar (order screen) */
+  .cart-bar { position:fixed; left:0; right:0; bottom:14px; z-index:400; display:flex; justify-content:center; padding:0 14px; pointer-events:none; }
+  .cart-bar-inner { pointer-events:auto; width:100%; max-width:572px; height:56px; background:#009A97; border:none; border-radius:12px; box-shadow:0 6px 18px rgba(0,122,119,0.35); display:flex; align-items:center; gap:12px; padding:0 16px; color:white; cursor:pointer; font-family:inherit; }
+  .cart-bar-inner:hover { background:#007A77; }
+  .cart-ic { position:relative; width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .cart-badge { position:absolute; top:-4px; right:-5px; min-width:18px; height:18px; border-radius:9px; background:#E8971A; color:white; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; padding:0 4px; border:1.5px solid #009A97; }
+  .cart-badge.bump { animation: cartBump 0.35s ease; }
+  @keyframes cartBump { 0% { transform:scale(1); } 40% { transform:scale(1.35); } 100% { transform:scale(1); } }
+  body.has-cart-bar .dev-view-toggle { bottom:84px; }
 </style>
 </head>
 <body>
@@ -1764,21 +1774,9 @@ select:focus { border-color: #009A97; }
 
         </div><!-- end items-list-view -->
 
-      <!-- Order Total — between items and Please Note -->
-      <div style="margin:10px 14px 0;border-radius:12px;overflow:hidden;border:0.5px solid #e0dfd8;">
-        <div style="background:#E0F5F5;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid #80CCCB;">
-          <span style="font-size:13px;font-weight:600;color:#007A77;">Order Total</span>
-          <span style="font-size:18px;font-weight:700;color:#007A77;" id="ev1-total">$0.00</span>
-        </div>
-        <div style="background:white;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-size:12px;color:#B4B2A9;cursor:pointer;">Purchase-on-Behalf</span>
-          <span style="font-size:11px;color:#009A97;font-weight:600;">Admin fee included: $0.00</span>
-        </div>
-      </div>
-
-      <!-- Notes + Please note combined card -->
+      <!-- Please note card (Notes to the host now lives on the checkout screen) -->
       <div style="background:white;border-radius:12px;border:0.5px solid #e0dfd8;margin:10px 14px 0;overflow:hidden;">
-        <div style="padding:12px 14px 10px;border-bottom:0.5px solid #f0f0f0;">
+        <div style="padding:12px 14px;">
           <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:8px;">PLEASE NOTE</div>
           <div style="display:flex;flex-direction:column;gap:5px;">
             <div style="display:flex;gap:7px;font-size:12px;color:#888780;align-items:flex-start;">
@@ -1791,16 +1789,26 @@ select:focus { border-color: #009A97; }
             </div>
           </div>
         </div>
-        <div style="padding:12px 14px;">
-          <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;margin-bottom:6px;">NOTES TO THE HOST</div>
-          <textarea id="ev1-notes" placeholder="Optional message to the host..." style="width:100%;height:64px;border:0.5px solid #D3D1C7;border-radius:8px;padding:8px 10px;font-size:12px;font-family:inherit;outline:none;resize:none;background:#FAFAF8;"></textarea>
-        </div>
       </div>
 
-      <!-- Actions -->
-      <div style="display:flex;gap:10px;margin:12px 14px 28px;">
-        <button onclick="showView('view-all')" style="flex:1;height:48px;border:0.5px solid #D3D1C7;border-radius:10px;background:white;font-size:14px;font-weight:600;color:#888780;cursor:pointer;font-family:inherit;">Cancel</button>
-        <button onclick="placeOrder2()" style="flex:2;height:48px;background:#009A97;border:none;border-radius:10px;font-size:14px;font-weight:700;color:white;cursor:pointer;font-family:inherit;">Place Order</button>
+      <!-- Spacer so the sticky cart bar never covers the last card -->
+      <div style="height:90px;"></div>
+
+      <!-- Sticky cart bar — hidden until an item is added; opens Checkout -->
+      <div class="cart-bar" id="cart-bar" style="display:none;">
+        <button class="cart-bar-inner" onclick="placeOrder2()">
+          <span class="cart-ic">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <span class="cart-badge" id="cart-badge">0</span>
+          </span>
+          <span style="flex:1;min-width:0;text-align:left;">
+            <span id="ev1-total" style="display:block;font-size:15px;font-weight:700;line-height:1.1;">$0.00</span>
+            <span id="cart-sub" style="display:block;font-size:11px;color:rgba(255,255,255,0.8);margin-top:2px;">0 items</span>
+          </span>
+          <span style="display:flex;align-items:center;gap:4px;font-size:14px;font-weight:700;">Checkout
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </button>
       </div>
     </div>
 
@@ -1810,7 +1818,7 @@ select:focus { border-color: #009A97; }
       <!-- Order + event card (same card language as Screen 1 header card) -->
       <div style="background:white;border-radius:14px;margin:12px 14px 0;overflow:hidden;border:0.5px solid #e0dfd8;box-shadow:0 1px 8px rgba(0,0,0,0.05);">
         <div style="text-align:center;padding:12px 14px 10px;border-bottom:0.5px solid #f0f0f0;">
-          <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.06em;">ORDER NO: <span id="hp-ordernum" style="font-size:15px;font-weight:700;color:#1a1a18;letter-spacing:0;">1</span></div>
+          <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.08em;">CHECKOUT</div>
           <div id="hp-event-title" style="font-size:12px;color:#888780;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Groupbuy Event</div>
         </div>
         <div style="display:flex;align-items:flex-start;justify-content:space-between;padding:12px 14px 10px;">
@@ -1857,6 +1865,10 @@ select:focus { border-color: #009A97; }
           <span style="font-size:13px;font-weight:600;color:#007A77;">Final</span>
           <span id="hp-final" style="font-size:18px;font-weight:700;color:#007A77;">$0.00</span>
         </div>
+        <div style="background:white;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;border-top:0.5px solid #80CCCB;">
+          <span style="font-size:12px;color:#B4B2A9;cursor:pointer;">Purchase-on-Behalf</span>
+          <span style="font-size:11px;color:#009A97;font-weight:600;">Admin fee included: $0.00</span>
+        </div>
       </div>
 
       <!-- Notes to the host (carried over from Screen 1) -->
@@ -1867,7 +1879,7 @@ select:focus { border-color: #009A97; }
 
       <!-- Actions (same pair as Screen 1) -->
       <div style="display:flex;gap:10px;margin:12px 14px 28px;">
-        <button onclick="cancelHitPay()" style="flex:1;height:48px;border:0.5px solid #D3D1C7;border-radius:10px;background:white;font-size:14px;font-weight:600;color:#888780;cursor:pointer;font-family:inherit;">Cancel</button>
+        <button onclick="cancelHitPay()" style="flex:1;height:48px;border:0.5px solid #D3D1C7;border-radius:10px;background:white;font-size:14px;font-weight:600;color:#888780;cursor:pointer;font-family:inherit;">Back</button>
         <button id="hp-pay-btn" onclick="makePayment()" style="flex:2;height:48px;background:#009A97;border:none;border-radius:10px;font-size:14px;font-weight:700;color:white;cursor:pointer;font-family:inherit;">Make Payment</button>
       </div>
     </div>
@@ -2356,7 +2368,7 @@ select:focus { border-color: #009A97; }
 
   <!-- SUB-ITEM CONFIGURATIONS DEMO — dedicated screen, does not share markup/JS state with view-event-detail.
        Structure below deliberately mirrors view-event-detail (header card, search bar, one items card,
-       Order Total, Cancel/Place Order) for visual consistency with the real event page. -->
+       sticky Checkout cart bar) for visual consistency with the real event page. -->
   <div id="view-subitem-demo" style="display:none;">
 
     <!-- Event header card -->
@@ -2544,22 +2556,22 @@ select:focus { border-color: #009A97; }
 
     </div>
 
-    <!-- Order Total -->
-    <div style="margin:10px 14px 0;border-radius:12px;overflow:hidden;border:0.5px solid #e0dfd8;">
-      <div style="background:#E0F5F5;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid #80CCCB;">
-        <span style="font-size:13px;font-weight:600;color:#007A77;">Order Total</span>
-        <span style="font-size:18px;font-weight:700;color:#007A77;" id="subitem-demo-total">$0.00</span>
-      </div>
-      <div style="background:white;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:12px;color:#B4B2A9;">Demo only</span>
-        <span style="font-size:11px;color:#009A97;font-weight:600;">No real order is placed</span>
-      </div>
-    </div>
-
-    <!-- Actions -->
-    <div style="display:flex;gap:10px;margin:12px 14px 28px;">
-      <button onclick="showView('view-all')" style="flex:1;height:48px;border:0.5px solid #D3D1C7;border-radius:10px;background:white;font-size:14px;font-weight:600;color:#888780;cursor:pointer;font-family:inherit;">Cancel</button>
-      <button onclick="alert('This is a demo screen — no real order is placed.')" style="flex:2;height:48px;background:#009A97;border:none;border-radius:10px;font-size:14px;font-weight:700;color:white;cursor:pointer;font-family:inherit;">Place Order</button>
+    <!-- Spacer + sticky cart bar (mirrors the real event page; demo only, no order placed) -->
+    <div style="height:90px;"></div>
+    <div class="cart-bar" id="subitem-cart-bar" style="display:none;">
+      <button class="cart-bar-inner" onclick="alert('This is a demo screen — no real order is placed.')">
+        <span class="cart-ic">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cart-badge" id="subitem-cart-badge">0</span>
+        </span>
+        <span style="flex:1;min-width:0;text-align:left;">
+          <span id="subitem-demo-total" style="display:block;font-size:15px;font-weight:700;line-height:1.1;">$0.00</span>
+          <span id="subitem-cart-sub" style="display:block;font-size:11px;color:rgba(255,255,255,0.8);margin-top:2px;">Demo only · no real order</span>
+        </span>
+        <span style="display:flex;align-items:center;gap:4px;font-size:14px;font-weight:700;">Checkout
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </button>
     </div>
 
   </div>
@@ -4547,6 +4559,8 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   document.getElementById('ev-screen-2').style.display = 'none';
   document.getElementById('ev-screen-hitpay').style.display = 'none';
   document.getElementById('ev-screen-qr').style.display = 'none';
+  CURRENT_ORDER_NO = '';
+  var hpNotes = document.getElementById('hp-notes'); if (hpNotes) hpNotes.value = '';
   showView('view-event-detail');
 }
 
@@ -4689,7 +4703,29 @@ function updateTotal2() {
   total += updateStickerPackDiscount();
   const el = document.getElementById('ev1-total');
   if (el) el.textContent = '$' + total.toFixed(2);
+  updateCartBar(total);
   return total;
+}
+
+/* Sticky cart bar: hidden at 0 items; count = total units; bumps when count goes up */
+var cartBarLastCount = 0;
+function updateCartBar(total) {
+  var bar = document.getElementById('cart-bar');
+  if (!bar) return;
+  var ids = ['p2', 'p3', 'p4', 'p6', 'p7'];
+  document.querySelectorAll('#ev-screen-1 [id^="ps"]').forEach(function (e) { ids.push(e.id); });
+  var count = 0;
+  ids.forEach(function (id) { var q = document.getElementById(id); if (q) count += parseInt(q.textContent || 0) || 0; });
+  bar.style.display = count > 0 ? 'flex' : 'none';
+  document.body.classList.toggle('has-cart-bar', count > 0);
+  var badge = document.getElementById('cart-badge');
+  if (badge) {
+    badge.textContent = count;
+    if (count > cartBarLastCount) { badge.classList.remove('bump'); void badge.offsetWidth; badge.classList.add('bump'); }
+  }
+  cartBarLastCount = count;
+  var sub = document.getElementById('cart-sub');
+  if (sub) sub.textContent = count + (count === 1 ? ' item' : ' items') + (total >= 5 ? ' \u00b7 10% off applied at checkout' : '');
 }
 
 /* Product Discount demo (matches host builder spec): quantity-only condition,
@@ -4758,7 +4794,6 @@ function placeOrder2() {
   if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
   if (finalEl) finalEl.textContent = '$' + total.toFixed(2);
   if (payEl) payEl.textContent = '$' + total.toFixed(2);
-  document.getElementById('ev2-ordernum').textContent = Math.floor(Math.random() * 10) + 1;
   // Populate the payment screen (order details + HitPay payment)
   populatePaymentScreen(total);
   document.getElementById('ev-screen-1').style.display = 'none';
@@ -4801,10 +4836,6 @@ function populatePaymentScreen(subtotal) {
 
   renderHpItems();
 
-  // Carry over note typed on Screen 1
-  var n1 = document.getElementById('ev1-notes');
-  var n2 = document.getElementById('hp-notes');
-  if (n1 && n2) n2.value = n1.value;
 }
 
 /* Payment screen items — editable. Qty changes and deletes write straight back
@@ -4926,12 +4957,16 @@ function hpShowUndo(id, qty) {
 /* Make Payment -> PayNow QR screen.
    Prototype: the QR is a fake, purple, QR-style SVG (no real PayNow payload). */
 var HOST_PAYNOW = '83062355';
+var CURRENT_ORDER_NO = '';
 var QR_PURPLE = '#7B2D8B';
 var qrSeed = 1;
 
 function makePayment() {
   var finalTxt = document.getElementById('hp-final').textContent;
-  var orderNo = document.getElementById('hp-ordernum').textContent;
+  // The order is created here (not on Checkout), so the number is assigned now
+  if (!CURRENT_ORDER_NO) CURRENT_ORDER_NO = String(Math.floor(Math.random() * 10) + 1);
+  var orderNo = CURRENT_ORDER_NO;
+  document.getElementById('ev2-ordernum').textContent = orderNo;
   var title = document.getElementById('ev1-title').textContent || 'event';
   var ref = title.split(/\s+/).filter(Boolean).map(function (w) { return w.charAt(0).toLowerCase(); }).join('').replace(/[^a-z0-9]/g, '') + '-no' + orderNo;
   document.getElementById('qr-ordernum').textContent = orderNo;
@@ -4940,9 +4975,6 @@ function makePayment() {
   document.getElementById('qr-amount-inline').textContent = finalTxt;
   document.getElementById('qr-paynow').textContent = HOST_PAYNOW;
   document.getElementById('qr-ref').textContent = ref;
-  // keep note typed on the cart screen
-  var n1 = document.getElementById('ev1-notes'), n2 = document.getElementById('hp-notes');
-  if (n1 && n2) n1.value = n2.value;
   clearQrScreenshot();
   qrSeed = orderNo.length + finalTxt.length + ref.length;
   renderFakeQr();
@@ -5112,6 +5144,8 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   document.getElementById('ev-screen-2').style.display = 'none';
   document.getElementById('ev-screen-hitpay').style.display = 'none';
   document.getElementById('ev-screen-qr').style.display = 'none';
+  CURRENT_ORDER_NO = '';
+  var hpNotes = document.getElementById('hp-notes'); if (hpNotes) hpNotes.value = '';
   showView('view-event-detail');
 }
 
@@ -5404,6 +5438,15 @@ function updateSubitemDemoTotal() {
   var total = (specQty * specPrice) + (btQty * btPrice) + tsTotal;
   var totalEl = document.getElementById('subitem-demo-total');
   if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
+  var count = specQty + btQty + tsS + tsM + tsL;
+  var bar = document.getElementById('subitem-cart-bar');
+  if (bar) bar.style.display = count > 0 ? 'flex' : 'none';
+  var badge = document.getElementById('subitem-cart-badge');
+  if (badge) {
+    var prev = parseInt(badge.textContent) || 0;
+    badge.textContent = count;
+    if (count > prev) { badge.classList.remove('bump'); void badge.offsetWidth; badge.classList.add('bump'); }
+  }
 }
 function tileSpecPill(btn) {
   var group = btn.getAttribute('data-group');
