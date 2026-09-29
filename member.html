@@ -1855,17 +1855,13 @@ select:focus { border-color: #009A97; }
           <div id="hp-row-discount" style="display:flex;justify-content:space-between;"><span style="color:#888780;">Discount</span><span id="hp-discount" style="color:#1a1a18;font-weight:500;">$0.00</span></div>
           <div id="hp-row-admin" style="display:flex;justify-content:space-between;"><span style="color:#888780;">Admin fee</span><span id="hp-admin" style="color:#1a1a18;font-weight:500;">$0.00</span></div>
           <div id="hp-row-delivery" style="display:flex;justify-content:space-between;align-items:center;">
-            <div style="display:flex;align-items:center;gap:6px;"><span style="color:#888780;">Delivery</span><span id="hp-delivery-tbc" style="font-size:10px;color:#888780;background:#f0f0f0;border-radius:4px;padding:1px 5px;display:none;">TBC</span></div>
+            <span style="color:#888780;">Delivery</span>
             <span id="hp-delivery" style="color:#1a1a18;font-weight:500;">$0.00</span>
           </div>
         </div>
         <div style="background:#E0F5F5;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-top:0.5px solid #80CCCB;">
           <span style="font-size:13px;font-weight:600;color:#007A77;">Final</span>
           <span id="hp-final" style="font-size:18px;font-weight:700;color:#007A77;">$0.00</span>
-        </div>
-        <div style="background:white;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;border-top:0.5px solid #80CCCB;">
-          <span style="font-size:12px;color:#B4B2A9;cursor:pointer;">Purchase-on-Behalf</span>
-          <span id="hp-tbc-note" style="font-size:11px;color:#888780;"></span>
         </div>
       </div>
 
@@ -4920,10 +4916,9 @@ function renderHpItems() {
   setText('hp-admin', money(amt.adminFee));
   document.getElementById('hp-row-admin').style.display = amt.adminFee > 0 ? 'flex' : 'none';
   var dRow = document.getElementById('hp-row-delivery');
-  dRow.style.display = amt.deliveryMode === 'none' ? 'none' : 'flex';
-  document.getElementById('hp-delivery-tbc').style.display = amt.deliveryMode === 'tbc' ? 'inline' : 'none';
-  setText('hp-delivery', amt.deliveryMode === 'tbc' ? '\u2014' : money(amt.deliveryFee));
-  setText('hp-tbc-note', amt.deliveryMode === 'tbc' ? 'Delivery fee billed separately' : '');
+  // Delivery row only when the fee is known (flat); TBC delivery is not shown on Checkout
+  dRow.style.display = amt.deliveryMode === 'flat' ? 'flex' : 'none';
+  setText('hp-delivery', money(amt.deliveryFee));
   setText('hp-final', money(finalAmt));
   setText('ev2-total', money(amt.subtotal));
   setText('ev2-discount', amt.discount > 0 ? '-' + money(amt.discount) : '$0.00');
