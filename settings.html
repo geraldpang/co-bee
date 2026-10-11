@@ -5,896 +5,746 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>co·bee — Settings</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F4F6F8;color:#1a1a18;font-size:13px;}
+/* co·bee group settings — tab bar + white section cards, single light theme to match the app.
+   Teal #009A97 primary, warm greys, amber marks unsaved changes. */
+:root{
+  --bg:#F4F6F8; --surface:#FFFFFF; --sunk:#F4F6F8; --fg:#1A1A18; --muted:#888780; --line:#E0DFD8; --line-soft:#F0F0EE;
+  --teal:#009A97; --teal-dark:#007A77; --teal-soft:#E0F5F5; --teal-line:#80CCCB;
+  --amber:#E8971A; --amber-soft:#FEF2DC; --purple:#7B2D8B; --red:#E24B4A; --red-soft:#FCEBEB;
+  --font:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono:ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:13px;line-height:1.45;margin:0}
+button{font-family:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 
-.tab-bar{background:white;border-bottom:0.5px solid #E0DFD8;display:flex;padding:0 24px;gap:0;position:sticky;top:0;z-index:50;}
-.tab{padding:14px 18px;font-size:13px;font-weight:500;color:#888780;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;white-space:nowrap;}
-.tab:hover{color:#009A97;}
-.tab.active{color:#009A97;border-bottom-color:#009A97;font-weight:600;}
+.tabs-wrap{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.tabs-inner{max-width:1100px;margin:0 auto;padding-inline:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tabs{display:flex;overflow-x:auto;flex:1;min-width:0;scrollbar-width:none}
+.tab{background:none;border:none;border-bottom:2px solid transparent;padding:14px 14px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tab:hover{color:var(--teal)}
+.tab[aria-selected="true"]{color:var(--teal);border-bottom-color:var(--teal);font-weight:600}
+.tab .dot{width:6px;height:6px;border-radius:50%;background:var(--amber)}
+.search{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;padding:0 10px;height:34px;background:var(--surface);width:220px;max-width:100%}
+.search input{border:none;outline:none;font-size:13px;flex:1;min-width:0;background:transparent;color:var(--fg)}
+@media (max-width:640px){.search{width:100%;margin-bottom:8px}}
 
-.page{padding:24px;max-width:1100px;margin:0 auto;}
-.tab-content{display:none;}
-.tab-content.active{display:block;}
+.page{max-width:1100px;margin:0 auto;padding-inline:16px;padding-block:20px 120px;display:grid;gap:20px}
+.page.with-preview{grid-template-columns:minmax(0,1fr) 300px}
+@media (max-width:960px){.page.with-preview{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
 
-.section{background:white;border-radius:12px;border:0.5px solid #E0DFD8;margin-bottom:16px;overflow:hidden;}
-.section-header{padding:14px 18px;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;}
-.section-title{font-size:12px;font-weight:700;color:#1a1a18;letter-spacing:0.04em;text-transform:uppercase;}
-.section-body{padding:20px 18px;}
-.divider{height:0.5px;background:#f0f0f0;margin:18px 0;}
+.intro{display:flex;gap:12px;align-items:flex-start;background:var(--teal-soft);border:1px solid var(--teal-line);border-radius:10px;padding:12px 14px;font-size:12.5px}
+.intro .lk{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--surface);display:grid;place-items:center;color:var(--teal)}
+.intro p{margin:0}
 
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;}
-.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px 20px;}
+.section{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.sec-h{padding:12px 18px;border-bottom:1px solid var(--line-soft);display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sec-h h2{margin:0;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.sec-h span{font-size:11px;color:var(--muted)}
+.rows{display:flex;flex-direction:column}
 
-.field{display:flex;flex-direction:column;gap:5px;}
-.field label{font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;}
-.field label .req{color:#E24B4A;margin-left:2px;}
-.input{height:38px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 12px;font-size:13px;font-family:inherit;outline:none;color:#1a1a18;background:white;width:100%;}
-.input:focus{border-color:#009A97;}
-.textarea{border:0.5px solid #D3D1C7;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;outline:none;color:#1a1a18;background:white;width:100%;resize:vertical;min-height:80px;}
-.textarea:focus{border-color:#009A97;}
-.select{height:38px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 28px 0 12px;font-size:13px;font-family:inherit;outline:none;background:white;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;width:100%;}
-.input-prefix{display:flex;align-items:center;border:0.5px solid #D3D1C7;border-radius:8px;overflow:hidden;}
-.input-prefix .prefix{padding:0 10px;background:#f5f5f5;border-right:0.5px solid #D3D1C7;height:38px;display:flex;align-items:center;font-size:12px;color:#888780;white-space:nowrap;gap:5px;flex-shrink:0;}
-.input-prefix .input{border:none;border-radius:0;flex:1;}
-.helper{font-size:11px;color:#888780;margin-top:2px;}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 20px;padding:13px 18px;border-top:1px solid var(--line-soft);position:relative;align-items:center}
+.row:first-child{border-top:none}
+.row.changed::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--amber)}
+.row.sub{background:#FAFBFB;padding-left:34px}
+.row .tt{font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.row .ds{font-size:11.5px;color:var(--muted);margin-top:2px;max-width:62ch}
+.row .note{grid-column:1 / -1;font-size:11.5px;color:var(--purple);background:#F3E9FA;border-radius:6px;padding:6px 10px;display:flex;gap:6px;align-items:flex-start}
+.ctl{display:flex;align-items:center;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+@media (max-width:560px){.row{grid-template-columns:minmax(0,1fr)}.ctl{justify-content:flex-start}}
+.chip{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.02em}
+.chip.lock{background:var(--teal-soft);color:var(--teal)}
+.chip.pro{background:#F3E9FA;color:var(--purple)}
+.chip.def{background:var(--sunk);color:var(--muted);font-weight:600}
 
-.toggle-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:0.5px solid #f0f0f0;}
-.toggle-row:last-child{border-bottom:none;}
-.toggle-label-title{font-size:13px;font-weight:500;color:#1a1a18;}
-.toggle-label-sub{font-size:11px;color:#888780;margin-top:2px;line-height:1.5;}
-.toggle{width:38px;height:22px;border-radius:99px;background:#D3D1C7;border:none;cursor:pointer;position:relative;flex-shrink:0;margin-top:2px;transition:background 0.2s;}
-.toggle.on{background:#009A97;}
-.toggle::after{content:'';position:absolute;width:18px;height:18px;background:white;border-radius:50%;top:2px;left:2px;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
-.toggle.on::after{left:18px;}
+.sw{width:38px;height:22px;border-radius:99px;background:#D3D1C7;border:none;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s;padding:0}
+.sw::after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
+.sw[aria-checked="true"]{background:var(--teal)}
+.sw[aria-checked="true"]::after{left:18px}
+.sw:disabled{opacity:.5;cursor:not-allowed}
 
-.profile-photo-wrap{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;}
-.photo-circle{width:80px;height:80px;border-radius:50%;background:#E0F5F5;border:2px dashed #80CCCB;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:4px;transition:all 0.15s;flex-shrink:0;}
-.photo-circle:hover{border-color:#009A97;}
-.photo-circle svg{color:#80CCCB;}
-.photo-circle span{font-size:9px;color:#888780;text-align:center;line-height:1.2;}
+.seg{display:inline-flex;border:1px solid #D3D1C7;border-radius:8px;overflow:hidden;background:var(--surface);max-width:100%;flex-wrap:wrap}
+.seg button{border:none;background:none;padding:0 12px;height:32px;font-size:12px;color:var(--fg);cursor:pointer;border-left:1px solid #D3D1C7;white-space:nowrap}
+.seg button:first-child{border-left:none}
+.seg button[aria-pressed="true"]{background:var(--teal);color:#fff;font-weight:600}
+.seg button:disabled{cursor:not-allowed;opacity:.55}
 
-.contact-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.contact-row:last-child{margin-bottom:0;}
-.contact-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.num{display:inline-flex;align-items:center;border:1px solid #D3D1C7;border-radius:8px;overflow:hidden;height:32px;background:var(--surface)}
+.num span{padding:0 9px;font-size:12px;color:var(--muted);background:var(--sunk);height:100%;display:flex;align-items:center}
+.num input{width:64px;border:none;outline:none;padding:0 8px;font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+.txt{height:32px;border:1px solid #D3D1C7;border-radius:8px;padding:0 10px;font-size:13px;width:240px;max-width:100%;color:var(--fg)}
+textarea.txt{height:60px;padding:8px 10px;width:100%;resize:vertical;font-family:inherit}
+.row.wide .ctl{grid-column:1 / -1;justify-content:stretch}
+select.txt{width:auto}
 
-.color-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-.color-field{display:flex;flex-direction:column;gap:6px;}
-.color-field label{font-size:11px;font-weight:600;color:#888780;}
-.color-preview{display:flex;align-items:center;gap:8px;}
-.color-swatch{width:40px;height:38px;border-radius:8px;border:0.5px solid #D3D1C7;cursor:pointer;flex-shrink:0;padding:2px;}
-.color-input-hex{height:38px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 10px;font-size:12px;font-family:monospace;width:100px;outline:none;}
-.color-input-hex:focus{border-color:#009A97;}
-.color-presets{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;}
-.color-preset{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color 0.1s;flex-shrink:0;}
-.color-preset:hover{border-color:#1a1a18;}
+.lockbtn{width:30px;height:30px;border-radius:7px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;color:#B4B2A9;flex-shrink:0}
+.lockbtn:hover{color:var(--teal);border-color:var(--teal-line)}
+.lockbtn[aria-pressed="true"]{color:var(--teal);background:var(--teal-soft);border-color:var(--teal-line)}
 
-.banner-upload{border:1.5px dashed #D3D1C7;border-radius:8px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all 0.15s;}
-.banner-upload:hover{border-color:#009A97;background:#f5fafa;}
-.banner-thumb{width:80px;height:54px;background:#E0F5F5;border-radius:6px;border:0.5px solid #E0DFD8;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.checks{display:flex;flex-wrap:wrap;gap:8px}
+.ck{display:flex;align-items:center;gap:7px;border:1px solid #D3D1C7;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:12px;background:var(--surface)}
+.ck input{accent-color:var(--teal)}
+.ck.on{border-color:var(--teal);background:var(--teal-soft)}
 
-.radio-group{background:#E0F5F5;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;}
-.radio-section-title{font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;}
-.radio-row{display:flex;gap:28px;}
-.radio-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:500;color:#1a1a18;}
-.radio-label input[type=radio]{accent-color:#009A97;width:16px;height:16px;}
+.sb{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(0,0,0,.06);z-index:30;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.sb-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.sb-msg{flex:1;min-width:200px;font-size:12.5px}
+.sb-msg b{color:var(--amber)}
+.btn{height:34px;padding:0 14px;border-radius:8px;border:1px solid #D3D1C7;background:var(--surface);font-size:13px;cursor:pointer;color:var(--fg)}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600}
+.btn.primary:hover{background:var(--teal-dark)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.apply{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12px;width:100%;padding-top:8px;border-top:1px dashed var(--line);margin-top:4px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;background:var(--fg);color:#fff;padding:9px 14px;border-radius:8px;font-size:12.5px;z-index:40;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.show{opacity:1}
 
-/* Payment single-select */
-.pay-method{border:0.5px solid #D3D1C7;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.15s;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;}
-.pay-method:last-child{margin-bottom:0;}
-.pay-method:hover{border-color:#009A97;}
-.pay-method.selected{border-color:#009A97;background:#E0F5F5;}
-.pay-method-radio{width:18px;height:18px;border-radius:50%;border:2px solid #D3D1C7;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
-.pay-method.selected .pay-method-radio{border-color:#009A97;background:#009A97;}
-.pay-method.selected .pay-method-radio::after{content:'';width:6px;height:6px;background:white;border-radius:50%;}
-.pay-method-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.pay-method-body{flex:1;}
-.pay-method-name{font-size:13px;font-weight:600;color:#1a1a18;}
-.pay-method-sub{font-size:11px;color:#888780;margin-top:2px;}
-.pay-method-detail{margin-top:12px;padding-top:12px;border-top:0.5px solid #80CCCB;display:none;}
-.pay-method.selected .pay-method-detail{display:block;}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:28px;text-align:center;color:var(--muted)}
+.where{font-size:10.5px;font-weight:600;color:var(--teal);letter-spacing:.04em;text-transform:uppercase}
 
-.keyword-row{display:flex;gap:8px;align-items:center;}
-.setting-card{border:0.5px solid #D3D1C7;border-radius:10px;padding:12px;cursor:pointer;transition:all 0.15s;display:flex;align-items:flex-start;gap:10px;}
-.setting-card:hover{border-color:#009A97;}
-.setting-card.selected{border-color:#009A97;background:#E0F5F5;}
-.setting-card-check{width:18px;height:18px;border-radius:50%;border:2px solid #D3D1C7;flex-shrink:0;margin-top:1px;transition:all 0.15s;}
-.setting-card-check.on{border-color:#009A97;background:#009A97;background-image:url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4l3 3 5-6' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;}
-.setting-card-title{font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:3px;}
-.setting-card-sub{font-size:11px;color:#888780;line-height:1.4;}
-.btn{height:36px;padding:0 16px;border-radius:8px;border:0.5px solid #D3D1C7;background:white;font-size:13px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:6px;color:#1a1a18;transition:all 0.12s;}
-.btn:hover{background:#f5f5f5;}
-.btn.primary{background:#009A97;border-color:#009A97;color:white;}
-.btn.primary:hover{background:#007A77;}
-.btn.danger{color:#E24B4A;border-color:#F09595;}
-.btn.danger:hover{background:#FCEBEB;}
-.btn.sm{height:30px;padding:0 12px;font-size:12px;}
-
-
+/* member preview */
+.pv{position:sticky;top:70px;align-self:start;display:flex;flex-direction:column;gap:8px}
+.pv-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.phone{border:8px solid #2a2a28;border-radius:26px;overflow:hidden;background:var(--pbg,#F4F6F8);height:520px;display:flex;flex-direction:column}
+.ph-top{background:var(--ptop,#7B2D8B);color:var(--ptxt,#fff);text-align:center;padding:10px 8px 8px;font-weight:700;font-size:13px}
+.ph-tabs{display:flex;background:#fff;border-bottom:1px solid var(--line);font-size:10.5px}
+.ph-tabs span{flex:1;text-align:center;padding:7px 0;color:var(--muted)}
+.ph-tabs span.on{color:var(--pprim,#7B2D8B);border-bottom:2px solid var(--pprim,#7B2D8B);font-weight:700}
+.ph-body{flex:1;overflow:hidden;padding:8px;display:flex;flex-direction:column;gap:6px}
+.ph-feed{display:grid;gap:6px}
+.ph-feed.tile{grid-template-columns:1fr 1fr}
+.ev{background:#fff;border-radius:8px;border:1px solid var(--line);overflow:hidden;font-size:10.5px}
+.ev .img{background:linear-gradient(135deg,#E0F5F5,#FEF2DC)}
+.ph-feed.list .ev{display:flex;gap:6px;padding:5px}
+.ph-feed.list .ev .img{width:38px;height:38px;border-radius:6px;flex-shrink:0}
+.ph-feed.tile .ev .img{height:56px}
+.ph-feed.tile .ev .bd{padding:5px}
+.ev b{display:block;font-size:10.5px;color:var(--pitem,#1A1A18)}
+.ev .pr{color:var(--pprice,#7B2D8B);font-weight:700}
+.hexsw{width:36px;height:32px;border:1px solid #D3D1C7;border-radius:8px;padding:2px;background:var(--surface);cursor:pointer}
+.txt.hex{width:92px;font-family:var(--mono);font-size:12px;text-transform:uppercase}
+.thumb{width:64px;height:40px;border-radius:8px;border:1.5px dashed var(--teal-line);background:var(--teal-soft);display:grid;place-items:center;color:var(--teal-line)}
+.thumb.round{width:44px;height:44px;border-radius:50%}
+.btn.sm{height:30px;padding:0 12px;font-size:12px}
+.slug{display:flex;align-items:center;border:1px solid #D3D1C7;border-radius:8px;overflow:hidden;height:32px;max-width:100%;background:var(--surface)}
+.slug > span:first-child{padding:0 8px;background:var(--sunk);height:100%;display:flex;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.slug input{border:none;outline:none;padding:0 8px;font-family:var(--mono);font-size:12.5px;width:120px;min-width:0;color:var(--fg)}
+.slug-st{padding:0 9px;height:100%;display:flex;align-items:center;font-size:11px;font-weight:700;border-left:1px solid #D3D1C7;background:var(--sunk)}
+.slug-st.ok{color:#27AE60}.slug-st.bad{color:var(--red)}
+.tt .req{font-size:10px;font-weight:600;color:var(--red)}
+.links{display:flex;flex-direction:column;gap:8px;width:100%}
+.link-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) auto;gap:8px}
+.link-row .txt{width:100%}
+@media (max-width:560px){.link-row{grid-template-columns:minmax(0,1fr) auto}.link-row .txt:nth-child(2){grid-column:1}}
+.btn.danger{color:var(--red);border-color:#F09595}
+.btn.addlink{align-self:flex-start;color:var(--teal);border-style:dashed}
+/* Profile tab — same classes and look as today's settings.html */
+.legacy .section-header{padding:14px 18px;border-bottom:1px solid var(--line-soft)}
+.legacy .section-title{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.legacy .section-body{padding:20px 18px;display:flex;flex-direction:column;gap:16px}
+.legacy .profile-photo-wrap{display:flex;align-items:flex-start;gap:16px}
+.legacy .photo-circle{width:80px;height:80px;border-radius:50%;background:var(--teal-soft);border:2px dashed var(--teal-line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex-shrink:0}
+.legacy .photo-circle span{font-size:9px;color:var(--muted)}
+.legacy .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
+@media (max-width:640px){.legacy .two-col{grid-template-columns:minmax(0,1fr)}}
+.legacy .field{display:flex;flex-direction:column;gap:5px;min-width:0;position:relative}
+.legacy .field label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.05em}
+.legacy .field label .req{color:var(--red);margin-left:2px}
+.legacy .input,.legacy .select{height:38px;border:1px solid #D3D1C7;border-radius:8px;padding:0 12px;font-size:13px;font-family:inherit;color:var(--fg);background:var(--surface);width:100%;outline:none}
+.legacy .input:focus,.legacy .select:focus,.legacy .textarea:focus{border-color:var(--teal)}
+.legacy .textarea{border:1px solid #D3D1C7;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;color:var(--fg);width:100%;resize:vertical;min-height:80px;outline:none}
+.legacy .helper{font-size:11px;color:var(--muted);line-height:1.5}
+.legacy .divider{height:1px;background:var(--line-soft)}
+.legacy .sub-lbl{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.legacy .url-lbl{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.05em}
+.legacy .prem{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#8E44AD;background:#F3E9FA;border:1px solid #D9BEEA;border-radius:99px;padding:2px 8px;letter-spacing:.03em}
+.legacy .slug{height:38px}
+.legacy .slug input{flex:1}
+.legacy .url-prev{font-family:var(--mono);font-size:11px;color:var(--teal);word-break:break-all}
+.legacy .contact-row{display:flex;align-items:center;gap:10px;position:relative}
+.legacy .contact-icon{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex-shrink:0}
+.legacy .input-prefix{display:flex;align-items:center;border:1px solid #D3D1C7;border-radius:8px;overflow:hidden;flex:1;min-width:0}
+.legacy .input-prefix .prefix{padding:0 10px;background:var(--sunk);border-right:1px solid #D3D1C7;height:38px;display:flex;align-items:center;font-size:12px;color:var(--muted);flex-shrink:0;width:86px}
+.legacy .input-prefix .input{border:none;border-radius:0}
+.legacy .field.changed::before,.legacy .contact-row.changed::before{content:"";position:absolute;left:-10px;top:0;bottom:0;width:3px;border-radius:3px;background:var(--amber)}
+.legacy .slug.changed{border-color:var(--amber)}
+.ev .badge{display:inline-block;font-size:8.5px;font-weight:700;color:#fff;background:var(--pacc,#E8971A);border-radius:4px;padding:1px 4px;margin-top:2px}
+.ev .cnt{color:var(--muted);font-size:9.5px}
+.ph-foot{text-align:center;font-size:9px;color:var(--muted);padding:6px}
+.ph-body{overflow-y:auto}
+.ph-feed.tile.c3{grid-template-columns:1fr 1fr 1fr}
+.ph-feed.tile.c3 .ev .img{height:40px}
+.ph-feed.tile.land .ev .img{height:40px}
+.ph-feed.prod.tile:not(.land):not(.c3) .ev .img{height:auto;aspect-ratio:1}
+.ph-grp{font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.ph-filters{display:flex;gap:4px;flex-wrap:wrap}
+.ph-filters span{font-size:9px;border:1px solid var(--line);background:#fff;border-radius:99px;padding:2px 7px;color:var(--fg)}
+.ph-filters.pills span.on{background:var(--pprim,#7B2D8B);border-color:var(--pprim,#7B2D8B);color:#fff}
+.qadd{display:inline-block;margin-top:3px;font-size:9px;font-weight:700;color:var(--pprim,#7B2D8B);border:1px solid var(--pprim,#7B2D8B);border-radius:5px;padding:1px 5px}
+.pin{font-size:8.5px;font-weight:700;color:var(--pprim,#7B2D8B);text-transform:uppercase}
+.ev.closed{opacity:.55}.ev.closed .bd,.ev.order .bd{padding:6px}
+.stt{font-size:8.5px;font-weight:700;border-radius:4px;padding:1px 4px}
+.stt.un{background:var(--red-soft);color:var(--red)}.stt.pd{background:var(--teal-soft);color:var(--teal)}.stt.dn{background:var(--sunk);color:var(--muted)}
+.paybar{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:10px}
+.pbb{background:var(--pprim,#7B2D8B);color:#fff;font-weight:700;border-radius:5px;padding:3px 7px}
+.pageseg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px;gap:4px;flex-wrap:wrap}
+.pageseg button{flex:1;min-width:110px;border:none;background:none;border-radius:7px;padding:9px 10px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.pageseg button[aria-selected="true"]{background:var(--teal);color:#fff;font-weight:600}
+.pageseg .ps-h{font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:99px;background:var(--amber-soft);color:var(--amber)}
+.pageseg button[aria-selected="true"] .ps-h{background:rgba(255,255,255,.25);color:#fff}
+.pageseg .dot{width:6px;height:6px;border-radius:50%;background:var(--amber)}
+.ph-wa{background:#25D366;color:#fff;border-radius:6px;text-align:center;font-size:10px;font-weight:700;padding:5px}
+.swatches{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.swatch{width:26px;height:26px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+.swatch[aria-pressed="true"]{box-shadow:0 0 0 2px var(--fg)}
+.warn{color:var(--red);font-size:11.5px;display:flex;gap:4px;align-items:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-
-<div class="tab-bar">
-  <div class="tab active"  onclick="switchTab('general',this)">Profile</div>
-  <div class="tab"         onclick="switchTab('appearance',this)">Appearance</div>
-  <div class="tab"         onclick="switchTab('group',this)">Group</div>
-  <div class="tab"         onclick="switchTab('advance',this)">Advance</div>
-  <div class="tab"         onclick="switchTab('payment',this)">Payment</div>
-</div>
-
-<div class="page">
-
-<!-- ═══════════ GENERAL ═══════════ -->
-<div id="tab-general" class="tab-content active">
-  <div class="section">
-    <div class="section-header">
-      <span class="section-title">Profile</span>
-    </div>
-    <div class="section-body">
-
-      <!-- Group photo + name row -->
-      <div class="profile-photo-wrap">
-        <div class="photo-circle" onclick="alert('Upload profile photo')">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          <span>Add Photo</span>
-        </div>
-        <div style="flex:1;">
-          <div style="font-size:11px;color:#888780;margin-bottom:8px;">This photo appears on event cards and is seen by all buyers.</div>
-          <button class="btn sm">Upload Photo</button>
-        </div>
-      </div>
-
-      <!-- Shop / Group info -->
-      <div class="two-col" style="margin-bottom:16px;">
-        <div class="field">
-          <label>Group Name <span class="req">*</span></label>
-          <input class="input" id="group-name-input" value="M6 Group"/>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:14px;margin-bottom:5px;">
-            <span style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;">GROUP URL</span>
-            <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#8E44AD;background:#F3E9FA;border:0.5px solid #D9BEEA;border-radius:100px;padding:2px 8px;letter-spacing:0.03em;">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="#8E44AD" stroke="none"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.8 5.7 21l2.3-7.2-6-4.4h7.6z"/></svg>
-              Premium
-            </span>
-          </div>
-          <div style="font-size:10.5px;color:#888780;margin-bottom:6px;line-height:1.5;">Your own branded page — members go straight to your group's events and purchases, with your colors and name in the header.</div>
-          <div style="display:flex;align-items:center;gap:0;border:0.5px solid #D3D1C7;border-radius:8px;overflow:hidden;background:white;height:38px;">
-            <span style="padding:0 10px;background:#F4F6F8;border-right:0.5px solid #D3D1C7;font-size:12px;font-family:monospace;color:#888780;white-space:nowrap;height:100%;display:flex;align-items:center;">https://co-bee.pages.dev/</span>
-            <input id="subdomain-input" style="height:100%;border:none;padding:0 10px;font-size:13px;font-family:monospace;outline:none;color:#1a1a18;flex:1;min-width:120px;" value="m6group" placeholder="your-group" oninput="updateSubdomainPreview(this.value)"/>
-            <span id="subdomain-status" style="padding:0 10px;font-size:11px;font-weight:600;color:#27AE60;display:flex;align-items:center;gap:4px;white-space:nowrap;border-left:0.5px solid #D3D1C7;height:100%;background:#F4F6F8;">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Available
-            </span>
-          </div>
-          <a id="subdomain-preview-link" href="group-portal.html?g=m6group" target="_blank" style="display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:11px;color:#009A97;text-decoration:none;font-family:monospace;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            <span id="subdomain-preview-text">https://co-bee.pages.dev/m6group</span>
-          </a>
-        </div>
-        <div class="field">
-          <label>Address <span class="req">*</span></label>
-          <input class="input" value="Simei Street 1, Singapore 529948"/>
-        </div>
-      </div>
-      <div class="two-col" style="margin-bottom:16px;">
-        <div class="field">
-          <label>Time Zone</label>
-          <select class="select"><option selected>Asia / Singapore</option><option>Asia / Kuala Lumpur</option><option>UTC</option></select>
-        </div>
-        <div class="field">
-          <label>Currency</label>
-          <select class="select"><option selected>SGD — Singapore Dollar</option><option>MYR — Malaysian Ringgit</option><option>USD — US Dollar</option></select>
-        </div>
-      </div>
-      <div class="field" style="margin-bottom:16px;">
-        <label>Headline / Description</label>
-        <textarea class="textarea">Good things must share! Join M6 Group for the best group buys in Singapore.</textarea>
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- Contact & Social -->
-      <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:12px;">Contact &amp; Social</div>
-      <div class="contact-row">
-        <div class="contact-icon" style="background:#E8F8EF;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.58 3.47 2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 19z"/></svg></div>
-        <div class="input-prefix" style="flex:1;"><span class="prefix">WhatsApp</span><input class="input" value="+65 9123 4567"/></div>
-      </div>
-      <div class="contact-row">
-        <div class="contact-icon" style="background:#FEF2DC;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
-        <div class="input-prefix" style="flex:1;"><span class="prefix">Instagram</span><input class="input" placeholder="@handle or URL"/></div>
-      </div>
-      <div class="contact-row">
-        <div class="contact-icon" style="background:#EBF5FB;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3498DB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
-        <div class="input-prefix" style="flex:1;"><span class="prefix">Facebook</span><input class="input" value="https://facebook.com/m6group"/></div>
-      </div>
-      <div class="contact-row">
-        <div class="contact-icon" style="background:#F0F0F0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-        <div class="input-prefix" style="flex:1;"><span class="prefix">Website</span><input class="input" placeholder="https://yourwebsite.com"/></div>
-      </div>
-
-
-    </div>
+<div class="tabs-wrap">
+  <div class="tabs-inner">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <label class="search" for="q"><span aria-hidden="true" style="color:var(--muted)">&#9906;</span><input id="q" type="search" placeholder="Search settings" autocomplete="off"></label>
   </div>
 </div>
 
-<!-- ═══════════ APPEARANCE ═══════════ -->
-<div id="tab-appearance" class="tab-content">
+<div class="page" id="page"></div>
 
-
-  <!-- Banner -->
-  <div class="section">
-    <div class="section-header"><span class="section-title">Banner Images</span></div>
-    <div class="section-body">
-      <div style="position:relative;cursor:pointer;" onclick="document.getElementById('banner-input').click()" id="banner-drop">
-        <!-- Preview area — shows placeholder or uploaded image -->
-        <div id="banner-preview" style="width:100%;height:160px;background:#E0F5F5;border-radius:10px;border:1.5px dashed #80CCCB;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transition:all 0.15s;overflow:hidden;position:relative;">
-          <svg id="banner-placeholder-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span id="banner-placeholder-text" style="font-size:12px;font-weight:500;color:#888780;">Click to upload banner image</span>
-          <span id="banner-placeholder-sub" style="font-size:10px;color:#B4B2A9;">PNG, JPG up to 5MB — recommended 1200×400px. Replaces the event page header.</span>
-          <!-- Uploaded image shown here -->
-          <img id="banner-img" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:8px;"/>
-        </div>
-        <!-- Overlay on hover when image is loaded -->
-        <div id="banner-overlay" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.35);border-radius:10px;align-items:center;justify-content:center;gap:8px;flex-direction:column;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <span style="font-size:12px;font-weight:600;color:white;">Change Banner</span>
-        </div>
+<div class="sb" id="sb" hidden>
+  <div class="sb-in">
+    <div class="sb-msg" id="sb-msg"></div>
+    <button class="btn" id="discard" type="button">Discard</button>
+    <button class="btn primary" id="save" type="button">Save changes</button>
+    <div class="apply" id="apply" hidden>
+      <span>Apply event defaults to:</span>
+      <div class="seg" role="group" aria-label="Apply to">
+        <button type="button" data-apply="new" aria-pressed="true">New events only</button>
+        <button type="button" data-apply="open" aria-pressed="false">New + 3 open events</button>
       </div>
-      <input type="file" id="banner-input" accept="image/*" style="display:none;" onchange="previewBanner(this)"/>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
-        <span style="font-size:11px;color:#888780;" id="banner-filename">No file selected</span>
-        <button class="btn sm danger" id="banner-remove" style="display:none;" onclick="removeBanner(event)">Remove</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Color Scheme -->
-  <div class="section">
-    <div class="section-header"><span class="section-title">Color Scheme</span></div>
-    <div class="section-body">
-      <div style="font-size:11px;color:#888780;margin-bottom:16px;">Color changes apply to both member-facing event pages and the admin interface.</div>
-
-      <!-- Title -->
-      <div style="margin-bottom:18px;padding-bottom:18px;border-bottom:0.5px solid #f0f0f0;">
-        <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:10px;">Site Title</div>
-        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-          <div class="field" style="flex:1;min-width:180px;">
-            <label>Title Text</label>
-            <input class="input" value="co·bee" id="site-title-input" oninput="previewTitle(this.value)" placeholder="e.g. co·bee"/>
-            <span class="helper">Replaces the "co·bee" header across the platform.</span>
-          </div>
-          <div id="title-preview-box" style="background:#009A97;border-radius:8px;padding:10px 18px;display:flex;align-items:center;gap:6px;">
-            <span id="site-title-preview" style="font-size:16px;font-weight:700;color:#FFFFFF;letter-spacing:-0.02em;">co·bee</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Colors -->
-      <div style="font-size:11px;font-weight:600;color:#888780;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:12px;">Colors</div>
-      <div class="color-grid" style="margin-bottom:16px;">
-        <div class="color-field">
-          <label>Primary (Teal)</label>
-          <div class="color-preview"><input type="color" class="color-swatch" value="#009A97" id="clr-primary" oninput="syncHex('primary',this.value)"/><input class="color-input-hex" value="#009A97" id="hex-primary" oninput="syncSwatch('primary',this.value)" maxlength="7"/></div>
-          <div class="color-presets">
-            <div class="color-preset" style="background:#009A97;" onclick="applyColor('primary','#009A97')"></div>
-            <div class="color-preset" style="background:#0077CC;" onclick="applyColor('primary','#0077CC')"></div>
-            <div class="color-preset" style="background:#7B2D8B;" onclick="applyColor('primary','#7B2D8B')"></div>
-            <div class="color-preset" style="background:#E24B4A;" onclick="applyColor('primary','#E24B4A')"></div>
-            <div class="color-preset" style="background:#27AE60;" onclick="applyColor('primary','#27AE60')"></div>
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Accent (Amber / Badge)</label>
-          <div class="color-preview"><input type="color" class="color-swatch" value="#E8971A" id="clr-accent" oninput="syncHex('accent',this.value)"/><input class="color-input-hex" value="#E8971A" id="hex-accent" oninput="syncSwatch('accent',this.value)" maxlength="7"/></div>
-          <div class="color-presets">
-            <div class="color-preset" style="background:#E8971A;" onclick="applyColor('accent','#E8971A')"></div>
-            <div class="color-preset" style="background:#F5A623;" onclick="applyColor('accent','#F5A623')"></div>
-            <div class="color-preset" style="background:#E74C3C;" onclick="applyColor('accent','#E74C3C')"></div>
-            <div class="color-preset" style="background:#8E44AD;" onclick="applyColor('accent','#8E44AD')"></div>
-            <div class="color-preset" style="background:#2ECC71;" onclick="applyColor('accent','#2ECC71')"></div>
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Page Background</label>
-          <div class="color-preview"><input type="color" class="color-swatch" value="#F4F6F8" id="clr-bg" oninput="syncHex('bg',this.value)"/><input class="color-input-hex" value="#F4F6F8" id="hex-bg" oninput="syncSwatch('bg',this.value)" maxlength="7"/></div>
-          <div class="color-presets">
-            <div class="color-preset" style="background:#F4F6F8;border:1px solid #ddd;" onclick="applyColor('bg','#F4F6F8')"></div>
-            <div class="color-preset" style="background:#FFFFFF;border:1px solid #ddd;" onclick="applyColor('bg','#FFFFFF')"></div>
-            <div class="color-preset" style="background:#F1EFE8;" onclick="applyColor('bg','#F1EFE8')"></div>
-            <div class="color-preset" style="background:#EAF4F4;" onclick="applyColor('bg','#EAF4F4')"></div>
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Topbar Background</label>
-          <div class="color-preview"><input type="color" class="color-swatch" value="#009A97" id="clr-topbar" oninput="syncHex('topbar',this.value)"/><input class="color-input-hex" value="#009A97" id="hex-topbar" oninput="syncSwatch('topbar',this.value)" maxlength="7"/></div>
-          <div class="color-presets">
-            <div class="color-preset" style="background:#009A97;" onclick="applyColor('topbar','#009A97')"></div>
-            <div class="color-preset" style="background:#1a1a18;" onclick="applyColor('topbar','#1a1a18')"></div>
-            <div class="color-preset" style="background:#2C3E50;" onclick="applyColor('topbar','#2C3E50')"></div>
-            <div class="color-preset" style="background:#7B2D8B;" onclick="applyColor('topbar','#7B2D8B')"></div>
-            <div class="color-preset" style="background:#FFFFFF;border:1px solid #ddd;" onclick="applyColor('topbar','#FFFFFF')"></div>
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Topbar Text</label>
-          <div class="color-preview"><input type="color" class="color-swatch" value="#FFFFFF" id="clr-header" oninput="syncHex('header',this.value)"/><input class="color-input-hex" value="#FFFFFF" id="hex-header" oninput="syncSwatch('header',this.value)" maxlength="7"/></div>
-          <div class="color-presets">
-            <div class="color-preset" style="background:#FFFFFF;border:1px solid #ddd;" onclick="applyColor('header','#FFFFFF')"></div>
-            <div class="color-preset" style="background:#1a1a18;" onclick="applyColor('header','#1a1a18')"></div>
-            <div class="color-preset" style="background:#E0F5F5;" onclick="applyColor('header','#E0F5F5')"></div>
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Price Color</label>
-          <div class="color-preview"><input type="color" class="color-swatch" value="#009A97" id="clr-price" oninput="syncHex('price',this.value)"/><input class="color-input-hex" value="#009A97" id="hex-price" oninput="syncSwatch('price',this.value)" maxlength="7"/></div>
-        </div>
-        <div class="color-field">
-          <label>Item Title Color</label>
-          <div class="color-preview"><input type="color" class="color-swatch" value="#009A97" id="clr-item" oninput="syncHex('item',this.value)"/><input class="color-input-hex" value="#009A97" id="hex-item" oninput="syncSwatch('item',this.value)" maxlength="7"/></div>
-        </div>
-      </div>
-      <button class="btn" onclick="resetColors()">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
-        Reset to Default
-      </button>
-    </div>
-  </div>
-
-
-  <!-- Default Item View -->
-  <div class="section">
-    <div class="section-header"><span class="section-title">Default Item View</span></div>
-    <div class="section-body" style="padding:14px 18px;">
-      <div style="font-size:11px;color:#888780;margin-bottom:12px;">How products appear by default when members open an event. Members can still switch while browsing.</div>
-      <div style="display:flex;gap:10px;">
-
-        <div class="setting-card selected" id="view-opt-list" onclick="selectViewDefault('list')" style="flex:1;padding:10px;">
-          <div class="setting-card-check on"></div>
-          <div style="flex:1;">
-            <div class="setting-card-title" style="font-size:12px;">List</div>
-            <div style="margin-top:7px;display:flex;flex-direction:column;gap:3px;">
-              <div style="display:flex;align-items:center;gap:4px;background:#F4F6F8;border-radius:4px;padding:4px 5px;">
-                <div style="width:16px;height:16px;border-radius:3px;background:#E0F5F5;flex-shrink:0;"></div>
-                <div style="flex:1;"><div style="height:4px;background:#D3D1C7;border-radius:2px;width:70%;"></div></div>
-              </div>
-              <div style="display:flex;align-items:center;gap:4px;background:#F4F6F8;border-radius:4px;padding:4px 5px;">
-                <div style="width:16px;height:16px;border-radius:3px;background:#FEF2DC;flex-shrink:0;"></div>
-                <div style="flex:1;"><div style="height:4px;background:#D3D1C7;border-radius:2px;width:55%;"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="setting-card" id="view-opt-tile" onclick="selectViewDefault('tile')" style="flex:1;padding:10px;">
-          <div class="setting-card-check"></div>
-          <div style="flex:1;">
-            <div class="setting-card-title" style="font-size:12px;">Tile</div>
-            <div style="margin-top:7px;display:grid;grid-template-columns:1fr 1fr;gap:4px;">
-              <div style="background:#F4F6F8;border-radius:4px;overflow:hidden;">
-                <div style="height:18px;background:#E0F5F5;"></div>
-                <div style="padding:3px;"><div style="height:4px;background:#D3D1C7;border-radius:2px;"></div></div>
-              </div>
-              <div style="background:#F4F6F8;border-radius:4px;overflow:hidden;">
-                <div style="height:18px;background:#FEF2DC;"></div>
-                <div style="padding:3px;"><div style="height:4px;background:#D3D1C7;border-radius:2px;"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<!-- ═══════════ GROUP ═══════════ -->
-<div id="tab-group" class="tab-content">
-
-  <div class="section">
-    <div class="section-header"><span class="section-title">Group Settings</span></div>
-    <div class="section-body">
-      <div style="display:flex;flex-direction:column;gap:10px;">
-
-        <!-- Group Type -->
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-          <div style="font-size:12px;font-weight:600;color:#888780;width:130px;flex-shrink:0;">Group type</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;">
-            <div class="setting-card selected" onclick="selectSetting(this,'grp-type','private')">
-              <div class="setting-card-check on"></div>
-              <div><div class="setting-card-title">Private</div><div class="setting-card-sub">Events are private and only invited members can participate.</div></div>
-            </div>
-            <div class="setting-card" onclick="selectSetting(this,'grp-type','public')">
-              <div class="setting-card-check"></div>
-              <div><div class="setting-card-title">Public</div><div class="setting-card-sub">Anyone in co-bee can participate in Group-Buy.</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="height:0.5px;background:#f0f0f0;"></div>
-
-        <!-- Default Permission -->
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-          <div style="font-size:12px;font-weight:600;color:#888780;width:130px;flex-shrink:0;">Default Permission</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;">
-            <div class="setting-card selected" onclick="selectSetting(this,'grp-perm','member')">
-              <div class="setting-card-check on"></div>
-              <div><div class="setting-card-title">Member</div><div class="setting-card-sub">All members by default don't have the right to host group-buy.</div></div>
-            </div>
-            <div class="setting-card" onclick="selectSetting(this,'grp-perm','host')">
-              <div class="setting-card-check"></div>
-              <div><div class="setting-card-title">Host</div><div class="setting-card-sub">All members by default can host group-buy events.</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="height:0.5px;background:#f0f0f0;"></div>
-
-        <!-- Approval Type -->
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-          <div style="font-size:12px;font-weight:600;color:#888780;width:130px;flex-shrink:0;">Approval Type</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;">
-            <div class="setting-card selected" onclick="selectSetting(this,'grp-approval','admin')">
-              <div class="setting-card-check on"></div>
-              <div><div class="setting-card-title">Admin</div><div class="setting-card-sub">Requires Admin to verify new joiners before admitting them.</div></div>
-            </div>
-            <div class="setting-card" onclick="selectSetting(this,'grp-approval','auto')">
-              <div class="setting-card-check"></div>
-              <div><div class="setting-card-title">Auto Join</div><div class="setting-card-sub">Auto admit new joiners without the need for verification.</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="height:0.5px;background:#f0f0f0;"></div>
-
-        <!-- Member Privacy -->
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-          <div style="font-size:12px;font-weight:600;color:#888780;width:130px;flex-shrink:0;">Member Privacy</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;">
-            <div class="setting-card" onclick="selectSetting(this,'grp-privacy','yes')">
-              <div class="setting-card-check"></div>
-              <div><div class="setting-card-title">Yes</div><div class="setting-card-sub">All members can see who is in the group.</div></div>
-            </div>
-            <div class="setting-card selected" onclick="selectSetting(this,'grp-privacy','no')">
-              <div class="setting-card-check on"></div>
-              <div><div class="setting-card-title">No</div><div class="setting-card-sub">All members cannot see who is in the group.</div></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- Join Question card — only shown when Approval Type = Admin -->
-  <div class="section" id="join-question-card">
-    <div class="section-header">
-      <span class="section-title">Join Question</span>
-      <span style="font-size:11px;color:#888780;">Only shown when Approval Type is Admin</span>
-    </div>
-    <div class="section-body">
-      <div class="field" style="margin-bottom:16px;">
-        <label>Question to ask before joining</label>
-        <input class="input" placeholder="e.g. How did you hear about us?"/>
-        <span class="helper">New members must answer this before their request is reviewed.</span>
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- Keyword auto-approve -->
-      <div class="toggle-row" style="margin-bottom:0;">
-        <div>
-          <div class="toggle-label-title">Keyword Auto-Approve</div>
-          <div class="toggle-label-sub">If a member's answer contains a matching keyword, they are automatically approved without admin review.</div>
-        </div>
-        <button class="toggle" id="keyword-toggle" onclick="this.classList.toggle('on');toggleKeywords()"></button>
-      </div>
-
-      <div id="keyword-section" style="display:none;margin-top:14px;">
-        <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:8px;">Keywords</div>
-        <div id="keyword-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-          <div class="keyword-row">
-            <input class="input" placeholder="Keyword (e.g. COBEE2026)" style="flex:1;"/>
-            <input class="input" placeholder="Label (optional, e.g. WhatsApp group)" style="flex:1;"/>
-            <button class="btn sm danger" onclick="this.closest('.keyword-row').remove()">Remove</button>
-          </div>
-        </div>
-        <button class="btn sm" onclick="addKeyword()">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>
-          Add Keyword
-        </button>
-        <div style="font-size:11px;color:#888780;margin-top:8px;display:flex;align-items:flex-start;gap:5px;">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          A member is auto-approved if their answer <strong>contains</strong> any keyword (case-insensitive). Share keywords privately — anyone who knows one will be approved instantly.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Invite Members card -->
-  <div class="section">
-    <div class="section-header"><span class="section-title">Invite Members</span></div>
-    <div class="section-body">
-      <div style="margin-bottom:16px;">
-        <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:6px;">Invite Link</div>
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px;">
-          <input class="input" value="https://co-bee.pages.dev/join/m6group-abc123" readonly style="background:#FAFAF8;color:#888780;font-size:11px;flex:1;"/>
-          <button class="btn sm" onclick="copyLink()">Copy</button>
-          <button class="btn sm" onclick="showToast('Link regenerated')">Regenerate</button>
-        </div>
-        <span class="helper">Share this link to invite new members directly.</span>
-      </div>
-      <div>
-        <div style="font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:8px;">Invite by Email</div>
-        <div style="display:flex;gap:8px;">
-          <input class="input" placeholder="Enter email address" id="invite-email" style="flex:1;"/>
-          <select class="select" style="width:130px;"><option>Member</option><option>Host</option></select>
-          <button class="btn primary sm" onclick="sendInvite()">Send Invite</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-header"><span class="section-title">WhatsApp Group Link</span></div>
-    <div class="section-body">
-      <div class="toggle-row" style="margin-bottom:14px;">
-        <div>
-          <div class="toggle-label-title">Show WhatsApp Group Link to Members</div>
-          <div class="toggle-label-sub">Display a WhatsApp join button on your group page so members can quickly join your chat.</div>
-        </div>
-        <button class="toggle on" onclick="this.classList.toggle('on')"></button>
-      </div>
-      <div class="field" style="max-width:440px;margin-top:14px;">
-        <label>WhatsApp Group Invite Link</label>
-        <div class="input-prefix">
-          <span class="prefix" style="background:#E8F8EF;color:#27AE60;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.58 3.47 2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 19z"/></svg></span>
-          <input class="input" placeholder="https://chat.whatsapp.com/xxxxxxxxxxxxxxx"/>
-        </div>
-        <span class="helper">Get this from WhatsApp group → Invite via link → Copy link</span>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<!-- ═══════════ ADVANCE ═══════════ -->
-<div id="tab-advance" class="tab-content">
-
-  <div class="section">
-    <div class="section-header"><span class="section-title">Default Options</span></div>
-    <div class="section-body" style="padding-bottom:8px;padding-top:8px;">
-
-      <!-- Transaction Fees at the very top -->
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label-title">Add Transaction Fees</div>
-          <div class="toggle-label-sub">Pass payment processing fees on to buyers (e.g. 2.5% handling fee).</div>
-        </div>
-        <button class="toggle" onclick="this.classList.toggle('on')"></button>
-      </div>
-
-
-      <!-- Payment type -->
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label-title">Payment after Closing Date</div>
-          <div class="toggle-label-sub">Host consolidates discount and distributes delivery cost after the event closes. Amounts set in Dashboard.</div>
-        </div>
-        <button class="toggle" onclick="this.classList.toggle('on')"></button>
-      </div>
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label-title">Pay Together</div>
-          <div class="toggle-label-sub">Members can pay for multiple events at once via Pay Together.</div>
-        </div>
-        <button class="toggle" onclick="this.classList.toggle('on')"></button>
-      </div>
-
-
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label-title">Important Notes to Buyers</div>
-          <div class="toggle-label-sub">Show a notes section on all events for important messages to buyers.</div>
-        </div>
-        <button class="toggle" onclick="this.classList.toggle('on')"></button>
-      </div>
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label-title">External URL</div>
-          <div class="toggle-label-sub">Allow a custom link (e.g. product page) to be shown on each event.</div>
-        </div>
-        <button class="toggle" onclick="this.classList.toggle('on')"></button>
-      </div>
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label-title">Request Delivery Details from Buyers</div>
-          <div class="toggle-label-sub">Ask buyers to provide their delivery address when placing an order.</div>
-        </div>
-        <button class="toggle" onclick="this.classList.toggle('on')"></button>
-      </div>
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label-title">Show Reviews on Events</div>
-          <div class="toggle-label-sub">Display star ratings and buyer reviews on event pages.</div>
-        </div>
-        <button class="toggle" onclick="this.classList.toggle('on')"></button>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<div id="tab-payment" class="tab-content">
-
-  <div class="section">
-    <div class="section-header"><span class="section-title">Payment Method</span></div>
-    <div class="section-body">
-      <div style="font-size:11px;color:#888780;margin-bottom:14px;">Select one primary payment method for your buyers.</div>
-
-      <div class="pay-method selected" onclick="selectPay(this)">
-        <div class="pay-method-radio"></div>
-        <div class="pay-method-icon" style="background:#E0F5F5;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-        <div class="pay-method-body">
-          <div class="pay-method-name">PayNow</div>
-          <div class="pay-method-sub">Buyers pay via Singapore's PayNow QR code system.</div>
-          <div class="pay-method-detail">
-            <div class="field" style="max-width:280px;">
-              <label>PayNow UEN / Phone Number</label>
-              <input class="input" value="83062355" placeholder="e.g. 83062355 or UEN"/>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pay-method" onclick="selectPay(this)">
-        <div class="pay-method-radio"></div>
-        <div class="pay-method-icon" style="background:#EBF5FB;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3498DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-        <div class="pay-method-body">
-          <div class="pay-method-name">Bank Transfer</div>
-          <div class="pay-method-sub">Buyers pay via direct bank transfer to your account.</div>
-          <div class="pay-method-detail">
-            <div class="two-col" style="max-width:460px;margin-bottom:10px;">
-              <div class="field"><label>Bank Name</label><input class="input" placeholder="e.g. DBS, OCBC, UOB"/></div>
-              <div class="field"><label>Account Number</label><input class="input" placeholder="1234567890"/></div>
-            </div>
-            <div class="field" style="max-width:220px;">
-              <label>Account Name</label><input class="input" placeholder="As shown on bank account"/>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pay-method" onclick="selectPay(this)">
-        <div class="pay-method-radio"></div>
-        <div class="pay-method-icon" style="background:#E8F8EF;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-        <div class="pay-method-body">
-          <div class="pay-method-name">Cash on Pickup</div>
-          <div class="pay-method-sub">Buyers pay in cash when collecting their order at pickup.</div>
-        </div>
-      </div>
+      <button class="btn primary" id="confirm" type="button">Confirm save</button>
     </div>
   </div>
 </div>
-
-</div><!-- .page -->
-
-<div style="max-width:1100px;margin:0 auto;padding:0 24px 32px;display:flex;justify-content:flex-end;gap:8px;">
-  <button class="btn" onclick="showToast('Changes discarded','warn')">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
-    Cancel
-  </button>
-  <button class="btn primary" style="font-weight:500;" onclick="saveGroupSettings()">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13"/><polyline points="7 3 7 8 15 8"/></svg>
-    Save Settings
-  </button>
-</div>
-
-<div id="toast" style="position:fixed;bottom:72px;right:24px;font-size:12px;font-weight:500;padding:10px 16px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.2);opacity:0;transition:opacity 0.25s;pointer-events:none;z-index:999;background:#1a1a18;color:white;"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-function toggleKeywords() {
-  var on = document.getElementById('keyword-toggle').classList.contains('on');
-  document.getElementById('keyword-section').style.display = on ? 'block' : 'none';
-}
-function addKeyword() {
-  var list = document.getElementById('keyword-list');
-  var row = document.createElement('div');
-  row.className = 'keyword-row';
-  var k = document.createElement('input');
-  k.className = 'input'; k.placeholder = 'Keyword'; k.style.flex = '1';
-  var lb = document.createElement('input');
-  lb.className = 'input'; lb.placeholder = 'Label (optional)'; lb.style.flex = '1';
-  var btn = document.createElement('button');
-  btn.className = 'btn sm danger'; btn.textContent = 'Remove';
-  btn.onclick = function(){ row.remove(); };
-  row.appendChild(k); row.appendChild(lb); row.appendChild(btn);
-  list.appendChild(row);
-}
-function selectSetting(el, group, val) {
-  var allCards = el.closest('.section-body').querySelectorAll('.setting-card');
-  allCards.forEach(function(c) {
-    if ((c.getAttribute('onclick') || '').indexOf(group) !== -1) {
-      c.classList.remove('selected');
-      c.querySelector('.setting-card-check').classList.remove('on');
-    }
-  });
-  el.classList.add('selected');
-  el.querySelector('.setting-card-check').classList.add('on');
-  if (group === 'grp-approval') {
-    var card = document.getElementById('join-question-card');
-    if (card) card.style.display = (val === 'admin') ? 'block' : 'none';
-  }
-}
-function updateTitlePreview(id, val) {
-  var box = document.getElementById('title-preview-box');
-  var text = document.getElementById('site-title-preview');
-  if (!box || !text) return;
-  if (id === 'topbar') box.style.background = val;
-  if (id === 'header') text.style.color = val;
-}
-function updateSubdomainPreview(val) {
-  var status = document.getElementById('subdomain-status');
-  if (!status) return;
-  // Sanitise: lowercase, alphanumeric + hyphens only
-  var clean = val.toLowerCase().replace(/[^a-z0-9-]/g, '').replace(/^-+|-+$/g, '');
-  document.getElementById('subdomain-input').value = clean;
-  if (!clean) {
-    status.innerHTML = '';
-    return;
-  }
-  if (clean.length < 3) {
-    status.style.color = '#E24B4A';
-    status.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Too short';
-    return;
-  }
-  // Simulate availability check (in real app this hits an API)
-  var taken = ['admin','app','api','www','shop','group','store'];
-  if (taken.includes(clean)) {
-    status.style.color = '#E24B4A';
-    status.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Taken';
+(function(){
+var LOCK_SVG='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+
+// ── Option definitions ────────────────────────────────────────────────
+// type: toggle | seg | num | text | area | checks | select | colors
+// lockable: per-event option the owner can lock for co-hosts
+// parent: shown only when the parent toggle is on
+var TABS=[
+ {id:'profile',label:'Profile',intro:'Who your group is. This appears on event cards, your group page and emails.',sections:[
+  {title:'Group',rows:[
+   {k:'photo',t:'Group photo',d:'Shown on event cards and seen by all buyers.',type:'upload',round:true},
+   {k:'groupName',t:'Group name',d:'',type:'text',v:'M6 Group',req:true},
+   {k:'slug',t:'Group URL',d:'Your own branded page. Members go straight to your group\'s events.',type:'slug',v:'m6group',pro:true},
+   {k:'headline',t:'Headline / description',d:'',type:'area',v:'Good things must share! Join M6 Group for the best group buys in Singapore.'},
+   {k:'address',t:'Address',d:'Also used as the default pick-up location for new events.',type:'text',v:'Simei Street 1, Singapore 529948',req:true}
+  ]},
+  {title:'Region',rows:[
+   {k:'tz',t:'Time zone',d:'Closing and collection times use this.',type:'select',opts:[['sg','Asia / Singapore'],['kl','Asia / Kuala Lumpur'],['utc','UTC']],v:'sg'},
+   {k:'currency',t:'Currency',d:'',type:'select',opts:[['SGD','SGD — Singapore Dollar'],['MYR','MYR — Malaysian Ringgit'],['USD','USD — US Dollar']],v:'SGD'}
+  ]},
+  {title:'Contact & social',hint:'Shown in the group page header',rows:[
+   {k:'waNum',t:'WhatsApp number',d:'',type:'text',v:'+65 9123 4567'},
+   {k:'insta',t:'Instagram',d:'',type:'text',v:'',ph:'@handle or URL'},
+   {k:'fb',t:'Facebook',d:'',type:'text',v:'https://facebook.com/m6group'},
+   {k:'web',t:'Website',d:'',type:'text',v:'',ph:'https://yourwebsite.com'}
+  ]}
+ ]},
+ {id:'events',label:'Event defaults',intro:'These pre-fill every new event in M6 Group. Hosts can change them per event unless you lock them with the padlock.',sections:[
+  {title:'Sharing',hint:'How events spread',rows:[
+   {k:'shareLink',t:'Event share link',d:'Show a Share button on event cards so members can send the event to friends.',type:'toggle',v:true},
+   {k:'shareTemplate',t:'Share Template',d:'Let hosts download an event as an Excel or PDF template.',type:'seg',opts:[['always','Always shown'],['ask','On request'],['off','Off']],v:'ask'},
+   {k:'extLinks',t:'External links on every event',d:'Links such as a product page or your Telegram channel, added to each new event.',type:'toggle',v:false},
+   {k:'extLinkList',t:'Default links',d:'Added to every new event. Hosts can edit or remove them per event.',type:'links',v:[{label:'',url:''}],parent:'extLinks'},
+   {k:'extLinkMode',t:'External links open as',d:'Opening directly suits product pages; copy or preview suits links buyers forward.',type:'seg',opts:[['open','Open directly'],['copy','Copy or preview']],v:'open',parent:'extLinks'},
+   {k:'socialProof',t:'Show how many people joined',d:'"12 people joined" on event cards. Helps milestone discounts fill up.',type:'toggle',v:true}
+  ]},
+  {title:'Ordering',hint:'What buyers can do',rows:[
+   {k:'guest',t:'Order without login',d:'Buyers can order with just a name and phone number.',type:'toggle',v:true},
+   {k:'onBehalf',t:'Purchase on behalf',d:'A member can place an order for a friend or family member.',type:'toggle',v:true},
+   {k:'editCutoff',t:'Buyers can edit or cancel orders',d:'After this point only you can change an order.',type:'seg',opts:[['close','Until closing'],['24h','Until 24h before'],['never','Never']],v:'close'},
+   {k:'notesHost',t:'Notes to host on orders',d:'A free-text box at checkout.',type:'toggle',v:true},
+   {k:'splitCase',t:'Allow split case',d:'Buyers can order individual pieces of a case. Payment then has to wait until the event closes.',type:'toggle',v:true},
+   {k:'stock',t:'Remaining stock shown as',d:'',type:'seg',opts:[['exact','Exact count'],['low','"Low stock" only'],['hide','Hidden']],v:'low'}
+  ]},
+  {title:'Fulfilment',hint:'Collection and delivery',rows:[
+   {k:'fulfil',t:'Members can',d:'',type:'seg',opts:[['collect','Self-collect'],['delivery','Delivery'],['both','Both']],v:'collect',lockable:true},
+   {k:'pickup',t:'Default pick-up location',d:'Taken from your Profile address.',type:'text',v:'Simei Street 1, Singapore 529948'},
+   {k:'deliveryFee',t:'Delivery fee',d:'',type:'num',pre:'S$',v:'0.00'}
+  ]},
+  {title:'Event content',hint:'Pre-filled text',rows:[
+   {k:'notesOn',t:'Important notes to buyers',d:'Shown in the notes section of every event.',type:'toggle',v:true},
+   {k:'notesText',t:'Default notes',d:'',type:'area',v:'Collection at Simei St 1 void deck, 7–9pm. Uncollected items after 3 days are forfeited.',parent:'notesOn'}
+  ]}
+ ]},
+ {id:'payment',label:'Payment',intro:'Payment rules for every event. Lock timing and Pay Together so every event in the group pays the same way.',sections:[
+  {title:'When buyers pay',rows:[
+   {k:'timing',t:'Default payment timing',d:'',type:'seg',opts:[['order','At order'],['after','After closing']],v:'order'},
+   {k:'payTogether',t:'Offer Pay Together',d:'Members settle several events in one payment.',type:'toggle',v:true},
+   {k:'ptStart',t:'New events start with Pay Together',d:'Hosts can still change it per event.',type:'seg',opts:[['on','On'],['off','Off']],v:'on',parent:'payTogether'},
+   {k:'reminders',t:'Automatic payment reminders',d:'Email and in-app reminder to unpaid buyers.',type:'toggle',v:true}
+  ]},
+  {title:'How buyers pay',rows:[
+   {k:'methods',t:'Payment methods offered',d:'Buyers choose at checkout.',type:'checks',opts:[['paynow','PayNow'],['bank','Bank transfer'],['cash','Cash on pickup']],v:['paynow']},
+   {k:'paynowId',t:'PayNow UEN or phone number',d:'Used to generate the PayNow QR code.',type:'text',v:'8306 2355',parent:'m:paynow'},
+   {k:'bankName',t:'Bank name',d:'',type:'text',v:'',ph:'e.g. DBS, OCBC, UOB',parent:'m:bank'},
+   {k:'bankAcct',t:'Account number',d:'',type:'text',v:'',ph:'1234567890',parent:'m:bank'},
+   {k:'bankHolder',t:'Account name',d:'As shown on the bank account.',type:'text',v:'',parent:'m:bank'},
+   {k:'adminFee',t:'Admin fee per order',d:'',type:'num',pre:'S$',v:'0.00',lockable:true}
+  ]}
+ ]},
+ {id:'members',label:'Members',intro:'Who can join, who can host, and what members can see about each other.',sections:[
+  {title:'Joining',rows:[
+   {k:'grpType',t:'Group type',d:'Private groups can only be joined by invite or approval.',type:'seg',opts:[['private','Private'],['public','Public']],v:'private'},
+   {k:'approval',t:'New members',d:'',type:'seg',opts:[['auto','Join instantly'],['admin','I approve'],['question','I approve after a question']],v:'question'},
+   {k:'joinQ',t:'Question to ask before joining',d:'New members answer this before you review their request.',type:'text',v:'How did you hear about us?',parent:'approvalQ'},
+   {k:'keywords',t:'Approve automatically with a keyword',d:'Answers containing a keyword skip your review. Share keywords privately.',type:'toggle',v:false,parent:'approvalQ'},
+   {k:'kwList',t:'Keywords',d:'Separate with commas. Each needs 4 or more characters.',type:'text',v:'',ph:'e.g. COBEE2026, SIMEI',parent:'keywords'},
+   {k:'preview',t:'Non-members can preview events',d:'A shared link shows the event before asking them to join.',type:'toggle',v:false}
+  ]},
+  {title:'Hosting & privacy',rows:[
+   {k:'whoHosts',t:'Who can host events',d:'',type:'seg',opts:[['host','Host'],['admin','Admin'],['all','All members']],v:'host'},
+   {k:'directory',t:'Members can see who else is in the group',d:'',type:'toggle',v:false}
+  ]}
+ ]},
+ {id:'layout',label:'Layout',preview:true,segments:[['products','Products'],['events','Events'],['purchase','My Purchase']],
+  intro:'How your group looks to members. Pick a page below to set its layout; the phone on the right shows that page as you change things.',sections:[
+  // ── Products page ──
+  {seg:'products',title:'Product cards',rows:[
+   {k:'pView',t:'Product view',d:'Members can still switch.',type:'seg',opts:[['list','List'],['tile','Tile']],v:'tile'},
+   {k:'pCols',t:'Tiles per row on phones',d:'',type:'seg',opts:[['2','2'],['3','3']],v:'2',parent:'pViewTile'},
+   {k:'pImg',t:'Product image shape',d:'Keeps tiles even when hosts upload mixed photos.',type:'seg',opts:[['square','Square'],['landscape','Landscape']],v:'square'},
+   {k:'pShow',t:'Each card shows',d:'',type:'checks',opts:[['event','Event name'],['sold','Number sold'],['stock','Stock left'],['add','Quick add button']],v:['event','sold','add']}
+  ]},
+  {seg:'products',title:'Browsing',rows:[
+   {k:'pSort',t:'Products sorted by',d:'',type:'seg',opts:[['popular','Most popular'],['closing','Closing soon'],['newest','Newest'],['price','Price']],v:'popular'},
+   {k:'pGroup',t:'Group products by',d:'',type:'seg',opts:[['none','None'],['event','Event'],['category','Category']],v:'none'},
+   {k:'pFilters',t:'Filters members can use',d:'',type:'checks',opts:[['category','Category'],['event','Event'],['price','Price range']],v:['category','event']}
+  ]},
+  // ── Events page ──
+  {seg:'events',title:'Event cards',rows:[
+   {k:'feedView',t:'Event feed view',d:'Members can still switch.',type:'seg',opts:[['list','List'],['tile','Tile']],v:'list'},
+   {k:'eShow',t:'Each card shows',d:'',type:'checks',opts:[['host','Host'],['close','Closing date'],['collect','Collection date'],['joined','People joined']],v:['close','joined']},
+   {k:'soonDays',t:'"Closing soon" badge',d:'Days before closing.',type:'num',post:'days',v:'2'},
+   {k:'itemView',t:'Product view inside an event',d:'Members can still switch.',type:'seg',opts:[['list','List'],['tile','Tile']],v:'list'}
+  ]},
+  {seg:'events',title:'Feed',rows:[
+   {k:'sort',t:'Feed order',d:'',type:'seg',opts:[['closing','Closing soon'],['newest','Newest'],['active','Most active']],v:'closing'},
+   {k:'closed',t:'Closed events',d:'',type:'seg',opts:[['hide','Hide'],['week','Show for 7 days'],['all','Always show']],v:'week'}
+  ]},
+  // ── My Purchase page ──
+  {seg:'purchase',title:'Orders list',rows:[
+   {k:'mGroup',t:'Orders grouped by',d:'',type:'seg',opts:[['none','Newest first'],['event','Event'],['collect','Collection date']],v:'collect'},
+   {k:'mFilter',t:'Opens on',d:'The filter members see first.',type:'seg',opts:[['all','All'],['pay','To pay'],['collect','To collect'],['done','Completed']],v:'pay'},
+   {k:'mHistory',t:'Order history kept visible',d:'',type:'seg',opts:[['3','3 months'],['12','12 months'],['all','All']],v:'12'}
+  ]},
+  {seg:'purchase',title:'Order details',rows:[
+   {k:'mStatus',t:'Payment status badges',d:'Paid, Unpaid, Pending confirmation.',type:'toggle',v:true},
+   {k:'mCountdown',t:'Collection countdown',d:'"Collect in 2 days" on each order.',type:'toggle',v:true},
+   {k:'mPayBar',t:'Pay Together bar',d:'A total of unpaid orders with one Pay button. Needs Pay Together on the Payment tab.',type:'toggle',v:true},
+   {k:'mReorder',t:'"Buy again" button',d:'Shown on completed orders when the product is in an open event.',type:'toggle',v:false}
+  ]},
+  // ── All pages ──
+  {title:'All pages · Branding',rows:[
+   {k:'siteTitle',t:'Site title',d:'Replaces "co·bee" in the topbar.',type:'text',v:'M6 Group'},
+   {k:'banner',t:'Banner image',d:'1200 × 400 px, PNG or JPG up to 5 MB. Also the default banner for new events.',type:'upload'}
+  ]},
+  {title:'All pages · Colours',hint:'Pick a preset, then fine-tune',rows:[
+   {k:'colors',t:'Theme preset',d:'Sets primary colour and topbar together.',type:'colors',v:'#7B2D8B'},
+   {k:'cPrimary',t:'Primary',d:'Buttons, active tabs and links.',type:'hex',v:'#7B2D8B'},
+   {k:'cTop',t:'Topbar background',d:'',type:'hex',v:'#7B2D8B'},
+   {k:'topText',t:'Topbar text',d:'',type:'seg',opts:[['#FFFFFF','White'],['#1A1A18','Dark']],v:'#FFFFFF'},
+   {k:'cAccent',t:'Accent',d:'Badges such as "Closing soon".',type:'hex',v:'#E8971A'},
+   {k:'cBg',t:'Page background',d:'',type:'hex',v:'#F6F0F8'},
+   {k:'cPrice',t:'Price colour',d:'',type:'hex',v:'#7B2D8B'},
+   {k:'cItem',t:'Item title colour',d:'',type:'hex',v:'#1A1A18'},
+   {k:'cReset',t:'Reset colours',d:'Back to co·bee teal.',type:'reset'}
+  ]},
+  {title:'All pages · Navigation',rows:[
+   {k:'firstTab',t:'Members land on',d:'The page members see when they open your group.',type:'seg',opts:[['Products','Products'],['Events','Events'],['My Purchase','My Purchase']],v:'Events'}
+  ]}
+ ]},
+ {id:'notify',label:'Notifications',intro:'Emails your members receive from M6 Group, and alerts sent to you.',sections:[
+  {title:'Emails to members',rows:[
+   {k:'emOrder',t:'Order confirmation',d:'',type:'toggle',v:true},
+   {k:'emPayReq',t:'Payment request',d:'',type:'toggle',v:true},
+   {k:'emRem',t:'Payment reminder',d:'Uses the schedule on the Payment tab.',type:'toggle',v:true},
+   {k:'emJoin',t:'Group approved',d:'',type:'toggle',v:true},
+   {k:'sender',t:'Sender name',d:'',type:'text',v:'M6 Group'}
+  ]},
+  {title:'Alerts to you',rows:[
+   {k:'alOrder',t:'New order',d:'',type:'toggle',v:true},
+   {k:'alPaid',t:'Payment received',d:'',type:'toggle',v:true},
+   {k:'alJoin',t:'Join request',d:'',type:'toggle',v:true}
+  ]}
+ ]}
+];
+
+// ── State ─────────────────────────────────────────────────────────────
+var state={},initial={},locks={},initLocks={},rowTab={};
+TABS.forEach(function(tab){tab.sections.forEach(function(s){s.rows.forEach(function(r){
+  if(s.seg)r._seg=s.seg;
+  state[r.k]=Array.isArray(r.v)?r.v.slice():r.v; initial[r.k]=JSON.stringify(r.v); rowTab[r.k]=tab;
+  if(r.lockable){locks[r.k]=(r.k==='payTogether'||r.k==='timing');initLocks[r.k]=locks[r.k];}
+});});});
+var current='profile', query='', applyMode='new';
+
+// ── Persistence (mock-up: browser localStorage) ───────────────────────
+// Saved under the same key and with the same top-level fields that
+// group-portal.html already reads (groupName, title, primary, accent, bg,
+// topbar), so the branded portal keeps working unchanged. Every other
+// setting is stored alongside in `settings` / `locks`.
+var STORE_PREFIX='cobee_group_';
+function storeKey(slug){return STORE_PREFIX+(slug||'m6group');}
+function loadSaved(){
+  var raw=null; try{raw=localStorage.getItem(storeKey(state.slug));}catch(e){}
+  if(!raw) return;
+  var cfg=null; try{cfg=JSON.parse(raw);}catch(e){return;}
+  if(!cfg) return;
+  if(cfg.settings){
+    Object.keys(cfg.settings).forEach(function(k){if(k in state)state[k]=cfg.settings[k];});
+    if(cfg.locks)Object.keys(cfg.locks).forEach(function(k){if(k in locks)locks[k]=!!cfg.locks[k];});
   } else {
-    status.style.color = '#27AE60';
-    status.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Available';
+    // Older save from the previous settings page: only branding was stored.
+    if(cfg.groupName)state.groupName=cfg.groupName;
+    if(cfg.title)state.siteTitle=cfg.title;
+    if(cfg.primary){state.cPrimary=cfg.primary;state.colors=cfg.primary;state.cPrice=cfg.primary;}
+    if(cfg.accent)state.cAccent=cfg.accent;
+    if(cfg.bg)state.cBg=cfg.bg;
+    if(cfg.topbar)state.cTop=cfg.topbar;
   }
-  // Update preview link — text shows the real-looking URL, but the link
-  // itself opens the working mockup page so "Preview" is actually clickable here.
-  var link = document.getElementById('subdomain-preview-link');
-  var linkText = document.getElementById('subdomain-preview-text');
-  if (link && linkText && clean) {
-    linkText.textContent = 'https://co-bee.pages.dev/' + clean;
-    link.href = 'group-portal.html?g=' + encodeURIComponent(clean);
-  }
+  Object.keys(state).forEach(function(k){initial[k]=JSON.stringify(state[k]);});
+  Object.keys(locks).forEach(function(k){initLocks[k]=locks[k];});
 }
-// Persists this group's branding (title, colors, subdomain slug) so the
-// premium branded portal page (group-portal.html) can pick it up. In a
-// real build this would be an API call — here it's localStorage, keyed
-// by the group's slug, so the mockup portal page can actually read it.
-function saveGroupSettings() {
-  var slug = (document.getElementById('subdomain-input').value || '').trim();
-  if (!slug) { showToast('Please set a group URL first', 'warn'); return; }
-
-  var groupName = document.getElementById('group-name-input');
-  var config = {
-    slug: slug,
-    groupName: (groupName && groupName.value) || 'M6 Group',
-    title: document.getElementById('site-title-input').value || 'co·bee',
-    primary: document.getElementById('hex-primary').value || '#009A97',
-    accent: document.getElementById('hex-accent').value || '#E8971A',
-    bg: document.getElementById('hex-bg').value || '#F4F6F8',
-    topbar: document.getElementById('hex-topbar').value || '#009A97'
+function persist(){
+  var cfg={
+    slug:state.slug, groupName:state.groupName, title:state.siteTitle||state.groupName,
+    primary:state.cPrimary, accent:state.cAccent, bg:state.cBg, topbar:state.cTop,
+    settings:state, locks:locks, applyTo:applyMode, savedAt:new Date().toISOString()
   };
-  try {
-    localStorage.setItem('cobee_group_' + slug, JSON.stringify(config));
-    showToast('Settings saved ✓');
-  } catch (e) {
-    showToast('Could not save — try again', 'warn');
+  try{localStorage.setItem(storeKey(state.slug),JSON.stringify(cfg));return true;}catch(e){return false;}
+}
+loadSaved();
+
+// Dependency rules — the one place cross-option logic lives
+function forced(k){
+  if(k==='keywords' && state.approval==='auto') return {v:false,why:'Not needed when members join instantly.'};
+  return null;
+}
+function visible(r){
+  if(!r.parent) return true;
+  if(r.parent==='pViewTile') return state.pView==='tile';
+  if(r.parent==='approvalQ') return state.approval==='question';
+  if(r.parent.indexOf('m:')===0) return state.methods.indexOf(r.parent.slice(2))>=0;
+  if(r.parent==='keywords') return state.approval==='question'&&!!state.keywords;
+  return !!state[r.parent];
+}
+var RESERVED=['admin','api','app','www','shop','group','store','signin','signup','member','members','hosting','settings','profile','dashboard','functions','join','uploads','index'];
+var layoutSeg='events';
+function segLabel(id){var s=TABS.filter(function(t){return t.id==='layout';})[0].segments.filter(function(x){return x[0]===id;})[0];return s?s[1]:'';}
+function changedKeys(){var out=[];Object.keys(state).forEach(function(k){if(JSON.stringify(state[k])!==initial[k])out.push(k);});Object.keys(locks).forEach(function(k){if(locks[k]!==initLocks[k]&&out.indexOf(k)<0)out.push(k);});return out;}
+function lum(hex){var h=(hex||'#000000').replace('#','');var r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255;}
+function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+// ── Controls ──────────────────────────────────────────────────────────
+function control(r){
+  var f=forced(r.k), val=f?f.v:state[r.k], dis=!!f, w=el('div','ctl');
+  if(r.lockable){
+    var lb=el('button','lockbtn',LOCK_SVG); lb.type='button';
+    lb.setAttribute('aria-pressed',locks[r.k]?'true':'false');
+    lb.title=locks[r.k]?'Locked: co-hosts can\'t change this per event':'Unlocked: co-hosts can change this per event';
+    lb.setAttribute('aria-label',(locks[r.k]?'Unlock ':'Lock ')+r.t+' for co-hosts');
+    lb.addEventListener('click',function(){locks[r.k]=!locks[r.k];render();});
+    w.appendChild(lb);
   }
+  if(r.type==='toggle'){
+    var b=el('button','sw'); b.type='button'; b.setAttribute('role','switch'); b.setAttribute('aria-checked',val?'true':'false');
+    b.setAttribute('aria-label',r.t); b.disabled=dis; b.addEventListener('click',function(){state[r.k]=!state[r.k];render();}); w.appendChild(b);
+  } else if(r.type==='seg'){
+    var g=el('div','seg'); g.setAttribute('role','group'); g.setAttribute('aria-label',r.t);
+    r.opts.forEach(function(o){var b=el('button',null,esc(o[1]));b.type='button';b.setAttribute('aria-pressed',val===o[0]?'true':'false');b.disabled=dis;b.addEventListener('click',function(){state[r.k]=o[0];render();});g.appendChild(b);});
+    w.appendChild(g);
+  } else if(r.type==='num'){
+    var n=el('div','num'); if(r.pre)n.appendChild(el('span',null,esc(r.pre)));
+    var i=el('input'); i.id='f-'+r.k; i.inputMode='decimal'; i.value=state[r.k]; i.setAttribute('aria-label',r.t);
+    i.addEventListener('change',function(){state[r.k]=i.value;render();}); n.appendChild(i);
+    if(r.post)n.appendChild(el('span',null,esc(r.post))); w.appendChild(n);
+  } else if(r.type==='text'||r.type==='area'){
+    var t=el(r.type==='area'?'textarea':'input','txt'); t.id='f-'+r.k; t.value=state[r.k]; t.setAttribute('aria-label',r.t);
+    if(r.ph)t.placeholder=r.ph;
+    t.addEventListener('change',function(){state[r.k]=t.value;render();}); w.appendChild(t);
+  } else if(r.type==='links'){
+    var lw=el('div','links');
+    state[r.k].forEach(function(it,ix){
+      var lr=el('div','link-row');
+      var ln=el('input','txt'); ln.id='f-'+r.k+'-'+ix+'-label'; ln.placeholder='Label (e.g. Telegram)'; ln.value=it.label; ln.setAttribute('aria-label','Link '+(ix+1)+' label');
+      var lu=el('input','txt'); lu.id='f-'+r.k+'-'+ix+'-url'; lu.type='url'; lu.placeholder='https://…'; lu.value=it.url; lu.setAttribute('aria-label','Link '+(ix+1)+' address');
+      ln.addEventListener('change',function(){state[r.k]=state[r.k].map(function(x,j){return j===ix?{label:ln.value,url:x.url}:x;});render();});
+      lu.addEventListener('change',function(){state[r.k]=state[r.k].map(function(x,j){return j===ix?{label:x.label,url:lu.value}:x;});render();});
+      var rm=el('button','btn sm danger','Remove'); rm.type='button'; rm.setAttribute('aria-label','Remove link '+(ix+1));
+      rm.addEventListener('click',function(){var a=state[r.k].filter(function(_,j){return j!==ix;});state[r.k]=a.length?a:[{label:'',url:''}];render();});
+      lr.appendChild(ln); lr.appendChild(lu); lr.appendChild(rm); lw.appendChild(lr);
+    });
+    var add=el('button','btn sm addlink','+ Add link'); add.type='button';
+    add.addEventListener('click',function(){state[r.k]=state[r.k].concat([{label:'',url:''}]);render();var ins=document.querySelectorAll('.link-row input[id$="-label"]');if(ins.length)ins[ins.length-1].focus();});
+    lw.appendChild(add); w.appendChild(lw);
+  } else if(r.type==='select'){
+    var se=el('select','txt'); se.id='f-'+r.k; se.setAttribute('aria-label',r.t);
+    r.opts.forEach(function(o){var op=el('option',null,esc(o[1]));op.value=o[0];if(state[r.k]===o[0])op.selected=true;se.appendChild(op);});
+    se.addEventListener('change',function(){state[r.k]=se.value;render();}); w.appendChild(se);
+  } else if(r.type==='hex'){
+    var cp=el('input','hexsw'); cp.type='color'; cp.id='f-'+r.k; cp.value=state[r.k]; cp.setAttribute('aria-label',r.t+' colour');
+    var hx=el('input','txt hex'); hx.id='f-'+r.k+'-hex'; hx.value=state[r.k]; hx.maxLength=7; hx.setAttribute('aria-label',r.t+' hex code');
+    cp.addEventListener('change',function(){state[r.k]=cp.value.toUpperCase();render();});
+    hx.addEventListener('change',function(){var v=hx.value.trim();if(v[0]!=='#')v='#'+v;if(/^#[0-9A-Fa-f]{6}$/.test(v)){state[r.k]=v.toUpperCase();render();}else{toast('Use a 6-digit hex code like #7B2D8B');hx.value=state[r.k];}});
+    w.appendChild(cp); w.appendChild(hx);
+  } else if(r.type==='upload'){
+    w.appendChild(el('div','thumb'+(r.round?' round':''),'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>'));
+    var ub=el('button','btn sm','Upload'); ub.type='button'; ub.addEventListener('click',function(){toast('Opens the file picker in the real page');}); w.appendChild(ub);
+  } else if(r.type==='slug'){
+    var sl=el('div','slug'); sl.appendChild(el('span',null,'co-bee.pages.dev/'));
+    var si=el('input'); si.id='f-'+r.k; si.value=state[r.k]; si.setAttribute('aria-label','Group URL');
+    var clean=state[r.k], ok=clean.length>=3&&RESERVED.indexOf(clean)<0;
+    var st=el('span','slug-st '+(ok?'ok':'bad'),clean.length<3?'Too short':(RESERVED.indexOf(clean)>=0?'Reserved':'Available'));
+    si.addEventListener('change',function(){state[r.k]=si.value.toLowerCase().replace(/[^a-z0-9-]/g,'').replace(/^-+|-+$/g,'');render();});
+    sl.appendChild(si); sl.appendChild(st); w.appendChild(sl);
+  } else if(r.type==='link'){
+    var li=el('input','txt'); li.id='f-'+r.k; li.readOnly=true; li.value=state[r.k]; li.setAttribute('aria-label',r.t);
+    var cb=el('button','btn sm','Copy'); cb.type='button';
+    cb.addEventListener('click',function(){try{navigator.clipboard.writeText(li.value).then(function(){toast('Link copied');},function(){li.select();toast('Press Ctrl+C to copy');});}catch(e){li.select();toast('Press Ctrl+C to copy');}});
+    var rb=el('button','btn sm','Regenerate'); rb.type='button';
+    rb.addEventListener('click',function(){state[r.k]='https://co-bee.pages.dev/join/m6group-'+Math.random().toString(36).slice(2,8);render();toast('New link created. The old one stops working when you save.');});
+    w.appendChild(li); w.appendChild(cb); w.appendChild(rb);
+  } else if(r.type==='invite'){
+    var ie=el('input','txt'); ie.id='f-inviteEmail'; ie.type='email'; ie.placeholder='Email address'; ie.setAttribute('aria-label','Email address to invite');
+    var ir=el('select','txt'); ir.id='f-inviteRole'; ir.setAttribute('aria-label','Invite as'); ['Member','Host'].forEach(function(o){ir.appendChild(el('option',null,o));});
+    var ib=el('button','btn primary sm','Send invite'); ib.type='button';
+    ib.addEventListener('click',function(){var v=ie.value.trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){toast('Enter a valid email address');return;}toast('Invite sent to '+v+' as '+ir.value);ie.value='';});
+    w.appendChild(ie); w.appendChild(ir); w.appendChild(ib);
+  } else if(r.type==='reset'){
+    var rs=el('button','btn sm','Reset to default'); rs.type='button';
+    rs.addEventListener('click',function(){state.colors='#009A97';state.cPrimary='#009A97';state.cTop='#009A97';state.topText='#FFFFFF';state.cAccent='#E8971A';state.cBg='#F4F6F8';state.cPrice='#009A97';state.cItem='#1A1A18';render();toast('Colours reset to co·bee default');});
+    w.appendChild(rs);
+  } else if(r.type==='checks'){
+    var c=el('div','checks');
+    r.opts.forEach(function(o){var on=state[r.k].indexOf(o[0])>=0;var l=el('label','ck'+(on?' on':''));var x=el('input');x.type='checkbox';x.id='f-'+r.k+'-'+o[0];x.checked=on;
+      x.addEventListener('change',function(){var a=state[r.k];if(x.checked)a.push(o[0]);else if(r.k!=='methods'||a.length>1)a.splice(a.indexOf(o[0]),1);else{x.checked=true;toast('Keep at least one payment method');}render();});
+      l.appendChild(x);l.appendChild(document.createTextNode(o[1]));c.appendChild(l);});
+    w.appendChild(c);
+  } else if(r.type==='colors'){
+    var s=el('div','swatches');
+    ['#7B2D8B','#009A97','#0077CC','#E24B4A','#27AE60','#FFFFFF'].forEach(function(cv){var b=el('button','swatch');b.type='button';b.style.background=cv;b.setAttribute('aria-label','Theme colour '+cv);b.setAttribute('aria-pressed',state.colors===cv?'true':'false');
+      b.addEventListener('click',function(){state.colors=cv;state.cTop=cv;state.cPrimary=cv==='#FFFFFF'?'#009A97':cv;state.cPrice=state.cPrimary;state.topText=cv==='#FFFFFF'?'#1A1A18':'#FFFFFF';render();});s.appendChild(b);});
+    w.appendChild(s);
+  }
+  return w;
+}
+function rowEl(r){
+  var cls='row'+(r.parent?' sub':'')+((r.type==='area'||r.type==='link'||r.type==='invite'||r.type==='links')?' wide':'');
+  var changed=(JSON.stringify(state[r.k])!==initial[r.k])||(r.lockable&&locks[r.k]!==initLocks[r.k]);
+  if(changed)cls+=' changed';
+  var row=el('div',cls), left=el('div');
+  var tt=el('div','tt',esc(r.t));
+  if(r.lockable&&locks[r.k])tt.appendChild(el('span','chip lock','Locked for co-hosts'));
+  if(r.pro)tt.appendChild(el('span','chip pro','Host Pro'));
+  if(changed)tt.appendChild(el('span','chip def','Changed'));
+  left.appendChild(tt); if(r.d)left.appendChild(el('div','ds',esc(r.d)));
+  if(query)left.insertBefore(el('div','where',esc(rowTab[r.k].label+(r._seg?' · '+segLabel(r._seg):''))),tt);
+  row.appendChild(left); row.appendChild(control(r));
+  if(r.k==='topText'&&lum(state.cTop)>0.6&&state.topText==='#FFFFFF')row.appendChild(el('div','note','White text on a light topbar is hard to read. Choose Dark.'));
+  if(r.k==='topText'&&lum(state.cTop)<0.25&&state.topText==='#1A1A18')row.appendChild(el('div','note','Dark text on a dark topbar is hard to read. Choose White.'));
+  if(r.req)tt.appendChild(el('span','req','Required'));  var f=forced(r.k); if(f)row.appendChild(el('div','note',esc(f.why)));
+  return row;
 }
 
-function selectViewDefault(mode) {
-  var listCard = document.getElementById('view-opt-list');
-  var tileCard = document.getElementById('view-opt-tile');
-  if (!listCard || !tileCard) return;
-  var isList = mode === 'list';
-  listCard.classList.toggle('selected', isList);
-  listCard.querySelector('.setting-card-check').classList.toggle('on', isList);
-  tileCard.classList.toggle('selected', !isList);
-  tileCard.querySelector('.setting-card-check').classList.toggle('on', !isList);
+// ── Preview ───────────────────────────────────────────────────────────
+function preview(){
+  var p=el('div','pv'); p.appendChild(el('div','pv-lbl','What members see · '+esc(segLabel(layoutSeg))));
+  var ph=el('div','phone');
+  ph.style.setProperty('--ptop',state.cTop); ph.style.setProperty('--pprim',state.cPrimary); ph.style.setProperty('--ptxt',state.topText);
+  ph.style.setProperty('--pacc',state.cAccent); ph.style.setProperty('--pbg',state.cBg); ph.style.setProperty('--pprice',state.cPrice); ph.style.setProperty('--pitem',state.cItem);
+  ph.appendChild(el('div','ph-top',esc(state.siteTitle||'co·bee')));
+  var segName=segLabel(layoutSeg);
+  var tabs=el('div','ph-tabs'); ['Products','Events','My Purchase'].forEach(function(t){tabs.appendChild(el('span',t===segName?'on':'',t));}); ph.appendChild(tabs);
+  var body=el('div','ph-body');
+  if(state.waBtn)body.appendChild(el('div','ph-wa','Join our WhatsApp group'));
+  var soon=parseInt(state.soonDays,10)||0;
+
+  if(layoutSeg==='products'){
+    var ps=[['Chestnut (case)','S$38.00','Chestnut (Dec round)',42,3,'Snacks',1],['Bubble Tea mix','S$4.50','Bubble Tea Feb',18,20,'Drinks',4],['Toothpaste x6','S$3.20','Toothpaste bulk buy',65,0,'Household',6],['Spec frames','S$29.00','Spec Frames',7,12,'Lifestyle',9],['Green tea','S$6.80','Bubble Tea Feb',11,30,'Drinks',4],['Sticker pack','S$2.00','Sticker Pack',23,5,'Lifestyle',9]];
+    if(state.pSort==='popular')ps=ps.slice().sort(function(a,b){return b[3]-a[3];});
+    if(state.pSort==='closing')ps=ps.slice().sort(function(a,b){return a[6]-b[6];});
+    if(state.pSort==='price')ps=ps.slice().sort(function(a,b){return parseFloat(a[1].slice(2))-parseFloat(b[1].slice(2));});
+    if(state.pSort==='newest')ps=ps.slice().reverse();
+    if(state.pFilters.length){var fb=el('div','ph-filters');state.pFilters.forEach(function(f){fb.appendChild(el('span',null,{category:'Category',event:'Event',price:'Price'}[f]+' ▾'));});body.appendChild(fb);}
+    var groups=[[null,ps]];
+    if(state.pGroup!=='none'){var gi=state.pGroup==='event'?2:5,m={},o=[];ps.forEach(function(p){if(!m[p[gi]]){m[p[gi]]=[];o.push(p[gi]);}m[p[gi]].push(p);});groups=o.map(function(g){return [g,m[g]];});}
+    var sh=state.pShow;
+    groups.forEach(function(g){
+      if(g[0])body.appendChild(el('div','ph-grp',esc(g[0])));
+      var grid=el('div','ph-feed prod '+state.pView+(state.pView==='tile'&&state.pCols==='3'?' c3':'')+(state.pImg==='landscape'?' land':''));
+      g[1].forEach(function(p){var card=el('div','ev');card.appendChild(el('div','img'));var bd=el('div','bd');
+        bd.innerHTML='<b>'+esc(p[0])+'</b><span class="pr">'+esc(p[1])+'</span>'
+          +(sh.indexOf('event')>=0&&state.pGroup!=='event'?'<div class="cnt">'+esc(p[2])+'</div>':'')
+          +(sh.indexOf('sold')>=0?'<div class="cnt">'+p[3]+' sold</div>':'')
+          +(sh.indexOf('stock')>=0?'<div class="cnt">'+(p[4]?p[4]+' left':'Sold out')+'</div>':'')
+          +(sh.indexOf('add')>=0&&p[4]?'<span class="qadd">+ Add</span>':'');
+        card.appendChild(bd);grid.appendChild(card);});
+      body.appendChild(grid);
+    });
+  } else if(layoutSeg==='events'){
+    var evs=[['Chestnut (Dec round)','S$12.90',1,18,'Grace','14 Dec','17 Dec'],['Bubble Tea Feb','S$4.50',4,9,'Marcus','17 Dec','20 Dec'],['Toothpaste bulk buy','S$3.20',6,27,'Grace','19 Dec','22 Dec'],['Fresh produce — May','S$15.00',9,4,'Mary','22 Dec','26 Dec']];
+    if(state.sort==='newest')evs=[evs[3],evs[1],evs[0],evs[2]]; if(state.sort==='active')evs=evs.slice().sort(function(a,b){return b[3]-a[3];});
+    if(state.pinFirst){var pi=evs.findIndex(function(e){return e[0].indexOf('Fresh')===0;});var pe=evs.splice(pi,1)[0];pe=pe.slice();pe.pinned=true;evs.unshift(pe);}
+    var es=state.eShow, feed=el('div','ph-feed '+state.feedView);
+    evs.forEach(function(e){var card=el('div','ev');card.appendChild(el('div','img'));var bd=el('div','bd');
+      bd.innerHTML=(e.pinned?'<div class="pin">Pinned</div>':'')+'<b>'+esc(e[0])+'</b><span class="pr">from '+esc(e[1])+'</span>'
+        +(es.indexOf('host')>=0?'<div class="cnt">by '+esc(e[4])+'</div>':'')
+        +(es.indexOf('close')>=0?'<div class="cnt">Closes '+e[5]+'</div>':'')
+        +(es.indexOf('collect')>=0?'<div class="cnt">Collect '+e[6]+'</div>':'')
+        +(es.indexOf('joined')>=0?'<div class="cnt">'+e[3]+' joined</div>':'')
+        +(e[2]<=soon?'<span class="badge">Closes in '+e[2]+'d</span>':'');
+      card.appendChild(bd);feed.appendChild(card);});
+    body.appendChild(feed);
+    if(state.closed!=='hide'){var cl=el('div','ev closed');cl.innerHTML='<div class="bd"><b>Sticker Pack</b><div class="cnt">Closed '+(state.closed==='week'?'3 days ago':'2 Nov')+'</div></div>';body.appendChild(el('div','ph-grp','Closed'));body.appendChild(cl);}
+  } else {
+    var fl=el('div','ph-filters pills');[['all','All'],['pay','To pay'],['collect','To collect'],['done','Completed']].forEach(function(f){fl.appendChild(el('span',state.mFilter===f[0]?'on':'',f[1]));});body.appendChild(fl);
+    var od=[['Chestnut (case) x1','S$38.00','Unpaid','17 Dec','Chestnut (Dec round)',2],['Bubble Tea mix x3','S$13.50','Unpaid','20 Dec','Bubble Tea Feb',5],['Toothpaste x6 x2','S$6.40','Paid','22 Dec','Toothpaste bulk buy',7],['Spec frames x1','S$29.00','Collected','2 Nov','Spec Frames',-1]];
+    var vis=od.filter(function(o){return state.mFilter==='all'||(state.mFilter==='pay'&&o[2]==='Unpaid')||(state.mFilter==='collect'&&o[2]==='Paid')||(state.mFilter==='done'&&o[2]==='Collected');});
+    if(state.mPayBar&&state.payTogether&&state.mFilter!=='done'&&state.mFilter!=='collect'){var unpaid=od.filter(function(o){return o[2]==='Unpaid';});var tot=unpaid.reduce(function(s,o){return s+parseFloat(o[1].slice(2));},0);
+      var pb=el('div','paybar');pb.innerHTML='<span>'+unpaid.length+' unpaid · <b>S$'+tot.toFixed(2)+'</b></span><span class="pbb">Pay together</span>';body.appendChild(pb);}
+    var mg=[[null,vis]];
+    if(state.mGroup!=='none'){var key=state.mGroup==='event'?4:3,mm={},oo=[];vis.forEach(function(o){var g=state.mGroup==='event'?o[4]:'Collect '+o[3];if(!mm[g]){mm[g]=[];oo.push(g);}mm[g].push(o);});mg=oo.map(function(g){return [g,mm[g]];});}
+    mg.forEach(function(g){if(g[0])body.appendChild(el('div','ph-grp',esc(g[0])));
+      g[1].forEach(function(o){var c=el('div','ev order');var st=o[2]==='Unpaid'?'un':o[2]==='Paid'?'pd':'dn';
+        c.innerHTML='<div class="bd"><b>'+esc(o[0])+'</b><span class="pr">'+esc(o[1])+'</span>'
+          +(state.mStatus?' <span class="stt '+st+'">'+o[2]+'</span>':'')
+          +(state.mCountdown&&o[5]>0?'<div class="cnt">Collect in '+o[5]+' days</div>':'')
+          +(state.mReorder&&o[2]==='Collected'?'<span class="qadd">Buy again</span>':'')+'</div>';
+        body.appendChild(c);});});
+    if(!vis.length)body.appendChild(el('div','ph-grp','No orders here'));
+  }
+  ph.appendChild(body);
+  if(state.poweredBy)ph.appendChild(el('div','ph-foot','Powered by co·bee'));
+  p.appendChild(ph); return p;
 }
-function previewTitle(val) {
-  document.getElementById('site-title-preview').textContent = val || 'co·bee';
+
+// ── Render ────────────────────────────────────────────────────────────
+function render(){
+  var tabsEl=document.getElementById('tabs'); tabsEl.innerHTML='';
+  var ch=changedKeys();
+  TABS.forEach(function(t){var b=el('button','tab',esc(t.label));b.type='button';b.setAttribute('role','tab');b.setAttribute('aria-selected',(!query&&t.id===current)?'true':'false');
+    if(ch.some(function(k){return rowTab[k].id===t.id;}))b.appendChild(el('span','dot'));
+    b.addEventListener('click',function(){current=t.id;query='';document.getElementById('q').value='';render();});tabsEl.appendChild(b);});
+  var page=document.getElementById('page'); page.innerHTML='';
+  var tab=TABS.filter(function(t){return t.id===current;})[0], col=el('div','col');
+  if(query){
+    var ql=query.toLowerCase(),n=0;
+    TABS.forEach(function(t){t.sections.forEach(function(s){var rs=s.rows.filter(function(r){return (r.t+' '+r.d).toLowerCase().indexOf(ql)>=0;});
+      if(rs.length){n+=rs.length;var sec=el('div','section');var h=el('div','sec-h');h.appendChild(el('h2',null,esc(s.title)));h.appendChild(el('span',null,esc(t.label)));sec.appendChild(h);var rw=el('div','rows');rs.forEach(function(r){rw.appendChild(rowEl(r));});sec.appendChild(rw);col.appendChild(sec);}});});
+    if(!n)col.appendChild(el('div','empty','No settings match "'+esc(query)+'". Try "pay", "share" or "delivery".'));
+    page.className='page';
+  } else {
+    if(tab.id==='profile'){ col.appendChild(profileView(ch)); page.className='page'; page.appendChild(col); finish(ch); return; }
+    var hasLock=tab.sections.some(function(s){return s.rows.some(function(r){return r.lockable;});});
+    var intro=el('div','intro'); intro.appendChild(el('div','lk',hasLock?LOCK_SVG:'<b aria-hidden="true">i</b>')); intro.appendChild(el('p',null,esc(tab.intro))); col.appendChild(intro);
+    if(tab.segments){
+      var sw=el('div','pageseg'); sw.setAttribute('role','tablist'); sw.setAttribute('aria-label','Member page');
+      tab.segments.forEach(function(sg){
+        var dirty=ch.some(function(k){return rowTab[k].id==='layout'&&TABS.some(function(t){return t.sections.some(function(s){return s.seg===sg[0]&&s.rows.some(function(r){return r.k===k;});});});});
+        var b=el('button',null,'<span class="ps-n">'+esc(sg[1])+'</span>'+(state.firstTab===sg[1]?'<span class="ps-h">Home</span>':'')+(dirty?'<span class="dot"></span>':''));
+        b.type='button'; b.setAttribute('role','tab'); b.setAttribute('aria-selected',layoutSeg===sg[0]?'true':'false');
+        b.addEventListener('click',function(){layoutSeg=sg[0];render();}); sw.appendChild(b);
+      });
+      col.appendChild(sw);
+    }
+    tab.sections.filter(function(s){return !tab.segments||!s.seg||s.seg===layoutSeg;}).forEach(function(s){var sec=el('div','section');var h=el('div','sec-h');h.appendChild(el('h2',null,esc(s.title)));if(s.hint)h.appendChild(el('span',null,esc(s.hint)));sec.appendChild(h);
+      var rw=el('div','rows');s.rows.forEach(function(r){if(visible(r))rw.appendChild(rowEl(r));});sec.appendChild(rw);col.appendChild(sec);});
+    page.className='page'+(tab.preview?' with-preview':'');
+  }
+  page.appendChild(col); if(!query&&tab.preview)page.appendChild(preview());
+  finish(ch);
 }
-function previewBanner(input) {
-  if (!input.files || !input.files[0]) return;
-  var file = input.files[0];
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var img = document.getElementById('banner-img');
-    img.src = e.target.result;
-    img.style.display = 'block';
-    document.getElementById('banner-placeholder-icon').style.display = 'none';
-    document.getElementById('banner-placeholder-text').style.display = 'none';
-    document.getElementById('banner-placeholder-sub').style.display = 'none';
-    document.getElementById('banner-preview').style.border = '1.5px solid #009A97';
-    document.getElementById('banner-filename').textContent = file.name;
-    document.getElementById('banner-remove').style.display = 'inline-flex';
+function finish(ch){
+  var sb=document.getElementById('sb'); sb.hidden=!ch.length;
+  document.getElementById('sb-msg').innerHTML='<b>'+ch.length+' unsaved change'+(ch.length===1?'':'s')+'</b> · new events will use these defaults once saved';
+}
+// ── Profile tab: same layout as today's settings.html Profile tab ─────
+function profileView(ch){
+  function ch1(k){return ch.indexOf(k)>=0?' changed':'';}
+  var slug=state.slug, ok=slug.length>=3&&RESERVED.indexOf(slug)<0;
+  var stTxt=slug.length<3?'Too short':(RESERVED.indexOf(slug)>=0?'Reserved':'Available');
+  var ICON={
+    wa:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.58 3.47 2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 19z"/></svg>',
+    ig:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8971A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>',
+    fb:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3498DB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>',
+    web:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'
   };
-  reader.readAsDataURL(file);
+  function sel(k){var r=TABS[0].sections[1].rows.filter(function(x){return x.k===k;})[0];return r.opts.map(function(o){return '<option value="'+esc(o[0])+'"'+(state[k]===o[0]?' selected':'')+'>'+esc(o[1])+'</option>';}).join('');}
+  function contact(k,bg,icon,label,ph){return '<div class="contact-row'+ch1(k)+'"><div class="contact-icon" style="background:'+bg+'">'+icon+'</div><div class="input-prefix"><span class="prefix">'+label+'</span><input class="input" id="f-'+k+'" data-k="'+k+'" value="'+esc(state[k])+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+'></div></div>';}
+  var html=''
+  +'<div class="section legacy"><div class="section-header"><span class="section-title">Profile</span></div><div class="section-body">'
+  +  '<div class="profile-photo-wrap"><div class="photo-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Add Photo</span></div>'
+  +  '<div style="flex:1;min-width:0"><div class="helper" style="margin-bottom:8px">This photo appears on event cards and is seen by all buyers.</div><button class="btn sm" type="button" data-act="upload">Upload Photo</button></div></div>'
+  +  '<div class="two-col">'
+  +    '<div class="field'+ch1('groupName')+'"><label for="f-groupName">Group Name <span class="req">*</span></label><input class="input" id="f-groupName" data-k="groupName" value="'+esc(state.groupName)+'">'
+  +      '<div class="url-lbl"><span>GROUP URL</span><span class="prem"><svg width="10" height="10" viewBox="0 0 24 24" fill="#8E44AD" aria-hidden="true"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.8 5.7 21l2.3-7.2-6-4.4h7.6z"/></svg>Premium</span></div>'
+  +      '<div class="helper">Your own branded page — members go straight to your group\'s events and purchases, with your colors and name in the header.</div>'
+  +      '<div class="slug'+ch1('slug')+'"><span>https://co-bee.pages.dev/</span><input id="f-slug" data-k="slug" data-slug="1" value="'+esc(slug)+'" aria-label="Group URL"><span class="slug-st '+(ok?'ok':'bad')+'">'+stTxt+'</span></div>'
+  +      '<span class="url-prev">https://co-bee.pages.dev/'+esc(slug)+'</span>'
+  +    '</div>'
+  +    '<div class="field'+ch1('address')+'"><label for="f-address">Address <span class="req">*</span></label><input class="input" id="f-address" data-k="address" value="'+esc(state.address)+'"></div>'
+  +  '</div>'
+  +  '<div class="two-col">'
+  +    '<div class="field'+ch1('tz')+'"><label for="f-tz">Time Zone</label><select class="select" id="f-tz" data-k="tz">'+sel('tz')+'</select></div>'
+  +    '<div class="field'+ch1('currency')+'"><label for="f-currency">Currency</label><select class="select" id="f-currency" data-k="currency">'+sel('currency')+'</select></div>'
+  +  '</div>'
+  +  '<div class="field'+ch1('headline')+'"><label for="f-headline">Headline / Description</label><textarea class="textarea" id="f-headline" data-k="headline">'+esc(state.headline)+'</textarea></div>'
+  +  '<div class="divider"></div>'
+  +  '<div class="sub-lbl">Contact &amp; Social</div>'
+  +  contact('waNum','#E8F8EF',ICON.wa,'WhatsApp','')
+  +  contact('insta','#FEF2DC',ICON.ig,'Instagram','@handle or URL')
+  +  contact('fb','#EBF5FB',ICON.fb,'Facebook','')
+  +  contact('web','#F0F0F0',ICON.web,'Website','https://yourwebsite.com')
+  +'</div></div>';
+  var wrap=el('div',null,html);
+  wrap.querySelectorAll('[data-k]').forEach(function(inp){inp.addEventListener('change',function(){
+    var v=inp.value; if(inp.getAttribute('data-slug'))v=v.toLowerCase().replace(/[^a-z0-9-]/g,'').replace(/^-+|-+$/g,'');
+    state[inp.getAttribute('data-k')]=v; render();});});
+  wrap.querySelector('[data-act="upload"]').addEventListener('click',function(){toast('Opens the file picker in the real page');});
+  return wrap;
 }
-function removeBanner(e) {
-  e.stopPropagation();
-  document.getElementById('banner-img').src = '';
-  document.getElementById('banner-img').style.display = 'none';
-  document.getElementById('banner-placeholder-icon').style.display = 'block';
-  document.getElementById('banner-placeholder-text').style.display = 'block';
-  document.getElementById('banner-placeholder-sub').style.display = 'block';
-  document.getElementById('banner-preview').style.border = '1.5px dashed #80CCCB';
-  document.getElementById('banner-filename').textContent = 'No file selected';
-  document.getElementById('banner-remove').style.display = 'none';
-  document.getElementById('banner-input').value = '';
-}
-// Hover overlay when image is loaded
-document.addEventListener('DOMContentLoaded', function() {
-  var drop = document.getElementById('banner-drop');
-  var overlay = document.getElementById('banner-overlay');
-  if (!drop || !overlay) return;
-  drop.addEventListener('mouseenter', function() {
-    if (document.getElementById('banner-img').src) overlay.style.display = 'flex';
-  });
-  drop.addEventListener('mouseleave', function() {
-    overlay.style.display = 'none';
-  });
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove('show');},2400);}
+
+document.getElementById('q').addEventListener('input',function(e){query=e.target.value.trim();render();});
+document.getElementById('discard').addEventListener('click',function(){Object.keys(initial).forEach(function(k){state[k]=JSON.parse(initial[k]);});Object.keys(initLocks).forEach(function(k){locks[k]=initLocks[k];});document.getElementById('apply').hidden=true;render();toast('Changes discarded');});
+document.getElementById('save').addEventListener('click',function(){
+  var evChanged=changedKeys().some(function(k){return rowTab[k].id==='events'||rowTab[k].id==='payment';});
+  if(evChanged){document.getElementById('apply').hidden=false;}else{commit();}
 });
-function switchTab(id, el) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  el.classList.add('active');
+document.querySelectorAll('[data-apply]').forEach(function(b){b.addEventListener('click',function(){applyMode=b.getAttribute('data-apply');document.querySelectorAll('[data-apply]').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});});});
+document.getElementById('confirm').addEventListener('click',commit);
+function commit(){
+  var n=changedKeys().length;
+  if(!state.groupName.trim()){toast('Enter a group name before saving');return;}
+  if(state.slug.length<3||RESERVED.indexOf(state.slug)>=0){toast('Choose a different group URL — "'+state.slug+'" is '+(state.slug.length<3?'too short':'reserved'));return;}
+  if(!persist()){toast('Couldn\'t save — this browser is blocking storage');return;}
+  Object.keys(state).forEach(function(k){initial[k]=JSON.stringify(state[k]);});
+  Object.keys(locks).forEach(function(k){initLocks[k]=locks[k];});
+  document.getElementById('apply').hidden=true;render();
+  toast('Saved '+n+' change'+(n===1?'':'s')+(applyMode==='open'?' · applied to 3 open events':' · applies to new events'));
 }
-
-function selectPay(el) {
-  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-function syncHex(id, val) {
-  document.getElementById('hex-' + id).value = val;
-  updateTitlePreview(id, val);
-}
-function syncSwatch(id, val) {
-  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
-    document.getElementById('clr-' + id).value = val;
-    updateTitlePreview(id, val);
-  }
-}
-function applyColor(id, val) {
-  document.getElementById('clr-' + id).value = val;
-  document.getElementById('hex-' + id).value = val;
-  updateTitlePreview(id, val);
-}
-function resetColors() {
-  var d = {primary:'#009A97',accent:'#E8971A',bg:'#F4F6F8',topbar:'#009A97',header:'#FFFFFF',price:'#009A97',item:'#009A97'};
-  Object.keys(d).forEach(function(k){ applyColor(k, d[k]); });
-  showToast('Colors reset to default');
-}
-
-function copyLink() {
-  var val = document.querySelector('input[value*="co-bee.pages.dev/join"]').value;
-  navigator.clipboard.writeText(val).then(function(){ showToast('Link copied!'); });
-}
-function sendInvite() {
-  var e = document.getElementById('invite-email').value.trim();
-  if (!e) return;
-  document.getElementById('invite-email').value = '';
-  showToast('Invite sent to ' + e);
-}
-function showToast(msg, type) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = type === 'warn' ? '#E8971A' : '#1a1a18';
-  t.style.opacity = '1';
-  setTimeout(function(){ t.style.opacity = '0'; }, 2500);
-}
+render();
+})();
 </script>
 </body>
 </html>
