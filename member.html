@@ -1294,6 +1294,22 @@ select:focus { border-color: #009A97; }
   .qr-link { display:inline-flex; align-items:center; gap:4px; background:none; border:none; padding:0; font-size:11px; font-weight:500; color:#888780; cursor:pointer; font-family:inherit; }
   .qr-link.teal { color:#009A97; font-weight:600; }
 
+
+/* ── Products tab (all products from open events, used by the branded group portal) ── */
+.prod-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.prod-sort{height:30px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 8px;font-size:12px;background:white;color:#1a1a18;font-family:inherit;}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+.prod-card{background:white;border:0.5px solid #E0DFD8;border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;text-align:left;font-family:inherit;padding:0;}
+.prod-card:hover{border-color:#80CCCB;}
+.prod-card:focus-visible{outline:2px solid #009A97;outline-offset:2px;}
+.prod-img{aspect-ratio:1;background:linear-gradient(135deg,#E0F5F5,#FEF2DC);display:grid;place-items:center;font-size:28px;font-weight:700;color:#80CCCB;}
+.prod-body{padding:8px 10px 10px;display:flex;flex-direction:column;gap:2px;flex:1;}
+.prod-name{font-size:13px;font-weight:600;color:#1a1a18;line-height:1.3;}
+.prod-price{font-size:13px;font-weight:700;color:#009A97;}
+.prod-meta{font-size:11px;color:#888780;line-height:1.35;}
+.prod-badge{align-self:flex-start;margin-top:4px;font-size:10px;font-weight:700;color:white;background:#E8971A;border-radius:4px;padding:1px 6px;}
+.prod-badge.out{background:#B4B2A9;}
+.prod-add{margin-top:6px;align-self:flex-start;font-size:11px;font-weight:700;color:#009A97;border:1px solid #009A97;border-radius:6px;padding:2px 8px;}
 </style>
 </head>
 <body>
@@ -2099,6 +2115,19 @@ select:focus { border-color: #009A97; }
   </div>
 
   <!-- ALL EVENTS VIEW -->
+  <!-- ═══ PRODUCTS — every product from the group's open events ═══ -->
+  <div id="view-products" style="display:none;">
+    <div class="prod-toolbar">
+      <span class="feed-header-count" id="prod-count">0 PRODUCTS</span>
+      <select class="prod-sort" id="prod-sort" aria-label="Sort products">
+        <option value="popular">Most popular</option>
+        <option value="closing">Closing soon</option>
+        <option value="price">Price: low to high</option>
+      </select>
+    </div>
+    <div class="prod-grid" id="prod-grid"></div>
+  </div>
+
   <div id="view-all">
     <div class="feed-header">
       <span class="feed-header-count">5 EVENTS</span>
@@ -4496,6 +4525,71 @@ function initStep2() {
 
 
 // Listen for tab switch messages from parent shell
+/* ── Products tab ──────────────────────────────────────────────────────
+   Mock data: products from the group's open events. Each card opens its
+   event with the same showDetail() call the event cards use. Built with
+   createElement + data- attributes + one delegated listener (no inline
+   onclick strings). */
+var PRODUCT_EVENTS = {
+  'Groupbuy Event test': ['Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true'],
+  'Product & Event Discount Demo': ['Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false'],
+  'This is a test event for Purchase with no login': ['This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false'],
+  'New event': ['New event','test','Minh Cong','M6 group','15','0','false']
+};
+var PRODUCTS = [
+  { name:'Chestnut (case)',       price:38.00, event:'Groupbuy Event test',                             sold:42, stock:3,  days:15 },
+  { name:'Chestnut (individual)', price:4.20,  event:'Groupbuy Event test',                             sold:65, stock:40, days:15 },
+  { name:'Bubble Tea',            price:5.00,  event:'This is a test event for Purchase with no login', sold:18, stock:20, days:14 },
+  { name:'Bundle pack',           price:12.50, event:'This is a test event for Purchase with no login', sold:9,  stock:0,  days:14 },
+  { name:'Toothpaste (6-pack)',   price:12.80, event:'Product & Event Discount Demo',                   sold:27, stock:15, days:20 },
+  { name:'Sticker Pack',          price:2.00,  event:'Product & Event Discount Demo',                   sold:23, stock:50, days:20 },
+  { name:'Spec Frames',           price:29.00, event:'New event',                                        sold:7,  stock:12, days:15 }
+];
+function renderProducts() {
+  var grid = document.getElementById('prod-grid');
+  if (!grid) return;
+  var sortSel = document.getElementById('prod-sort');
+  var sort = sortSel ? sortSel.value : 'popular';
+  var list = PRODUCTS.slice();
+  if (sort === 'popular') list.sort(function(a,b){ return b.sold - a.sold; });
+  if (sort === 'closing') list.sort(function(a,b){ return a.days - b.days; });
+  if (sort === 'price')   list.sort(function(a,b){ return a.price - b.price; });
+  grid.textContent = '';
+  list.forEach(function(p) {
+    var card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'prod-card';
+    card.setAttribute('data-event', p.event);
+    var img = document.createElement('div'); img.className = 'prod-img'; img.textContent = p.name.charAt(0);
+    var body = document.createElement('div'); body.className = 'prod-body';
+    var nm = document.createElement('div'); nm.className = 'prod-name'; nm.textContent = p.name;
+    var pr = document.createElement('div'); pr.className = 'prod-price'; pr.textContent = 'S$' + p.price.toFixed(2);
+    var ev = document.createElement('div'); ev.className = 'prod-meta'; ev.textContent = p.event;
+    var sd = document.createElement('div'); sd.className = 'prod-meta'; sd.textContent = p.sold + ' sold';
+    body.appendChild(nm); body.appendChild(pr); body.appendChild(ev); body.appendChild(sd);
+    if (p.stock === 0) {
+      var so = document.createElement('span'); so.className = 'prod-badge out'; so.textContent = 'Sold out'; body.appendChild(so);
+    } else {
+      if (p.stock <= 5) { var lo = document.createElement('span'); lo.className = 'prod-badge'; lo.textContent = 'Low stock'; body.appendChild(lo); }
+      var ad = document.createElement('span'); ad.className = 'prod-add'; ad.textContent = '+ Add'; body.appendChild(ad);
+    }
+    card.appendChild(img); card.appendChild(body);
+    grid.appendChild(card);
+  });
+  var cnt = document.getElementById('prod-count');
+  if (cnt) cnt.textContent = PRODUCTS.length + ' PRODUCTS';
+}
+document.addEventListener('click', function(e) {
+  var card = e.target.closest && e.target.closest('#prod-grid .prod-card');
+  if (!card) return;
+  var args = PRODUCT_EVENTS[card.getAttribute('data-event')];
+  if (args) showDetail.apply(null, args);
+});
+document.addEventListener('change', function(e) {
+  if (e.target && e.target.id === 'prod-sort') renderProducts();
+});
+renderProducts();
+
 window.addEventListener('message', function(e) {
   if (e.data && e.data.type === 'switchTab') {
     switchTab(e.data.tab);
@@ -4503,7 +4597,7 @@ window.addEventListener('message', function(e) {
 });
 
 function showView(viewId) {
-  ['view-all','view-purchase','view-group','view-group-detail','view-event-detail','view-subitem-demo'].forEach(id => {
+  ['view-products','view-all','view-purchase','view-group','view-group-detail','view-event-detail','view-subitem-demo'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
@@ -5121,7 +5215,7 @@ function confirmPayment() {
 
 
 function showView(viewId) {
-  ['view-all','view-purchase','view-group','view-group-detail','view-event-detail','view-subitem-demo'].forEach(id => {
+  ['view-products','view-all','view-purchase','view-group','view-group-detail','view-event-detail','view-subitem-demo'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
@@ -5321,8 +5415,8 @@ function togglePcard(id) {
 }
 
 function switchTab(tab) {
-  const views = { all: 'view-all', purchase: 'view-purchase', group: 'view-group' };
-  const order = ['all', 'purchase', 'group'];
+  const views = { products: 'view-products', all: 'view-all', purchase: 'view-purchase', group: 'view-group' };
+  const order = ['products', 'all', 'purchase', 'group'];
   document.getElementById('view-group-detail').style.display = 'none';
   document.getElementById('view-event-detail').style.display = 'none';
   order.forEach(t => {
