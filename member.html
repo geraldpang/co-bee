@@ -60,6 +60,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .card-body { padding: 12px 14px 6px; }
   .card-title { font-size: 15px; font-weight: 700; color: #1a1a18; margin-bottom: 4px; }
   .card-desc { font-size: 13px; color: #1a1a18; line-height: 1.5; }
+  .event-card .card-desc { color: #5F5E5A; white-space: pre-line; overflow-wrap: anywhere; }
 
   /* MEMBER EVENTS FEED — LIST/TILE TOGGLE + SORT (namespaced mef- to avoid clashing with .event-card/.card-* used elsewhere in this file) */
   .mef-view-toggle { display: flex; border: 0.5px solid #d3d1c7; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: white; }
@@ -76,7 +77,7 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .mef-tile-createdby { font-size: 10px; color: #888780; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .mef-tile-img { width: 100%; aspect-ratio: 1 / 1; background: #E0F5F5; display: flex; align-items: center; justify-content: center; position: relative; }
   .mef-tile-buy { position: absolute; top: 6px; right: 6px; font-size: 10px; font-weight: 600; border-radius: 10px; padding: 2px 7px; color: white; }
-  .mef-tile-desc { padding: 7px 10px 0; font-size: 10px; color: #1a1a18; line-height: 1.4; min-height: 34px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .mef-tile-desc { white-space: pre-line; padding: 7px 10px 0; font-size: 10px; color: #1a1a18; line-height: 1.4; min-height: 34px; overflow-wrap: anywhere; }
   .mef-tile-dates { padding: 6px 10px 0; flex: 1; }
   .mef-tile-daterow { display: flex; flex-direction: column; gap: 3px; font-size: 10px; }
   .mef-tile-daterow div { display: flex; justify-content: space-between; align-items: baseline; }
@@ -1445,7 +1446,7 @@ select:focus { border-color: #009A97; }
           <div style="display:flex;align-items:center;gap:10px;min-width:0;">
             <div style="width:40px;height:40px;border-radius:50%;background:#009A97;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;">M6</div>
             <div style="min-width:0;">
-              <div id="ev1-title" style="font-size:13px;font-weight:600;color:#1a1a18;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+              <div id="ev1-group" style="font-size:13px;font-weight:600;color:#1a1a18;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
               <div id="ev1-createdby" style="font-size:11px;color:#888780;"></div>
               <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
                 <button id="ev1-edit-btn" class="gd-admin-link" style="display:none;margin-top:0;" onclick="event.stopPropagation();window.parent && window.parent.navigate ? window.parent.navigate('hosting.html',null) : alert('Open event editor')">
@@ -1468,7 +1469,8 @@ select:focus { border-color: #009A97; }
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#80CCCB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
         <div style="padding:14px;">
-          <div id="ev1-desc" style="font-size:13px;color:#1a1a18;margin-bottom:12px;"></div>
+          <div id="ev1-title" style="font-size:17px;font-weight:700;color:#1a1a18;line-height:1.3;margin-bottom:6px;overflow-wrap:anywhere;"></div>
+          <div id="ev1-desc" style="font-size:13px;color:#5F5E5A;line-height:1.55;margin-bottom:12px;white-space:pre-wrap;overflow-wrap:anywhere;"></div>
           <div style="display:grid;grid-template-columns:80px 1fr;gap:6px 0;font-size:12px;margin-bottom:12px;">
             <span style="color:#888780;">Event open</span><span class="ev-info-val" style="color:#5F5E5A;font-weight:500;">09-05-2026</span>
             <span style="color:#888780;">Event close</span><span class="ev-info-val" style="color:#5F5E5A;font-weight:500;">15-05-2026</span>
@@ -2155,11 +2157,11 @@ select:focus { border-color: #009A97; }
       </div>
     </div>
     <div class="feed">
-      <div class="event-card" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-05-22" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
+      <div class="event-card" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-05-22" onclick="showDetail('Groupbuy Event test','Our monthly pantry & household run is open! This round we\'re bringing in roasted chestnuts straight from our supplier in Johor, plus a few everyday essentials so you can top up in one go.\n\nChestnuts come by the case (6 packs) or as single packs through split case. Once a case fills up, everyone in the split gets theirs. Spend $5 or more and enjoy 10% off your whole order.\n\nCollection is at Simei Street 1 on collection day, 10AM to 5PM. Please bring your own bag and have your order number ready. Unpaid orders will be released 24 hours after the event closes.','Minh Cong','M6 group','15','0','true')">
         <div class="card-header">
           <div class="card-host">
             <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
-            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Groupbuy Event test</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">M6 group</div><div class="host-sub" style="color:#888780;">Created by Minh Cong</div></div>
           </div>
           <div class="card-badges">
             <span class="closing-text">Closing in 15 days</span>
@@ -2167,7 +2169,11 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-        <div class="card-body"><div class="card-desc">This is how it looks like in an actual group buy</div></div>
+        <div class="card-body"><div class="card-title">Groupbuy Event test</div><div class="card-desc">Our monthly pantry &amp; household run is open! This round we're bringing in roasted chestnuts straight from our supplier in Johor, plus a few everyday essentials so you can top up in one go.
+
+Chestnuts come by the case (6 packs) or as single packs through split case. Once a case fills up, everyone in the split gets theirs. Spend $5 or more and enjoy 10% off your whole order.
+
+Collection is at Simei Street 1 on collection day, 10AM to 5PM. Please bring your own bag and have your order number ready. Unpaid orders will be released 24 hours after the event closes.</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">09-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
           <button class="mef-share-btn" onclick="shareEvent(this,'Groupbuy Event test')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
@@ -2177,18 +2183,20 @@ select:focus { border-color: #009A97; }
           </button>
         </div>
       </div>
-      <div class="event-card" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-05-22" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
+      <div class="event-card" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-05-22" onclick="showDetail('New event','Fresh Korean strawberries flown in weekly: sweet, juicy and great for gifting. Each box is about 330g, and we order by the carton, so the more of us join, the better the price for everyone.\n\nPlease check your box at collection. Any bruised or spoilt fruit must be reported with a photo on the same day for a replacement. No refunds after collection.','Minh Cong','M6 group','15','0','false')">
         <div class="card-header">
           <div class="card-host">
             <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
-            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">New event</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">M6 group</div><div class="host-sub" style="color:#888780;">Created by Minh Cong</div></div>
           </div>
           <div class="card-badges">
             <span class="closing-text">Closing in 15 days</span>
             <span class="buy-badge" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
           </div>
         </div>
-        <div class="card-body"><div class="card-desc">test</div></div>
+        <div class="card-body"><div class="card-title">New event</div><div class="card-desc">Fresh Korean strawberries flown in weekly: sweet, juicy and great for gifting. Each box is about 330g, and we order by the carton, so the more of us join, the better the price for everyone.
+
+Please check your box at collection. Any bruised or spoilt fruit must be reported with a photo on the same day for a replacement. No refunds after collection.</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">09-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
           <button class="mef-share-btn" onclick="shareEvent(this,'New event')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
@@ -2198,18 +2206,20 @@ select:focus { border-color: #009A97; }
           </button>
         </div>
       </div>
-      <div class="event-card" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-05-22" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
+      <div class="event-card" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-05-22" onclick="showDetail('This is a test event for Purchase with no login','Open to friends and neighbours, no co·bee account needed. Just fill in your name and phone number at checkout and we\'ll send your order details via WhatsApp.\n\nThis round features Japanese snacks and drinks restocked from our supplier. Seasonal flavours are limited, so it\'s first come, first served. Payment is by PayNow only; please upload your screenshot after paying so we can confirm your order.','Minh Cong','M6 group','14','6','false')">
         <div class="card-header">
           <div class="card-host">
             <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
-            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">This is a test event for Purchase with no login</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">M6 group</div><div class="host-sub" style="color:#888780;">Created by Minh Cong</div></div>
           </div>
           <div class="card-badges">
             <span class="closing-text">Closing in 14 days</span>
             <span class="buy-badge" style="background:#009A97;">6 BUY</span>
           </div>
         </div>
-        <div class="card-body"><div class="card-desc">test</div></div>
+        <div class="card-body"><div class="card-title">This is a test event for Purchase with no login</div><div class="card-desc">Open to friends and neighbours, no co·bee account needed. Just fill in your name and phone number at checkout and we'll send your order details via WhatsApp.
+
+This round features Japanese snacks and drinks restocked from our supplier. Seasonal flavours are limited, so it's first come, first served. Payment is by PayNow only; please upload your screenshot after paying so we can confirm your order.</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">08-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">14-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">22-05-2026 (10AM - 5PM)</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
           <button class="mef-share-btn" onclick="shareEvent(this,'This is a test event for Purchase with no login')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
@@ -2220,11 +2230,11 @@ select:focus { border-color: #009A97; }
         </div>
       </div>
 
-      <div class="event-card" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false')">
+      <div class="event-card" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers. Some items carry their own tiered discount (buy 3 or more and save), and the whole order also gets a spend-based discount on top.\n\nTry adding different quantities to watch the Order Total update. Discounts are worked out automatically and shown on your order summary before you pay.','Minh Cong','M6 group','20','0','false')">
         <div class="card-header">
           <div class="card-host">
             <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
-            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Product &amp; Event Discount Demo</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">M6 group</div><div class="host-sub" style="color:#888780;">Created by Minh Cong</div></div>
           </div>
           <div class="card-badges">
             <span class="closing-text">Closing in 20 days</span>
@@ -2232,7 +2242,9 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
-        <div class="card-body"><div class="card-desc">See how Product Discount and the event-wide discount look to buyers.</div></div>
+        <div class="card-body"><div class="card-title">Product &amp; Event Discount Demo</div><div class="card-desc">See how Product Discount and the event-wide discount look to buyers. Some items carry their own tiered discount (buy 3 or more and save), and the whole order also gets a spend-based discount on top.
+
+Try adding different quantities to watch the Order Total update. Discounts are worked out automatically and shown on your order summary before you pay.</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">10-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">28-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">04-06-2026 (10AM - 5PM)</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
           <button class="mef-share-btn" onclick="shareEvent(this,'Product &amp; Event Discount Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
@@ -2247,7 +2259,7 @@ select:focus { border-color: #009A97; }
         <div class="card-header">
           <div class="card-host">
             <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
-            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Sub-Item Configurations Demo</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">M6 group</div><div class="host-sub" style="color:#888780;">Created by Minh Cong</div></div>
           </div>
           <div class="card-badges">
             <span class="closing-text">Closing in 25 days</span>
@@ -2255,7 +2267,7 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-        <div class="card-body"><div class="card-desc">Three products showing Choose One, Build a Combo, and Choose Quantities sub-items.</div></div>
+        <div class="card-body"><div class="card-title">Sub-Item Configurations Demo</div><div class="card-desc">Three products showing Choose One, Build a Combo, and Choose Quantities sub-items.</div></div>
         <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">14-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">02-06-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">09-06-2026 (10AM - 5PM)</span></div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
           <button class="mef-share-btn" onclick="shareEvent(this,'Sub-Item Configurations Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
@@ -2264,7 +2276,7 @@ select:focus { border-color: #009A97; }
     </div>
 
     <div class="mef-grid" id="mef-tile-grid" style="display:none;">
-      <div class="mef-tile" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-05-22" data-close="2026-05-15" data-collect="2026-05-22" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
+      <div class="mef-tile" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-05-22" data-close="2026-05-15" data-collect="2026-05-22" onclick="showDetail('Groupbuy Event test','Our monthly pantry & household run is open! This round we\'re bringing in roasted chestnuts straight from our supplier in Johor, plus a few everyday essentials so you can top up in one go.\n\nChestnuts come by the case (6 packs) or as single packs through split case. Once a case fills up, everyone in the split gets theirs. Spend $5 or more and enjoy 10% off your whole order.\n\nCollection is at Simei Street 1 on collection day, 10AM to 5PM. Please bring your own bag and have your order number ready. Unpaid orders will be released 24 hours after the event closes.','Minh Cong','M6 group','15','0','true')">
         <div class="mef-tile-hd">
           <span class="mef-tile-avatar2">M6</span>
           <div class="mef-tile-hdtext"><div class="mef-tile-name">Groupbuy Event test</div></div>
@@ -2273,7 +2285,11 @@ select:focus { border-color: #009A97; }
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
         </div>
-        <div class="mef-tile-desc">This is how it looks like in an actual group buy</div>
+        <div class="mef-tile-desc">Our monthly pantry &amp; household run is open! This round we're bringing in roasted chestnuts straight from our supplier in Johor, plus a few everyday essentials so you can top up in one go.
+
+Chestnuts come by the case (6 packs) or as single packs through split case. Once a case fills up, everyone in the split gets theirs. Spend $5 or more and enjoy 10% off your whole order.
+
+Collection is at Simei Street 1 on collection day, 10AM to 5PM. Please bring your own bag and have your order number ready. Unpaid orders will be released 24 hours after the event closes.</div>
         <div class="mef-tile-dates">
           <div class="mef-tile-daterow">
             <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">09 MAY</span></span></div>
@@ -2289,7 +2305,7 @@ select:focus { border-color: #009A97; }
           </button>
         </div>
       </div>
-      <div class="mef-tile" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-05-22" data-close="2026-05-15" data-collect="2026-05-22" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
+      <div class="mef-tile" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-05-22" data-close="2026-05-15" data-collect="2026-05-22" onclick="showDetail('New event','Fresh Korean strawberries flown in weekly: sweet, juicy and great for gifting. Each box is about 330g, and we order by the carton, so the more of us join, the better the price for everyone.\n\nPlease check your box at collection. Any bruised or spoilt fruit must be reported with a photo on the same day for a replacement. No refunds after collection.','Minh Cong','M6 group','15','0','false')">
         <div class="mef-tile-hd">
           <span class="mef-tile-avatar2">M6</span>
           <div class="mef-tile-hdtext"><div class="mef-tile-name">New event</div></div>
@@ -2298,7 +2314,9 @@ select:focus { border-color: #009A97; }
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
         </div>
-        <div class="mef-tile-desc">test</div>
+        <div class="mef-tile-desc">Fresh Korean strawberries flown in weekly: sweet, juicy and great for gifting. Each box is about 330g, and we order by the carton, so the more of us join, the better the price for everyone.
+
+Please check your box at collection. Any bruised or spoilt fruit must be reported with a photo on the same day for a replacement. No refunds after collection.</div>
         <div class="mef-tile-dates">
           <div class="mef-tile-daterow">
             <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">09 MAY</span></span></div>
@@ -2314,7 +2332,7 @@ select:focus { border-color: #009A97; }
           </button>
         </div>
       </div>
-      <div class="mef-tile" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-05-22" data-close="2026-05-14" data-collect="2026-05-22" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
+      <div class="mef-tile" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-05-22" data-close="2026-05-14" data-collect="2026-05-22" onclick="showDetail('This is a test event for Purchase with no login','Open to friends and neighbours, no co·bee account needed. Just fill in your name and phone number at checkout and we\'ll send your order details via WhatsApp.\n\nThis round features Japanese snacks and drinks restocked from our supplier. Seasonal flavours are limited, so it\'s first come, first served. Payment is by PayNow only; please upload your screenshot after paying so we can confirm your order.','Minh Cong','M6 group','14','6','false')">
         <div class="mef-tile-hd">
           <span class="mef-tile-avatar2">M6</span>
           <div class="mef-tile-hdtext"><div class="mef-tile-name">This is a test event for Purchase with no login</div></div>
@@ -2323,7 +2341,9 @@ select:focus { border-color: #009A97; }
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           <span class="mef-tile-buy" style="background:#009A97;">6 BUY</span>
         </div>
-        <div class="mef-tile-desc">test</div>
+        <div class="mef-tile-desc">Open to friends and neighbours, no co·bee account needed. Just fill in your name and phone number at checkout and we'll send your order details via WhatsApp.
+
+This round features Japanese snacks and drinks restocked from our supplier. Seasonal flavours are limited, so it's first come, first served. Payment is by PayNow only; please upload your screenshot after paying so we can confirm your order.</div>
         <div class="mef-tile-dates">
           <div class="mef-tile-daterow">
             <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">08 MAY</span></span></div>
@@ -2339,7 +2359,7 @@ select:focus { border-color: #009A97; }
           </button>
         </div>
       </div>
-      <div class="mef-tile" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" data-close="2026-09-02" data-collect="2026-09-09" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false')">
+      <div class="mef-tile" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" data-close="2026-09-02" data-collect="2026-09-09" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers. Some items carry their own tiered discount (buy 3 or more and save), and the whole order also gets a spend-based discount on top.\n\nTry adding different quantities to watch the Order Total update. Discounts are worked out automatically and shown on your order summary before you pay.','Minh Cong','M6 group','20','0','false')">
         <div class="mef-tile-hd">
           <span class="mef-tile-avatar2">M6</span>
           <div class="mef-tile-hdtext"><div class="mef-tile-name">Product &amp; Event Discount Demo</div></div>
@@ -2348,7 +2368,9 @@ select:focus { border-color: #009A97; }
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
         </div>
-        <div class="mef-tile-desc">See how Product Discount and the event-wide discount look to buyers.</div>
+        <div class="mef-tile-desc">See how Product Discount and the event-wide discount look to buyers. Some items carry their own tiered discount (buy 3 or more and save), and the whole order also gets a spend-based discount on top.
+
+Try adding different quantities to watch the Order Total update. Discounts are worked out automatically and shown on your order summary before you pay.</div>
         <div class="mef-tile-dates">
           <div class="mef-tile-daterow">
             <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">20 AUG</span></span></div>
@@ -2915,11 +2937,11 @@ select:focus { border-color: #009A97; }
         <!-- Events list -->
         <div class="feed" id="gd-feed-list" style="padding:0;display:none;">
 
-          <div class="event-card" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-09-23" data-close="2026-09-16" data-collect="2026-09-23" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
+          <div class="event-card" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-09-23" data-close="2026-09-16" data-collect="2026-09-23" onclick="showDetail('Groupbuy Event test','Our monthly pantry & household run is open! This round we\'re bringing in roasted chestnuts straight from our supplier in Johor, plus a few everyday essentials so you can top up in one go.\n\nChestnuts come by the case (6 packs) or as single packs through split case. Once a case fills up, everyone in the split gets theirs. Spend $5 or more and enjoy 10% off your whole order.\n\nCollection is at Simei Street 1 on collection day, 10AM to 5PM. Please bring your own bag and have your order number ready. Unpaid orders will be released 24 hours after the event closes.','Minh Cong','M6 group','15','0','true')">
             <div class="card-header">
               <div class="card-host">
                 <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
-                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Groupbuy Event test</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">M6 group</div><div class="host-sub" style="color:#888780;">Created by Minh Cong</div></div>
               </div>
               <div class="card-badges">
                 <span class="closing-text">Closing in 7 days</span>
@@ -2927,7 +2949,11 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
             <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-            <div class="card-body"><div class="card-desc">This is how it looks like in an actual group buy</div></div>
+            <div class="card-body"><div class="card-title">Groupbuy Event test</div><div class="card-desc">Our monthly pantry &amp; household run is open! This round we're bringing in roasted chestnuts straight from our supplier in Johor, plus a few everyday essentials so you can top up in one go.
+
+Chestnuts come by the case (6 packs) or as single packs through split case. Once a case fills up, everyone in the split gets theirs. Spend $5 or more and enjoy 10% off your whole order.
+
+Collection is at Simei Street 1 on collection day, 10AM to 5PM. Please bring your own bag and have your order number ready. Unpaid orders will be released 24 hours after the event closes.</div></div>
             <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">02-09-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">16-09-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">23-09-2026</span></div>
             <div class="mef-card-actions" onclick="event.stopPropagation()">
               <button class="mef-share-btn" onclick="shareEvent(this,'Groupbuy Event test')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
@@ -2938,11 +2964,11 @@ select:focus { border-color: #009A97; }
             </div>
           </div>
 
-          <div class="event-card" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-09-19" data-close="2026-09-12" data-collect="2026-09-19" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
+          <div class="event-card" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-09-19" data-close="2026-09-12" data-collect="2026-09-19" onclick="showDetail('New event','Fresh Korean strawberries flown in weekly: sweet, juicy and great for gifting. Each box is about 330g, and we order by the carton, so the more of us join, the better the price for everyone.\n\nPlease check your box at collection. Any bruised or spoilt fruit must be reported with a photo on the same day for a replacement. No refunds after collection.','Minh Cong','M6 group','15','0','false')">
             <div class="card-header">
               <div class="card-host">
                 <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
-                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">New event</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">M6 group</div><div class="host-sub" style="color:#888780;">Created by Minh Cong</div></div>
               </div>
               <div class="card-badges">
                 <span class="closing-text">Closing in 3 days</span>
@@ -2950,7 +2976,9 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
             <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-            <div class="card-body"><div class="card-desc">test</div></div>
+            <div class="card-body"><div class="card-title">New event</div><div class="card-desc">Fresh Korean strawberries flown in weekly: sweet, juicy and great for gifting. Each box is about 330g, and we order by the carton, so the more of us join, the better the price for everyone.
+
+Please check your box at collection. Any bruised or spoilt fruit must be reported with a photo on the same day for a replacement. No refunds after collection.</div></div>
             <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">05-09-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">12-09-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">19-09-2026</span></div>
             <div class="mef-card-actions" onclick="event.stopPropagation()">
               <button class="mef-share-btn" onclick="shareEvent(this,'New event')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
@@ -2961,11 +2989,11 @@ select:focus { border-color: #009A97; }
             </div>
           </div>
 
-          <div class="event-card" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-09-27" data-close="2026-09-20" data-collect="2026-09-27" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
+          <div class="event-card" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-09-27" data-close="2026-09-20" data-collect="2026-09-27" onclick="showDetail('This is a test event for Purchase with no login','Open to friends and neighbours, no co·bee account needed. Just fill in your name and phone number at checkout and we\'ll send your order details via WhatsApp.\n\nThis round features Japanese snacks and drinks restocked from our supplier. Seasonal flavours are limited, so it\'s first come, first served. Payment is by PayNow only; please upload your screenshot after paying so we can confirm your order.','Minh Cong','M6 group','14','6','false')">
             <div class="card-header">
               <div class="card-host">
                 <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
-                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">This is a test event for Purchase with no login</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">M6 group</div><div class="host-sub" style="color:#888780;">Created by Minh Cong</div></div>
               </div>
               <div class="card-badges">
                 <span class="closing-text">Closing in 11 days</span>
@@ -2973,7 +3001,9 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
             <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-            <div class="card-body"><div class="card-desc">test</div></div>
+            <div class="card-body"><div class="card-title">This is a test event for Purchase with no login</div><div class="card-desc">Open to friends and neighbours, no co·bee account needed. Just fill in your name and phone number at checkout and we'll send your order details via WhatsApp.
+
+This round features Japanese snacks and drinks restocked from our supplier. Seasonal flavours are limited, so it's first come, first served. Payment is by PayNow only; please upload your screenshot after paying so we can confirm your order.</div></div>
             <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">01-09-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">20-09-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">27-09-2026</span></div>
             <div class="mef-card-actions" onclick="event.stopPropagation()">
               <button class="mef-share-btn" onclick="shareEvent(this,'This is a test event for Purchase with no login')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
@@ -2984,11 +3014,11 @@ select:focus { border-color: #009A97; }
             </div>
           </div>
 
-          <div class="event-card" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" data-close="2026-09-02" data-collect="2026-09-09" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false')">
+          <div class="event-card" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" data-close="2026-09-02" data-collect="2026-09-09" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers. Some items carry their own tiered discount (buy 3 or more and save), and the whole order also gets a spend-based discount on top.\n\nTry adding different quantities to watch the Order Total update. Discounts are worked out automatically and shown on your order summary before you pay.','Minh Cong','M6 group','20','0','false')">
             <div class="card-header">
               <div class="card-host">
                 <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
-                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Product &amp; Event Discount Demo</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">M6 group</div><div class="host-sub" style="color:#888780;">Created by Minh Cong</div></div>
               </div>
               <div class="card-badges">
                 <span class="closing-text" style="color:#B4B2A9;">Closed</span>
@@ -2996,7 +3026,9 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
             <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
-            <div class="card-body"><div class="card-desc">See how Product Discount and the event-wide discount look to buyers.</div></div>
+            <div class="card-body"><div class="card-title">Product &amp; Event Discount Demo</div><div class="card-desc">See how Product Discount and the event-wide discount look to buyers. Some items carry their own tiered discount (buy 3 or more and save), and the whole order also gets a spend-based discount on top.
+
+Try adding different quantities to watch the Order Total update. Discounts are worked out automatically and shown on your order summary before you pay.</div></div>
             <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">20-08-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">02-09-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">09-09-2026</span></div>
             <div class="mef-card-actions" onclick="event.stopPropagation()">
               <button class="mef-share-btn" onclick="shareEvent(this,'Product &amp; Event Discount Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
@@ -3011,7 +3043,7 @@ select:focus { border-color: #009A97; }
             <div class="card-header">
               <div class="card-host">
                 <div class="avatar lg" style="background:#009A97;font-size:12px;">M6</div>
-                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Sub-Item Configurations Demo</div><div class="host-sub" style="color:#888780;">Created by M6 group</div></div>
+                <div><div class="host-name" style="font-weight:600;color:#1a1a18;">M6 group</div><div class="host-sub" style="color:#888780;">Created by Minh Cong</div></div>
               </div>
               <div class="card-badges">
                 <span class="closing-text">Collecting in 1 day</span>
@@ -3019,7 +3051,7 @@ select:focus { border-color: #009A97; }
               </div>
             </div>
             <div class="card-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-            <div class="card-body"><div class="card-desc">Three products, three sub-item setups to compare.</div></div>
+            <div class="card-body"><div class="card-title">Sub-Item Configurations Demo</div><div class="card-desc">Three products, three sub-item setups to compare.</div></div>
             <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">10-08-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">20-08-2026 <span style="color:#B4B2A9;">(Closed)</span></span><span class="card-info-lbl">Collection:</span><span class="card-info-val">10-09-2026 <span style="color:#E8971A;">(in 1 day)</span></span></div>
             <div class="mef-card-actions" onclick="event.stopPropagation()">
               <button class="mef-share-btn" onclick="shareEvent(this,'Sub-Item Configurations Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
@@ -3032,7 +3064,7 @@ select:focus { border-color: #009A97; }
         <div class="mef-grid" id="gd-grid" style="padding:0;max-width:none;margin:0;">
 
 
-          <div class="mef-tile" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-09-23" data-close="2026-09-16" data-collect="2026-09-23" onclick="showDetail('Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true')">
+          <div class="mef-tile" data-closing="15" data-buy="0" data-order="0" data-eventdate="2026-09-23" data-close="2026-09-16" data-collect="2026-09-23" onclick="showDetail('Groupbuy Event test','Our monthly pantry & household run is open! This round we\'re bringing in roasted chestnuts straight from our supplier in Johor, plus a few everyday essentials so you can top up in one go.\n\nChestnuts come by the case (6 packs) or as single packs through split case. Once a case fills up, everyone in the split gets theirs. Spend $5 or more and enjoy 10% off your whole order.\n\nCollection is at Simei Street 1 on collection day, 10AM to 5PM. Please bring your own bag and have your order number ready. Unpaid orders will be released 24 hours after the event closes.','Minh Cong','M6 group','15','0','true')">
             <div class="mef-tile-hd">
               <span class="mef-tile-avatar2">M6</span>
               <div class="mef-tile-hdtext"><div class="mef-tile-name">Groupbuy Event test</div></div>
@@ -3041,7 +3073,11 @@ select:focus { border-color: #009A97; }
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
               <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
             </div>
-            <div class="mef-tile-desc">This is how it looks like in an actual group buy</div>
+            <div class="mef-tile-desc">Our monthly pantry &amp; household run is open! This round we're bringing in roasted chestnuts straight from our supplier in Johor, plus a few everyday essentials so you can top up in one go.
+
+Chestnuts come by the case (6 packs) or as single packs through split case. Once a case fills up, everyone in the split gets theirs. Spend $5 or more and enjoy 10% off your whole order.
+
+Collection is at Simei Street 1 on collection day, 10AM to 5PM. Please bring your own bag and have your order number ready. Unpaid orders will be released 24 hours after the event closes.</div>
             <div class="mef-tile-dates">
               <div class="mef-tile-daterow">
                 <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">02 SEP</span></span></div>
@@ -3058,7 +3094,7 @@ select:focus { border-color: #009A97; }
             </div>
           </div>
 
-          <div class="mef-tile" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-09-19" data-close="2026-09-12" data-collect="2026-09-19" onclick="showDetail('New event','test','Minh Cong','M6 group','15','0','false')">
+          <div class="mef-tile" data-closing="15" data-buy="0" data-order="1" data-eventdate="2026-09-19" data-close="2026-09-12" data-collect="2026-09-19" onclick="showDetail('New event','Fresh Korean strawberries flown in weekly: sweet, juicy and great for gifting. Each box is about 330g, and we order by the carton, so the more of us join, the better the price for everyone.\n\nPlease check your box at collection. Any bruised or spoilt fruit must be reported with a photo on the same day for a replacement. No refunds after collection.','Minh Cong','M6 group','15','0','false')">
             <div class="mef-tile-hd">
               <span class="mef-tile-avatar2">M6</span>
               <div class="mef-tile-hdtext"><div class="mef-tile-name">New event</div></div>
@@ -3067,7 +3103,9 @@ select:focus { border-color: #009A97; }
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
               <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
             </div>
-            <div class="mef-tile-desc">test</div>
+            <div class="mef-tile-desc">Fresh Korean strawberries flown in weekly: sweet, juicy and great for gifting. Each box is about 330g, and we order by the carton, so the more of us join, the better the price for everyone.
+
+Please check your box at collection. Any bruised or spoilt fruit must be reported with a photo on the same day for a replacement. No refunds after collection.</div>
             <div class="mef-tile-dates">
               <div class="mef-tile-daterow">
                 <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">05 SEP</span></span></div>
@@ -3084,7 +3122,7 @@ select:focus { border-color: #009A97; }
             </div>
           </div>
 
-          <div class="mef-tile" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-09-27" data-close="2026-09-20" data-collect="2026-09-27" onclick="showDetail('This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false')">
+          <div class="mef-tile" data-closing="14" data-buy="6" data-order="2" data-eventdate="2026-09-27" data-close="2026-09-20" data-collect="2026-09-27" onclick="showDetail('This is a test event for Purchase with no login','Open to friends and neighbours, no co·bee account needed. Just fill in your name and phone number at checkout and we\'ll send your order details via WhatsApp.\n\nThis round features Japanese snacks and drinks restocked from our supplier. Seasonal flavours are limited, so it\'s first come, first served. Payment is by PayNow only; please upload your screenshot after paying so we can confirm your order.','Minh Cong','M6 group','14','6','false')">
             <div class="mef-tile-hd">
               <span class="mef-tile-avatar2">M6</span>
               <div class="mef-tile-hdtext"><div class="mef-tile-name">This is a test event for Purchase with no login</div></div>
@@ -3093,7 +3131,9 @@ select:focus { border-color: #009A97; }
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
               <span class="mef-tile-buy" style="background:#009A97;">6 BUY</span>
             </div>
-            <div class="mef-tile-desc">test</div>
+            <div class="mef-tile-desc">Open to friends and neighbours, no co·bee account needed. Just fill in your name and phone number at checkout and we'll send your order details via WhatsApp.
+
+This round features Japanese snacks and drinks restocked from our supplier. Seasonal flavours are limited, so it's first come, first served. Payment is by PayNow only; please upload your screenshot after paying so we can confirm your order.</div>
             <div class="mef-tile-dates">
               <div class="mef-tile-daterow">
                 <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">01 SEP</span></span></div>
@@ -3110,7 +3150,7 @@ select:focus { border-color: #009A97; }
             </div>
           </div>
 
-          <div class="mef-tile" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" data-close="2026-09-02" data-collect="2026-09-09" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false')">
+          <div class="mef-tile" data-closing="20" data-buy="0" data-order="3" data-eventdate="2026-05-28" data-close="2026-09-02" data-collect="2026-09-09" onclick="showDetail('Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers. Some items carry their own tiered discount (buy 3 or more and save), and the whole order also gets a spend-based discount on top.\n\nTry adding different quantities to watch the Order Total update. Discounts are worked out automatically and shown on your order summary before you pay.','Minh Cong','M6 group','20','0','false')">
             <div class="mef-tile-hd">
               <span class="mef-tile-avatar2">M6</span>
               <div class="mef-tile-hdtext"><div class="mef-tile-name">Product &amp; Event Discount Demo</div></div>
@@ -3119,7 +3159,9 @@ select:focus { border-color: #009A97; }
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
               <span class="mef-tile-buy" style="background:#D3D1C7;color:#5F5E5A;">0 BUY</span>
             </div>
-            <div class="mef-tile-desc">See how Product Discount and the event-wide discount look to buyers.</div>
+            <div class="mef-tile-desc">See how Product Discount and the event-wide discount look to buyers. Some items carry their own tiered discount (buy 3 or more and save), and the whole order also gets a spend-based discount on top.
+
+Try adding different quantities to watch the Order Total update. Discounts are worked out automatically and shown on your order summary before you pay.</div>
             <div class="mef-tile-dates">
               <div class="mef-tile-daterow">
                 <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">20 AUG</span></span></div>
@@ -4531,10 +4573,10 @@ function initStep2() {
    createElement + data- attributes + one delegated listener (no inline
    onclick strings). */
 var PRODUCT_EVENTS = {
-  'Groupbuy Event test': ['Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true'],
-  'Product & Event Discount Demo': ['Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers.','Minh Cong','M6 group','20','0','false'],
-  'This is a test event for Purchase with no login': ['This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false'],
-  'New event': ['New event','test','Minh Cong','M6 group','15','0','false']
+  'Groupbuy Event test': ['Groupbuy Event test','Our monthly pantry & household run is open! This round we\'re bringing in roasted chestnuts straight from our supplier in Johor, plus a few everyday essentials so you can top up in one go.\n\nChestnuts come by the case (6 packs) or as single packs through split case. Once a case fills up, everyone in the split gets theirs. Spend $5 or more and enjoy 10% off your whole order.\n\nCollection is at Simei Street 1 on collection day, 10AM to 5PM. Please bring your own bag and have your order number ready. Unpaid orders will be released 24 hours after the event closes.','Minh Cong','M6 group','15','0','true'],
+  'Product & Event Discount Demo': ['Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers. Some items carry their own tiered discount (buy 3 or more and save), and the whole order also gets a spend-based discount on top.\n\nTry adding different quantities to watch the Order Total update. Discounts are worked out automatically and shown on your order summary before you pay.','Minh Cong','M6 group','20','0','false'],
+  'This is a test event for Purchase with no login': ['This is a test event for Purchase with no login','Open to friends and neighbours, no co·bee account needed. Just fill in your name and phone number at checkout and we\'ll send your order details via WhatsApp.\n\nThis round features Japanese snacks and drinks restocked from our supplier. Seasonal flavours are limited, so it\'s first come, first served. Payment is by PayNow only; please upload your screenshot after paying so we can confirm your order.','Minh Cong','M6 group','14','6','false'],
+  'New event': ['New event','Fresh Korean strawberries flown in weekly: sweet, juicy and great for gifting. Each box is about 330g, and we order by the carton, so the more of us join, the better the price for everyone.\n\nPlease check your box at collection. Any bruised or spoilt fruit must be reported with a photo on the same day for a replacement. No refunds after collection.','Minh Cong','M6 group','15','0','false']
 };
 var PRODUCTS = [
   { name:'Chestnut (case)',       price:38.00, event:'Groupbuy Event test',                             sold:42, stock:3,  days:15 },
@@ -4610,7 +4652,9 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   document.getElementById('ev2-title').textContent = title;
   CURRENT_EVENT = { host: host, group: group, orders: parseInt(ordersPlaced) || 0 };
   var ev1CreatedBy = document.getElementById('ev1-createdby');
-  if (ev1CreatedBy) ev1CreatedBy.textContent = 'Created by ' + group;
+  var ev1Group = document.getElementById('ev1-group');
+  if (ev1Group) ev1Group.textContent = group;
+  if (ev1CreatedBy) ev1CreatedBy.textContent = 'Created by ' + host;
   var ev1EditBtn = document.getElementById('ev1-edit-btn');
   var ev1OrdersBtn = document.getElementById('ev1-orders-btn');
   if (ev1EditBtn) ev1EditBtn.setAttribute('data-host', host);
@@ -5228,7 +5272,9 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   document.getElementById('ev2-title').textContent = title;
   CURRENT_EVENT = { host: host, group: group, orders: parseInt(ordersPlaced) || 0 };
   var ev1CreatedBy = document.getElementById('ev1-createdby');
-  if (ev1CreatedBy) ev1CreatedBy.textContent = 'Created by ' + group;
+  var ev1Group = document.getElementById('ev1-group');
+  if (ev1Group) ev1Group.textContent = group;
+  if (ev1CreatedBy) ev1CreatedBy.textContent = 'Created by ' + host;
   var ev1EditBtn = document.getElementById('ev1-edit-btn');
   var ev1OrdersBtn = document.getElementById('ev1-orders-btn');
   if (ev1EditBtn) ev1EditBtn.setAttribute('data-host', host);
