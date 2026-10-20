@@ -1297,9 +1297,10 @@ select:focus { border-color: #009A97; }
 
 
 /* ── Products tab (all products from open events, used by the branded group portal) ── */
-.prod-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
-.prod-sort{height:30px;border:0.5px solid #D3D1C7;border-radius:8px;padding:0 8px;font-size:12px;background:white;color:#1a1a18;font-family:inherit;}
-.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;padding:4px 14px 16px;max-width:600px;margin:0 auto;}
+.prod-grid.list{grid-template-columns:1fr;}
+.prod-grid.list .prod-card{flex-direction:row;}
+.prod-grid.list .prod-img{width:84px;flex-shrink:0;aspect-ratio:auto;min-height:84px;}
 .prod-card{background:white;border:0.5px solid #E0DFD8;border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;text-align:left;font-family:inherit;padding:0;}
 .prod-card:hover{border-color:#80CCCB;}
 .prod-card:focus-visible{outline:2px solid #009A97;outline-offset:2px;}
@@ -2122,12 +2123,30 @@ select:focus { border-color: #009A97; }
   <!-- ALL EVENTS VIEW -->
   <!-- ═══ PRODUCTS — items the host has switched on in Products / Items ═══ -->
   <div id="view-products" style="display:none;">
-    <div class="prod-toolbar">
+    <div class="feed-header">
       <span class="feed-header-count" id="prod-count">0 PRODUCTS</span>
-      <select class="prod-sort" id="prod-sort" aria-label="Sort products">
-        <option value="popular">Most popular</option>
-        <option value="price">Price: low to high</option>
-      </select>
+      <div class="mef-view-toggle">
+        <button id="prod-btn-list" data-prod-view="list" title="List view">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect y="1" width="14" height="2" rx="1"/><rect y="6" width="14" height="2" rx="1"/><rect y="11" width="14" height="2" rx="1"/></svg>
+        </button>
+        <button class="active" id="prod-btn-tile" data-prod-view="tile" title="Tile view">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="feed-header" style="padding-top:0;justify-content:flex-end;">
+      <div class="mef-sort-wrap">
+        <button class="mef-sort-btn" id="prod-sort-btn" data-prod-sort-toggle>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          <span id="prod-sort-label">Sort</span>
+        </button>
+        <div class="mef-sort-menu" id="prod-sort-menu">
+          <div class="mef-sort-item" data-psort="popular">Most Popular</div>
+          <div class="mef-sort-item" data-psort="price">Price: Low to High</div>
+          <div class="mef-sort-item" data-psort="price-desc">Price: High to Low</div>
+          <div class="mef-sort-item" data-psort="closing">Closing Soon</div>
+        </div>
+      </div>
     </div>
     <div class="prod-grid" id="prod-grid"></div>
   </div>
@@ -4703,14 +4722,23 @@ function loadOwnProducts() {
   } catch (e) {}
   return PT_SEED.slice();
 }
+var PROD_SORT = 'popular';
+var PROD_SORT_LABELS = { popular: 'Most Popular', price: 'Price: Low to High', 'price-desc': 'Price: High to Low', closing: 'Closing Soon' };
+function setProdView(mode) {
+  var grid = document.getElementById('prod-grid');
+  if (grid) grid.classList.toggle('list', mode === 'list');
+  document.getElementById('prod-btn-list').classList.toggle('active', mode === 'list');
+  document.getElementById('prod-btn-tile').classList.toggle('active', mode !== 'list');
+}
 function renderProducts() {
   var grid = document.getElementById('prod-grid');
   if (!grid) return;
-  var sortSel = document.getElementById('prod-sort');
-  var sort = sortSel ? sortSel.value : 'popular';
+  var sort = PROD_SORT;
   var list = loadProductsTab();
-  if (sort === 'popular') list.sort(function(a,b){ return (b.orders||0) - (a.orders||0); });
-  if (sort === 'price')   list.sort(function(a,b){ return (a.price||0) - (b.price||0); });
+  if (sort === 'popular')    list.sort(function(a,b){ return (b.orders||0) - (a.orders||0); });
+  if (sort === 'price')      list.sort(function(a,b){ return (a.price||0) - (b.price||0); });
+  if (sort === 'price-desc') list.sort(function(a,b){ return (b.price||0) - (a.price||0); });
+  if (sort === 'closing')    list.sort(function(a,b){ return ((a.eventStatus==='Closed')-(b.eventStatus==='Closed')) || ((PRODUCT_EVENTS[a.event]||[])[4]||99) - ((PRODUCT_EVENTS[b.event]||[])[4]||99); });
   grid.textContent = '';
   if (!list.length) {
     var empty = document.createElement('div');
@@ -4755,8 +4783,20 @@ document.addEventListener('click', function(e) {
   var args = PRODUCT_EVENTS[ev] || [ev, '', 'Minh Cong', 'M6 group', '0', '0', 'false'];
   showDetail.apply(null, args);
 });
-document.addEventListener('change', function(e) {
-  if (e.target && e.target.id === 'prod-sort') renderProducts();
+// Products header: same list/tile toggle and Sort menu as the Events tab. Tile is the default.
+document.addEventListener('click', function(e) {
+  if (!e.target.closest) return;
+  var v = e.target.closest('[data-prod-view]');
+  if (v) { setProdView(v.getAttribute('data-prod-view')); return; }
+  if (e.target.closest('[data-prod-sort-toggle]')) { toggleSortMenu('prod-sort-menu'); return; }
+  var it = e.target.closest('#prod-sort-menu [data-psort]');
+  if (it) {
+    PROD_SORT = it.getAttribute('data-psort');
+    document.getElementById('prod-sort-label').textContent = PROD_SORT_LABELS[PROD_SORT] || 'Sort';
+    document.querySelectorAll('#prod-sort-menu .mef-sort-item').forEach(function (x) { x.classList.toggle('active', x === it); });
+    document.getElementById('prod-sort-menu').classList.remove('open');
+    renderProducts();
+  }
 });
 // Refresh when the portal switches to this tab, or when Products / Items
 // changes a switch in another tab of the same browser.
