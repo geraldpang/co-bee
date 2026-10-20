@@ -1313,6 +1313,7 @@ select:focus { border-color: #009A97; }
 .prod-card.closed{opacity:.6;}
 .prod-empty{grid-column:1/-1;background:white;border:1px dashed #D3D1C7;border-radius:12px;padding:28px 16px;text-align:center;font-size:12px;color:#888780;}
 .prod-empty-title{font-size:14px;font-weight:600;color:#1a1a18;margin-bottom:4px;}
+.prod-group{font-size:10.5px;font-weight:700;color:#7B2D8B;text-transform:uppercase;letter-spacing:.03em;}
 .prod-add{margin-top:6px;align-self:flex-start;font-size:11px;font-weight:700;color:#009A97;border:1px solid #009A97;border-radius:6px;padding:2px 8px;}
 </style>
 </head>
@@ -2275,6 +2276,36 @@ Try adding different quantities to watch the Order Total update. Discounts are w
           <button class="mef-share-btn" onclick="shareEvent(this,'Sub-Item Configurations Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
         </div>
       </div>
+          <!-- Another group's event: visible on the co·bee shared platform only -->
+      <div class="event-card" data-group="tampines-mums" data-group-name="Tampines Mums" data-host="Grace Lim" data-title="Durian Season: Mao Shan Wang" data-desc="Fresh Mao Shan Wang and D24 from our Pahang farm partner, opened on collection day. Sold by the kilo; we pack in insulated boxes." data-closing="3" data-buy="12" data-order="9" data-eventdate="2026-05-20">
+        <div class="card-header">
+          <div class="card-host">
+            <div class="avatar lg" style="background:#E8971A;font-size:12px;">TM</div>
+            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Tampines Mums</div><div class="host-sub" style="color:#888780;">Created by Grace Lim</div></div>
+          </div>
+          <div class="card-badges">
+            <span class="closing-text">Closing in 3 days</span>
+            <span class="buy-badge" style="background:#E8971A;">12 BUY</span>
+          </div>
+        </div>
+        <div class="card-body"><div class="card-title">Durian Season: Mao Shan Wang</div><div class="card-desc">Fresh Mao Shan Wang and D24 from our Pahang farm partner, opened on collection day. Sold by the kilo; we pack in insulated boxes.</div></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">15-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">18-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">20-05-2026 (6PM - 9PM)</span></div>
+      </div>
+      <!-- Another group's event: visible on the co·bee shared platform only -->
+      <div class="event-card" data-group="punggol-foodies" data-group-name="Punggol Foodies" data-host="Marcus Tan" data-title="Weekend Sourdough Bakes" data-desc="Country loaves and cinnamon rolls baked Saturday morning by a home baker in Punggol. Limited to 40 loaves each weekend." data-closing="6" data-buy="4" data-order="9" data-eventdate="2026-05-20">
+        <div class="card-header">
+          <div class="card-host">
+            <div class="avatar lg" style="background:#3498DB;font-size:12px;">PF</div>
+            <div><div class="host-name" style="font-weight:600;color:#1a1a18;">Punggol Foodies</div><div class="host-sub" style="color:#888780;">Created by Marcus Tan</div></div>
+          </div>
+          <div class="card-badges">
+            <span class="closing-text">Closing in 6 days</span>
+            <span class="buy-badge" style="background:#3498DB;">4 BUY</span>
+          </div>
+        </div>
+        <div class="card-body"><div class="card-title">Weekend Sourdough Bakes</div><div class="card-desc">Country loaves and cinnamon rolls baked Saturday morning by a home baker in Punggol. Limited to 40 loaves each weekend.</div></div>
+        <div class="card-info-grid"><span class="card-info-lbl">Event open:</span><span class="card-info-val">12-05-2026</span><span class="card-info-lbl">Event close:</span><span class="card-info-val">21-05-2026</span><span class="card-info-lbl">Collection:</span><span class="card-info-val">23-05-2026 (9AM - 12PM)</span></div>
+      </div>
     </div>
 
     <div class="mef-grid" id="mef-tile-grid" style="display:none;">
@@ -2407,6 +2438,42 @@ Try adding different quantities to watch the Order Total update. Discounts are w
         </div>
         <div class="mef-card-actions" onclick="event.stopPropagation()">
           <button class="mef-share-btn" onclick="shareEvent(this,'Sub-Item Configurations Demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="10.51" x2="15.42" y2="6.49"/><line x1="8.59" y1="13.49" x2="15.42" y2="17.51"/></svg></button>
+        </div>
+      </div>
+          <!-- Another group's event: visible on the co·bee shared platform only -->
+      <div class="mef-tile" data-group="tampines-mums" data-group-name="Tampines Mums" data-host="Grace Lim" data-title="Durian Season: Mao Shan Wang" data-desc="Fresh Mao Shan Wang and D24 from our Pahang farm partner, opened on collection day. Sold by the kilo; we pack in insulated boxes." data-closing="3" data-buy="12" data-order="9" data-eventdate="2026-05-20" data-close="2026-05-18" data-collect="2026-05-20">
+        <div class="mef-tile-hd">
+          <span class="mef-tile-avatar2" style="background:#E8971A;">TM</span>
+          <div class="mef-tile-hdtext"><div class="mef-tile-name">Durian Season: Mao Shan Wang</div></div>
+        </div>
+        <div class="mef-tile-img">
+          <span class="mef-tile-buy" style="background:#E8971A;">12 BUY</span>
+        </div>
+        <div class="mef-tile-desc">Fresh Mao Shan Wang and D24 from our Pahang farm partner, opened on collection day. Sold by the kilo; we pack in insulated boxes.</div>
+        <div class="mef-tile-dates">
+          <div class="mef-tile-daterow">
+            <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">15 MAY</span></span></div>
+            <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">18 MAY</span></span></div>
+            <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">20 MAY</span></span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Another group's event: visible on the co·bee shared platform only -->
+      <div class="mef-tile" data-group="punggol-foodies" data-group-name="Punggol Foodies" data-host="Marcus Tan" data-title="Weekend Sourdough Bakes" data-desc="Country loaves and cinnamon rolls baked Saturday morning by a home baker in Punggol. Limited to 40 loaves each weekend." data-closing="6" data-buy="4" data-order="9" data-eventdate="2026-05-20" data-close="2026-05-21" data-collect="2026-05-23">
+        <div class="mef-tile-hd">
+          <span class="mef-tile-avatar2" style="background:#3498DB;">PF</span>
+          <div class="mef-tile-hdtext"><div class="mef-tile-name">Weekend Sourdough Bakes</div></div>
+        </div>
+        <div class="mef-tile-img">
+          <span class="mef-tile-buy" style="background:#3498DB;">4 BUY</span>
+        </div>
+        <div class="mef-tile-desc">Country loaves and cinnamon rolls baked Saturday morning by a home baker in Punggol. Limited to 40 loaves each weekend.</div>
+        <div class="mef-tile-dates">
+          <div class="mef-tile-daterow">
+            <div><span class="mef-tile-lbl">Event open</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-dateval">12 MAY</span></span></div>
+            <div><span class="mef-tile-lbl">Event close</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-close-countdown"></span><span class="tile-close-val mef-tile-dateval">21 MAY</span></span></div>
+            <div><span class="mef-tile-lbl">Collection</span><span class="mef-tile-dateval-wrap"><span class="mef-tile-countdown tile-collect-countdown"></span><span class="tile-collect-val mef-tile-dateval">23 MAY</span></span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -4569,6 +4636,42 @@ function initStep2() {
 
 
 // Listen for tab switch messages from parent shell
+
+/* ── Group scope (co·bee shared platform vs a premium group's own page) ──
+   member.html is shown inside cobee.html (shared platform: every group)
+   or inside group-portal.html (one premium group: that group only).
+   Event cards carry data-group; M6 Group's original cards are tagged
+   m6group here. Inside a group's page, other groups' events and products
+   are hidden. */
+var GROUP_SCOPE = (function () {
+  try {
+    // group-portal.html (a premium group's own page) is the only parent with #tab-products.
+    if (window.parent !== window && window.parent.document.getElementById('tab-products')) return 'm6group';
+  } catch (e) {}
+  return null; // co·bee shared platform: all groups
+})();
+function applyGroupScope() {
+  var feed = document.querySelectorAll('#view-all .event-card, #mef-tile-grid .mef-tile');
+  feed.forEach(function (c) {
+    if (!c.hasAttribute('data-group')) c.setAttribute('data-group', 'm6group');
+    if (GROUP_SCOPE && c.getAttribute('data-group') !== GROUP_SCOPE) c.style.display = 'none';
+  });
+  var shown = Array.prototype.filter.call(document.querySelectorAll('#view-all .event-card'), function (c) { return c.style.display !== 'none'; }).length;
+  var groups = {};
+  Array.prototype.forEach.call(document.querySelectorAll('#view-all .event-card'), function (c) { if (c.style.display !== 'none') groups[c.getAttribute('data-group')] = 1; });
+  var n = Object.keys(groups).length;
+  var cnt = document.querySelector('#view-all .feed-header-count');
+  if (cnt) cnt.textContent = shown + ' EVENTS' + (!GROUP_SCOPE && n > 1 ? ' · ' + n + ' GROUPS' : '');
+}
+// Other groups' cards open their event without inline onclick strings.
+document.addEventListener('click', function (e) {
+  var c = e.target.closest && e.target.closest('#view-all .event-card[data-title], #mef-tile-grid .mef-tile[data-title]');
+  if (!c) return;
+  showDetail(c.getAttribute('data-title'), c.getAttribute('data-desc') || '', c.getAttribute('data-host') || '',
+             c.getAttribute('data-group-name') || '', c.getAttribute('data-closing') || '0', '0', 'false');
+});
+applyGroupScope();
+
 /* ── Products tab ──────────────────────────────────────────────────────
    Shows only items the host has switched on in Products / Items (the
    "Products tab" switch). products-items.html saves those items to
@@ -4589,7 +4692,20 @@ var PRODUCT_EVENTS = {
   'new event':           ['New event','test','Minh Cong','M6 group','15','0','false'],
   'order without login': ['This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false']
 };
+// Other groups' products: shown on the co·bee shared platform only.
+var OTHER_GROUP_PRODUCTS = [
+  { key:'mao|tm', name:'Mao Shan Wang (1kg)',      desc:'Opened on collection day',   group:'tampines-mums',   groupName:'Tampines Mums',   event:'tm-durian', eventLabel:'Durian Season: Mao Shan Wang', eventStatus:'Open', price:38.00, stock:6,  orders:12 },
+  { key:'d24|tm', name:'D24 Durian (1kg)',         desc:'Creamy, slightly bitter',    group:'tampines-mums',   groupName:'Tampines Mums',   event:'tm-durian', eventLabel:'Durian Season: Mao Shan Wang', eventStatus:'Open', price:22.00, stock:20, orders:7 },
+  { key:'loaf|pf', name:'Country sourdough loaf',  desc:'Baked Saturday morning',     group:'punggol-foodies', groupName:'Punggol Foodies', event:'pf-sourdough', eventLabel:'Weekend Sourdough Bakes', eventStatus:'Open', price:12.00, stock:40, orders:4 },
+  { key:'roll|pf', name:'Cinnamon rolls (box of 4)', desc:'Brown butter glaze',       group:'punggol-foodies', groupName:'Punggol Foodies', event:'pf-sourdough', eventLabel:'Weekend Sourdough Bakes', eventStatus:'Open', price:14.00, stock:3,  orders:9 }
+];
+PRODUCT_EVENTS['tm-durian']    = ['Durian Season: Mao Shan Wang','Fresh Mao Shan Wang and D24 from our Pahang farm partner, opened on collection day.','Grace Lim','Tampines Mums','3','0','false'];
+PRODUCT_EVENTS['pf-sourdough'] = ['Weekend Sourdough Bakes','Country loaves and cinnamon rolls baked Saturday morning by a home baker in Punggol.','Marcus Tan','Punggol Foodies','6','0','false'];
 function loadProductsTab() {
+  var own = loadOwnProducts().map(function (p) { var q = Object.assign({}, p); q.group = q.group || 'm6group'; q.groupName = q.groupName || 'M6 Group'; return q; });
+  return GROUP_SCOPE ? own.filter(function (p) { return p.group === GROUP_SCOPE; }) : own.concat(OTHER_GROUP_PRODUCTS);
+}
+function loadOwnProducts() {
   try {
     var raw = localStorage.getItem(PT_KEY);
     if (raw) { var list = JSON.parse(raw); if (Array.isArray(list)) return list; }
@@ -4623,6 +4739,7 @@ function renderProducts() {
     var nm = document.createElement('div'); nm.className = 'prod-name'; nm.textContent = p.name || '';
     body.appendChild(nm);
     if (p.desc) { var ds = document.createElement('div'); ds.className = 'prod-meta'; ds.textContent = p.desc; body.appendChild(ds); }
+    if (!GROUP_SCOPE && p.groupName) { var gn = document.createElement('div'); gn.className = 'prod-group'; gn.textContent = p.groupName; body.appendChild(gn); }
     var pr = document.createElement('div'); pr.className = 'prod-price'; pr.textContent = 'S$' + (p.price || 0).toFixed(2);
     var ev = document.createElement('div'); ev.className = 'prod-meta'; ev.textContent = p.eventLabel || p.event || '';
     var sd = document.createElement('div'); sd.className = 'prod-meta'; sd.textContent = (p.orders || 0) + ' ordered';
