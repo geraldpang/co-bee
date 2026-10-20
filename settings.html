@@ -270,8 +270,6 @@ var TABS=[
   {title:'Ordering',hint:'What buyers can do',rows:[
    {k:'guest',t:'Order without login',d:'Buyers can order with just a name and phone number.',type:'toggle',v:true},
    {k:'onBehalf',t:'Purchase on behalf',d:'A member can place an order for a friend or family member.',type:'toggle',v:true},
-   {k:'editCutoff',t:'Buyers can edit or cancel orders',d:'After this point only you can change an order.',type:'seg',opts:[['close','Until closing'],['24h','Until 24h before'],['never','Never']],v:'close'},
-   {k:'notesHost',t:'Notes to host on orders',d:'A free-text box at checkout.',type:'toggle',v:true},
    {k:'splitCase',t:'Allow split case',d:'Buyers can order individual pieces of a case. Payment then has to wait until the event closes.',type:'toggle',v:true},
    {k:'stock',t:'Remaining stock shown as',d:'',type:'seg',opts:[['exact','Exact count'],['low','"Low stock" only'],['hide','Hidden']],v:'low'}
   ]},
@@ -285,26 +283,18 @@ var TABS=[
    {k:'notesText',t:'Default notes',d:'',type:'area',v:'Collection at Simei St 1 void deck, 7–9pm. Uncollected items after 3 days are forfeited.',parent:'notesOn'}
   ]}
  ]},
- {id:'payment',label:'Payment',intro:'Payment rules for every event. Lock timing and Pay Together so every event in the group pays the same way.',sections:[
+ {id:'payment',label:'Payment',intro:'When buyers pay, for every new event in the group.',sections:[
   {title:'When buyers pay',rows:[
    {k:'timing',t:'Default payment timing',d:'',type:'seg',opts:[['order','At order'],['after','After closing']],v:'order'},
    {k:'payTogether',t:'Offer Pay Together',d:'Members settle several events in one payment.',type:'toggle',v:true},
    {k:'ptStart',t:'New events start with Pay Together',d:'Hosts can still change it per event.',type:'seg',opts:[['on','On'],['off','Off']],v:'on',parent:'payTogether'},
    {k:'reminders',t:'Automatic payment reminders',d:'Email and in-app reminder to unpaid buyers.',type:'toggle',v:true}
-  ]},
-  {title:'How buyers pay',rows:[
-   {k:'methods',t:'Payment methods offered',d:'Buyers choose at checkout.',type:'checks',opts:[['paynow','PayNow'],['bank','Bank transfer'],['cash','Cash on pickup']],v:['paynow']},
-   {k:'paynowId',t:'PayNow UEN or phone number',d:'Used to generate the PayNow QR code.',type:'text',v:'8306 2355',parent:'m:paynow'},
-   {k:'bankName',t:'Bank name',d:'',type:'text',v:'',ph:'e.g. DBS, OCBC, UOB',parent:'m:bank'},
-   {k:'bankAcct',t:'Account number',d:'',type:'text',v:'',ph:'1234567890',parent:'m:bank'},
-   {k:'bankHolder',t:'Account name',d:'As shown on the bank account.',type:'text',v:'',parent:'m:bank'},
-   {k:'adminFee',t:'Admin fee per order',d:'',type:'num',pre:'S$',v:'0.00',lockable:true}
   ]}
  ]},
  {id:'members',label:'Members',intro:'Who can join, who can host, and what members can see about each other.',sections:[
   {title:'Joining',rows:[
    {k:'grpType',t:'Group type',d:'Private groups can only be joined by invite or approval.',type:'seg',opts:[['private','Private'],['public','Public']],v:'private'},
-   {k:'approval',t:'New members',d:'',type:'seg',opts:[['auto','Join instantly'],['admin','I approve'],['question','I approve after a question']],v:'question'},
+   {k:'approval',t:'New members',d:'',type:'seg',opts:[['auto','Join instantly'],['admin','Approval required'],['question','Approval after a question']],v:'question'},
    {k:'joinQ',t:'Question to ask before joining',d:'New members answer this before you review their request.',type:'text',v:'How did you hear about us?',parent:'approvalQ'},
    {k:'keywords',t:'Approve automatically with a keyword',d:'Answers containing a keyword skip your review. Share keywords privately.',type:'toggle',v:false,parent:'approvalQ'},
    {k:'kwList',t:'Keywords',d:'Separate with commas. Each needs 4 or more characters.',type:'text',v:'',ph:'e.g. COBEE2026, SIMEI',parent:'keywords'},
