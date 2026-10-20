@@ -1310,6 +1310,9 @@ select:focus { border-color: #009A97; }
 .prod-meta{font-size:11px;color:#888780;line-height:1.35;}
 .prod-badge{align-self:flex-start;margin-top:4px;font-size:10px;font-weight:700;color:white;background:#E8971A;border-radius:4px;padding:1px 6px;}
 .prod-badge.out{background:#B4B2A9;}
+.prod-card.closed{opacity:.6;}
+.prod-empty{grid-column:1/-1;background:white;border:1px dashed #D3D1C7;border-radius:12px;padding:28px 16px;text-align:center;font-size:12px;color:#888780;}
+.prod-empty-title{font-size:14px;font-weight:600;color:#1a1a18;margin-bottom:4px;}
 .prod-add{margin-top:6px;align-self:flex-start;font-size:11px;font-weight:700;color:#009A97;border:1px solid #009A97;border-radius:6px;padding:2px 8px;}
 </style>
 </head>
@@ -2117,13 +2120,12 @@ select:focus { border-color: #009A97; }
   </div>
 
   <!-- ALL EVENTS VIEW -->
-  <!-- ═══ PRODUCTS — every product from the group's open events ═══ -->
+  <!-- ═══ PRODUCTS — items the host has switched on in Products / Items ═══ -->
   <div id="view-products" style="display:none;">
     <div class="prod-toolbar">
       <span class="feed-header-count" id="prod-count">0 PRODUCTS</span>
       <select class="prod-sort" id="prod-sort" aria-label="Sort products">
         <option value="popular">Most popular</option>
-        <option value="closing">Closing soon</option>
         <option value="price">Price: low to high</option>
       </select>
     </div>
@@ -4568,68 +4570,93 @@ function initStep2() {
 
 // Listen for tab switch messages from parent shell
 /* ── Products tab ──────────────────────────────────────────────────────
-   Mock data: products from the group's open events. Each card opens its
-   event with the same showDetail() call the event cards use. Built with
-   createElement + data- attributes + one delegated listener (no inline
-   onclick strings). */
-var PRODUCT_EVENTS = {
-  'Groupbuy Event test': ['Groupbuy Event test','Our monthly pantry & household run is open! This round we\'re bringing in roasted chestnuts straight from our supplier in Johor, plus a few everyday essentials so you can top up in one go.\n\nChestnuts come by the case (6 packs) or as single packs through split case. Once a case fills up, everyone in the split gets theirs. Spend $5 or more and enjoy 10% off your whole order.\n\nCollection is at Simei Street 1 on collection day, 10AM to 5PM. Please bring your own bag and have your order number ready. Unpaid orders will be released 24 hours after the event closes.','Minh Cong','M6 group','15','0','true'],
-  'Product & Event Discount Demo': ['Product &amp; Event Discount Demo','See how Product Discount and the event-wide discount look to buyers. Some items carry their own tiered discount (buy 3 or more and save), and the whole order also gets a spend-based discount on top.\n\nTry adding different quantities to watch the Order Total update. Discounts are worked out automatically and shown on your order summary before you pay.','Minh Cong','M6 group','20','0','false'],
-  'This is a test event for Purchase with no login': ['This is a test event for Purchase with no login','Open to friends and neighbours, no co·bee account needed. Just fill in your name and phone number at checkout and we\'ll send your order details via WhatsApp.\n\nThis round features Japanese snacks and drinks restocked from our supplier. Seasonal flavours are limited, so it\'s first come, first served. Payment is by PayNow only; please upload your screenshot after paying so we can confirm your order.','Minh Cong','M6 group','14','6','false'],
-  'New event': ['New event','Fresh Korean strawberries flown in weekly: sweet, juicy and great for gifting. Each box is about 330g, and we order by the carton, so the more of us join, the better the price for everyone.\n\nPlease check your box at collection. Any bruised or spoilt fruit must be reported with a photo on the same day for a replacement. No refunds after collection.','Minh Cong','M6 group','15','0','false']
-};
-var PRODUCTS = [
-  { name:'Chestnut (case)',       price:38.00, event:'Groupbuy Event test',                             sold:42, stock:3,  days:15 },
-  { name:'Chestnut (individual)', price:4.20,  event:'Groupbuy Event test',                             sold:65, stock:40, days:15 },
-  { name:'Bubble Tea',            price:5.00,  event:'This is a test event for Purchase with no login', sold:18, stock:20, days:14 },
-  { name:'Bundle pack',           price:12.50, event:'This is a test event for Purchase with no login', sold:9,  stock:0,  days:14 },
-  { name:'Toothpaste (6-pack)',   price:12.80, event:'Product & Event Discount Demo',                   sold:27, stock:15, days:20 },
-  { name:'Sticker Pack',          price:2.00,  event:'Product & Event Discount Demo',                   sold:23, stock:50, days:20 },
-  { name:'Spec Frames',           price:29.00, event:'New event',                                        sold:7,  stock:12, days:15 }
+   Shows only items the host has switched on in Products / Items (the
+   "Products tab" switch). products-items.html saves those items to
+   localStorage under cobee_products_tab_m6group (mock-up). Before any host
+   change, the same starter list as products-items.html is used. Each card
+   opens its event with the same showDetail() the event cards use. Built
+   with createElement + data- attributes + one delegated listener. */
+var PT_KEY = 'cobee_products_tab_m6group';
+var PT_SEED = [
+  { key:'Item 1|test_event',    name:'Item 1',        desc:'Artisan keycap — resin cast',  event:'test_event', eventLabel:'Test event...', eventStatus:'Open', category:'Accessories', price:59.00, stock:8,    orders:6 },
+  { key:'Item 2|test_event',    name:'Item 2',        desc:'Artisan keycap — sculpted',    event:'test_event', eventLabel:'Test event...', eventStatus:'Open', category:'Accessories', price:59.00, stock:92,   orders:1 },
+  { key:'Bundle Pack A|new event', name:'Bundle Pack A', desc:'3-item bundle — limited qty', event:'new event', eventLabel:'new event',     eventStatus:'Open', category:'Bundles',     price:25.00, stock:12,   orders:3 },
+  { key:'Item 1|new event',     name:'Item 1',        desc:'Standard group buy item',      event:'new event',  eventLabel:'new event',     eventStatus:'Open', category:'General',     price:10.00, stock:null, orders:2 }
 ];
+// Catalogue event names -> the event screens that exist in this mock-up.
+var PRODUCT_EVENTS = {
+  'test_event':          ['Groupbuy Event test','This is how it looks like in an actual group buy','Minh Cong','M6 group','15','0','true'],
+  'new event':           ['New event','test','Minh Cong','M6 group','15','0','false'],
+  'order without login': ['This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false']
+};
+function loadProductsTab() {
+  try {
+    var raw = localStorage.getItem(PT_KEY);
+    if (raw) { var list = JSON.parse(raw); if (Array.isArray(list)) return list; }
+  } catch (e) {}
+  return PT_SEED.slice();
+}
 function renderProducts() {
   var grid = document.getElementById('prod-grid');
   if (!grid) return;
   var sortSel = document.getElementById('prod-sort');
   var sort = sortSel ? sortSel.value : 'popular';
-  var list = PRODUCTS.slice();
-  if (sort === 'popular') list.sort(function(a,b){ return b.sold - a.sold; });
-  if (sort === 'closing') list.sort(function(a,b){ return a.days - b.days; });
-  if (sort === 'price')   list.sort(function(a,b){ return a.price - b.price; });
+  var list = loadProductsTab();
+  if (sort === 'popular') list.sort(function(a,b){ return (b.orders||0) - (a.orders||0); });
+  if (sort === 'price')   list.sort(function(a,b){ return (a.price||0) - (b.price||0); });
   grid.textContent = '';
+  if (!list.length) {
+    var empty = document.createElement('div');
+    empty.className = 'prod-empty';
+    var t1 = document.createElement('div'); t1.className = 'prod-empty-title'; t1.textContent = 'No products to show yet';
+    var t2 = document.createElement('div'); t2.textContent = 'Hosts choose which items appear here in Products / Items.';
+    empty.appendChild(t1); empty.appendChild(t2); grid.appendChild(empty);
+  }
   list.forEach(function(p) {
+    var closed = p.eventStatus === 'Closed';
     var card = document.createElement('button');
     card.type = 'button';
-    card.className = 'prod-card';
-    card.setAttribute('data-event', p.event);
-    var img = document.createElement('div'); img.className = 'prod-img'; img.textContent = p.name.charAt(0);
+    card.className = 'prod-card' + (closed ? ' closed' : '');
+    card.setAttribute('data-event', p.event || '');
+    var img = document.createElement('div'); img.className = 'prod-img'; img.textContent = (p.name || '?').charAt(0);
     var body = document.createElement('div'); body.className = 'prod-body';
-    var nm = document.createElement('div'); nm.className = 'prod-name'; nm.textContent = p.name;
-    var pr = document.createElement('div'); pr.className = 'prod-price'; pr.textContent = 'S$' + p.price.toFixed(2);
-    var ev = document.createElement('div'); ev.className = 'prod-meta'; ev.textContent = p.event;
-    var sd = document.createElement('div'); sd.className = 'prod-meta'; sd.textContent = p.sold + ' sold';
-    body.appendChild(nm); body.appendChild(pr); body.appendChild(ev); body.appendChild(sd);
-    if (p.stock === 0) {
+    var nm = document.createElement('div'); nm.className = 'prod-name'; nm.textContent = p.name || '';
+    body.appendChild(nm);
+    if (p.desc) { var ds = document.createElement('div'); ds.className = 'prod-meta'; ds.textContent = p.desc; body.appendChild(ds); }
+    var pr = document.createElement('div'); pr.className = 'prod-price'; pr.textContent = 'S$' + (p.price || 0).toFixed(2);
+    var ev = document.createElement('div'); ev.className = 'prod-meta'; ev.textContent = p.eventLabel || p.event || '';
+    var sd = document.createElement('div'); sd.className = 'prod-meta'; sd.textContent = (p.orders || 0) + ' ordered';
+    body.appendChild(pr); body.appendChild(ev); body.appendChild(sd);
+    if (closed) {
+      var cl = document.createElement('span'); cl.className = 'prod-badge out'; cl.textContent = 'Event closed'; body.appendChild(cl);
+    } else if (p.stock === 0) {
       var so = document.createElement('span'); so.className = 'prod-badge out'; so.textContent = 'Sold out'; body.appendChild(so);
     } else {
-      if (p.stock <= 5) { var lo = document.createElement('span'); lo.className = 'prod-badge'; lo.textContent = 'Low stock'; body.appendChild(lo); }
+      if (p.stock != null && p.stock <= 10) { var lo = document.createElement('span'); lo.className = 'prod-badge'; lo.textContent = 'Low stock'; body.appendChild(lo); }
       var ad = document.createElement('span'); ad.className = 'prod-add'; ad.textContent = '+ Add'; body.appendChild(ad);
     }
     card.appendChild(img); card.appendChild(body);
     grid.appendChild(card);
   });
   var cnt = document.getElementById('prod-count');
-  if (cnt) cnt.textContent = PRODUCTS.length + ' PRODUCTS';
+  if (cnt) cnt.textContent = list.length + (list.length === 1 ? ' PRODUCT' : ' PRODUCTS');
 }
 document.addEventListener('click', function(e) {
   var card = e.target.closest && e.target.closest('#prod-grid .prod-card');
   if (!card) return;
-  var args = PRODUCT_EVENTS[card.getAttribute('data-event')];
-  if (args) showDetail.apply(null, args);
+  var ev = card.getAttribute('data-event');
+  var args = PRODUCT_EVENTS[ev] || [ev, '', 'Minh Cong', 'M6 group', '0', '0', 'false'];
+  showDetail.apply(null, args);
 });
 document.addEventListener('change', function(e) {
   if (e.target && e.target.id === 'prod-sort') renderProducts();
 });
+// Refresh when the portal switches to this tab, or when Products / Items
+// changes a switch in another tab of the same browser.
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'switchTab' && e.data.tab === 'products') renderProducts();
+});
+window.addEventListener('storage', function(e) { if (e.key === PT_KEY) renderProducts(); });
 renderProducts();
 
 window.addEventListener('message', function(e) {
