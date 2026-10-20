@@ -1313,7 +1313,6 @@ select:focus { border-color: #009A97; }
 .prod-card.closed{opacity:.6;}
 .prod-empty{grid-column:1/-1;background:white;border:1px dashed #D3D1C7;border-radius:12px;padding:28px 16px;text-align:center;font-size:12px;color:#888780;}
 .prod-empty-title{font-size:14px;font-weight:600;color:#1a1a18;margin-bottom:4px;}
-.prod-group{font-size:10.5px;font-weight:700;color:#7B2D8B;text-transform:uppercase;letter-spacing:.03em;}
 .prod-add{margin-top:6px;align-self:flex-start;font-size:11px;font-weight:700;color:#009A97;border:1px solid #009A97;border-radius:6px;padding:2px 8px;}
 </style>
 </head>
@@ -4692,18 +4691,10 @@ var PRODUCT_EVENTS = {
   'new event':           ['New event','test','Minh Cong','M6 group','15','0','false'],
   'order without login': ['This is a test event for Purchase with no login','test','Minh Cong','M6 group','14','6','false']
 };
-// Other groups' products: shown on the co·bee shared platform only.
-var OTHER_GROUP_PRODUCTS = [
-  { key:'mao|tm', name:'Mao Shan Wang (1kg)',      desc:'Opened on collection day',   group:'tampines-mums',   groupName:'Tampines Mums',   event:'tm-durian', eventLabel:'Durian Season: Mao Shan Wang', eventStatus:'Open', price:38.00, stock:6,  orders:12 },
-  { key:'d24|tm', name:'D24 Durian (1kg)',         desc:'Creamy, slightly bitter',    group:'tampines-mums',   groupName:'Tampines Mums',   event:'tm-durian', eventLabel:'Durian Season: Mao Shan Wang', eventStatus:'Open', price:22.00, stock:20, orders:7 },
-  { key:'loaf|pf', name:'Country sourdough loaf',  desc:'Baked Saturday morning',     group:'punggol-foodies', groupName:'Punggol Foodies', event:'pf-sourdough', eventLabel:'Weekend Sourdough Bakes', eventStatus:'Open', price:12.00, stock:40, orders:4 },
-  { key:'roll|pf', name:'Cinnamon rolls (box of 4)', desc:'Brown butter glaze',       group:'punggol-foodies', groupName:'Punggol Foodies', event:'pf-sourdough', eventLabel:'Weekend Sourdough Bakes', eventStatus:'Open', price:14.00, stock:3,  orders:9 }
-];
-PRODUCT_EVENTS['tm-durian']    = ['Durian Season: Mao Shan Wang','Fresh Mao Shan Wang and D24 from our Pahang farm partner, opened on collection day.','Grace Lim','Tampines Mums','3','0','false'];
-PRODUCT_EVENTS['pf-sourdough'] = ['Weekend Sourdough Bakes','Country loaves and cinnamon rolls baked Saturday morning by a home baker in Punggol.','Marcus Tan','Punggol Foodies','6','0','false'];
 function loadProductsTab() {
   var own = loadOwnProducts().map(function (p) { var q = Object.assign({}, p); q.group = q.group || 'm6group'; q.groupName = q.groupName || 'M6 Group'; return q; });
-  return GROUP_SCOPE ? own.filter(function (p) { return p.group === GROUP_SCOPE; }) : own.concat(OTHER_GROUP_PRODUCTS);
+  // Products is a premium-group feature: only shown on the group's own page.
+  return own.filter(function (p) { return p.group === (GROUP_SCOPE || 'm6group'); });
 }
 function loadOwnProducts() {
   try {
@@ -4739,7 +4730,6 @@ function renderProducts() {
     var nm = document.createElement('div'); nm.className = 'prod-name'; nm.textContent = p.name || '';
     body.appendChild(nm);
     if (p.desc) { var ds = document.createElement('div'); ds.className = 'prod-meta'; ds.textContent = p.desc; body.appendChild(ds); }
-    if (!GROUP_SCOPE && p.groupName) { var gn = document.createElement('div'); gn.className = 'prod-group'; gn.textContent = p.groupName; body.appendChild(gn); }
     var pr = document.createElement('div'); pr.className = 'prod-price'; pr.textContent = 'S$' + (p.price || 0).toFixed(2);
     var ev = document.createElement('div'); ev.className = 'prod-meta'; ev.textContent = p.eventLabel || p.event || '';
     var sd = document.createElement('div'); sd.className = 'prod-meta'; sd.textContent = (p.orders || 0) + ' ordered';
