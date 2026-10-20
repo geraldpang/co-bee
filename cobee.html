@@ -105,7 +105,6 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
 <!-- NAV TABS — member view only -->
 <div id="nav-tabs-wrap" style="display:flex;flex-direction:column;">
   <div class="nav-tabs">
-    <div class="nav-tab" onclick="iframeTab('products')">Products</div>
     <div class="nav-tab" onclick="iframeTab('all')">Events</div>
     <div class="nav-tab" onclick="iframeTab('purchase')">My Purchase</div>
     <div class="nav-tab" onclick="iframeTab('group')">My Group</div>
@@ -187,7 +186,7 @@ function navigate(src, btn) {
 function iframeTab(tab) {
   // Update active nav tab
   document.querySelectorAll('.nav-tab').forEach((t, i) => {
-    t.classList.toggle('active', ['products','all','purchase','group'][i] === tab);
+    t.classList.toggle('active', ['all','purchase','group'][i] === tab);
   });
   const frame = document.getElementById('main-frame');
   // If not on member.html, load it first then switch tab after load
