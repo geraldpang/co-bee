@@ -76,9 +76,38 @@ tr:hover td { background: #FAFAF8; }
 .badge.refunded   { background: #FEF2DC; color: #BA7517; }
 .badge.pay-verified { background: #E0F5F5; color: #007A77; }
 .badge.collected  { background: #e8f5e9; color: #2e7d32; }
-.badge.hitpay-paid { background: #E0F5F5; color: #007A77; cursor:pointer; transition:background 0.12s; }
-.badge.hitpay-paid:hover { background: #c9ecec; }
-.badge.hitpay-paid.is-reconciled svg { stroke-width: 3.5; }
+.badge.gateway-paid { background: #E0F5F5; color: #007A77; cursor:pointer; transition:background 0.12s; }
+.badge.gateway-paid:hover { background: #c9ecec; }
+/* Paid (member side) — paper-clip = screenshot proof; gateway symbol = paid through the payment gateway */
+.badge.pay-paid { background: #E0F5F5; color: #007A77; cursor: pointer; transition: background 0.12s; }
+.badge.pay-paid:hover { background: #c9ecec; }
+.badge.pay-paid.via-gateway { background: #EFEBFF; color: #5B3FD6; }
+.badge.pay-paid.via-gateway:hover { background: #E2DBFF; }
+.om-net-cell { font-weight: 600; color: #007A77; white-space: nowrap; }
+.om-net-na { color: #B4B2A9; font-weight: 400; }
+/* Totals summary (same as Hosted Events) */
+.om-totals { background: #E0F5F5; border-radius: 12px; padding: 16px 20px; margin-top: 14px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; font-size: 14px; color: #1a1a18; }
+.om-totals strong { font-weight: 700; }
+.om-totals .om-receive { padding-top: 6px; margin-top: 2px; border-top: 0.5px solid #80CCCB; }
+.om-totals .om-receive strong { color: #007A77; font-size: 16px; }
+.om-totals-note { font-size: 11px; color: #888780; }
+/* Payment details card (same as Hosted Events) */
+.pp-name { font-size: 17px; font-weight: 700; color: #007A77; text-align: center; }
+.pp-amount { font-size: 14px; color: #007A77; margin-top: 2px; margin-bottom: 16px; text-align: center; }
+.pp-receipt { background: #F3FAFA; border: 0.5px solid #80CCCB; border-radius: 12px; padding: 18px 16px 16px; color: #1a1a18; text-align: left; }
+.pp-receipt-brand { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 14px; color: #007A77; }
+.pp-receipt-check { width: 38px; height: 38px; border-radius: 50%; background: #009A97; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; box-shadow: 0 0 0 6px #E0F5F5; }
+.pp-receipt-status { text-align: center; font-size: 12px; color: #888780; margin-bottom: 2px; }
+.pp-receipt-amount { text-align: center; font-size: 26px; font-weight: 700; margin-bottom: 14px; color: #007A77; }
+.pp-receipt-row { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; padding: 7px 0; border-top: 0.5px solid #E0DFD8; }
+.pp-receipt-row span:first-child { color: #888780; white-space: nowrap; padding-right: 10px; }
+.pp-receipt-row > span:last-child { font-weight: 600; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 62%; }
+.pp-receipt-sub { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #888780; padding: 12px 0 4px; border-top: 0.5px solid #E0DFD8; }
+.pp-mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+.pp-ok-btn { width: 100%; height: 44px; margin-top: 16px; border: none; border-radius: 999px; background: #009A97; color: white; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; }
+.pp-ok-btn:hover { background: #007A77; }
+.pp-invalid-link { display: block; margin: 12px auto 0; background: none; border: none; font-size: 12px; color: #888780; text-decoration: underline; cursor: pointer; font-family: inherit; }
+.pp-recon-link { display: block; width: 100%; margin-top: 10px; background: white; border: 0.5px solid #80CCCB; color: #007A77; border-radius: 999px; height: 38px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; }
 /* Reconciliation statuses */
 .badge.settled { background: #e8f5e9; color: #2e7d32; }
 .badge.pending-settle { background: #FEF2DC; color: #BA7517; }
@@ -161,7 +190,7 @@ tr:hover td { background: #FAFAF8; }
 .consol-events { font-size:12px; color:#888780; margin-bottom:2px; }
 .consol-total { font-size:13px; font-weight:600; color:#009A97; }
 
-/* ── HITPAY RECONCILIATION TAB ── */
+/* ── PAYMENT RECONCILIATION TAB ── */
 .recon-banner { display:flex; gap:12px; align-items:flex-start; background:#E0F5F5; border:0.5px solid #80CCCB; border-radius:10px; padding:14px 16px; margin-bottom:18px; }
 .recon-banner svg { flex-shrink:0; margin-top:1px; color:#007A77; }
 .recon-banner-title { font-size:13px; font-weight:700; color:#007A77; margin-bottom:3px; }
@@ -243,11 +272,9 @@ tr:hover td { background: #FAFAF8; }
     </select>
     <select class="filter-select wide" onchange="filterTable()" id="filter-payment">
       <option value="">Payment Status</option>
-      <option>Not Paid</option>
       <option>Paid</option>
+      <option>Unpaid</option>
       <option>Refunded</option>
-      <option>Verified</option>
-      <option>Collected</option>
     </select>
     <button class="btn-clear" onclick="clearFilters()">Clear Filter</button>
   </div>
@@ -282,14 +309,15 @@ tr:hover td { background: #FAFAF8; }
           <th onclick="sortTable(2)" data-col="2">Event <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
           <th onclick="sortTable(3)" data-col="3">Closing Date <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th><th onclick="sortTable(4)" data-col="4">Creation Date <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
           <th onclick="sortTable(5)" data-col="5">Purchase <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
-          <th onclick="sortTable(6)" data-col="6">Price <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
-          <th onclick="sortTable(7)" data-col="7">Event Status <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
-          <th onclick="sortTable(8)" data-col="8">Payment Status <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
-          <th onclick="sortTable(9)" data-col="9">Fulfilment <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(6)" data-col="6">Amount <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(7)" data-col="7" class="om-net-th">Net <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(8)" data-col="8">Event Status <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(9)" data-col="9">Payment Status <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
+          <th onclick="sortTable(10)" data-col="10">Fulfilment <svg class="sort-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></th>
         </tr>
       </thead>
       <tbody id="orders-body">
-        <tr data-event-status="Open" data-payment="Paid" data-fulfilment="Submitted & Paid" data-cancelled="false">
+        <tr data-event-status="Open" data-payment="Paid" data-gateway="HitPay" data-amount="47.00" data-txn="hp_8f3a2b1c" data-fulfilment="Submitted & Paid" data-cancelled="false">
           <td><span class="name-link">Alex Tan</span></td>
           <td>91234567</td>
           <td class="col-event"><span class="event-text" title="Groupbuy Event test">Groupbuy Event test</span></td>
@@ -297,8 +325,9 @@ tr:hover td { background: #FAFAF8; }
           <td>04/05/2026</td>
           <td class="purchase-cell"><div class="purchase-inline">Spec (qty:1)</div></td>
           <td><span class="price-bold">$47.00</span></td>
+          <td class="om-net-cell">$46.76</td>
           <td><span class="badge open">Open</span></td>
-          <td><span class="badge hitpay-paid is-reconciled" onclick="showPaymentDetail('hp_8f3a2b1c')" title="Click for payment details"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+          <td><span class="badge pay-paid via-gateway" onclick="showPaymentDetail(this)" title="Paid via payment gateway · click for payment details"><svg class="pay-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M13 13.5l-2 3h3l-2 3"/></svg>Paid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option>Unpaid</option>
@@ -309,7 +338,7 @@ tr:hover td { background: #FAFAF8; }
               <option>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Open" data-payment="Paid" data-fulfilment="Submitted & Paid" data-cancelled="false">
+        <tr data-event-status="Open" data-payment="Paid" data-gateway="HitPay" data-amount="20.00" data-txn="hp_2c9d77ea" data-fulfilment="Submitted & Paid" data-cancelled="false">
           <td><span class="name-link">Priya Nair</span></td>
           <td>98761234</td>
           <td class="col-event"><span class="event-text" title="new event">new event</span></td>
@@ -317,8 +346,9 @@ tr:hover td { background: #FAFAF8; }
           <td>03/05/2026</td>
           <td class="purchase-cell"><div class="purchase-inline">Item 1 (qty:2)</div></td>
           <td><span class="price-bold">$20.00</span></td>
+          <td class="om-net-cell">$19.90</td>
           <td><span class="badge open">Open</span></td>
-          <td><span class="badge hitpay-paid is-reconciled" onclick="showPaymentDetail('hp_2c9d77ea')" title="Click for payment details"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+          <td><span class="badge pay-paid via-gateway" onclick="showPaymentDetail(this)" title="Paid via payment gateway · click for payment details"><svg class="pay-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M13 13.5l-2 3h3l-2 3"/></svg>Paid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option>Unpaid</option>
@@ -329,7 +359,7 @@ tr:hover td { background: #FAFAF8; }
               <option>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Closed" data-payment="Verified" data-fulfilment="Verified" data-cancelled="false">
+        <tr data-event-status="Closed" data-payment="Paid" data-amount="10.00" data-fulfilment="Verified" data-cancelled="false">
           <td><span class="name-link">Gerald Pang</span></td>
           <td>0469787098</td>
           <td class="col-event"><span class="event-text" title="atea 1">atea 1</span></td>
@@ -337,8 +367,9 @@ tr:hover td { background: #FAFAF8; }
           <td>09/04/2026</td>
           <td class="purchase-cell"><div style="display:flex;align-items:flex-start;gap:3px;"><button onclick="alert('Edit order')" title="Edit" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:2px 3px;border-radius:4px;vertical-align:middle;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><div><div class="purchase-inline">Dev cùi (qty:1)</div></div></div></td>
           <td><span class="price-bold">$10.00</span></td>
+          <td class="om-net-cell"><span class="om-net-na">—</span></td>
           <td><span class="badge closed">Closed</span></td>
-          <td><span class="badge pay-verified"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>Verified</span></td>
+          <td><span class="badge pay-paid" onclick="showPaymentDetail(this)" title="Click for payment details"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>Paid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option>Unpaid</option>
@@ -349,7 +380,7 @@ tr:hover td { background: #FAFAF8; }
               <option>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Closed" data-payment="Not Paid" data-fulfilment="Unpaid" data-cancelled="false">
+        <tr data-event-status="Closed" data-payment="Unpaid" data-amount="1.00" data-fulfilment="Unpaid" data-cancelled="false">
           <td><span class="name-link">Minh Test</span></td>
           <td>0973117345</td>
           <td class="col-event"><span class="event-text" title="order without login">order without login</span></td>
@@ -357,8 +388,9 @@ tr:hover td { background: #FAFAF8; }
           <td>24/04/2026</td>
           <td class="purchase-cell"><div style="display:flex;align-items:flex-start;gap:3px;"><button onclick="alert('Edit order')" title="Edit" style="background:none;border:none;cursor:pointer;color:#B4B2A9;padding:2px 3px;border-radius:4px;vertical-align:middle;" onmouseover="this.style.color='#009A97';this.style.background='#E0F5F5'" onmouseout="this.style.color='#B4B2A9';this.style.background='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><div><div class="purchase-inline">pro 1 (qty:1)</div></div></div></td>
           <td><span class="price-bold">$1.00</span></td>
+          <td class="om-net-cell"><span class="om-net-na">—</span></td>
           <td><span class="badge closed">Closed</span></td>
-          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Not Paid</span></td>
+          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Unpaid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option selected>Unpaid</option>
@@ -369,7 +401,7 @@ tr:hover td { background: #FAFAF8; }
               <option>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Open" data-payment="Verified" data-fulfilment="Submitted & Paid" data-cancelled="false">
+        <tr data-event-status="Open" data-payment="Paid" data-amount="59.00" data-fulfilment="Submitted & Paid" data-cancelled="false">
           <td><span class="name-link">Gerald test3</span></td>
           <td>0469787098</td>
           <td class="col-event"><span class="event-text" title="This is a test event for Purchase with no login">This is a test event for Purchase with no login</span></td>
@@ -379,8 +411,9 @@ tr:hover td { background: #FAFAF8; }
             <div class="purchase-extra" id="ex_gerald_test3" style="display:none;">item 2 (qty:1)</div>
             <button class="purchase-more" onclick="toggleExtra('ex_gerald_test3',this)">+1 more</button></div></div></td>
           <td><span class="price-bold">$59.00</span></td>
+          <td class="om-net-cell"><span class="om-net-na">—</span></td>
           <td><span class="badge open">Open</span></td>
-          <td><span class="badge pay-verified"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>Verified</span></td>
+          <td><span class="badge pay-paid" onclick="showPaymentDetail(this)" title="Click for payment details"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>Paid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option>Unpaid</option>
@@ -391,7 +424,7 @@ tr:hover td { background: #FAFAF8; }
               <option>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Open" data-payment="Not Paid" data-fulfilment="Unpaid" data-cancelled="false">
+        <tr data-event-status="Open" data-payment="Unpaid" data-gateway="HitPay" data-amount="10.00" data-fulfilment="Unpaid" data-cancelled="false">
           <td><span class="name-link">Minh Cong</span></td>
           <td>83062355</td>
           <td class="col-event"><span class="event-text" title="new event">new event</span></td>
@@ -399,8 +432,9 @@ tr:hover td { background: #FAFAF8; }
           <td>30/04/2026</td>
           <td class="purchase-cell"><div class="purchase-inline">Item 1 (qty:1)</div></td>
           <td style="white-space:nowrap;"><span class="price-bold">$10.00</span></td>
+          <td class="om-net-cell">$9.95</td>
           <td><span class="badge open">Open</span></td>
-          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Not Paid</span></td>
+          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Unpaid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option selected>Unpaid</option>
@@ -411,7 +445,7 @@ tr:hover td { background: #FAFAF8; }
               <option>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Open" data-payment="Refunded" data-fulfilment="Cancelled" data-cancelled="true">
+        <tr data-event-status="Open" data-payment="Refunded" data-amount="118.00" data-fulfilment="Cancelled" data-cancelled="true">
           <td><span class="name-link">Janet Lee</span></td>
           <td>0412345678</td>
           <td class="col-event"><span class="event-text" title="This is a test event for Purchase with no login">This is a test event for Purchase with no login</span></td>
@@ -419,6 +453,7 @@ tr:hover td { background: #FAFAF8; }
           <td>01/05/2026</td>
           <td class="purchase-cell"><div class="purchase-inline">Item 1 (qty:2)</div></td>
           <td style="white-space:nowrap;"><span class="price-bold">$118.00</span></td>
+          <td class="om-net-cell"><span class="om-net-na">—</span></td>
           <td><span class="badge open">Open</span></td>
           <td><span class="badge refunded">Refunded</span></td>
           <td><select class="ful-select">
@@ -431,7 +466,7 @@ tr:hover td { background: #FAFAF8; }
               <option>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Open" data-payment="Not Paid" data-fulfilment="Submitted & Unpaid" data-cancelled="false">
+        <tr data-event-status="Open" data-payment="Unpaid" data-gateway="HitPay" data-amount="10.00" data-fulfilment="Submitted & Unpaid" data-cancelled="false">
           <td><span class="name-link">David Tan</span></td>
           <td>0498765432</td>
           <td class="col-event"><span class="event-text" title="new event">new event</span></td>
@@ -439,8 +474,9 @@ tr:hover td { background: #FAFAF8; }
           <td>02/05/2026</td>
           <td class="purchase-cell"><div class="purchase-inline">Item 1 (qty:1)</div></td>
           <td style="white-space:nowrap;"><span class="price-bold">$10.00</span></td>
+          <td class="om-net-cell">$9.95</td>
           <td><span class="badge open">Open</span></td>
-          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Not Paid</span></td>
+          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Unpaid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option>Unpaid</option>
@@ -451,7 +487,7 @@ tr:hover td { background: #FAFAF8; }
               <option>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Closed" data-payment="Collected" data-fulfilment="Collected" data-cancelled="false">
+        <tr data-event-status="Closed" data-payment="Paid" data-amount="20.00" data-fulfilment="Collected" data-cancelled="false">
           <td><span class="name-link">Sarah Wong</span></td>
           <td>0423456789</td>
           <td class="col-event"><span class="event-text" title="atea 1">atea 1</span></td>
@@ -459,8 +495,9 @@ tr:hover td { background: #FAFAF8; }
           <td>10/04/2026</td>
           <td class="purchase-cell"><div class="purchase-inline">Dev cùi (qty:2)</div></td>
           <td style="white-space:nowrap;"><span class="price-bold">$20.00</span></td>
+          <td class="om-net-cell"><span class="om-net-na">—</span></td>
           <td><span class="badge closed">Closed</span></td>
-          <td><span class="badge collected">Collected</span></td>
+          <td><span class="badge pay-paid" onclick="showPaymentDetail(this)" title="Click for payment details"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>Paid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option>Unpaid</option>
@@ -471,7 +508,7 @@ tr:hover td { background: #FAFAF8; }
               <option selected>Collected</option>
               </select></td>
         </tr>
-        <tr data-event-status="Open" data-payment="Not Paid" data-fulfilment="Submitted & Collected" data-cancelled="false">
+        <tr data-event-status="Open" data-payment="Unpaid" data-amount="59.00" data-fulfilment="Submitted & Collected" data-cancelled="false">
           <td><span class="name-link">Tom Nguyen</span></td>
           <td>0455678901</td>
           <td class="col-event"><span class="event-text" title="This is a test event for Purchase with no login">This is a test event for Purchase with no login</span></td>
@@ -479,8 +516,9 @@ tr:hover td { background: #FAFAF8; }
           <td>03/05/2026</td>
           <td class="purchase-cell"><div class="purchase-inline">Item 2 (qty:1)</div></td>
           <td style="white-space:nowrap;"><span class="price-bold">$59.00</span></td>
+          <td class="om-net-cell"><span class="om-net-na">—</span></td>
           <td><span class="badge open">Open</span></td>
-          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Not Paid</span></td>
+          <td><span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Unpaid</span></td>
           <td><select class="ful-select">
               <option>Cancelled</option>
               <option>Unpaid</option>
@@ -494,6 +532,9 @@ tr:hover td { background: #FAFAF8; }
       </tbody>
     </table>
   <!-- Pagination -->
+  <!-- Totals for the orders shown (same as Hosted Events). Cancelled orders are left out. -->
+  <div class="om-totals" id="om-totals"></div>
+
   <div class="pagination">
     <div style="display:flex;align-items:center;gap:8px;">
       <span class="pagination-info">Rows per page:</span>
@@ -516,7 +557,7 @@ tr:hover td { background: #FAFAF8; }
   <!-- Consolidated Table Views -->
   <div id="consol-tables-wrap"></div>
 
-  <!-- ══════════ HITPAY RECONCILIATION PANEL ══════════ -->
+  <!-- ══════════ PAYMENT RECONCILIATION PANEL ══════════ -->
   <div id="recon-panel" style="display:none;">
 
     <!-- Explainer banner (dismissible) -->
@@ -524,7 +565,7 @@ tr:hover td { background: #FAFAF8; }
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
       <div>
         <div class="recon-banner-title">What is this tab?</div>
-        <div class="recon-banner-text">Reconciliation just means checking that money in matches money out. Every time a buyer pays through the HitPay checkout, HitPay takes a small processing fee, then pays the rest to your bank account in a batch ("payout") every few days. This tab lines up each buyer payment against those payouts, so you can see exactly what was collected, what HitPay kept as fees, and what actually landed in your bank — useful for your own records or for handing to an accountant/bookkeeper.</div>
+        <div class="recon-banner-text">Reconciliation just means checking that money in matches money out. Every time a buyer pays through the payment gateway checkout, the payment gateway takes a small processing fee, then pays the rest to your bank account in a batch ("payout") every few days. This tab lines up each buyer payment against those payouts, so you can see exactly what was collected, what the payment gateway kept as fees, and what actually landed in your bank — useful for your own records or for handing to an accountant/bookkeeper.</div>
       </div>
       <button class="recon-banner-close" onclick="document.getElementById('recon-banner').style.display='none'" title="Dismiss">&times;</button>
     </div>
@@ -595,7 +636,7 @@ tr:hover td { background: #FAFAF8; }
               <td>$1.41</td>
               <td>$45.59</td>
               <td class="mono-id">hp_8f3a2b1c</td>
-              <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+              <td><span class="badge gateway-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
               <td><span class="badge settled payout-status-badge">Settled</span><div class="date-row">Payout #P-1042</div></td>
               <td><span class="badge reconciled reconciled-badge">Reconciled</span></td>
               <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
@@ -610,7 +651,7 @@ tr:hover td { background: #FAFAF8; }
               <td>$0.88</td>
               <td>$19.12</td>
               <td class="mono-id">hp_2c9d77ea</td>
-              <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+              <td><span class="badge gateway-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
               <td><span class="badge settled payout-status-badge">Settled</span><div class="date-row">Payout #P-1042</div></td>
               <td><span class="badge reconciled reconciled-badge">Reconciled</span></td>
               <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
@@ -625,7 +666,7 @@ tr:hover td { background: #FAFAF8; }
               <td>$1.02</td>
               <td>$32.98</td>
               <td class="mono-id">hp_a51fe903</td>
-              <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+              <td><span class="badge gateway-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
               <td><span class="badge settled payout-status-badge">Settled</span><div class="date-row">Payout #P-1042</div></td>
               <td><span class="badge reconciled reconciled-badge">Reconciled</span></td>
               <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
@@ -640,7 +681,7 @@ tr:hover td { background: #FAFAF8; }
               <td>$1.77</td>
               <td>$57.23</td>
               <td class="mono-id">hp_66b0cd4f</td>
-              <td><span class="badge hitpay-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
+              <td><span class="badge gateway-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Paid</span></td>
               <td><span class="badge pending-settle payout-status-badge">Pending</span><div class="date-row">Payout #P-1043</div></td>
               <td><span class="badge unreconciled reconciled-badge">Unreconciled</span></td>
               <td><span class="match-ok"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Matched</span></td>
@@ -649,7 +690,7 @@ tr:hover td { background: #FAFAF8; }
           </tbody>
         </table>
       </div>
-      <div class="recon-section-hint" style="margin-top:8px;">"Payout Status" reflects whether HitPay has settled the money to your bank yet. "Reconciled" is independent — it tracks whether <em>you've</em> checked this transaction against your bank statement. "Match" checks whether a HitPay payment can be linked to an order in co·bee.</div>
+      <div class="recon-section-hint" style="margin-top:8px;">"Payout Status" reflects whether the payment gateway has settled the money to your bank yet. "Reconciled" is independent — it tracks whether <em>you've</em> checked this transaction against your bank statement. "Match" checks whether a payment gateway payment can be linked to an order in co·bee.</div>
     </div>
 
     <!-- Payouts table -->
@@ -691,20 +732,20 @@ tr:hover td { background: #FAFAF8; }
               <td>$1.77</td>
               <td><span class="price-bold">$57.23</span></td>
               <td>1</td>
-              <td><span class="badge pending-settle" id="payout-status-P-1043">Pending</span><button class="simulate-settle-P-1043" onclick="simulatePayoutSettlement('P-1043')" title="Demo only: simulate HitPay settling this payout" style="background:none;border:none;color:#888780;font-size:10px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:0;margin-left:6px;">simulate settlement</button></td>
+              <td><span class="badge pending-settle" id="payout-status-P-1043">Pending</span><button class="simulate-settle-P-1043" onclick="simulatePayoutSettlement('P-1043')" title="Demo only: simulate the payment gateway settling this payout" style="background:none;border:none;color:#888780;font-size:10px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:0;margin-left:6px;">simulate settlement</button></td>
               <td><span class="badge unreconciled" id="payout-reconciled-P-1043">Unreconciled</span></td>
               <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForPayout('P-1043')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;justify-content:center;" title="Download transactions" onclick="downloadTransactionsForPayout('P-1043')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="recon-section-hint" style="margin-top:8px;">A payout is one bank transfer from HitPay covering several transactions at once. Use "View Transactions" to jump straight to the linked list in the Transactions tab.</div>
+      <div class="recon-section-hint" style="margin-top:8px;">A payout is one bank transfer from the payment gateway covering several transactions at once. Use "View Transactions" to jump straight to the linked list in the Transactions tab.</div>
     </div>
 
     <!-- Daily / Weekly Close -->
     <div id="recon-view-close" style="display:none;">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-        <div class="recon-section-hint" style="max-width:520px;">A simple end-of-day (or end-of-week) checklist: tally up what came in, what HitPay kept as fees, and tick it off once you've checked it against your bank. Good habit to do this regularly rather than only at month-end.</div>
+        <div class="recon-section-hint" style="max-width:520px;">A simple end-of-day (or end-of-week) checklist: tally up what came in, what the payment gateway kept as fees, and tick it off once you've checked it against your bank. Good habit to do this regularly rather than only at month-end.</div>
         <div style="display:flex;border:0.5px solid #D3D1C7;border-radius:8px;overflow:hidden;flex-shrink:0;">
           <button class="page-btn active" id="close-btn-daily" onclick="setClosePeriod('daily')" style="border:none;border-radius:0;">Daily</button>
           <button class="page-btn" id="close-btn-weekly" onclick="setClosePeriod('weekly')" style="border:none;border-radius:0;border-left:0.5px solid #D3D1C7;">Weekly</button>
@@ -764,7 +805,7 @@ tr:hover td { background: #FAFAF8; }
                 <td><span class="price-bold">$59.00</span></td>
                 <td>$1.77</td>
                 <td>$57.23</td>
-                <td><span class="badge pending-settle" id="close-daily-4-payout-status">Pending</span><button class="simulate-settle-P-1043" onclick="simulatePayoutSettlement('P-1043')" title="Demo only: simulate HitPay settling this payout" style="background:none;border:none;color:#888780;font-size:10px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:0;margin-left:6px;">simulate settlement</button></td>
+                <td><span class="badge pending-settle" id="close-daily-4-payout-status">Pending</span><button class="simulate-settle-P-1043" onclick="simulatePayoutSettlement('P-1043')" title="Demo only: simulate the payment gateway settling this payout" style="background:none;border:none;color:#888780;font-size:10px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:0;margin-left:6px;">simulate settlement</button></td>
                 <td id="close-daily-4"><button class="btn-outline" id="close-daily-4-btn" disabled title="Available once this payout settles to your bank" style="height:28px;opacity:0.45;cursor:not-allowed;" onclick="markReconciled('close-daily-4', this, 'P-1043')">Mark as Reconciled</button></td>
                 <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForDate('2026-05-05','05 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;justify-content:center;" title="Download transactions" onclick="downloadTransactionsForDate('2026-05-05','05 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
               </tr>
@@ -806,7 +847,7 @@ tr:hover td { background: #FAFAF8; }
                 <td><span class="price-bold">$59.00</span></td>
                 <td>$1.77</td>
                 <td>$57.23</td>
-                <td><span class="badge pending-settle" id="close-weekly-2-payout-status">Pending</span><div class="date-row">Payout #P-1043</div><button class="simulate-settle-P-1043" onclick="simulatePayoutSettlement('P-1043')" title="Demo only: simulate HitPay settling this payout" style="background:none;border:none;color:#888780;font-size:10px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:0;margin-top:2px;">simulate settlement</button></td>
+                <td><span class="badge pending-settle" id="close-weekly-2-payout-status">Pending</span><div class="date-row">Payout #P-1043</div><button class="simulate-settle-P-1043" onclick="simulatePayoutSettlement('P-1043')" title="Demo only: simulate the payment gateway settling this payout" style="background:none;border:none;color:#888780;font-size:10px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:0;margin-top:2px;">simulate settlement</button></td>
                 <td id="close-weekly-2"><button class="btn-outline" id="close-weekly-2-btn" disabled title="Available once this payout settles to your bank" style="height:28px;opacity:0.45;cursor:not-allowed;" onclick="markReconciled('close-weekly-2', this, 'P-1043')">Mark as Reconciled</button></td>
                 <td><div style="display:flex;gap:6px;"><button class="btn-outline" style="height:26px;padding:0 10px;font-size:11px;" onclick="goToTransactionsForWeek('2026-05-05','2026-05-11','05 – 11 May 2026')">View Transactions →</button><button class="btn-outline" style="height:26px;width:26px;padding:0;justify-content:center;" title="Download transactions" onclick="downloadTransactionsForWeek('2026-05-05','2026-05-11','05 – 11 May 2026')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div></td>
               </tr>
@@ -858,7 +899,7 @@ function filterTable() {
     const matchEv = !evFilter || event.toLowerCase().includes(evFilter.toLowerCase());
     const matchEvStatus = !evStatus || eventStatus === evStatus;
     const matchPay = !payFilter || payment === payFilter;
-    const matchTab = currentTab === 'all' || (currentTab === 'unpaid' && payment === 'Not Paid');
+    const matchTab = currentTab === 'all' || (currentTab === 'unpaid' && payment === 'Unpaid');
     const matchCancelled = !exclCancelled || !cancelled;
 
     const show = matchQ && matchEv && matchEvStatus && matchPay && matchTab && matchCancelled;
@@ -867,6 +908,7 @@ function filterTable() {
   });
 
   document.getElementById('total-count').textContent = count;
+  updateOmTotals();
 }
 
 function clearFilters() {
@@ -878,7 +920,7 @@ function clearFilters() {
 }
 
 // ── COLUMN VISIBILITY ──
-const COL_NAMES = ['Name','Mobile','Event','Closing Date','Creation Date','Purchase','Price','Event Status','Payment Status','Fulfilment'];
+const COL_NAMES = ['Name','Mobile','Event','Closing Date','Creation Date','Purchase','Amount','Net','Event Status','Payment Status','Fulfilment'];
 let hiddenCols = new Set();
 
 function buildColMenu() {
@@ -1038,8 +1080,8 @@ function consolidate() {
     const purchase = cells[5]?.textContent.trim().replace('+1 more','').trim();
     const priceText = (cells[6]?.textContent || '').replace(/[^\d.]/g,'');
     const price = parseFloat(priceText) || 0;
-    const payBadge = cells[8]?.innerHTML || '';
-    const fulSelect = cells[9]?.innerHTML || '';
+    const payBadge = cells[9]?.innerHTML || '';
+    const fulSelect = cells[10]?.innerHTML || '';
     if (!name) return;
     if (!groups[name]) { groups[name] = { mobile, entries:[], total:0, payBadge, fulSelect }; order.push(name); }
     groups[name].entries.push({ event, closing, purchase, price });
@@ -1084,7 +1126,7 @@ function consolidate() {
     + '<th>Name</th>'
     + '<th>Mobile</th>'
     + '<th>Purchase</th>'
-    + '<th>Total Price</th>'
+    + '<th>Amount</th>'
     + '<th>Payment Status</th>'
     + '<th>Fulfilment</th>'
     + '</tr></thead><tbody>';
@@ -1126,6 +1168,7 @@ function switchToConsolTab(listId, tabEl) {
   // Hide main table + pagination, show consol table
   document.getElementById('orders-table').style.display = 'none';
   document.querySelector('.pagination').style.display = 'none';
+  document.getElementById('om-totals').style.display = 'none';
   document.querySelectorAll('[id^="consol-table-"]').forEach(t => t.style.display = 'none');
   document.getElementById('consol-table-' + listId).style.display = 'block';
   const rp = document.getElementById('recon-panel'); if (rp) rp.style.display = 'none';
@@ -1139,16 +1182,18 @@ function setTabMain(tabEl) {
   // Show main table + pagination
   document.getElementById('orders-table').style.display = '';
   document.querySelector('.pagination').style.display = '';
+  document.getElementById('om-totals').style.display = '';
   document.querySelectorAll('[id^="consol-table-"]').forEach(t => t.style.display = 'none');
   const rp = document.getElementById('recon-panel'); if (rp) rp.style.display = 'none';
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   tabEl.classList.add('active');
 }
 
-// ── HITPAY RECONCILIATION TAB ──
+// ── PAYMENT RECONCILIATION TAB ──
 function showReconTab(tabEl) {
   document.getElementById('orders-table').style.display = 'none';
   document.querySelector('.pagination').style.display = 'none';
+  document.getElementById('om-totals').style.display = 'none';
   document.querySelectorAll('[id^="consol-table-"]').forEach(t => t.style.display = 'none');
   document.getElementById('recon-panel').style.display = 'block';
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1173,12 +1218,12 @@ function setClosePeriod(period) {
 }
 
 function markReconciled(rowId, btn, payoutId) {
-  // Guard: a payout can't be reconciled until HitPay has actually settled it to the bank
+  // Guard: a payout can't be reconciled until the payment gateway has actually settled it to the bank
   if (payoutId) {
     const bankStatusBadge = document.getElementById('payout-status-' + payoutId);
     const isSettled = bankStatusBadge && bankStatusBadge.textContent.trim() === 'Settled';
     if (!isSettled) {
-      alert('This payout hasn\'t settled to your bank yet — you can mark it reconciled once HitPay pays it out.');
+      alert('This payout hasn\'t settled to your bank yet — you can mark it reconciled once the payment gateway pays it out.');
       return;
     }
   }
@@ -1200,7 +1245,7 @@ function markReconciled(rowId, btn, payoutId) {
   }
 }
 
-// Demo-only helper: simulates HitPay settling a payout to the bank, which unlocks
+// Demo-only helper: simulates the payment gateway settling a payout to the bank, which unlocks
 // "Mark as Reconciled" for that payout everywhere it appears.
 const PAYOUT_CLOSE_STATUS_IDS = { 'P-1043': ['close-daily-4-payout-status', 'close-weekly-2-payout-status'] };
 const PAYOUT_CLOSE_RECONCILE_BTN_IDS = { 'P-1043': ['close-daily-4-btn', 'close-weekly-2-btn'] };
@@ -1308,33 +1353,153 @@ const PAYMENT_DETAILS = {
   'hp_2c9d77ea': { buyer: 'Priya Nair', event: 'new event', amount: '$20.00', method: 'Visa •• 4242', fee: '$0.88', net: '$19.12', date: '03 May 2026', time: '4:02 PM', payoutId: 'P-1042', payoutStatus: 'Settled', reconciled: true }
 };
 
-function showPaymentDetail(txnId) {
-  const d = PAYMENT_DETAILS[txnId];
-  const body = document.getElementById('payment-detail-body');
-  if (!d || !body) return;
-  const payoutBadgeClass = d.payoutStatus === 'Settled' ? 'badge settled' : 'badge pending-settle';
-  const reconciledBadgeClass = d.reconciled ? 'badge reconciled' : 'badge unreconciled';
-  const reconciledLabel = d.reconciled ? 'Reconciled' : 'Unreconciled';
-  const row = function (label, valueHtml) {
-    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid #f5f5f5;">'
-      + '<span style="font-size:12px;color:#888780;">' + label + '</span>'
-      + '<span style="font-size:13px;color:#1a1a18;text-align:right;">' + valueHtml + '</span>'
-      + '</div>';
+// Platform fee on payment-gateway orders; assumed 0.5% (same as Hosted Events).
+const PLATFORM_FEE_RATE = 0.005;
+function omFee(amount) { return Math.round(amount * PLATFORM_FEE_RATE * 100) / 100; }
+const OM_PAYMENT_TYPES = ['PayNow', 'Visa', 'Mastercard', 'GrabPay', 'PayNow', 'Apple Pay'];
+const OM_ICON_GATEWAY = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M13 13.5l-2 3h3l-2 3"/></svg>';
+const OM_ICON_CARD = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>';
+
+/* Payment gateway record for an order: the fields a gateway dashboard shows.
+   With the integration these come from the gateway's API / webhook; until then
+   known transactions (PAYMENT_DETAILS) are used and the rest is sample data. */
+function omGatewayRecord(row, idx) {
+  const txn = row.dataset.txn || '';
+  const known = PAYMENT_DETAILS[txn];
+  const name = row.cells[0].textContent.trim();
+  const amount = parseFloat(row.dataset.amount) || 0;
+  let h = 0; const seed = name + idx; for (let k = 0; k < seed.length; k++) h = (h * 31 + seed.charCodeAt(k)) >>> 0;
+  const hex = n => { let s = ''; let x = h ^ (n * 2654435761); for (let k = 0; k < 8; k++) { s += (x & 15).toString(16); x = (x >>> 4) | ((x & 15) << 28); } return s; };
+  const digits = String(1793704000000 + (h % 999999));
+  const method = known ? known.method.replace(/\s*•.*$/, '') : OM_PAYMENT_TYPES[idx % OM_PAYMENT_TYPES.length];
+  return {
+    gateway: row.dataset.gateway,
+    status: 'Succeeded',
+    method: method,
+    amount: amount,
+    fees: known ? parseFloat(known.fee.replace(/[^\d.]/g, '')) : Math.round((amount * 0.013 + 0.2) * 100) / 100,
+    email: name.toLowerCase().replace(/[^a-z]+/g, '.') + '@example.com',
+    sender: method === 'PayNow' ? name.toUpperCase() : (known && /•/.test(known.method) ? known.method.replace('••', '••••') : method + ' •••• ' + String(1000 + h % 9000)),
+    chargeId: txn || (hex(1) + '-' + hex(2).slice(0, 4) + '-' + hex(3).slice(0, 4) + '-' + hex(4).slice(0, 4) + '-' + hex(5) + hex(6).slice(0, 4)),
+    providerRef: method === 'PayNow' ? 'DICNP' + digits + 'X1' + hex(7).slice(0, 4).toUpperCase() : 'ch_' + hex(8) + hex(9).slice(0, 6),
+    referenceNo: 'om' + (idx + 1) + 'n7' + digits,
+    created: known ? known.date + ', ' + known.time : row.cells[4].textContent.trim() + ', 10:07 AM',
+    completed: known ? known.date + ', ' + known.time : row.cells[4].textContent.trim() + ', 10:10 AM',
+    payout: known ? { id: known.payoutId, status: known.payoutStatus, reconciled: known.reconciled } : null
   };
-  body.innerHTML = ''
-    + row('Buyer', '<strong>' + d.buyer + '</strong>')
-    + row('Event', d.event)
-    + row('Amount', '<strong>' + d.amount + '</strong>')
-    + row('Payment Method', d.method)
-    + row('Processing Fee', d.fee)
-    + row('Net Amount', d.net)
-    + row('Date &amp; Time', d.date + ', ' + d.time)
-    + row('Transaction ID', '<span class="mono-id">' + txnId + '</span>')
-    + row('Payout Status', '<span class="' + payoutBadgeClass + '">' + d.payoutStatus + '</span> <span style="font-size:11px;color:#888780;">#' + d.payoutId + '</span>')
-    + row('Reconciled', '<span class="' + reconciledBadgeClass + '">' + reconciledLabel + '</span>')
-    + '<button class="btn-outline" style="width:100%;justify-content:center;margin-top:14px;" onclick="closeModal(\'payment-detail-modal\');showReconTab(document.getElementById(\'tab-recon\'));setTimeout(function(){goToTransactionsForTxn(\'' + txnId + '\');},50);">View in Payment Reconciliation →</button>';
+}
+
+// Opens the payment details for a row (badge element) or a transaction id
+// (from the Payment Reconciliation tab).
+function showPaymentDetail(arg) {
+  let row = null;
+  if (typeof arg === 'string') {
+    row = document.querySelector('#orders-body tr[data-txn="' + arg + '"]');
+  } else if (arg && arg.closest) {
+    row = arg.closest('tr');
+  }
+  const body = document.getElementById('payment-detail-body');
+  if (!row || !body) return;
+  const rows = Array.from(document.querySelectorAll('#orders-body tr'));
+  const idx = rows.indexOf(row);
+  const name = row.cells[0].textContent.trim();
+  const event = row.cells[2].textContent.trim();
+  const amount = parseFloat(row.dataset.amount) || 0;
+  const money = v => '$' + v.toFixed(2);
+  const r = (label, value, cls) => '<div class="pp-receipt-row"><span>' + label + '</span><span' + (cls ? ' class="' + cls + '"' : '') + '>' + value + '</span></div>';
+  const isGateway = !!row.dataset.gateway;
+  let html = '<div class="pp-name">' + name + '</div><div class="pp-amount">Payment made for ' + money(amount) + '</div><div class="pp-receipt">';
+  if (isGateway) {
+    const g = omGatewayRecord(row, idx);
+    html += '<div class="pp-receipt-brand">' + OM_ICON_GATEWAY + 'Paid via payment gateway</div>'
+      + '<div class="pp-receipt-check"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>'
+      + '<div class="pp-receipt-status">' + g.status + '</div><div class="pp-receipt-amount">' + money(amount) + '</div>'
+      + r('Payment gateway', g.gateway) + r('Event', event) + r('Method', g.method)
+      + r('Amount', 'SGD ' + g.amount.toFixed(2)) + r('Gateway fees', 'SGD ' + g.fees.toFixed(2))
+      + r('Platform fee', 'SGD ' + omFee(amount).toFixed(2))
+      + r('Customer', g.email) + r(g.method === 'PayNow' ? 'Sender name' : 'Card', g.sender)
+      + '<div class="pp-receipt-sub">Payment gateway references</div>'
+      + '<div class="pp-receipt-row"><span>Charge ID</span><span class="pp-mono" title="' + g.chargeId + '">' + (g.chargeId.length > 20 ? g.chargeId.slice(0, 18) + '…' : g.chargeId) + '</span></div>'
+      + r('Provider reference', g.providerRef, 'pp-mono') + r('Reference no.', g.referenceNo, 'pp-mono')
+      + r('Created', g.created) + r('Completed', g.completed);
+    if (g.payout) {
+      html += '<div class="pp-receipt-sub">Payout</div>'
+        + r('Payout status', '<span class="' + (g.payout.status === 'Settled' ? 'badge settled' : 'badge pending-settle') + '">' + g.payout.status + '</span> <span style="font-size:11px;color:#888780;font-weight:400;">#' + g.payout.id + '</span>')
+        + r('Reconciled', '<span class="' + (g.payout.reconciled ? 'badge reconciled' : 'badge unreconciled') + '">' + (g.payout.reconciled ? 'Reconciled' : 'Unreconciled') + '</span>');
+    }
+    html += '</div><button class="pp-ok-btn" onclick="closeModal(\'payment-detail-modal\')">OK</button>';
+    if (g.payout) {
+      html += '<button class="pp-recon-link" onclick="closeModal(\'payment-detail-modal\');showReconTab(document.getElementById(\'tab-recon\'));setTimeout(function(){goToTransactionsForTxn(\'' + g.chargeId + '\');},50);">View in Payment Reconciliation →</button>';
+    }
+  } else {
+    const ref = event.split(/\s+/).map(w => w.charAt(0).toLowerCase()).join('').replace(/[^a-z0-9]/g, '') + '-no' + (idx + 1);
+    html += '<div class="pp-receipt-brand">' + OM_ICON_CARD + 'PayNow Transfer</div>'
+      + '<div class="pp-receipt-check"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>'
+      + '<div class="pp-receipt-status">Transfer Successful</div><div class="pp-receipt-amount">' + money(amount) + '</div>'
+      + r('To', 'M6 Group') + r('From', name) + r('Event', event) + r('Reference', ref)
+      + r('Date &amp; Time', row.cells[4].textContent.trim() + ', 10:14 AM')
+      + r('Transaction ID', 'PN' + ref.toUpperCase().replace(/[^A-Z0-9]/g, '') + '00' + (idx + 1))
+      + '</div><button class="pp-ok-btn" onclick="closeModal(\'payment-detail-modal\')">OK</button>'
+      + '<button class="pp-invalid-link" onclick="markInvalidPayment(' + idx + ')">If invalid payment, click here</button>';
+  }
+  body.innerHTML = html;
   openModal('payment-detail-modal');
 }
+
+// Invalid PayNow screenshot: the order goes back to Unpaid on both sides.
+function markInvalidPayment(idx) {
+  const row = document.querySelectorAll('#orders-body tr')[idx];
+  if (!row) return;
+  row.dataset.payment = 'Unpaid';
+  row.cells[9].innerHTML = '<span class="badge not-paid"><svg class="pay-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Unpaid</span>';
+  const sel = row.querySelector('.ful-select');
+  if (sel) sel.value = 'Unpaid';
+  closeModal('payment-detail-modal');
+  filterTable();
+}
+
+// ── TOTALS (same rules as Hosted Events) ──
+// Shown orders only, cancelled left out. Payment Collected = Fulfilment
+// Verified or Collected. Gateway orders also carry the platform fee.
+function updateOmTotals() {
+  const el = document.getElementById('om-totals');
+  if (!el) return;
+  let total = 0, collected = 0, fee = 0, feeCollected = 0, gatewayRows = 0, rowsShown = 0;
+  document.querySelectorAll('#orders-body tr').forEach(row => {
+    if (row.style.display === 'none') return;
+    const sel = row.querySelector('.ful-select');
+    const ful = sel ? sel.value : (row.dataset.fulfilment || '');
+    if (ful === 'Cancelled' || row.dataset.cancelled === 'true') return;
+    rowsShown++;
+    const amt = parseFloat(row.dataset.amount) || 0;
+    const isGw = !!row.dataset.gateway;
+    const isCollected = ful === 'Verified' || ful === 'Collected';
+    total += amt;
+    if (isCollected) collected += amt;
+    if (isGw) { gatewayRows++; fee += omFee(amt); if (isCollected) feeCollected += omFee(amt); }
+  });
+  const money = v => '$' + v.toFixed(2);
+  const allGateway = rowsShown > 0 && gatewayRows === rowsShown;
+  let html;
+  if (!gatewayRows) {
+    html = '<div>Total Amount: <strong>' + money(total) + '</strong></div>'
+      + '<div class="om-receive">Payment Collected: <strong>' + money(collected) + '</strong></div>';
+  } else if (allGateway) {
+    html = '<div>Total Paid: <strong>' + money(total) + '</strong></div>'
+      + '<div>Platform Fee: <strong>-' + money(fee) + '</strong></div>'
+      + '<div class="om-receive">Net Received: <strong>' + money(collected - feeCollected) + '</strong></div>';
+  } else {
+    html = '<div>Total Amount: <strong>' + money(total) + '</strong></div>'
+      + '<div>Payment Collected: <strong>' + money(collected) + '</strong></div>'
+      + '<div>Platform Fee: <strong>-' + money(feeCollected) + '</strong> <span class="om-totals-note">(on collected payment gateway orders)</span></div>'
+      + '<div class="om-receive">Net Received: <strong>' + money(collected - feeCollected) + '</strong></div>';
+  }
+  el.innerHTML = html;
+}
+document.addEventListener('change', function (e) {
+  if (e.target.classList && e.target.classList.contains('ful-select') && e.target.closest('#orders-body')) updateOmTotals();
+});
+document.addEventListener('DOMContentLoaded', updateOmTotals);
 
 function downloadTransactionsForPayout(payoutId) {
   alert('Downloading CSV of all transactions in Payout #' + payoutId + '...');
@@ -1523,7 +1688,7 @@ function sortTable(col) {
       <span style="font-size:15px;font-weight:600;color:#009A97;">Payment Details</span>
       <button onclick="closeModal('payment-detail-modal')" style="background:none;border:none;cursor:pointer;color:#888780;font-size:20px;line-height:1;">×</button>
     </div>
-    <div style="padding:18px 20px;" id="payment-detail-body"></div>
+    <div style="padding:18px 20px;max-height:78vh;overflow-y:auto;" id="payment-detail-body"></div>
   </div>
 </div>
 
