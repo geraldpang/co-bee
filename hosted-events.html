@@ -517,10 +517,11 @@ tbody td.muted { color: var(--mid); font-size: 12px; }
   #order-detail-view thead th:nth-child(1), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(1) {
     display: none;
   }
-  #order-detail-view thead th:nth-child(2), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(2) { width: 42%; }
-  #order-detail-view thead th:nth-child(3), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(3) { width: 15%; }
-  #order-detail-view thead th:nth-child(4), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(4) { width: 20%; }
-  #order-detail-view thead th:nth-child(5), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(5) { width: 23%; }
+  #order-detail-view thead th:nth-child(2), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(2) { width: 30%; }
+  #order-detail-view thead th:nth-child(3), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(3) { width: 10%; }
+  #order-detail-view thead th:nth-child(4), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(4) { width: 18%; }
+  #order-detail-view thead th:nth-child(5), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(5) { width: 17%; }
+  #order-detail-view thead th:nth-child(6), #order-detail-view tbody > tr:not(.od-expand-row) > td:nth-child(6) { width: 25%; }
   #order-detail-view th, #order-detail-view td { padding: 9px 5px; font-size: 12px; }
   #order-detail-view .od-row-name-cell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   #order-detail-view .od-status-select { font-size: 11px; height: 30px; width: 100%; padding: 0 20px 0 6px; background-position: right 5px center; }
@@ -581,6 +582,20 @@ body { background: #F4F6F8; }
   background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 8px center;
 }
+.od-update-unpaid    { color: #E8711A; }
+.od-update-verified  { color: #3F9C99; }
+.od-update-collected { color: #1c7a41; }
+#order-detail-view .od-status-select { width: 100%; max-width: 210px; height: 32px; font-weight: 500; }
+.od-sort-th { cursor: pointer; user-select: none; }
+.od-sort-caret { font-size: 10px; color: var(--mid); margin-left: 2px; }
+.od-no-cell { color: var(--ink); }
+.od-row-name-cell { font-weight: 600; color: var(--teal-dark); cursor: pointer; }
+.od-qty-cell { color: #993556; }
+.od-price-cell { font-weight: 600; color: var(--ink); }
+.od-pay-paid { display: inline-flex; align-items: center; gap: 4px; border: none; background: none; padding: 0; font: inherit; font-weight: 600; color: var(--teal-dark); cursor: pointer; }
+.od-pay-paid svg { width: 13px; height: 13px; }
+.od-pay-paid:hover { text-decoration: underline; }
+.od-pay-unpaid { color: var(--mid); font-weight: 500; }
 .od-status-unpaid    { color: var(--red-dark); }
 .od-status-pending   { color: var(--amber-dark); }
 .od-status-paid      { color: #005f5d; }
@@ -599,7 +614,7 @@ body { background: #F4F6F8; }
   font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
 }
 .od-exit-btn:hover { background: var(--teal-light); }
-.od-delete-link { display: block; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mid); cursor: pointer; }
+.od-delete-link { display: inline-block; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--red); cursor: pointer; margin-top: 4px; }
 .od-delete-link:hover { color: var(--red-dark); }
 @media (max-width: 640px) {
   .od-header { flex-direction: column; }
@@ -1274,10 +1289,11 @@ tr.od-row-name-cell { cursor: pointer; }
             <table>
               <thead>
                 <tr>
-                  <th>No</th>
+                  <th class="od-sort-th" onclick="sortOrderRows()">No <span class="od-sort-caret" id="od-sort-caret">&#8963;</span></th>
                   <th>Name</th>
                   <th style="text-align:center;">Qty</th>
                   <th>Price</th>
+                  <th>Status</th>
                   <th>Updates</th>
                 </tr>
               </thead>
@@ -1287,6 +1303,7 @@ tr.od-row-name-cell { cursor: pointer; }
 
           <div class="od-totals">
             <div>Total Purchase: <strong id="od-total-purchase">$0.00</strong></div>
+            <div>Platform Fee: <strong id="od-platform-fee">$0.00</strong></div>
             <div>Payment Collected: <strong id="od-total-collected">$0.00</strong></div>
             <div id="od-profit-row" style="display:none;">Total Profit: <strong id="od-total-profit" style="color:var(--teal-dark);">$0.00</strong></div>
           </div>
@@ -1695,7 +1712,8 @@ function renderOrderRows(orders) {
   odCurrentOrders = orders || [];
 
   if (!orders || orders.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="od-empty">No orders yet for this event.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="od-empty">No orders yet for this event.</td></tr>';
+    document.getElementById('od-platform-fee').textContent = '$0.00';
     document.getElementById('od-total-purchase').textContent = '$0.00';
     document.getElementById('od-total-collected').textContent = '$0.00';
     const eventCost = (orderEventData[odCurrentEventKey] && orderEventData[odCurrentEventKey].eventCost) || 0;
@@ -1708,26 +1726,26 @@ function renderOrderRows(orders) {
   orders.forEach((o, i) => {
     const items = o.items || [{ qty: o.qty || 1 }];
     const totalQty = items.reduce((sum, it) => sum + (it.qty || 1), 0);
+    // STATUS = the member's side (have they paid?); UPDATES = the host's side
+    // (verified the payment / collected). Derived once from the sample status.
+    if (o.memberPaid === undefined) o.memberPaid = o.status !== 'unpaid';
+    if (o.update === undefined) o.update = o.status === 'paid' ? 'verified' : (o.status === 'collected' ? 'collected' : 'unpaid');
 
     const tr = document.createElement('tr');
     tr.id = 'od-row-' + i;
+    tr.dataset.no = i + 1;
     tr.innerHTML =
-      '<td class="muted">' + (i + 1) + '</td>' +
-      '<td class="od-row-name-cell" style="font-weight:500;color:var(--teal-dark);" onclick="toggleOrderExpand(' + i + ')">' + o.name + '<span class="od-chevron"></span></td>' +
-      '<td class="muted" style="text-align:center;">' + totalQty + '</td>' +
-      '<td>$' + o.price.toFixed(2) + '</td>' +
+      '<td class="od-no-cell">' + (i + 1) + '</td>' +
+      '<td class="od-row-name-cell" onclick="toggleOrderExpand(' + i + ')">' + o.name + '</td>' +
+      '<td class="od-qty-cell" style="text-align:center;">' + totalQty + '</td>' +
+      '<td class="od-price-cell">$' + o.price.toFixed(2) + '</td>' +
+      '<td class="od-paystatus-cell">' + payStatusHTML(o, i) + '</td>' +
       '<td>' +
-        '<div style="display:flex;align-items:center;gap:4px;">' +
-        '<select class="od-status-select od-status-' + o.status + '" onchange="updateOrderStatus(this)">' +
-          '<option value="unpaid"' + (o.status === 'unpaid' ? ' selected' : '') + '>Unpaid</option>' +
-          '<option value="pending"' + (o.status === 'pending' ? ' selected' : '') + '>Pending</option>' +
-          '<option value="paid"' + (o.status === 'paid' ? ' selected' : '') + '>Paid</option>' +
-          '<option value="collected"' + (o.status === 'collected' ? ' selected' : '') + '>Collected</option>' +
+        '<select class="od-status-select od-update-' + o.update + '" onchange="updateOrderStatus(this)">' +
+          '<option value="unpaid"' + (o.update === 'unpaid' ? ' selected' : '') + '>Unpaid</option>' +
+          '<option value="verified"' + (o.update === 'verified' ? ' selected' : '') + '>Verified</option>' +
+          '<option value="collected"' + (o.update === 'collected' ? ' selected' : '') + '>Collected</option>' +
         '</select>' +
-        '<button class="od-clip-btn" id="od-clip-' + i + '" style="display:' + ((o.status === 'paid' || o.status === 'collected') ? 'inline-flex' : 'none') + ';" title="View payment proof" onclick="event.stopPropagation();viewPaymentProof(' + i + ')">' +
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>' +
-        '</button>' +
-        '</div>' +
       '</td>';
     tr.dataset.price = o.price;
     tbody.appendChild(tr);
@@ -1736,7 +1754,7 @@ function renderOrderRows(orders) {
     expandTr.id = 'od-expand-row-' + i;
     expandTr.className = 'od-expand-row collapsed';
     const expandTd = document.createElement('td');
-    expandTd.colSpan = 5;
+    expandTd.colSpan = 6;
     expandTd.innerHTML = buildReceiptHTML(o, i);
     expandTr.appendChild(expandTd);
     tbody.appendChild(expandTr);
@@ -1830,6 +1848,10 @@ function viewPaymentProof(index) {
 }
 
 function markInvalidPayment(index) {
+  const o = odCurrentOrders[index];
+  if (o) o.memberPaid = false;
+  const cell = document.querySelector('#od-row-' + index + ' .od-paystatus-cell');
+  if (cell && o) cell.innerHTML = payStatusHTML(o, index);
   const select = document.querySelector('#od-row-' + index + ' .od-status-select');
   if (select) {
     select.value = 'unpaid';
@@ -1901,26 +1923,38 @@ function toggleOrderExpand(index) {
   }
 }
 
-function updateOrderStatus(selectEl) {
-  const newStatus = selectEl.value;
-  const meta = ODStatusMeta[newStatus] || ODStatusMeta.unpaid;
-  selectEl.className = 'od-status-select od-status-' + newStatus;
-  const row = selectEl.closest('tr');
-  const clipBtn = row.querySelector('.od-clip-btn');
-  if (clipBtn) clipBtn.style.display = (newStatus === 'paid' || newStatus === 'collected') ? 'inline-flex' : 'none';
-  updateOrderTotals();
-  showToast('Status updated to ' + meta.label, 'success');
+// STATUS cell: paper-clip + "Paid" opens the payment details; "Unpaid" is plain.
+function payStatusHTML(o, i) {
+  if (!o.memberPaid) return '<span class="od-pay-unpaid">Unpaid</span>';
+  return '<button class="od-pay-paid" title="View payment details" onclick="event.stopPropagation();viewPaymentProof(' + i + ')">' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>' +
+    'Paid</button>';
 }
 
+const OD_UPDATE_LABEL = { unpaid: 'Unpaid', verified: 'Verified', collected: 'Collected' };
+function updateOrderStatus(selectEl) {
+  const newStatus = selectEl.value;
+  selectEl.className = 'od-status-select od-update-' + newStatus;
+  const row = selectEl.closest('tr');
+  const o = odCurrentOrders[parseInt(row.id.replace('od-row-', ''), 10)];
+  if (o) o.update = newStatus;
+  updateOrderTotals();
+  showToast('Updated to ' + (OD_UPDATE_LABEL[newStatus] || newStatus), 'success');
+}
+
+// Platform fee: assumed 0.5% of Total Purchase ($6.00 -> $0.03, as in the reference screen).
+const PLATFORM_FEE_RATE = 0.005;
 function updateOrderTotals() {
   let totalPurchase = 0, totalCollected = 0;
   document.querySelectorAll('#od-order-rows tr[data-price]').forEach(row => {
     const price = parseFloat(row.dataset.price) || 0;
     totalPurchase += price;
-    const status = row.querySelector('.od-status-select')?.value;
-    if (status === 'paid' || status === 'collected') totalCollected += price;
+    const update = row.querySelector('.od-status-select')?.value;
+    // Payment Collected = payments the host has verified (or already collected)
+    if (update === 'verified' || update === 'collected') totalCollected += price;
   });
   document.getElementById('od-total-purchase').textContent = '$' + totalPurchase.toFixed(2);
+  document.getElementById('od-platform-fee').textContent = '$' + (Math.round(totalPurchase * PLATFORM_FEE_RATE * 100) / 100).toFixed(2);
   document.getElementById('od-total-collected').textContent = '$' + totalCollected.toFixed(2);
 
   const eventCost = (orderEventData[odCurrentEventKey] && orderEventData[odCurrentEventKey].eventCost) || 0;
@@ -1928,6 +1962,21 @@ function updateOrderTotals() {
   const profitEl = document.getElementById('od-total-profit');
   profitEl.textContent = (profit < 0 ? '-$' + Math.abs(profit).toFixed(2) : '$' + profit.toFixed(2));
   profitEl.style.color = profit < 0 ? 'var(--red-dark)' : 'var(--teal-dark)';
+}
+
+// NO column sort (ascending / descending), keeping each row's expand row with it.
+let odSortAsc = true;
+function sortOrderRows() {
+  odSortAsc = !odSortAsc;
+  const tbody = document.getElementById('od-order-rows');
+  const rows = Array.from(tbody.querySelectorAll('tr[data-price]'));
+  rows.sort((a, b) => odSortAsc ? a.dataset.no - b.dataset.no : b.dataset.no - a.dataset.no);
+  rows.forEach(r => {
+    tbody.appendChild(r);
+    const ex = document.getElementById('od-expand-row-' + r.id.replace('od-row-', ''));
+    if (ex) tbody.appendChild(ex);
+  });
+  document.getElementById('od-sort-caret').innerHTML = odSortAsc ? '&#8963;' : '&#8964;';
 }
 
 function updateEventCostButton(cost) {
