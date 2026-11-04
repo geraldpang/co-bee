@@ -28,6 +28,23 @@
   .nav-right a:hover { text-decoration: underline; }
   .page { min-height: 100vh; padding: 100px 20px 48px; }
   /* Inside the app shell (cobee.html iframe) the shell already has a topbar */
+  /* Opened from the public home page: same cream + honeycomb + soft glows as
+     the landing hero (cobee-redesign.html), so it feels like the same site */
+  body.from-home::before, body.from-home::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  body.from-home::before {
+    background:
+      radial-gradient(circle at 100% 0%, rgba(26,163,154,0.12) 0, transparent 420px),
+      radial-gradient(circle at 0% 100%, rgba(245,166,35,0.10) 0, transparent 300px);
+  }
+  body.from-home::after {
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='52' viewBox='0 0 60 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 17.3 L60 34.6 L30 52 L0 34.6 L0 17.3Z' fill='%231AA39A'/%3E%3C/svg%3E");
+    background-size: 72px 62px;
+  }
+  body.from-home .page { position: relative; z-index: 1; }
+  /* Opened from the app (Find a group to join / My Group): match the member app's page background */
+  body.in-app { background: #F4F6F8; }
+  body.in-app nav { background: rgba(244,246,248,0.85); }
   body.in-shell nav { display: none; }
   body.in-shell .page { padding-top: 20px; }
   .host-landing.is-missing { text-align: center; padding: 48px 24px; }
@@ -194,11 +211,14 @@
   // signed-in members) link here as host.html?from=home|find&d=<host JSON>.
   // With a real backend, d would become a host id or slug looked up via API.
   var params = new URLSearchParams(window.location.search);
-  var FROM_HOME = params.get('from') !== 'find';
-  var BACK_URL = FROM_HOME ? 'cobee-redesign.html#hosts' : 'find-hosts.html';
+  var FROM = params.get('from') || 'home';           // 'home' | 'find' | 'mygroup'
+  var FROM_HOME = FROM !== 'find' && FROM !== 'mygroup';
+  var BACK_URL = FROM_HOME ? 'cobee-redesign.html#hosts' : (FROM === 'mygroup' ? 'member.html' : 'find-hosts.html');
+  var BACK_LABEL = FROM === 'mygroup' ? 'Back to My Group' : 'Back to map';
   var pageEl = document.getElementById('hostLanding');
   if (window.parent && window.parent !== window) document.body.classList.add('in-shell');
 
+  document.body.classList.add(FROM_HOME ? 'from-home' : 'in-app');
   if (!FROM_HOME) document.getElementById('navRight').innerHTML = '<a href="find-hosts.html">Find hosts</a>';
 
   var toastTimer = null;
@@ -226,6 +246,23 @@
     phone: d.phone, email: d.email, openEvents: d.events || []
   };
   document.title = d.title + ' — co·bee';
+
+  // ─── My groups store ───
+  // Shared with member.html (My Group list) and find-hosts.html (Join
+  // buttons). One entry per host: status 'pending' until approved, or
+  // 'member' when the join went through instantly.
+  var GROUPS_KEY = 'cobee_my_groups';
+  var groupKey = d.title + '|' + d.host;
+  function loadMyGroups() {
+    try { return JSON.parse(localStorage.getItem(GROUPS_KEY) || '[]') || []; } catch (e) { return []; }
+  }
+  function saveMyGroup(entry) {
+    var list = loadMyGroups().filter(function (g) { return g.key !== entry.key; });
+    list.unshift(entry);
+    try { localStorage.setItem(GROUPS_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+  var existing = loadMyGroups().filter(function (g) { return g.key === groupKey; })[0];
+  if (existing && existing.status === 'pending' && !FROM_HOME) h.pending = true;
 
     // ─── Colour extraction ───
     // Draws the avatar (an image, or for now an emoji) onto a tiny canvas and
@@ -359,7 +396,7 @@
         '<div class="lp-hero">' +
           '<a class="lp-back" id="lpBack" href="' + BACK_URL + '">' +
             '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
-            'Back to map</a>' +
+            BACK_LABEL + '</a>' +
           '<div class="lp-avatar">' + h.groupBuy.emoji + '</div>' +
           '<div class="lp-title">' + h.groupBuy.name + '</div>' +
           '<div class="lp-host">' + 'Hosted by' + ' <b>' + h.name + '</b></div>' +
@@ -420,7 +457,8 @@
       if (FROM_HOME) {
         var mode = instant ? 'open' : h.approvalMode;
         var url = 'signup.html?host=' + encodeURIComponent(h.groupBuy.name) +
-          '&hostname=' + encodeURIComponent(h.name) + '&approval=' + encodeURIComponent(mode);
+          '&hostname=' + encodeURIComponent(h.name) + '&approval=' + encodeURIComponent(mode) +
+          '&emoji=' + encodeURIComponent(h.groupBuy.emoji);
         if (mode === 'question' && h.joinQuestion) url += '&question=' + encodeURIComponent(h.joinQuestion);
         if (answer) url += '&answer=' + encodeURIComponent(answer);
         if (message) url += '&message=' + encodeURIComponent(message);
@@ -429,6 +467,11 @@
       }
 
       h.joinRequest = { answer: answer, comment: message }; // sent with the join
+      saveMyGroup({
+        key: groupKey, status: instant ? 'member' : 'pending', requestedAt: new Date().toISOString(),
+        accent: paletteFor(h).accent, light: paletteFor(h).light, d: d,
+        answer: answer, message: message
+      });
       if (instant) {
         showToast("You're in! You've joined " + h.groupBuy.name + (keywordHit ? ' (approved automatically)' : '') + '. \ud83c\udf89', 'success');
       } else {
@@ -437,7 +480,10 @@
         renderLanding(h);
       }
       setTimeout(function () {
-        if (window.parent && window.parent !== window && window.parent.navigate) {
+        // Land on My Group so the new (or pending) group is the first thing they see.
+        if (window.parent && window.parent !== window && window.parent.iframeTab) {
+          window.parent.iframeTab('group');
+        } else if (window.parent && window.parent !== window && window.parent.navigate) {
           window.parent.navigate('member.html', null);
         } else {
           window.location.href = 'https://co-bee.pages.dev/cobee';
@@ -446,6 +492,13 @@
     }
 
     renderLanding(h);
+    // From My Group inside the app shell, "Back" returns to the My Group tab.
+    if (FROM === 'mygroup' && window.parent && window.parent !== window && window.parent.iframeTab) {
+      document.getElementById('lpBack').addEventListener('click', function (e) {
+        e.preventDefault();
+        window.parent.iframeTab('group');
+      });
+    }
 })();
 </script>
 
