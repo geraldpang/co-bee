@@ -327,7 +327,11 @@
   if (approvalMode === 'question' && joinQuestion) {
     document.getElementById('field-joinQuestion').style.display = 'block';
     document.getElementById('joinQuestionLabel').textContent = joinQuestion;
+    // Answer typed on the host's landing page (home page map) carries over.
+    if (params.get('answer')) document.getElementById('joinQuestion').value = params.get('answer');
   }
+  // Optional "Leave a message" from the landing page, sent with the join request.
+  var joinMessage = params.get('message') || '';
 
   // Show/hide password toggles
   document.querySelectorAll('.pw-toggle').forEach(function (btn) {
