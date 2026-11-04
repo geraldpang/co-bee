@@ -346,6 +346,7 @@
     text-decoration: none; white-space: nowrap; flex-shrink: 0;
     transition: background 0.15s, opacity 0.15s;
     opacity: 0; pointer-events: none;
+    font-family: inherit; cursor: pointer;
   }
   .host-card-join:hover { background: var(--teal-dark); }
   .host-card:hover .host-card-join { opacity: 1; pointer-events: auto; }
@@ -380,6 +381,7 @@
     background: var(--teal); color: white; border: none;
     padding: 6px 12px; border-radius: 100px; font-size: 11px; font-weight: 600;
     text-decoration: none; white-space: nowrap; transition: background 0.15s;
+    font-family: inherit; cursor: pointer;
   }
   .host-tooltip .tt-join:hover { background: var(--teal-dark); }
 
@@ -707,6 +709,10 @@
   }
 
   @media (max-width: 520px) {
+    .hero-map-card .host-list { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 680px) {
     .hero-map-card .host-list { grid-template-columns: 1fr; }
   }
 </style>
@@ -1203,11 +1209,12 @@
     // Builds the signup link for a specific host, carrying which host was
     // picked so the signup page knows to skip the "find hosts" step after —
     // and whether that host needs approval (and a question) to join.
-    function joinUrl(h) {
+    function joinUrl(h, modeOverride) {
+      var mode = modeOverride || h.approvalMode || 'open';
       var url = 'signup.html?host=' + encodeURIComponent(h.groupBuy.name) +
         '&hostname=' + encodeURIComponent(h.name) +
-        '&approval=' + encodeURIComponent(h.approvalMode || 'open');
-      if (h.approvalMode === 'question' && h.joinQuestion) {
+        '&approval=' + encodeURIComponent(mode);
+      if (mode === 'question' && h.joinQuestion) {
         url += '&question=' + encodeURIComponent(h.joinQuestion);
       }
       return url;
@@ -1361,11 +1368,14 @@
     // Some hosts require the host to approve a join request before it goes
     // through; some also ask a short question first. Deterministic by index
     // so it's consistent across reloads, not random.
-    var APPROVAL_MODES = ['open', 'open', 'open', 'approval', 'open', 'question'];
+    // Mirrors Settings › Joining: 'open' = Join instantly, 'question' = Approval
+    // after a question (the question text is configured by the host there).
+    var APPROVAL_MODES = ['open', 'open', 'question', 'question', 'open', 'question'];
     var JOIN_QUESTIONS = [
-      'What made you interested in this group buy?',
-      'Have you joined one of our group buys before?',
-      'Any delivery or collection notes we should know about you?'
+      'How did you hear about us?',
+      'Which block or estate do you stay in? (Collection is nearby.)',
+      'Who referred you to this group?',
+      '1 + 2 = ?'
     ];
     function approvalModeFor(i) { return APPROVAL_MODES[i % APPROVAL_MODES.length]; }
     function joinQuestionFor(i) { return JOIN_QUESTIONS[i % JOIN_QUESTIONS.length]; }
@@ -1454,10 +1464,11 @@
           '<div class="tt-name">' + h.groupBuy.name + '</div>' +
           '<div class="tt-host">Hosted by ' + h.name + '</div>' +
         '</div>' +
-        '<a href="' + joinUrl(h) + '" class="tt-join">' + joinLabel(h) + '</a>';
+        '<button type="button" class="tt-join">' + joinLabel(h) + '</button>';
       tooltipEl.style.left = px + 'px';
       tooltipEl.style.top = py + 'px';
       tooltipEl.classList.add('show');
+      tooltipEl.querySelector('.tt-join').addEventListener('click', function () { openLanding(h); });
     }
 
     function ringOnly(h) {
@@ -1487,7 +1498,7 @@
     var activeTapHost = null;
     function handlePinTap(h, evt) {
       if (activeTapHost === h) {
-        window.location.href = joinUrl(h);
+        openLanding(h);
         return;
       }
       if (evt && evt.preventDefault) evt.preventDefault();
@@ -1519,6 +1530,79 @@
       });
     }
 
+    // ══════════════════════════════════════════════════════════════════
+    // HOST / GROUP LANDING
+    // Tapping Join (pin tooltip, second pin tap, partner card) swaps the map
+    // for this landing. One template serves group buys and community groups,
+    // and it is themed from the colours in the host's own avatar image.
+    // ══════════════════════════════════════════════════════════════════
+
+    // ─── Sample landing data (deterministic per host) ───
+    var COMMUNITY_GROUPS = [
+      ['🌻', 'Sunflower Mums Club'], ['🏡', 'Punggol Neighbours'], ['🐝', 'Busy Bees Bedok'],
+      ['🍃', 'Green Living Circle'], ['🎈', 'Parents Corner'], ['🫐', 'Berry Good Buys']
+    ];
+    var EVENT_SUFFIXES = ['November Run', 'Weekend Drop', 'Restock #', 'Year-End Bundle', 'Pre-order'];
+    function nearestAreaName(lat, lng) {
+      var best = null, bestD = Infinity;
+      Object.keys(AREAS).forEach(function (k) {
+        var d = haversineKm(lat, lng, AREAS[k][0], AREAS[k][1]);
+        if (d < bestD) { bestD = d; best = k; }
+      });
+      return best.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    }
+    hosts.forEach(function (h, i) {
+      h.area = nearestAreaName(h.lat, h.lng);
+      h.kind = (i % 4 === 3) ? 'group' : 'groupbuy';
+      if (h.kind === 'group') {
+        var g = COMMUNITY_GROUPS[Math.floor(i / 4) % COMMUNITY_GROUPS.length];
+        h.groupBuy = { emoji: g[0], name: g[1] };
+        // Settings › "Approve automatically with a keyword": answers that
+        // contain one of these skip the admin's review.
+        h.joinKeywords = [g[1].split(' ')[0].toUpperCase()];
+      }
+      h.members = 18 + ((i * 37) % 260);
+      h.phone = '+65 ' + (8 + (i % 2)) + String(100 + (i * 73) % 900) + ' ' + String(1000 + (i * 389) % 9000);
+      h.email = h.name.toLowerCase().replace(/[^a-z]+/g, '.') + '@gmail.com';
+      h.eventsHosted = (h.kind === 'group' && i % 8 === 7) ? 0 : 3 + ((i * 13) % 58);
+      var cat = h.groupBuy.name.replace(/ (Bundle|Group Buy|Weekly Run|Restock|Haul|Box)$/, '');
+      h.description = h.kind === 'group'
+        ? 'A neighbourhood circle in ' + h.area + ' for families who like to share good finds. Members suggest what to buy next, ' +
+          'and hosts run group buys when enough people are keen. Friendly, no spam, and everyone collects nearby.'
+        : 'I consolidate orders for ' + cat.toLowerCase() + ' from trusted suppliers so neighbours in ' + h.area +
+          ' get wholesale prices without buying a whole carton alone. Self-collect near ' + h.area + ', or delivery islandwide for a small fee.';
+      h.tags = h.kind === 'group'
+        ? ['Community', h.area, 'Self-collect']
+        : [h.area, 'Self-collect', 'Delivery available', 'PayNow'];
+      h.openEvents = [];
+      var nEvents = h.eventsHosted === 0 ? 0 : 1 + (i % 3);
+      for (var e = 0; e < nEvents; e++) {
+        var suf = EVENT_SUFFIXES[(i + e) % EVENT_SUFFIXES.length];
+        h.openEvents.push({
+          title: (h.kind === 'group' ? 'Members’ pick' : cat) + ' · ' + (suf === 'Restock #' ? 'Restock #' + (2 + i % 9) : suf),
+          orders: 4 + ((i * 7 + e * 11) % 40),
+          daysLeft: 1 + ((i + e * 3) % 9)
+        });
+      }
+    });
+
+    // ─── Open the host's own page ───
+    // Join / Request to Join now opens host.html, a separate page with the
+    // same cream background as sign-in, instead of squeezing the landing
+    // into the map area. The host's details travel in the link.
+    function hostPageUrl(h, from) {
+      var d = {
+        title: h.groupBuy.name, emoji: h.groupBuy.emoji, host: h.name, kind: h.kind,
+        mode: h.approvalMode, q: h.joinQuestion || '', kw: h.joinKeywords || [],
+        members: h.members, eventsHosted: h.eventsHosted, desc: h.description,
+        phone: h.phone, email: h.email, events: h.openEvents
+      };
+      return 'host.html?from=' + from + '&d=' + encodeURIComponent(JSON.stringify(d));
+    }
+    function openLanding(h) {
+      window.location.href = hostPageUrl(h, 'home');
+    }
+
     // Populate the datalist for autocomplete
     var datalist = document.getElementById('sgAreas');
     Object.keys(AREAS).forEach(function (name) {
@@ -1542,7 +1626,9 @@
           '<div class="host-card-name">' + h.groupBuy.name + '</div>' +
           '<div class="host-card-dist">' + subtitle + '</div>' +
         '</div>' +
-        '<a href="' + joinUrl(h) + '" class="host-card-join">' + joinLabel(h) + '</a>';
+        '<button type="button" class="host-card-join">' + joinLabel(h) + '</button>';
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', function () { openLanding(h); });
       card.addEventListener('mouseenter', function () { ringOnly(h); });
       card.addEventListener('mouseleave', clearRingOnly);
       hostList.appendChild(card);
