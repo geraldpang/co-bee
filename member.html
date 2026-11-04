@@ -325,6 +325,56 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .dot-menu { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; transition: background 0.12s; }
   .dot-menu:hover { background: #E6F7F7; }
 
+  /* Pay Together on Checkout */
+  .hp-pt-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #007A77; background: #E0F5F5; border: 0.5px solid #80CCCB; border-radius: 100px; padding: 3px 10px; margin-bottom: 10px; }
+  .hp-pt-card { background: white; border-radius: 12px; border: 0.5px solid #e0dfd8; margin: 10px 14px 0; padding: 12px 14px; }
+  .hp-pt-head { font-size: 11px; font-weight: 600; color: #888780; letter-spacing: 0.06em; margin-bottom: 2px; }
+  .hp-pt-sub { font-size: 12px; color: #888780; margin-bottom: 10px; }
+  .hp-pt-opt { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 0.5px solid #D3D1C7; border-radius: 10px; cursor: pointer; margin-top: 8px; transition: border-color 0.15s, background 0.15s; }
+  .hp-pt-opt.sel { border-color: #009A97; background: #F3FAFA; box-shadow: 0 0 0 1px #009A97 inset; }
+  .hp-pt-check { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid #B4B2A9; background: white; flex-shrink: 0; margin-top: 1px; position: relative; }
+  .hp-pt-opt.sel .hp-pt-check { border-color: #009A97; background: #009A97; }
+  .hp-pt-opt.sel .hp-pt-check::after { content: ''; position: absolute; left: 5px; top: 1px; width: 5px; height: 10px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .hp-pt-opt.locked { cursor: default; }
+  .hp-pt-opt.locked .hp-pt-check { opacity: 0.55; }
+  .hp-pt-tag { display: inline-block; font-size: 10px; font-weight: 700; color: #007A77; background: #E0F5F5; border-radius: 100px; padding: 1px 7px; margin-left: 4px; vertical-align: 1px; }
+  .hp-pt-sum { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 0.5px solid #E0DFD8; font-size: 12.5px; color: #888780; }
+  .hp-pt-sum strong { font-size: 15px; color: #007A77; }
+  .hp-pt-main { flex: 1; min-width: 0; }
+  .hp-pt-name { font-size: 13px; font-weight: 600; color: #1a1a18; }
+  .hp-pt-lines { font-size: 11.5px; color: #888780; margin-top: 3px; line-height: 1.5; }
+  .hp-pt-amt { font-size: 14px; font-weight: 700; color: #007A77; white-space: nowrap; }
+
+  /* Payment success pop-up (after CONFIRM PAYMENT with a PayNow screenshot) */
+  .pay-ok-overlay {
+    display: none; position: fixed; inset: 0; z-index: 400;
+    background: rgba(26,26,24,0.45); align-items: center; justify-content: center; padding: 24px;
+  }
+  .pay-ok-overlay.show { display: flex; animation: payOkFade 0.2s ease both; }
+  .pay-ok-modal {
+    width: 100%; max-width: 360px; background: white; border-radius: 16px;
+    padding: 28px 24px 22px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    animation: payOkPop 0.28s cubic-bezier(.2,1.3,.4,1) both;
+  }
+  @keyframes payOkFade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes payOkPop { from { opacity: 0; transform: scale(0.92) translateY(8px); } to { opacity: 1; transform: none; } }
+  .pay-ok-icon {
+    width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px;
+    background: #E0F5F5; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 8px rgba(0,154,151,0.08);
+  }
+  .pay-ok-title { font-size: 18px; font-weight: 700; color: #1a1a18; margin-bottom: 6px; }
+  .pay-ok-sub { font-size: 13px; color: #888780; line-height: 1.55; margin-bottom: 16px; }
+  .pay-ok-sub strong { color: #1a1a18; font-weight: 600; }
+  .pay-ok-rows { background: #FAFAF8; border: 0.5px solid #E0DFD8; border-radius: 10px; padding: 10px 14px; margin-bottom: 18px; text-align: left; }
+  .pay-ok-row { display: flex; justify-content: space-between; font-size: 12.5px; padding: 3px 0; }
+  .pay-ok-row span:first-child { color: #888780; }
+  .pay-ok-row span:last-child { color: #1a1a18; font-weight: 600; }
+  .pay-ok-row.total span:last-child { color: #007A77; font-size: 14px; }
+  .pay-ok-btn { width: 100%; height: 46px; border: none; border-radius: 10px; background: #009A97; color: white; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; }
+  .pay-ok-btn:hover { background: #007A77; }
+  .pay-ok-link { margin-top: 10px; background: none; border: none; color: #009A97; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; }
+
   /* MY GROUP  */
   .group-list { display: flex; flex-direction: column; gap: 1px; max-width: 600px; margin: 0 auto; padding: 0 14px; }
   .group-list-item {
@@ -1862,7 +1912,10 @@ select:focus { border-color: #009A97; }
           </div>
         </div>
         <div style="padding:0 14px 14px;">
-          <div id="hp-paymode" style="font-size:12px;font-weight:600;color:#009A97;margin-bottom:10px;">Pay after 1</div>
+          <div id="hp-paymode" class="hp-pt-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            Pay Together available
+          </div>
           <div style="display:grid;grid-template-columns:80px 1fr;gap:6px 0;font-size:12px;">
             <span style="color:#888780;">Closing</span><span id="hp-closing" style="color:#5F5E5A;font-weight:500;">15-05-2026</span>
             <span style="color:#888780;">Collection</span><span id="hp-collection" style="color:#5F5E5A;font-weight:500;">22-05-2026</span>
@@ -1894,6 +1947,14 @@ select:focus { border-color: #009A97; }
           <span style="font-size:13px;font-weight:600;color:#007A77;">Final</span>
           <span id="hp-final" style="font-size:18px;font-weight:700;color:#007A77;">$0.00</span>
         </div>
+      </div>
+
+      <!-- Pay Together: shown when the event has Pay Together on AND the member
+           has other unpaid orders with this host. Renders into #hp-pt-list. -->
+      <div class="hp-pt-card" id="hp-pt-card" style="display:none;">
+        <div class="hp-pt-head">PAY TOGETHER</div>
+        <div class="hp-pt-sub" id="hp-pt-sub">Settle your other unpaid orders with this host in one payment.</div>
+        <div id="hp-pt-list"></div>
       </div>
 
       <!-- Notes to the host (carried over from Screen 1) -->
@@ -4874,6 +4935,7 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   document.getElementById('ev-screen-hitpay').style.display = 'none';
   document.getElementById('ev-screen-qr').style.display = 'none';
   CURRENT_ORDER_NO = '';
+  PT_SELECTED = {};
   var hpNotes = document.getElementById('hp-notes'); if (hpNotes) hpNotes.value = '';
   showView('view-event-detail');
 }
@@ -5241,6 +5303,7 @@ function renderHpItems() {
   dRow.style.display = amt.deliveryMode === 'flat' ? 'flex' : 'none';
   setText('hp-delivery', money(amt.deliveryFee));
   setText('hp-final', money(finalAmt));
+  renderPayTogether(finalAmt);
   setText('ev2-total', money(amt.subtotal));
   setText('ev2-discount', amt.discount > 0 ? '-' + money(amt.discount) : '$0.00');
   setText('ev2-admin', money(amt.adminFee));
@@ -5306,8 +5369,67 @@ var CURRENT_ORDER_NO = '';
 var QR_PURPLE = '#7B2D8B';
 var qrSeed = 1;
 
+/* ─── Pay Together (Checkout) ───
+   When the event has Pay Together on (hosting.html › Payment options) and the
+   member has other unpaid orders with the same host, Checkout offers to pay
+   them in the same PayNow transfer. Sample data mirrors My Purchase's
+   "Awaiting payment" card (Moi nua, M6 group, $24.00). */
+var EVENT_PAY_TOGETHER = true;
+// Sample unpaid orders (one per event). Moi nua mirrors My Purchase's
+// "Awaiting payment" card; the other two are extra samples so several can be picked.
+var UNPAID_ORDERS = [
+  { id: 'u1', title: 'Moi nua', host: 'Minh Cong', group: 'M6 group', collect: '01-12-2025', amount: 24.00 },
+  { id: 'u2', title: 'Japanese Snacks Restock', host: 'Minh Cong', group: 'M6 group', collect: '06-12-2025', amount: 18.50 },
+  { id: 'u3', title: 'Fresh Durian Box', host: 'Minh Cong', group: 'M6 group', collect: '13-12-2025', amount: 32.00 }
+];
+var PT_SELECTED = {};          // unpaid order id -> true when ticked
+var PT_THIS_AMOUNT = 0;
+
+function unpaidWithThisHost() {
+  var host = (CURRENT_EVENT && CURRENT_EVENT.host) || '';
+  return UNPAID_ORDERS.filter(function (o) { return o.host === host; });
+}
+function ptSelectedOrders() {
+  return unpaidWithThisHost().filter(function (o) { return PT_SELECTED[o.id]; });
+}
+function payTogetherTotal() {
+  return PT_THIS_AMOUNT + ptSelectedOrders().reduce(function (s, o) { return s + o.amount; }, 0);
+}
+function renderPayTogether(thisAmount) {
+  PT_THIS_AMOUNT = thisAmount;
+  var others = unpaidWithThisHost();
+  var badge = document.getElementById('hp-paymode');
+  var card = document.getElementById('hp-pt-card');
+  if (badge) badge.style.display = EVENT_PAY_TOGETHER ? 'inline-flex' : 'none';
+  if (!card) return;
+  if (!EVENT_PAY_TOGETHER || !others.length) { card.style.display = 'none'; PT_SELECTED = {}; return; }
+  card.style.display = 'block';
+  var title = document.getElementById('ev1-title').textContent || 'This event';
+  document.getElementById('hp-pt-sub').textContent = 'You have ' + others.length + ' other unpaid event' + (others.length > 1 ? 's' : '') + ' with ' + CURRENT_EVENT.host + '. Tick the ones to pay in the same payment.';
+  var html = '<div class="hp-pt-opt sel locked"><span class="hp-pt-check"></span><div class="hp-pt-main">' +
+      '<div class="hp-pt-name">' + title + ' <span class="hp-pt-tag">This order</span></div>' +
+      '<div class="hp-pt-lines">' + (CURRENT_EVENT.group || '') + '</div></div>' +
+      '<div class="hp-pt-amt">$' + thisAmount.toFixed(2) + '</div></div>';
+  others.forEach(function (o) {
+    var on = !!PT_SELECTED[o.id];
+    html += '<div class="hp-pt-opt' + (on ? ' sel' : '') + '" onclick="togglePayTogether(\'' + o.id + '\')" role="checkbox" aria-checked="' + on + '">' +
+      '<span class="hp-pt-check"></span><div class="hp-pt-main"><div class="hp-pt-name">' + o.title + '</div>' +
+      '<div class="hp-pt-lines">' + o.group + ' · Collection ' + o.collect + '</div></div>' +
+      '<div class="hp-pt-amt">$' + o.amount.toFixed(2) + '</div></div>';
+  });
+  var n = ptSelectedOrders().length + 1, total = payTogetherTotal();
+  html += '<div class="hp-pt-sum"><span>' + n + (n === 1 ? ' event' : ' events') + ' selected</span><strong>$' + total.toFixed(2) + '</strong></div>';
+  document.getElementById('hp-pt-list').innerHTML = html;
+  var pay = document.getElementById('hp-pay-btn');
+  if (pay && !pay.disabled) pay.textContent = n > 1 ? 'Make Payment · $' + total.toFixed(2) : 'Make Payment';
+}
+function togglePayTogether(id) {
+  PT_SELECTED[id] = !PT_SELECTED[id];
+  renderPayTogether(PT_THIS_AMOUNT);
+}
+
 function makePayment() {
-  var finalTxt = document.getElementById('hp-final').textContent;
+  var finalTxt = '$' + payTogetherTotal().toFixed(2);
   // The order is created here (not on Checkout), so the number is assigned now
   if (!CURRENT_ORDER_NO) CURRENT_ORDER_NO = String(Math.floor(Math.random() * 10) + 1);
   var orderNo = CURRENT_ORDER_NO;
@@ -5315,7 +5437,9 @@ function makePayment() {
   var title = document.getElementById('ev1-title').textContent || 'event';
   var ref = title.split(/\s+/).filter(Boolean).map(function (w) { return w.charAt(0).toLowerCase(); }).join('').replace(/[^a-z0-9]/g, '') + '-no' + orderNo;
   document.getElementById('qr-ordernum').textContent = orderNo;
-  document.getElementById('qr-event-title').textContent = title;
+  var ptCount = ptSelectedOrders().length ? ptSelectedOrders().length + 1 : 0;
+  document.getElementById('qr-event-title').textContent = ptCount ? title + ' + ' + (ptCount - 1) + ' more · Pay Together' : title;
+  if (ptCount) ref += '-pt' + ptCount;
   document.getElementById('qr-amount').textContent = finalTxt;
   document.getElementById('qr-amount-inline').textContent = finalTxt;
   document.getElementById('qr-paynow').textContent = HOST_PAYNOW;
@@ -5417,7 +5541,27 @@ function confirmQrPayment() {
   document.getElementById('ev-screen-qr').style.display = 'none';
   document.getElementById('ev-screen-2').style.display = 'block';
   document.getElementById('view-event-detail').scrollTop = 0;
-  showToast('Payment submitted', 'success');
+  openPayOkModal();
+}
+
+/* Payment success pop-up: confirms the PayNow screenshot went to the host,
+   with the reference code and amount (no order number). "View my order" closes it
+   onto the Order Confirmed screen; "Go to My Purchase" switches tab. */
+function openPayOkModal() {
+  document.getElementById('payOkRef').textContent = document.getElementById('qr-ref').textContent;
+  document.getElementById('payOkAmt').textContent = document.getElementById('qr-amount').textContent;
+  var host = (typeof CURRENT_EVENT !== 'undefined' && CURRENT_EVENT && CURRENT_EVENT.host) ? CURRENT_EVENT.host : 'the host';
+  document.getElementById('payOkHost').textContent = host;
+  var overlay = document.getElementById('payOkOverlay');
+  // The page's markup nests some views inside others; keep the pop-up a direct
+  // child of <body> so a hidden parent view can never hide it.
+  if (overlay.parentNode !== document.body) document.body.appendChild(overlay);
+  // Any earlier warning toast (e.g. "Please attach…") is now out of date.
+  var tw = document.getElementById('toast-wrap'); if (tw) tw.innerHTML = '';
+  overlay.classList.add('show');
+}
+function closePayOkModal() {
+  document.getElementById('payOkOverlay').classList.remove('show');
 }
 
 function cancelHitPay() {
@@ -5494,6 +5638,7 @@ function showDetail(title, desc, host, group, daysLeft, ordersPlaced, shared) {
   document.getElementById('ev-screen-hitpay').style.display = 'none';
   document.getElementById('ev-screen-qr').style.display = 'none';
   CURRENT_ORDER_NO = '';
+  PT_SELECTED = {};
   var hpNotes = document.getElementById('hp-notes'); if (hpNotes) hpNotes.value = '';
   showView('view-event-detail');
 }
@@ -6429,5 +6574,22 @@ applyDefaultGecFilter();
   }
 })();
 </script>
+<!-- Payment success pop-up — opened by confirmQrPayment() -->
+<div class="pay-ok-overlay" id="payOkOverlay" onclick="if (event.target === this) closePayOkModal()">
+  <div class="pay-ok-modal" role="dialog" aria-modal="true" aria-labelledby="payOkTitle">
+    <div class="pay-ok-icon">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#009A97" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="pay-ok-title" id="payOkTitle">Payment made successfully!</div>
+    <div class="pay-ok-sub">Thank you! We've sent your PayNow screenshot to <strong id="payOkHost">the host</strong>. They'll check it and confirm your order.</div>
+    <div class="pay-ok-rows">
+      <div class="pay-ok-row"><span>Reference</span><span id="payOkRef"></span></div>
+      <div class="pay-ok-row total"><span>Amount paid</span><span id="payOkAmt">$0.00</span></div>
+    </div>
+    <button type="button" class="pay-ok-btn" onclick="closePayOkModal()">View my order</button>
+    <button type="button" class="pay-ok-link" onclick="closePayOkModal(); switchTab('purchase');">Go to My Purchase</button>
+  </div>
+</div>
+
 </body>
 </html>
