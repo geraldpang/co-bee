@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join a group — co·bee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Page chrome matches signin.html: cream background, frosted nav, centred card */
+  :root {
+    --honey: #F5A623; --teal: #1AA39A; --teal-dark: #0D7A72;
+    --cream: #FFFBF4; --dark: #1A1A2E; --nav-mid: #4A4A6A;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--cream); color: var(--dark); min-height: 100vh; }
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 24px; background: rgba(255,251,244,0.85);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(26,163,154,0.12);
+  }
+  .logo { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 900; color: var(--teal); letter-spacing: -1px; text-decoration: none; }
+  .logo span { color: var(--honey); }
+  .nav-right { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--nav-mid); }
+  .nav-right a { color: var(--teal); font-weight: 600; text-decoration: none; }
+  .nav-right a:hover { text-decoration: underline; }
+  .page { min-height: 100vh; padding: 100px 20px 48px; }
+  /* Inside the app shell (cobee.html iframe) the shell already has a topbar */
+  body.in-shell nav { display: none; }
+  body.in-shell .page { padding-top: 20px; }
+  .host-landing.is-missing { text-align: center; padding: 48px 24px; }
+  .host-landing.is-missing p { color: #888780; margin: 8px 0 18px; font-size: 14px; }
+  .host-landing.is-missing a { color: var(--teal); font-weight: 600; }
+
+  /* Toast, following the project's showToast(message, type) pattern */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: #1a1a18; color: white; padding: 13px 22px; border-radius: 100px;
+    font-size: 13.5px; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 999; white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { background: #007A77; }
+
+  /* ─── HOST / GROUP LANDING — every colour comes from --lp-* vars, set per
+     host from the colours in its avatar image. Teal is only the fallback. ─── */
+  .host-landing {
+    --lp-accent: #009A97; --lp-dark: #007A77; --lp-light: #E0F5F5;
+    --lp-mid: #80CCCB; --lp-tint: #F3FAFA; --lp-on: #FFFFFF;
+    --ink: #1a1a18; --mid: #888780; --faint: #B4B2A9; --border: #D3D1C7;
+    --border-light: #E0DFD8; --amber: #E8971A; --red: #E24B4A; --honey-deep: #BA7517;
+    container-type: inline-size;
+    margin: 0 auto; max-width: 820px; border-radius: 22px; overflow: hidden;
+    background: white; border: 0.5px solid var(--lp-mid);
+    box-shadow: 0 8px 30px rgba(26,26,46,0.07);
+  }
+  .host-landing { display: block; animation: lpIn 0.32s ease both; }
+  @keyframes lpIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .lp-hero {
+    position: relative; text-align: center; padding: 22px 24px 26px;
+    background:
+      radial-gradient(circle at 50% 118%, white 0 26%, transparent 26.2%),
+      radial-gradient(circle at 50% 118%, var(--lp-tint) 0 40%, transparent 40.2%),
+      linear-gradient(180deg, var(--lp-light) 0%, var(--lp-tint) 100%);
+    border-bottom: 0.5px solid var(--lp-mid);
+  }
+  .lp-back {
+    text-decoration: none;
+    position: absolute; left: 16px; top: 16px;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.75); border: 0.5px solid var(--lp-mid);
+    color: var(--lp-dark); font-size: 12px; font-weight: 600; line-height: 1; font-family: inherit;
+    padding: 7px 12px; border-radius: 100px; cursor: pointer; transition: background 0.15s;
+  }
+  .lp-back:hover { background: white; }
+  .lp-kind {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--lp-dark); background: rgba(255,255,255,0.7); border-radius: 100px; padding: 3px 10px;
+    margin-bottom: 14px;
+  }
+  .lp-avatar {
+    width: 92px; height: 92px; border-radius: 50%; margin: 0 auto 12px;
+    background: white; display: flex; align-items: center; justify-content: center;
+    font-size: 46px; line-height: 1;
+    box-shadow: 0 0 0 6px var(--lp-light), 0 8px 22px rgba(0,0,0,0.12);
+  }
+  .lp-title { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 900; letter-spacing: -0.5px; color: var(--lp-dark); letter-spacing: -0.2px; }
+  .lp-host { font-size: 13px; color: var(--mid); margin-top: 4px; }
+  .lp-host b { color: var(--ink); font-weight: 600; }
+  .lp-stats { display: flex; justify-content: center; margin-top: 18px; }
+  .lp-stat { padding: 0 22px; }
+  .lp-stat + .lp-stat { border-left: 0.5px solid var(--lp-mid); }
+  .lp-stat-num { font-size: 22px; font-weight: 700; color: var(--lp-accent); }
+  .lp-stat-lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mid); margin-top: 2px; }
+
+  .lp-body { display: grid; grid-template-columns: 1.35fr 1fr; gap: 22px; padding: 22px 24px 24px; }
+  .lp-body > div { min-width: 0; }
+  .lp-section-lbl { font-size: 10.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--mid); margin-bottom: 8px; }
+  .lp-desc { font-size: 13.5px; line-height: 1.65; color: var(--ink); margin-bottom: 14px; }
+  .lp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+  .lp-tag { font-size: 11.5px; font-weight: 600; color: var(--lp-dark); background: var(--lp-light); border-radius: 100px; padding: 4px 10px; }
+
+  .lp-desc { margin-bottom: 20px; }
+  .lp-contact { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .lp-contact-row {
+    display: inline-flex; align-items: center; gap: 7px; text-decoration: none; max-width: 100%;
+    padding: 5px 12px 5px 5px; border-radius: 100px; border: 0.5px solid var(--lp-mid);
+    background: rgba(255,255,255,0.8); transition: background 0.15s;
+  }
+  .lp-contact-row:hover { background: white; }
+  .lp-contact-ico { width: 24px; height: 24px; border-radius: 50%; background: var(--lp-light); color: var(--lp-dark); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .lp-contact-val { font-size: 12.5px; font-weight: 600; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .lp-events { display: flex; flex-direction: column; gap: 8px; }
+  .lp-event {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border: 0.5px solid var(--border-light); border-radius: 12px; background: var(--lp-tint);
+  }
+  .lp-event-ico { width: 34px; height: 34px; border-radius: 9px; background: white; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .lp-event-info { flex: 1; min-width: 0; }
+  .lp-event-name { font-size: 12.5px; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lp-event-meta { font-size: 11px; color: var(--mid); margin-top: 1px; }
+  .lp-event-days { font-size: 11px; font-weight: 700; color: var(--amber); white-space: nowrap; }
+  .lp-empty {
+    font-size: 12.5px; color: var(--mid); padding: 14px; text-align: center;
+    border: 0.5px dashed var(--lp-mid); border-radius: 12px; background: var(--lp-tint);
+  }
+
+  .lp-join {
+    align-self: start; border-radius: 14px; padding: 18px;
+    background: var(--lp-tint); border: 0.5px solid var(--lp-mid);
+  }
+  .lp-join-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .lp-join-sub { font-size: 12.5px; color: var(--mid); line-height: 1.55; margin-bottom: 14px; }
+  .lp-field-lbl { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  .lp-field-hint { font-weight: 400; color: var(--mid); }
+  .lp-input, .lp-textarea {
+    width: 100%; border: 0.5px solid var(--border); border-radius: 10px; background: white;
+    padding: 10px 12px; font-size: 13.5px; font-family: inherit; color: var(--ink);
+    outline: none; margin-bottom: 12px; transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .lp-textarea { min-height: 72px; resize: vertical; }
+  .lp-textarea.lp-comment { min-height: 56px; }
+  .lp-input:focus, .lp-textarea:focus { border-color: var(--lp-accent); box-shadow: 0 0 0 3px var(--lp-light); }
+  .lp-q { background: white; border-left: 3px solid var(--lp-accent); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+  .lp-q-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--lp-dark); margin-bottom: 3px; }
+  .lp-q-text { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.45; }
+  .lp-textarea.is-error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(226,75,74,0.12); }
+  .lp-q-err { display: none; font-size: 11.5px; color: var(--red); margin: -6px 0 12px; }
+  .lp-q-err.show { display: block; }
+  .lp-join-btn {
+    width: 100%; border: none; border-radius: 10px; padding: 12px;
+    background: var(--lp-accent); color: var(--lp-on);
+    font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .lp-join-btn:hover { background: var(--lp-dark); }
+  .lp-join-btn:active { transform: scale(0.99); }
+  .lp-join-btn.is-pending, .lp-join-btn.is-pending:hover {
+    background: rgba(245,166,35,0.15); color: var(--honey-deep); cursor: not-allowed;
+  }
+  .lp-join-note { font-size: 11px; color: var(--faint); text-align: center; margin-top: 10px; }
+
+  @container (max-width: 760px) {
+    .lp-body { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 680px) {
+    .lp-body { grid-template-columns: 1fr; padding: 18px 16px 20px; }
+    .lp-hero { padding: 56px 16px 22px; }
+    .lp-stat { padding: 0 14px; }
+  }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="cobee-redesign.html" class="logo">co<span>·</span>bee</a>
+  <div class="nav-right" id="navRight">Already a member? <a href="signin.html">Sign In</a></div>
+</nav>
+
+<div class="page">
+  <div class="host-landing" id="hostLanding" aria-live="polite"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  // The map pages (cobee-redesign.html for visitors, find-hosts.html for
+  // signed-in members) link here as host.html?from=home|find&d=<host JSON>.
+  // With a real backend, d would become a host id or slug looked up via API.
+  var params = new URLSearchParams(window.location.search);
+  var FROM_HOME = params.get('from') !== 'find';
+  var BACK_URL = FROM_HOME ? 'cobee-redesign.html#hosts' : 'find-hosts.html';
+  var pageEl = document.getElementById('hostLanding');
+  if (window.parent && window.parent !== window) document.body.classList.add('in-shell');
+
+  if (!FROM_HOME) document.getElementById('navRight').innerHTML = '<a href="find-hosts.html">Find hosts</a>';
+
+  var toastTimer = null;
+  function showToast(message, type) {
+    var el = document.getElementById('toast');
+    el.textContent = message;
+    el.className = 'toast show' + (type ? ' ' + type : '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 3200);
+  }
+
+  var d = null;
+  try { d = JSON.parse(params.get('d') || 'null'); } catch (e) { d = null; }
+  if (!d || !d.title) {
+    pageEl.classList.add('is-missing');
+    pageEl.innerHTML = '<h2 style="font-family:Fraunces,serif;font-weight:900;">Host not found</h2>' +
+      '<p>This link is missing the host’s details.</p><a href="' + BACK_URL + '">Back to the map</a>';
+    return;
+  }
+  // Same shape the map pages use, so the shared render code works unchanged.
+  var h = {
+    name: d.host, kind: d.kind, approvalMode: d.mode, joinQuestion: d.q, joinKeywords: d.kw || [],
+    groupBuy: { emoji: d.emoji, name: d.title }, image: null,
+    members: d.members, eventsHosted: d.eventsHosted, description: d.desc,
+    phone: d.phone, email: d.email, openEvents: d.events || []
+  };
+  document.title = d.title + ' — co·bee';
+
+    // ─── Colour extraction ───
+    // Draws the avatar (an image, or for now an emoji) onto a tiny canvas and
+    // picks the most prominent *saturated* hue. A plain average of all pixels
+    // turns most photos muddy grey-brown, so near-white, near-black and grey
+    // pixels are skipped and the rest are grouped into 15° hue buckets,
+    // weighted by saturation.
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      var max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2, h = 0, s = 0;
+      if (max !== min) {
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+        else if (max === g) h = (b - r) / d + 2;
+        else h = (r - g) / d + 4;
+        h /= 6;
+      }
+      return [h, s, l];
+    }
+    function hslToRgb(h, s, l) {
+      function f(n) {
+        var k = (n + h * 12) % 12, a = s * Math.min(l, 1 - l);
+        return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
+      }
+      return [f(0), f(8), f(4)];
+    }
+    function luminance(rgb) {
+      var c = rgb.map(function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+      return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+    }
+    function contrastWithWhite(rgb) { return 1.05 / (luminance(rgb) + 0.05); }
+    function toHex(rgb) { return '#' + rgb.map(function (v) { return ('0' + v.toString(16)).slice(-2); }).join(''); }
+
+    var colourCache = {};
+    function extractColour(source) {
+      var key = typeof source === 'string' ? source : (source.src || '');
+      if (colourCache[key] !== undefined) return colourCache[key];
+      var S = 48, cv = document.createElement('canvas');
+      cv.width = S; cv.height = S;
+      var ctx = cv.getContext('2d'), data;
+      try {
+        if (typeof source === 'string') {
+          ctx.font = '40px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText(source, S / 2, S / 2 + 2);
+        } else {
+          ctx.drawImage(source, 0, 0, S, S);
+        }
+        data = ctx.getImageData(0, 0, S, S).data;
+      } catch (err) {
+        // Cross-origin image without CORS headers: canvas is "tainted".
+        colourCache[key] = null;
+        return null;
+      }
+      var buckets = {}, best = null;
+      for (var p = 0; p < data.length; p += 4) {
+        if (data[p + 3] < 160) continue;
+        var hsl = rgbToHsl(data[p], data[p + 1], data[p + 2]);
+        if (hsl[1] < 0.22 || hsl[2] < 0.12 || hsl[2] > 0.93) continue;
+        var b = Math.round(hsl[0] * 24) % 24;
+        var bk = buckets[b] || (buckets[b] = { w: 0, r: 0, g: 0, b: 0 });
+        var w = hsl[1];
+        bk.w += w; bk.r += data[p] * w; bk.g += data[p + 1] * w; bk.b += data[p + 2] * w;
+        if (!best || bk.w > best.w) best = bk;
+      }
+      var result = best ? [best.r / best.w, best.g / best.w, best.b / best.w].map(Math.round) : null;
+      colourCache[key] = result;
+      return result;
+    }
+
+    // One extracted colour → the full set of tokens the landing uses.
+    // The accent is darkened until white text on it stays readable.
+    function buildPalette(rgb) {
+      if (!rgb) return { accent: '#009A97', dark: '#007A77', light: '#E0F5F5', mid: '#80CCCB', tint: '#F3FAFA', on: '#FFFFFF' };
+      var hsl = rgbToHsl(rgb[0], rgb[1], rgb[2]);
+      var h = hsl[0], s = Math.max(0.45, Math.min(hsl[1], 0.85)), l = Math.max(0.32, Math.min(hsl[2], 0.48));
+      var accent = hslToRgb(h, s, l);
+      while (contrastWithWhite(accent) < 4 && l > 0.18) { l -= 0.02; accent = hslToRgb(h, s, l); }
+      return {
+        accent: toHex(accent),
+        dark: toHex(hslToRgb(h, s, Math.max(0.14, l - 0.1))),
+        light: toHex(hslToRgb(h, Math.min(s, 0.6), 0.93)),
+        mid: toHex(hslToRgb(h, s * 0.6, 0.78)),
+        tint: toHex(hslToRgb(h, s * 0.5, 0.975)),
+        on: '#FFFFFF'
+      };
+    }
+    function paletteFor(h) {
+      if (!h.palette) h.palette = buildPalette(extractColour(h.image || h.groupBuy.emoji));
+      return h.palette;
+    }
+
+
+    function joinCopy(h) {
+      if (h.approvalMode === 'open') return 'Open to everyone, so you’ll be in straight away.';
+      if (h.approvalMode === 'question') return 'Answer the host’s question below. They’ll review your request, usually within a day.';
+      return 'The host reviews each request, usually within a day.';
+    }
+
+    function renderLanding(h) {
+      var pal = paletteFor(h);
+      ['accent', 'dark', 'light', 'mid', 'tint', 'on'].forEach(function (k) {
+        pageEl.style.setProperty('--lp-' + k, pal[k]);
+      });
+      var isGroup = h.kind === 'group';
+      var pending = !!h.pending;
+      var eventsHtml = h.openEvents.length
+        ? h.openEvents.map(function (ev) {
+            return '<div class="lp-event"><div class="lp-event-ico">' + h.groupBuy.emoji + '</div>' +
+              '<div class="lp-event-info"><div class="lp-event-name">' + ev.title + '</div>' +
+              '<div class="lp-event-meta">' + ev.orders + ' orders so far</div></div>' +
+              '<div class="lp-event-days">' + ev.daysLeft + (ev.daysLeft === 1 ? ' day' : ' days') + ' left</div></div>';
+          }).join('')
+        : '<div class="lp-empty">No events yet. Join now and you’ll be notified when the first one opens.</div>';
+
+      var fields = '';
+      if (h.approvalMode === 'question') {
+        fields += '<div class="lp-q">' +
+            '<div class="lp-q-lbl">' + 'Host' + '’s question</div>' +
+            '<div class="lp-q-text">' + h.joinQuestion + '</div>' +
+          '</div>' +
+          '<textarea class="lp-textarea" id="lpAnswer" placeholder="Type your answer..."></textarea>' +
+          '<div class="lp-q-err" id="lpAnswerErr">Please answer the question to send your request.</div>';
+      }
+      fields += '<div class="lp-field-lbl">Leave a message <span class="lp-field-hint">· optional</span></div>' +
+        '<textarea class="lp-textarea lp-comment" id="lpComment" maxlength="300" placeholder="Say hello, or add anything they should know"></textarea>';
+      var btnLabel = pending ? 'Pending approval' : (h.approvalMode === 'open' ? 'Join' : 'Request to Join');
+
+      pageEl.innerHTML =
+        '<div class="lp-hero">' +
+          '<a class="lp-back" id="lpBack" href="' + BACK_URL + '">' +
+            '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+            'Back to map</a>' +
+          '<div class="lp-avatar">' + h.groupBuy.emoji + '</div>' +
+          '<div class="lp-title">' + h.groupBuy.name + '</div>' +
+          '<div class="lp-host">' + 'Hosted by' + ' <b>' + h.name + '</b></div>' +
+          '<div class="lp-contact">' +
+            '<a class="lp-contact-row" href="tel:' + h.phone.replace(/\s/g, '') + '">' +
+              '<span class="lp-contact-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>' +
+              '<span class="lp-contact-val">' + h.phone + '</span></a>' +
+            '<a class="lp-contact-row" href="mailto:' + h.email + '">' +
+              '<span class="lp-contact-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></span>' +
+              '<span class="lp-contact-val">' + h.email + '</span></a>' +
+          '</div>' +
+          '<div class="lp-stats">' +
+            '<div class="lp-stat"><div class="lp-stat-num">' + h.eventsHosted + '</div><div class="lp-stat-lbl">Events hosted</div></div>' +
+            '<div class="lp-stat"><div class="lp-stat-num">' + h.members + '</div><div class="lp-stat-lbl">Members</div></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="lp-body">' +
+          '<div>' +
+            '<div class="lp-section-lbl">About</div>' +
+            '<div class="lp-desc">' + h.description + '</div>' +
+            '<div class="lp-section-lbl">Open events</div>' +
+            '<div class="lp-events">' + eventsHtml + '</div>' +
+          '</div>' +
+          '<div class="lp-join">' +
+            '<div class="lp-join-title">Join ' + h.groupBuy.name + '</div>' +
+            '<div class="lp-join-sub">' + (pending ? 'Request sent. The ' + 'host' + ' will review your answer and you’ll get a notification once you’re approved.' : joinCopy(h)) + '</div>' +
+            (pending ? '' : fields) +
+            '<button type="button" class="lp-join-btn' + (pending ? ' is-pending' : '') + '" id="lpJoinBtn"' + (pending ? ' disabled' : '') + '>' + btnLabel + '</button>' +
+            '<div class="lp-join-note">' + (FROM_HOME ? 'Next, create your free co·bee account to finish joining.' : 'You can leave a group any time from My Group.') + '</div>' +
+          '</div>' +
+        '</div>';
+
+      var btn = document.getElementById('lpJoinBtn');
+      if (!pending) btn.addEventListener('click', function () { submitLandingJoin(h); });
+    }
+
+
+    // Visitors (from the home page) aren't signed in, so joining continues on
+    // sign-up with the answer and message carried along. Signed-in members
+    // (from find-hosts) join or send the request right here.
+    function submitLandingJoin(h) {
+      var ansEl = document.getElementById('lpAnswer');
+      var answer = ansEl ? ansEl.value.trim() : '';
+      if (h.approvalMode === 'question' && !answer) {
+        var errEl = document.getElementById('lpAnswerErr');
+        ansEl.classList.add('is-error');
+        errEl.classList.add('show');
+        ansEl.focus();
+        ansEl.oninput = function () { ansEl.classList.remove('is-error'); errEl.classList.remove('show'); };
+        return;
+      }
+      var commentEl = document.getElementById('lpComment');
+      var message = commentEl ? commentEl.value.trim() : '';
+      var upper = answer.toUpperCase();
+      var keywordHit = h.joinKeywords.some(function (k) { return upper.indexOf(k) !== -1; });
+      var instant = h.approvalMode === 'open' || keywordHit;
+
+      if (FROM_HOME) {
+        var mode = instant ? 'open' : h.approvalMode;
+        var url = 'signup.html?host=' + encodeURIComponent(h.groupBuy.name) +
+          '&hostname=' + encodeURIComponent(h.name) + '&approval=' + encodeURIComponent(mode);
+        if (mode === 'question' && h.joinQuestion) url += '&question=' + encodeURIComponent(h.joinQuestion);
+        if (answer) url += '&answer=' + encodeURIComponent(answer);
+        if (message) url += '&message=' + encodeURIComponent(message);
+        window.location.href = url;
+        return;
+      }
+
+      h.joinRequest = { answer: answer, comment: message }; // sent with the join
+      if (instant) {
+        showToast("You're in! You've joined " + h.groupBuy.name + (keywordHit ? ' (approved automatically)' : '') + '. \ud83c\udf89', 'success');
+      } else {
+        h.pending = true;
+        showToast('Request sent — awaiting approval for ' + h.groupBuy.name, 'warning');
+        renderLanding(h);
+      }
+      setTimeout(function () {
+        if (window.parent && window.parent !== window && window.parent.navigate) {
+          window.parent.navigate('member.html', null);
+        } else {
+          window.location.href = 'https://co-bee.pages.dev/cobee';
+        }
+      }, 1400);
+    }
+
+    renderLanding(h);
+})();
+</script>
+
+</body>
+</html>
