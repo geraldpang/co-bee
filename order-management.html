@@ -1459,8 +1459,9 @@ function markInvalidPayment(idx) {
 }
 
 // ── TOTALS (same rules as Hosted Events) ──
-// Shown orders only, cancelled left out. Payment Collected = Fulfilment
-// Verified or Collected. Gateway orders also carry the platform fee.
+// Shown orders only, cancelled left out. Payment Collected = gateway orders
+// paid through the gateway, plus screenshot orders marked Verified or Collected.
+// Gateway orders also carry the platform fee.
 function updateOmTotals() {
   const el = document.getElementById('om-totals');
   if (!el) return;
@@ -1473,7 +1474,9 @@ function updateOmTotals() {
     rowsShown++;
     const amt = parseFloat(row.dataset.amount) || 0;
     const isGw = !!row.dataset.gateway;
-    const isCollected = ful === 'Verified' || ful === 'Collected';
+    // Gateway orders count as collected once the gateway has taken the payment;
+    // screenshot orders once the host has marked them Verified or Collected.
+    const isCollected = isGw ? row.dataset.payment === 'Paid' : (ful === 'Verified' || ful === 'Collected');
     total += amt;
     if (isCollected) collected += amt;
     if (isGw) { gatewayRows++; fee += omFee(amt); if (isCollected) feeCollected += omFee(amt); }
@@ -1491,7 +1494,7 @@ function updateOmTotals() {
   } else {
     html = '<div>Total Amount: <strong>' + money(total) + '</strong></div>'
       + '<div>Payment Collected: <strong>' + money(collected) + '</strong></div>'
-      + '<div>Platform Fee: <strong>-' + money(feeCollected) + '</strong> <span class="om-totals-note">(on collected payment gateway orders)</span></div>'
+      + '<div>Platform Fee: <strong>-' + money(feeCollected) + '</strong></div>'
       + '<div class="om-receive">Net Received: <strong>' + money(collected - feeCollected) + '</strong></div>';
   }
   el.innerHTML = html;
