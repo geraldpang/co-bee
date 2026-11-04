@@ -33,6 +33,17 @@ body { min-height: 100%; overflow-y: auto; background: #F4F6F8; font-family: -ap
 .filters-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
 .filter-select { height: 34px; border: 0.5px solid #D3D1C7; border-radius: 8px; background: white; padding: 0 28px 0 10px; font-size: 12px; font-family: inherit; color: #1a1a18; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; min-width: 140px; }
 .filter-select.wide { flex: 1; min-width: 200px; }
+.ms { position: relative; min-width: 150px; }
+.ms.wide { flex: 1; min-width: 200px; }
+.ms-btn { width: 100%; height: 34px; border: 0.5px solid #D3D1C7; border-radius: 8px; background: white; padding: 0 28px 0 10px; font-size: 12px; font-family: inherit; color: #1a1a18; cursor: pointer; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888780' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
+.ms.has-sel .ms-btn { border-color: #009A97; color: #007A77; font-weight: 600; background-color: #F3FAFA; }
+.ms-panel { display: none; position: absolute; top: 38px; left: 0; min-width: 100%; width: max-content; max-width: 340px; background: white; border: 0.5px solid #D3D1C7; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); padding: 6px 0 0; z-index: 50; }
+.ms.open .ms-panel { display: block; }
+.ms-opt { display: flex; align-items: center; gap: 8px; padding: 7px 14px; font-size: 12px; color: #1a1a18; cursor: pointer; }
+.ms-opt:hover { background: #F3FAFA; }
+.ms-opt input { accent-color: #009A97; margin: 0; }
+.ms-foot { display: flex; justify-content: space-between; border-top: 0.5px solid #E0DFD8; margin-top: 4px; padding: 6px 8px; }
+.ms-foot button { background: none; border: none; font-size: 11.5px; font-weight: 600; color: #009A97; cursor: pointer; font-family: inherit; padding: 4px 6px; }
 .btn-clear { height: 34px; padding: 0 12px; border: 0.5px solid #D3D1C7; border-radius: 8px; background: white; font-size: 12px; color: #888780; cursor: pointer; font-family: inherit; white-space: nowrap; }
 .btn-clear:hover { background: #FCEBEB; color: #E24B4A; border-color: #F09595; }
 
@@ -91,6 +102,50 @@ tr:hover td { background: #FAFAF8; }
 .om-totals .om-receive { padding-top: 6px; margin-top: 2px; border-top: 0.5px solid #80CCCB; }
 .om-totals .om-receive strong { color: #007A77; font-size: 16px; }
 .om-totals-note { font-size: 11px; color: #888780; }
+/* Purchase breakdown + buyer card pop-ups */
+.om-modal { background: white; border-radius: 14px; width: 420px; max-width: calc(100vw - 32px); max-height: 86vh; display: flex; flex-direction: column; box-shadow: 0 8px 32px rgba(0,0,0,0.15); overflow: hidden; }
+.om-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 20px; border-bottom: 0.5px solid #e0dfd8; font-size: 15px; font-weight: 600; color: #009A97; }
+.om-modal-head span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.om-modal-head button { background: none; border: none; cursor: pointer; color: #888780; font-size: 20px; line-height: 1; }
+.om-modal-body { padding: 16px 20px 20px; overflow-y: auto; }
+.pd-card { background: #FAFAF8; border: 0.5px solid #E0DFD8; border-radius: 12px; padding: 14px 14px 4px; }
+.pd-head { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #4a4a45; margin-bottom: 8px; }
+.pd-item { display: grid; grid-template-columns: 1fr auto 64px; gap: 10px; align-items: start; padding: 10px 0; border-top: 0.5px dashed #E0DFD8; font-size: 12.5px; }
+.pd-item:first-of-type { border-top: none; }
+.pd-name { font-weight: 600; color: #1a1a18; line-height: 1.4; }
+.pd-qty { color: #888780; font-weight: 600; font-size: 11.5px; white-space: nowrap; padding-top: 1px; }
+.pd-price { text-align: right; font-weight: 700; color: #1a1a18; }
+.pd-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #E8971A; margin: 16px 0 6px; }
+.pd-note { width: 100%; min-height: 64px; border: 0.5px solid #D3D1C7; border-radius: 10px; padding: 9px 11px; font-size: 13px; font-family: inherit; resize: vertical; outline: none; box-sizing: border-box; }
+.pd-note:focus { border-color: #009A97; }
+.pd-foot { margin-top: 14px; padding: 12px 14px; background: #FAFAF8; border-radius: 10px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font-size: 13px; }
+.pd-foot > div { display: flex; align-items: center; gap: 10px; }
+.pd-total-lbl, .pd-total { color: #E8971A; font-weight: 700; }
+.pd-made-lbl { color: #888780; font-weight: 600; }
+.pd-pill { display: inline-block; font-size: 11px; font-weight: 600; border-radius: 99px; padding: 2px 10px; }
+.pd-pill.paid { background: #E3F6EA; color: #1c7a41; }
+.pd-pill.unpaid { background: #FCEBEB; color: #A32D2D; }
+.pd-pill.refunded { background: #FEF2DC; color: #BA7517; }
+.bd-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.bd-av { width: 44px; height: 44px; border-radius: 50%; background: #E8971A; color: white; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.bd-name { font-size: 16px; font-weight: 700; color: #1a1a18; }
+.bd-sub { font-size: 12px; color: #888780; }
+.bd-sec { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #888780; margin: 16px 0 4px; }
+.bd-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 0.5px solid #f0f0ee; font-size: 13px; }
+.bd-row span { color: #888780; }
+.bd-row a { color: #007A77; font-weight: 600; text-decoration: none; overflow: hidden; text-overflow: ellipsis; }
+.bd-actions { display: flex; gap: 8px; margin-top: 10px; }
+.bd-btn { flex: 1; text-align: center; height: 34px; line-height: 34px; border: 0.5px solid #80CCCB; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: #007A77; text-decoration: none; }
+.bd-btn:hover { background: #F3FAFA; }
+.bd-order { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid #f0f0ee; }
+.bd-ev { font-size: 13px; font-weight: 600; color: #1a1a18; }
+.bd-meta { font-size: 11.5px; color: #888780; margin-top: 2px; }
+.bd-right { text-align: right; flex-shrink: 0; }
+.bd-amt { font-size: 13px; font-weight: 700; color: #1a1a18; margin-bottom: 3px; }
+.bd-total { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding: 12px 14px; background: #E0F5F5; border-radius: 10px; font-size: 13px; color: #007A77; font-weight: 600; }
+.bd-total strong { font-size: 17px; }
+.bd-note { font-size: 11px; color: #888780; margin-top: 6px; text-align: right; }
+
 /* Payment details card (same as Hosted Events) */
 .pp-name { font-size: 17px; font-weight: 700; color: #007A77; text-align: center; }
 .pp-amount { font-size: 14px; color: #007A77; margin-top: 2px; margin-bottom: 16px; text-align: center; }
@@ -120,7 +175,12 @@ tr:hover td { background: #FAFAF8; }
 .ful-select:focus { border-color: #009A97; }
 .ful-select option { font-size: 12px; }
 
-.name-link { color: #1a1a18; cursor: pointer; font-weight: 500; }
+.name-link { color: #009A97; cursor: pointer; font-weight: 600; }
+.name-link:hover { text-decoration: underline; }
+/* Mobile is no longer a table column: it shows on the buyer card (click the name) */
+#orders-table th[data-col="1"], #orders-body > tr > td:nth-child(2) { display: none; }
+.purchase-inline.clickable { cursor: pointer; border-radius: 4px; }
+.purchase-inline.clickable:hover { color: #007A77; text-decoration: underline; }
 
 .purchase-cell { max-width: 200px; }
 
@@ -257,31 +317,16 @@ tr:hover td { background: #FAFAF8; }
 
   <!-- FILTERS -->
   <div class="filters-row">
-    <select class="filter-select" onchange="filterTable()" id="filter-event">
-      <option value="">Event</option>
-      <option>atea 1</option>
-      <option>order without login</option>
-      <option>This is a test event for Purchase with no login</option>
-      <option>new event</option>
-    </select>
-    <select class="filter-select" onchange="filterTable()" id="filter-event-status">
-      <option value="">Event Status</option>
-      <option>Open</option>
-      <option>Closed</option>
-      <option>Draft</option>
-    </select>
-    <select class="filter-select wide" onchange="filterTable()" id="filter-payment">
-      <option value="">Payment Status</option>
-      <option>Paid</option>
-      <option>Unpaid</option>
-      <option>Refunded</option>
-    </select>
+    <!-- Multi-select filters: tick any number of options; none ticked = all -->
+    <div class="ms" id="ms-event" data-label="Event"></div>
+    <div class="ms" id="ms-event-status" data-label="Event Status" data-options="Open|Closed|Draft"></div>
+    <div class="ms wide" id="ms-payment" data-label="Payment Status" data-options="Paid|Unpaid|Refunded"></div>
     <button class="btn-clear" onclick="clearFilters()">Clear Filter</button>
   </div>
 
   <!-- INFO BAR -->
   <div class="info-bar">
-    <div class="info-hint">Click on Names for Order Details and on
+    <div class="info-hint">Click on Names for Buyer Details, on Purchase for the breakdown, and on
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
       for Payment Details.
     </div>
@@ -879,9 +924,9 @@ function setTab(tab, el) {
 
 function filterTable() {
   const q = document.getElementById('search-input').value.toLowerCase();
-  const evFilter = document.getElementById('filter-event').value;
-  const evStatus = document.getElementById('filter-event-status').value;
-  const payFilter = document.getElementById('filter-payment').value;
+  const evSel = msSelected('ms-event');
+  const evStatusSel = msSelected('ms-event-status');
+  const paySel = msSelected('ms-payment');
   const exclCancelled = document.getElementById('excl-cancelled').checked;
   const rows = document.querySelectorAll('#orders-body tr');
   let count = 0;
@@ -890,15 +935,16 @@ function filterTable() {
     const name = row.cells[0].textContent.toLowerCase();
     const mobile = row.cells[1].textContent.toLowerCase();
     const event = row.cells[2].textContent.toLowerCase();
+    const eventTitle = (row.querySelector('.event-text') || row.cells[2]).getAttribute('title') || row.cells[2].textContent.trim();
     const payment = row.dataset.payment || '';
     const eventStatus = row.dataset.eventStatus || '';
     const fulfilment = row.dataset.fulfilment || '';
     const cancelled = row.dataset.cancelled === 'true';
 
     const matchQ = !q || name.includes(q) || mobile.includes(q) || event.includes(q);
-    const matchEv = !evFilter || event.toLowerCase().includes(evFilter.toLowerCase());
-    const matchEvStatus = !evStatus || eventStatus === evStatus;
-    const matchPay = !payFilter || payment === payFilter;
+    const matchEv = !evSel.length || evSel.includes(eventTitle);
+    const matchEvStatus = !evStatusSel.length || evStatusSel.includes(eventStatus);
+    const matchPay = !paySel.length || paySel.includes(payment);
     const matchTab = currentTab === 'all' || (currentTab === 'unpaid' && payment === 'Unpaid');
     const matchCancelled = !exclCancelled || !cancelled;
 
@@ -913,11 +959,50 @@ function filterTable() {
 
 function clearFilters() {
   document.getElementById('search-input').value = '';
-  document.getElementById('filter-event').value = '';
-  document.getElementById('filter-event-status').value = '';
-  document.getElementById('filter-payment').value = '';
+  ['ms-event', 'ms-event-status', 'ms-payment'].forEach(msClear);
   filterTable();
 }
+
+// ── MULTI-SELECT FILTERS ──
+// Each .ms div becomes a dropdown of checkboxes. Event options come from the
+// orders in the table; the others from data-options.
+function msBuild(id, options) {
+  const el = document.getElementById(id);
+  const label = el.dataset.label;
+  el.innerHTML = '<button type="button" class="ms-btn" onclick="msToggle(\'' + id + '\', event)"><span class="ms-text">' + label + '</span></button>'
+    + '<div class="ms-panel">'
+    + options.map(o => '<label class="ms-opt"><input type="checkbox" value="' + o.replace(/"/g, '&quot;') + '" onchange="msChanged(\'' + id + '\')"><span>' + o + '</span></label>').join('')
+    + '<div class="ms-foot"><button type="button" onclick="msAll(\'' + id + '\')">Select all</button><button type="button" onclick="msClear(\'' + id + '\');filterTable()">Clear</button></div>'
+    + '</div>';
+}
+function msSelected(id) {
+  return Array.from(document.querySelectorAll('#' + id + ' .ms-panel input:checked')).map(i => i.value);
+}
+function msLabel(id) {
+  const el = document.getElementById(id);
+  const sel = msSelected(id);
+  const txt = el.querySelector('.ms-text');
+  txt.textContent = !sel.length ? el.dataset.label : (sel.length === 1 ? sel[0] : el.dataset.label + ' · ' + sel.length + ' selected');
+  el.classList.toggle('has-sel', sel.length > 0);
+}
+function msChanged(id) { msLabel(id); filterTable(); }
+function msAll(id) { document.querySelectorAll('#' + id + ' .ms-panel input').forEach(i => { i.checked = true; }); msChanged(id); }
+function msClear(id) { document.querySelectorAll('#' + id + ' .ms-panel input').forEach(i => { i.checked = false; }); msLabel(id); }
+function msToggle(id, e) {
+  e.stopPropagation();
+  document.querySelectorAll('.ms.open').forEach(m => { if (m.id !== id) m.classList.remove('open'); });
+  document.getElementById(id).classList.toggle('open');
+}
+document.addEventListener('click', function (e) {
+  if (!e.target.closest('.ms')) document.querySelectorAll('.ms.open').forEach(m => m.classList.remove('open'));
+});
+document.addEventListener('DOMContentLoaded', function () {
+  const events = [];
+  document.querySelectorAll('#orders-body .event-text').forEach(s => { const v = s.getAttribute('title') || s.textContent.trim(); if (!events.includes(v)) events.push(v); });
+  msBuild('ms-event', events.sort());
+  msBuild('ms-event-status', document.getElementById('ms-event-status').dataset.options.split('|'));
+  msBuild('ms-payment', document.getElementById('ms-payment').dataset.options.split('|'));
+});
 
 // ── COLUMN VISIBILITY ──
 const COL_NAMES = ['Name','Mobile','Event','Closing Date','Creation Date','Purchase','Amount','Net','Event Status','Payment Status','Fulfilment'];
@@ -927,6 +1012,7 @@ function buildColMenu() {
   const menu = document.getElementById('col-menu');
   const hiddenByDefault = [4]; // Creation Date index
   COL_NAMES.forEach((name, i) => {
+    if (i === 1) return; // Mobile is shown on the buyer card, not in the table
     const item = document.createElement('label');
     item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#1a1a18;cursor:pointer;';
     item.onmouseover = () => item.style.background = '#f5fafa';
@@ -1504,6 +1590,86 @@ document.addEventListener('change', function (e) {
 });
 document.addEventListener('DOMContentLoaded', updateOmTotals);
 
+// ── ORDER ITEMS (sample) ──
+// Items per order, read from the Purchase cell ("Name (qty:n)"). Prices split
+// the order amount across items until real line items come from the backend.
+function omItems(row) {
+  const txt = row.cells[5].textContent.replace(/[+]\d+ more|▴ less/g, ' ');
+  const found = [];
+  txt.replace(/([^()]+?)\s*\(qty:(\d+)\)/g, function (_, n, q) { found.push({ name: n.trim(), qty: parseInt(q, 10) }); });
+  if (!found.length) found.push({ name: txt.trim() || 'Item', qty: 1 });
+  const amount = parseFloat(row.dataset.amount) || 0;
+  const units = found.reduce((s, it) => s + it.qty, 0);
+  let left = amount;
+  found.forEach((it, i) => {
+    it.price = i === found.length - 1 ? Math.round(left * 100) / 100 : Math.round(amount * it.qty / units * 100) / 100;
+    left -= it.price;
+  });
+  return found;
+}
+const OM_NOTES = {};
+
+// Purchase breakdown (click the Purchase cell)
+function showPurchaseDetail(row) {
+  const idx = Array.from(document.querySelectorAll('#orders-body tr')).indexOf(row);
+  const items = omItems(row);
+  const amount = parseFloat(row.dataset.amount) || 0;
+  const pay = row.dataset.payment;
+  const pill = pay === 'Paid' ? '<span class="pd-pill paid">Paid</span>' : (pay === 'Refunded' ? '<span class="pd-pill refunded">Refunded</span>' : '<span class="pd-pill unpaid">Unpaid</span>');
+  document.getElementById('purchase-detail-title').textContent = row.cells[0].textContent.trim() + ' · ' + row.cells[2].textContent.trim();
+  document.getElementById('purchase-detail-body').innerHTML =
+    '<div class="pd-card"><div class="pd-head">Items Summary</div>'
+    + items.map(it => '<div class="pd-item"><span class="pd-name">' + it.name + '</span><span class="pd-qty">QTY: ' + it.qty + '</span><span class="pd-price">$' + it.price.toFixed(2) + '</span></div>').join('')
+    + '</div>'
+    + '<div class="pd-lbl">Note</div>'
+    + '<textarea class="pd-note" id="pd-note" placeholder="Add a note for this order..." oninput="OM_NOTES[' + idx + '] = this.value">' + (OM_NOTES[idx] || '') + '</textarea>'
+    + '<div class="pd-foot"><div><span class="pd-total-lbl">Total Purchase:</span><span class="pd-total">$' + amount.toFixed(2) + '</span></div>'
+    + '<div><span class="pd-made-lbl">Payment Made:</span>' + pill + '</div></div>';
+  openModal('purchase-detail-modal');
+}
+
+// Buyer card (click the name): contact details, past orders, total purchase.
+// Past orders = every order in this list with the same mobile number.
+function showBuyerDetail(row) {
+  const name = row.cells[0].textContent.trim();
+  const mobile = row.cells[1].textContent.trim();
+  const email = name.toLowerCase().replace(/[^a-z]+/g, '.') + '@example.com';
+  const orders = Array.from(document.querySelectorAll('#orders-body tr')).filter(r => r.cells[1].textContent.trim() === mobile);
+  const counted = orders.filter(r => r.dataset.cancelled !== 'true');
+  const total = counted.reduce((s, r) => s + (parseFloat(r.dataset.amount) || 0), 0);
+  const waNum = mobile.replace(/\D/g, '').replace(/^0/, '');
+  const initials = name.split(/\s+/).map(w => w.charAt(0)).join('').slice(0, 2).toUpperCase();
+  document.getElementById('buyer-detail-body').innerHTML =
+    '<div class="bd-top"><div class="bd-av">' + initials + '</div><div><div class="bd-name">' + name + '</div>'
+    + '<div class="bd-sub">' + orders.length + (orders.length === 1 ? ' order' : ' orders') + ' in this list</div></div></div>'
+    + '<div class="bd-sec">Contact</div>'
+    + '<div class="bd-row"><span>Mobile</span><a href="tel:' + mobile.replace(/\s/g, '') + '">' + mobile + '</a></div>'
+    + '<div class="bd-row"><span>Email</span><a href="mailto:' + email + '">' + email + '</a></div>'
+    + '<div class="bd-actions"><a class="bd-btn" href="https://wa.me/' + waNum + '" target="_blank" rel="noopener">WhatsApp</a><a class="bd-btn" href="tel:' + mobile.replace(/\s/g, '') + '">Call</a><a class="bd-btn" href="mailto:' + email + '">Email</a></div>'
+    + '<div class="bd-sec">Past orders</div>'
+    + orders.map(r => {
+        const pay = r.dataset.payment;
+        const cls = pay === 'Paid' ? 'paid' : (pay === 'Refunded' ? 'refunded' : 'unpaid');
+        return '<div class="bd-order"><div><div class="bd-ev">' + r.cells[2].textContent.trim() + '</div>'
+          + '<div class="bd-meta">' + r.cells[4].textContent.trim() + ' · ' + r.cells[5].textContent.replace(/[+]\d+ more|▴ less/g, '').trim() + '</div></div>'
+          + '<div class="bd-right"><div class="bd-amt">$' + (parseFloat(r.dataset.amount) || 0).toFixed(2) + '</div><span class="pd-pill ' + cls + '">' + pay + '</span></div></div>';
+      }).join('')
+    + '<div class="bd-total"><span>Total purchase</span><strong>$' + total.toFixed(2) + '</strong></div>'
+    + (counted.length < orders.length ? '<div class="bd-note">Cancelled orders are not included in the total.</div>' : '');
+  openModal('buyer-detail-modal');
+}
+
+document.addEventListener('click', function (e) {
+  const nameEl = e.target.closest('#orders-body .name-link');
+  if (nameEl) { showBuyerDetail(nameEl.closest('tr')); return; }
+  const pEl = e.target.closest('#orders-body .purchase-cell');
+  if (pEl && !e.target.closest('button')) showPurchaseDetail(pEl.closest('tr'));
+});
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('#orders-body .purchase-inline').forEach(el => { el.classList.add('clickable'); el.title = 'Click for the purchase breakdown'; });
+  document.querySelectorAll('#orders-body .name-link').forEach(el => { el.title = 'Click for buyer details'; });
+});
+
 function downloadTransactionsForPayout(payoutId) {
   alert('Downloading CSV of all transactions in Payout #' + payoutId + '...');
 }
@@ -1685,6 +1851,22 @@ function sortTable(col) {
 </div>
 
 <!-- PAYMENT DETAIL MODAL -->
+<!-- Purchase breakdown -->
+<div class="modal-backdrop" id="purchase-detail-modal" onclick="closeModal('purchase-detail-modal')">
+  <div class="om-modal" onclick="event.stopPropagation()">
+    <div class="om-modal-head"><span id="purchase-detail-title">Purchase</span><button onclick="closeModal('purchase-detail-modal')">×</button></div>
+    <div class="om-modal-body" id="purchase-detail-body"></div>
+  </div>
+</div>
+
+<!-- Buyer details -->
+<div class="modal-backdrop" id="buyer-detail-modal" onclick="closeModal('buyer-detail-modal')">
+  <div class="om-modal" onclick="event.stopPropagation()">
+    <div class="om-modal-head"><span>Buyer Details</span><button onclick="closeModal('buyer-detail-modal')">×</button></div>
+    <div class="om-modal-body" id="buyer-detail-body"></div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="payment-detail-modal">
   <div style="background:white;border-radius:14px;width:380px;box-shadow:0 8px 32px rgba(0,0,0,0.15);overflow:hidden;" onclick="event.stopPropagation()">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:0.5px solid #e0dfd8;">
