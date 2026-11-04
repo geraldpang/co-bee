@@ -347,6 +347,15 @@ body { height: 100%; background: #F4F6F8; font-family: -apple-system, BlinkMacSy
   .group-meta { display: flex; gap: 10px; font-size: 12px; color: #888; }
   .group-meta span { color: #009A97; font-weight: 500; }
   .group-role { font-size: 12px; color: #888; flex-shrink: 0; }
+  .group-avatar.is-emoji { font-size: 22px; }
+  .group-list-item.is-pending .group-name { color: #888780; }
+  .group-list-item.is-pending .group-avatar { opacity: 0.75; }
+  .group-status-pending {
+    display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
+    font-size: 11px; font-weight: 700; color: #BA7517; background: #FEF2DC;
+    border: 0.5px solid #F3D29B; border-radius: 100px; padding: 3px 10px;
+  }
+  .group-status-pending::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #E8971A; }
   .group-search-link {
     display: block; text-align: center; padding: 16px;
     font-size: 13px; font-weight: 600; color: #009A97;
@@ -2897,7 +2906,7 @@ Try adding different quantities to watch the Order Total update. Discounts are w
     <!-- Find hosts near you — links out to the map/search page -->
     <div class="group-search-top" style="position:relative;">
       <div class="inner">
-        <span class="grp-lbl">MY GROUP (2)</span>
+        <span class="grp-lbl" id="myGroupLbl">MY GROUP (2)</span>
         <a class="group-find-link" href="find-hosts.html"
            onclick="event.preventDefault(); window.parent && window.parent.navigate ? window.parent.navigate('find-hosts.html', null) : window.location.href='find-hosts.html';">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -2906,8 +2915,8 @@ Try adding different quantities to watch the Order Total update. Discounts are w
       </div>
     </div>
 
-    <!-- My groups list -->
-    <div class="group-list">
+    <!-- My groups list (groups joined / requested from host.html are added at the top) -->
+    <div class="group-list" id="myGroupList">
       <div class="group-list-item" onclick="openPremiumGroup('m6group')" style="cursor:pointer;">
         <div class="group-avatar-wrap">
           <div class="group-avatar">M6</div>
@@ -6373,6 +6382,52 @@ initTileCountdowns();
 applyDevAdminView();
 sortGecEvents();
 applyDefaultGecFilter();
+
+// ─── MY GROUP: groups joined or requested from host.html ───
+// host.html saves each join to localStorage 'cobee_my_groups'. Pending
+// requests show greyed with a "Pending approval" pill; tapping one reopens
+// the host's page, which shows the request status.
+(function renderStoredGroups() {
+  var list = document.getElementById('myGroupList');
+  var lbl = document.getElementById('myGroupLbl');
+  if (!list || !lbl) return;
+  var stored = [];
+  try { stored = JSON.parse(localStorage.getItem('cobee_my_groups') || '[]') || []; } catch (e) {}
+  var baseCount = list.querySelectorAll('.group-list-item').length;
+  stored.slice().reverse().forEach(function (g) {
+    var d = g.d || {};
+    var pending = g.status === 'pending';
+    var row = document.createElement('div');
+    row.className = 'group-list-item' + (pending ? ' is-pending' : '');
+    row.style.cursor = 'pointer';
+    var meta = pending
+      ? 'Hosted by ' + (d.host || '') + ' &nbsp;<span style="color:#888780;font-weight:400;">Requested ' + timeAgo(g.requestedAt) + '</span>'
+      : (d.members || 0) + ' Members &nbsp;<span>' + (d.eventsHosted || 0) + ' Organized Events</span>';
+    row.innerHTML =
+      '<div class="group-avatar-wrap"><div class="group-avatar is-emoji" style="background:' + (g.light || '#E0F5F5') + ';">' + (d.emoji || '👥') + '</div></div>' +
+      '<div class="group-info"><div class="group-name"></div><div class="group-meta">' + meta + '</div></div>' +
+      (pending ? '<div class="group-status-pending">Pending approval</div>' : '<div class="group-role">Member</div>');
+    row.querySelector('.group-name').textContent = d.title || '';
+    row.addEventListener('click', function () {
+      var url = 'host.html?from=mygroup&d=' + encodeURIComponent(JSON.stringify(d));
+      if (window.parent && window.parent !== window && window.parent.navigate) window.parent.navigate(url, null);
+      else window.location.href = url;
+    });
+    list.insertBefore(row, list.firstChild);
+  });
+  lbl.textContent = 'MY GROUP (' + (baseCount + stored.length) + ')';
+
+  function timeAgo(iso) {
+    var mins = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+    if (!iso || isNaN(mins)) return 'recently';
+    if (mins < 1) return 'just now';
+    if (mins < 60) return mins + ' min ago';
+    var hrs = Math.round(mins / 60);
+    if (hrs < 24) return hrs + (hrs === 1 ? ' hr ago' : ' hrs ago');
+    var days = Math.round(hrs / 24);
+    return days + (days === 1 ? ' day ago' : ' days ago');
+  }
+})();
 </script>
 </body>
 </html>
