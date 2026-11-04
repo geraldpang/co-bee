@@ -525,7 +525,7 @@ tbody td.muted { color: var(--mid); font-size: 12px; }
   #order-detail-view.od-hitpay th, #order-detail-view.od-hitpay td { padding: 9px 3px; font-size: 11px; }
   #order-detail-view.od-hitpay thead th { font-size: 9px; letter-spacing: 0.02em; }
   #order-detail-view.od-hitpay .od-status-select { font-size: 10.5px; padding: 0 14px 0 4px; background-position: right 3px center; }
-  #order-detail-view.od-hitpay .od-pay-paid svg { display: none; }
+  #order-detail-view.od-hitpay .od-pay-paid svg { width: 12px; height: 12px; }
   #order-detail-view.od-hitpay thead th:nth-child(2), #order-detail-view.od-hitpay tbody > tr:not(.od-expand-row) > td:nth-child(2) { width: 22%; }
   #order-detail-view.od-hitpay thead th:nth-child(3), #order-detail-view.od-hitpay tbody > tr:not(.od-expand-row) > td:nth-child(3) { width: 9%; }
   #order-detail-view.od-hitpay thead th:nth-child(4), #order-detail-view.od-hitpay tbody > tr:not(.od-expand-row) > td:nth-child(4) { width: 16%; }
@@ -608,13 +608,21 @@ body { background: #F4F6F8; }
 .od-hitpay .od-lbl-std { display: none; }
 .od-hitpay .od-net-col { display: table-cell; }
 .od-hitpay .od-fee-row { display: block; }
-.od-hitpay-chip { display: none; vertical-align: 4px; margin-left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em; color: #5B3FD6; background: #EFEBFF; border: 0.5px solid #D5CCFF; border-radius: 100px; padding: 2px 9px; }
-.od-hitpay .od-hitpay-chip { display: inline-block; }
+.od-hitpay-chip { display: none; vertical-align: 3px; margin-left: 8px; width: 24px; height: 24px; border-radius: 50%; color: #5B3FD6; background: #EFEBFF; border: 0.5px solid #D5CCFF; align-items: center; justify-content: center; cursor: help; }
+.od-hitpay-chip svg { width: 14px; height: 14px; }
+.od-hitpay .od-hitpay-chip { display: inline-flex; }
+.od-hitpay-chip.card-chip { display: inline-flex; margin-left: 6px; vertical-align: -4px; width: 20px; height: 20px; }
+.od-hitpay-chip.card-chip svg { width: 12px; height: 12px; }
 #od-title { display: inline; }
 .od-receive-row { padding-top: 6px; margin-top: 2px; border-top: 0.5px solid var(--teal-mid); }
 .od-receive-row strong { color: var(--teal-dark); font-size: 17px; }
 .od-pay-paid { display: inline-flex; align-items: center; gap: 4px; border: none; background: none; padding: 0; font: inherit; font-weight: 600; color: var(--teal-dark); cursor: pointer; }
 .od-pay-paid svg { width: 13px; height: 13px; }
+.od-pay-paid.via-gateway { color: #5B3FD6; }
+.od-pay-paid.via-gateway svg { width: 15px; height: 15px; }
+.od-hint-gw { display: none; color: #5B3FD6; vertical-align: -2px; }
+.od-hitpay .od-hint-gw { display: inline; }
+.od-hitpay .od-hint-clip { display: none; }
 .od-pay-paid:hover { text-decoration: underline; }
 .od-pay-unpaid { color: var(--mid); font-weight: 500; }
 .od-status-unpaid    { color: var(--red-dark); }
@@ -745,13 +753,14 @@ tr.od-row-name-cell { cursor: pointer; }
 .pp-modal { background: white; border-radius: 16px; width: 340px; max-width: 100%; padding: 24px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
 .pp-name { font-size: 17px; font-weight: 700; color: var(--teal-dark); }
 .pp-amount { font-size: 14px; color: var(--teal-dark); margin-top: 2px; margin-bottom: 16px; }
-.pp-receipt { background: linear-gradient(180deg, #E01A1A 0%, #C81414 100%); border-radius: 12px; padding: 18px 16px 20px; color: white; text-align: left; }
-.pp-receipt-brand { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 14px; }
-.pp-receipt-check { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
-.pp-receipt-status { text-align: center; font-size: 12px; opacity: 0.9; margin-bottom: 2px; }
-.pp-receipt-amount { text-align: center; font-size: 26px; font-weight: 700; margin-bottom: 14px; }
-.pp-receipt-row { display: flex; justify-content: space-between; font-size: 11px; padding: 6px 0; border-top: 1px solid rgba(255,255,255,0.2); }
-.pp-receipt-row span:first-child { opacity: 0.75; }
+.pp-receipt { background: #F3FAFA; border: 0.5px solid var(--teal-mid); border-radius: 12px; padding: 18px 16px 16px; color: var(--ink); text-align: left; }
+.pp-receipt-brand { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 14px; color: var(--teal-dark); }
+.pp-receipt-check { width: 38px; height: 38px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; box-shadow: 0 0 0 6px var(--teal-light); }
+.pp-receipt-status { text-align: center; font-size: 12px; color: var(--mid); margin-bottom: 2px; }
+.pp-receipt-amount { text-align: center; font-size: 26px; font-weight: 700; margin-bottom: 14px; color: var(--teal-dark); }
+.pp-receipt-row { display: flex; justify-content: space-between; font-size: 11.5px; padding: 7px 0; border-top: 0.5px solid var(--border-light); }
+.pp-receipt-row span:first-child { color: var(--mid); }
+.pp-receipt-row span:last-child { font-weight: 600; }
 .pp-ok-btn { width: 100%; height: 42px; margin-top: 18px; background: var(--teal); color: white; border: none; border-radius: 999px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
 .pp-ok-btn:hover { background: var(--teal-dark); }
 .pp-invalid-link { display: inline-block; margin-top: 12px; font-size: 12px; color: var(--mid); cursor: pointer; background: none; border: none; font-family: inherit; text-decoration: underline; }
@@ -1238,7 +1247,7 @@ tr.od-row-name-cell { cursor: pointer; }
           <div class="od-header">
             <div>
               <h1 class="page-title" id="od-title">Event title</h1>
-              <span class="od-hitpay-chip" id="od-hitpay-chip">Payments via HitPay</span>
+              <span class="od-hitpay-chip" id="od-hitpay-chip" title="Payment gateway (HitPay)" aria-label="Payment gateway (HitPay)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M13 13.5l-2 3h3l-2 3"/></svg></span>
               <p class="page-subtitle">
                 Closing: <strong id="od-closing">—</strong>
                 <span id="od-collection-wrap">&nbsp;&nbsp;·&nbsp;&nbsp;Collection: <strong id="od-collection">—</strong></span>
@@ -1303,7 +1312,8 @@ tr.od-row-name-cell { cursor: pointer; }
 
           <p class="od-hint">
             Click on Names for Order Details and on
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            <svg class="od-hint-clip" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            <svg class="od-hint-gw" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M13 13.5l-2 3h3l-2 3"/></svg>
             for Payment Details.
           </p>
 
@@ -1443,14 +1453,15 @@ tr.od-row-name-cell { cursor: pointer; }
 
     <div class="pp-receipt">
       <div class="pp-receipt-brand">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-        PayNow Transfer
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path id="pp-brand-bolt" d="M13 13.5l-2 3h3l-2 3" style="display:none"/></svg>
+        <span id="pp-brand-label">PayNow Transfer</span>
       </div>
       <div class="pp-receipt-check">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <div class="pp-receipt-status">Transfer Successful</div>
+      <div class="pp-receipt-status" id="pp-receipt-status">Transfer Successful</div>
       <div class="pp-receipt-amount" id="pp-receipt-amount">$0.00</div>
+      <div class="pp-receipt-row" id="pp-row-paytype" style="display:none;"><span>Payment type</span><span id="pp-receipt-paytype">&mdash;</span></div>
       <div class="pp-receipt-row"><span>To</span><span id="pp-receipt-to">M6 Group</span></div>
       <div class="pp-receipt-row"><span>From</span><span id="pp-receipt-from">&mdash;</span></div>
       <div class="pp-receipt-row"><span>Reference</span><span id="pp-receipt-ref">&mdash;</span></div>
@@ -1648,6 +1659,22 @@ const orderEventData = {
     ]
   }
 };
+
+// Mark every event that takes payments through HitPay (orderEventData[title].hitpay)
+// with a "Payments via HitPay" chip on its tile and list card, so it's clear which
+// events show the Net column and Platform Fee.
+document.querySelectorAll('.event-card[data-title], .hlc[data-title]').forEach(function (card) {
+  var d = orderEventData[card.dataset.title];
+  if (!d || !d.hitpay) return;
+  var titleEl = card.querySelector('.et-title, .hlc-title');
+  if (!titleEl || titleEl.querySelector('.od-hitpay-chip')) return;
+  var chip = document.createElement('span');
+  chip.className = 'od-hitpay-chip card-chip';
+  chip.title = 'Payment gateway (HitPay)';
+  chip.setAttribute('aria-label', 'Payment gateway (HitPay)');
+  chip.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M13 13.5l-2 3h3l-2 3"/></svg>';
+  titleEl.appendChild(chip);
+});
 
 let odPreviousView = 'tile';
 let odCurrentEventKey = null;
@@ -1871,6 +1898,12 @@ function viewPaymentProof(index) {
   document.getElementById('pp-receipt-date').textContent = o.orderedOn || '\u2014';
   document.getElementById('pp-receipt-txn').textContent = 'PN' + (o.ref || 'XXXX').toUpperCase().replace(/[^A-Z0-9]/g, '') + '00' + (index + 1);
 
+  document.getElementById('pp-brand-label').textContent = odHitPay ? 'Paid via payment gateway (HitPay)' : 'PayNow Transfer';
+  document.getElementById('pp-brand-bolt').style.display = odHitPay ? '' : 'none';
+  // With a payment gateway every payment goes through it, so show how they paid
+  document.getElementById('pp-receipt-status').textContent = odHitPay ? 'Payment Successful' : 'Transfer Successful';
+  document.getElementById('pp-row-paytype').style.display = odHitPay ? 'flex' : 'none';
+  document.getElementById('pp-receipt-paytype').textContent = odPaymentType(o, index);
   document.getElementById('pp-invalid-btn').onclick = function () { markInvalidPayment(index); };
 
   openModal('payment-proof-modal');
@@ -1953,10 +1986,16 @@ function toggleOrderExpand(index) {
 }
 
 // STATUS cell: paper-clip + "Paid" opens the payment details; "Unpaid" is plain.
+// Sample payment types for gateway (HitPay) orders; real ones come from the gateway.
+const OD_PAYMENT_TYPES = ['PayNow', 'Visa', 'Mastercard', 'GrabPay', 'PayNow', 'Apple Pay'];
+function odPaymentType(o, i) { return o.paymentType || OD_PAYMENT_TYPES[i % OD_PAYMENT_TYPES.length]; }
+const OD_ICON_CLIP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>';
+const OD_ICON_GATEWAY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M13 13.5l-2 3h3l-2 3"/></svg>';
 function payStatusHTML(o, i) {
   if (!o.memberPaid) return '<span class="od-pay-unpaid">Unpaid</span>';
-  return '<button class="od-pay-paid" title="View payment details" onclick="event.stopPropagation();viewPaymentProof(' + i + ')">' +
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>' +
+  // Paper-clip = screenshot proof; with HitPay the payment-gateway symbol instead
+  return '<button class="od-pay-paid' + (odHitPay ? ' via-gateway' : '') + '" title="' + (odHitPay ? 'Paid via payment gateway (HitPay)' : 'View payment details') + '" onclick="event.stopPropagation();viewPaymentProof(' + i + ')">' +
+    (odHitPay ? OD_ICON_GATEWAY : OD_ICON_CLIP) +
     'Paid</button>';
 }
 
