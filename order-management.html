@@ -1508,15 +1508,7 @@ function showPaymentDetail(arg) {
       + '<div class="pp-receipt-row"><span>Charge ID</span><span class="pp-mono" title="' + g.chargeId + '">' + (g.chargeId.length > 20 ? g.chargeId.slice(0, 18) + '…' : g.chargeId) + '</span></div>'
       + r('Provider reference', g.providerRef, 'pp-mono') + r('Reference no.', g.referenceNo, 'pp-mono')
       + r('Created', g.created) + r('Completed', g.completed);
-    if (g.payout) {
-      html += '<div class="pp-receipt-sub">Payout</div>'
-        + r('Payout status', '<span class="' + (g.payout.status === 'Settled' ? 'badge settled' : 'badge pending-settle') + '">' + g.payout.status + '</span> <span style="font-size:11px;color:#888780;font-weight:400;">#' + g.payout.id + '</span>')
-        + r('Reconciled', '<span class="' + (g.payout.reconciled ? 'badge reconciled' : 'badge unreconciled') + '">' + (g.payout.reconciled ? 'Reconciled' : 'Unreconciled') + '</span>');
-    }
     html += '</div><button class="pp-ok-btn" onclick="closeModal(\'payment-detail-modal\')">OK</button>';
-    if (g.payout) {
-      html += '<button class="pp-recon-link" onclick="closeModal(\'payment-detail-modal\');showReconTab(document.getElementById(\'tab-recon\'));setTimeout(function(){goToTransactionsForTxn(\'' + g.chargeId + '\');},50);">View in Payment Reconciliation →</button>';
-    }
   } else {
     const ref = event.split(/\s+/).map(w => w.charAt(0).toLowerCase()).join('').replace(/[^a-z0-9]/g, '') + '-no' + (idx + 1);
     html += '<div class="pp-receipt-brand">' + OM_ICON_CARD + 'PayNow Transfer</div>'
