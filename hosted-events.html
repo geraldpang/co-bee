@@ -2093,7 +2093,7 @@ function odNet(amount) { return amount - odFee(amount); }
 // Without a gateway: Total Amount = every order's amount · Payment Collected =
 // orders marked Verified or Collected. Cancelled orders are left out.
 // With a gateway: Total Paid · Platform Fee (on all orders) · Net Received =
-// net of the orders marked Verified or Collected.
+// net of the orders paid through the gateway.
 function updateOrderTotals() {
   let totalPurchase = 0, totalFee = 0, receivedNet = 0;
   document.querySelectorAll('#od-order-rows tr[data-price]').forEach(row => {
@@ -2102,7 +2102,12 @@ function updateOrderTotals() {
     if (update === 'cancelled') return; // cancelled orders don't count towards any total
     totalPurchase += price;
     totalFee += odFee(price);
-    if (update === 'verified' || update === 'collected') receivedNet += odNet(price);
+    // With a gateway, a payment is collected as soon as the gateway takes it;
+    // without one, once the host marks it Verified or Collected.
+    const idx = parseInt(row.id.replace('od-row-', ''), 10);
+    const o = odCurrentOrders[idx];
+    const collected = odGateway ? !!(o && o.memberPaid) : (update === 'verified' || update === 'collected');
+    if (collected) receivedNet += odNet(price);
   });
   document.getElementById('od-total-purchase').textContent = '$' + totalPurchase.toFixed(2);
   document.getElementById('od-platform-fee').textContent = (totalFee > 0 ? '-$' : '$') + totalFee.toFixed(2);
