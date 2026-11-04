@@ -145,6 +145,17 @@ tr:hover td { background: #FAFAF8; }
 .bd-total { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding: 12px 14px; background: #E0F5F5; border-radius: 10px; font-size: 13px; color: #007A77; font-weight: 600; }
 .bd-total strong { font-size: 17px; }
 .bd-note { font-size: 11px; color: #888780; margin-top: 6px; text-align: right; }
+.bd-owed { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; padding: 10px 12px; background: #FCEBEB; border-radius: 10px; }
+.bd-owed-amt { font-size: 13.5px; font-weight: 700; color: #A32D2D; }
+.bd-owed-sub { font-size: 11px; color: #A32D2D; opacity: 0.8; margin-top: 1px; }
+.bd-right .remind-btn { margin-top: 6px; }
+/* Remind button — same as the dashboard's Payment Reminders */
+.remind-btn { height: 26px; padding: 0 10px; border-radius: 99px; border: 0.5px solid #80CCCB; background: #FFFFFF; color: #007A77; font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; flex-shrink: 0; transition: background 0.12s; }
+.remind-btn:hover { background: #E0F5F5; }
+.remind-btn.sent { border-color: #D3D1C7; color: #B4B2A9; cursor: default; background: #FAFAF8; }
+.remind-btn svg { width: 11px; height: 11px; }
+.reminder-sent-note { font-size: 10px; color: #007A77; margin-top: 4px; display: flex; align-items: center; justify-content: flex-end; gap: 3px; }
+.reminder-sent-note svg { width: 10px; height: 10px; flex-shrink: 0; }
 
 /* Payment details card (same as Hosted Events) */
 .pp-name { font-size: 17px; font-weight: 700; color: #007A77; text-align: center; }
@@ -1620,16 +1631,83 @@ function showPurchaseDetail(row) {
   openModal('purchase-detail-modal');
 }
 
+// ── PAYMENT REMINDERS (same message and WhatsApp link as the dashboard) ──
+const OM_ICON_MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>';
+const OM_ICON_TICK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+const OM_REMINDED = {};   // row index -> "4 Nov, 5:22 PM"
+// wa.me needs the country code: 8-digit numbers are Singapore (+65); 10-digit
+// numbers starting with 0 are treated as Australian (+61). Real numbers should
+// be stored with their country code.
+function omWaNumber(mobile) {
+  const d = String(mobile).replace(/\D/g, '');
+  if (d.length === 8) return '65' + d;
+  if (d.length === 10 && d.charAt(0) === '0') return '61' + d.slice(1);
+  return d;
+}
+function omPaymentLink(idx) { return 'https://co-bee.com/payment-order?ref=om' + (idx + 1) + 'r' + (1786968580000 + idx); }
+function omReminderMessage(rows) {
+  const lines = rows.map(r => {
+    const i = Array.from(document.querySelectorAll('#orders-body tr')).indexOf(r);
+    return 'Event Name: ' + r.cells[2].textContent.trim() + '\nPayment Amount: $' + (parseFloat(r.dataset.amount) || 0).toFixed(2) + '\n\uD83D\uDCB3Payment link:\n' + omPaymentLink(i);
+  });
+  return 'Please help to make this payment for the below order' + (rows.length > 1 ? 's' : '') + ' and upload the screenshot\uD83D\uDCBB in Cobee. Thank you very much \u2763\uFE0F\n\n' + lines.join('\n\n');
+}
+function omSentTime(d) {
+  return d.toLocaleDateString([], { day: 'numeric', month: 'short' }) + ', ' + d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+}
+function omOpenWhatsApp(rows) {
+  const phone = omWaNumber(rows[0].cells[1].textContent);
+  window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(omReminderMessage(rows)), '_blank');
+}
+function omFlashSent(btn) {
+  const original = btn.innerHTML;
+  btn.classList.add('sent');
+  btn.innerHTML = OM_ICON_TICK + 'Sent';
+  setTimeout(function () { btn.classList.remove('sent'); btn.innerHTML = original; }, 1500);
+}
+function omMarkSent(btn, idxs) {
+  const when = omSentTime(new Date());
+  idxs.forEach(i => { OM_REMINDED[i] = when; });
+  const card = btn.closest('.om-modal-body');
+  idxs.forEach(i => {
+    const b = card.querySelector('.remind-btn[onclick*="sendOmReminder(this, ' + i + ')"]');
+    if (!b) return;
+    const right = b.closest('.bd-right');
+    let note = right.querySelector('.reminder-sent-note');
+    if (!note) { note = document.createElement('div'); note.className = 'reminder-sent-note'; right.appendChild(note); }
+    note.innerHTML = OM_ICON_TICK + 'Sent ' + when;
+  });
+}
+function sendOmReminder(btn, idx) {
+  const row = document.querySelectorAll('#orders-body tr')[idx];
+  if (!row) return;
+  omOpenWhatsApp([row]);
+  omMarkSent(btn, [idx]);
+  omFlashSent(btn);
+}
+// One WhatsApp message listing every unpaid event for this buyer
+function sendOmReminderAll(btn, idxs) {
+  const all = document.querySelectorAll('#orders-body tr');
+  const rows = idxs.map(i => all[i]).filter(Boolean);
+  if (!rows.length) return;
+  omOpenWhatsApp(rows);
+  omMarkSent(btn, idxs);
+  omFlashSent(btn);
+}
+
 // Buyer card (click the name): contact details, past orders, total purchase.
 // Past orders = every order in this list with the same mobile number.
 function showBuyerDetail(row) {
   const name = row.cells[0].textContent.trim();
   const mobile = row.cells[1].textContent.trim();
   const email = name.toLowerCase().replace(/[^a-z]+/g, '.') + '@example.com';
-  const orders = Array.from(document.querySelectorAll('#orders-body tr')).filter(r => r.cells[1].textContent.trim() === mobile);
+  const allRows = Array.from(document.querySelectorAll('#orders-body tr'));
+  const orders = allRows.filter(r => r.cells[1].textContent.trim() === mobile);
+  const unpaid = orders.filter(r => r.dataset.payment === 'Unpaid' && r.dataset.cancelled !== 'true');
+  const owed = unpaid.reduce((s, r) => s + (parseFloat(r.dataset.amount) || 0), 0);
   const counted = orders.filter(r => r.dataset.cancelled !== 'true');
   const total = counted.reduce((s, r) => s + (parseFloat(r.dataset.amount) || 0), 0);
-  const waNum = mobile.replace(/\D/g, '').replace(/^0/, '');
+  const waNum = omWaNumber(mobile);
   const initials = name.split(/\s+/).map(w => w.charAt(0)).join('').slice(0, 2).toUpperCase();
   document.getElementById('buyer-detail-body').innerHTML =
     '<div class="bd-top"><div class="bd-av">' + initials + '</div><div><div class="bd-name">' + name + '</div>'
@@ -1638,13 +1716,18 @@ function showBuyerDetail(row) {
     + '<div class="bd-row"><span>Mobile</span><a href="tel:' + mobile.replace(/\s/g, '') + '">' + mobile + '</a></div>'
     + '<div class="bd-row"><span>Email</span><a href="mailto:' + email + '">' + email + '</a></div>'
     + '<div class="bd-actions"><a class="bd-btn" href="https://wa.me/' + waNum + '" target="_blank" rel="noopener">WhatsApp</a><a class="bd-btn" href="tel:' + mobile.replace(/\s/g, '') + '">Call</a><a class="bd-btn" href="mailto:' + email + '">Email</a></div>'
+    + (unpaid.length ? '<div class="bd-owed"><div><div class="bd-owed-amt">$' + owed.toFixed(2) + ' unpaid</div><div class="bd-owed-sub">' + unpaid.length + (unpaid.length === 1 ? ' event' : ' events') + ' awaiting payment</div></div>'
+        + (unpaid.length > 1 ? '<button class="remind-btn" onclick="sendOmReminderAll(this, [' + unpaid.map(r => allRows.indexOf(r)).join(',') + '])">' + OM_ICON_MAIL + 'Remind all</button>' : '') + '</div>' : '')
     + '<div class="bd-sec">Past orders</div>'
     + orders.map(r => {
         const pay = r.dataset.payment;
         const cls = pay === 'Paid' ? 'paid' : (pay === 'Refunded' ? 'refunded' : 'unpaid');
         return '<div class="bd-order"><div><div class="bd-ev">' + r.cells[2].textContent.trim() + '</div>'
           + '<div class="bd-meta">' + r.cells[4].textContent.trim() + ' · ' + r.cells[5].textContent.replace(/[+]\d+ more|▴ less/g, '').trim() + '</div></div>'
-          + '<div class="bd-right"><div class="bd-amt">$' + (parseFloat(r.dataset.amount) || 0).toFixed(2) + '</div><span class="pd-pill ' + cls + '">' + pay + '</span></div></div>';
+          + '<div class="bd-right"><div class="bd-amt">$' + (parseFloat(r.dataset.amount) || 0).toFixed(2) + '</div><span class="pd-pill ' + cls + '">' + pay + '</span>'
+          + (pay === 'Unpaid' && r.dataset.cancelled !== 'true' ? '<div><button class="remind-btn" onclick="sendOmReminder(this, ' + allRows.indexOf(r) + ')">' + OM_ICON_MAIL + 'Remind</button></div>' : '')
+          + (OM_REMINDED[allRows.indexOf(r)] ? '<div class="reminder-sent-note">' + OM_ICON_TICK + 'Sent ' + OM_REMINDED[allRows.indexOf(r)] + '</div>' : '')
+          + '</div></div>';
       }).join('')
     + '<div class="bd-total"><span>Total purchase</span><strong>$' + total.toFixed(2) + '</strong></div>'
     + (counted.length < orders.length ? '<div class="bd-note">Cancelled orders are not included in the total.</div>' : '');
