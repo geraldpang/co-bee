@@ -514,6 +514,12 @@
     // still depends on the host: open hosts join instantly, others need
     // approval (and sometimes a question) before the request goes through.
     var pendingHostKeys = {};
+    // Requests sent from host.html are kept in localStorage ('cobee_my_groups').
+    try {
+      (JSON.parse(localStorage.getItem('cobee_my_groups') || '[]') || []).forEach(function (g) {
+        if (g.status === 'pending') pendingHostKeys[g.key] = true;
+      });
+    } catch (e) {}
     function hostKey(h) { return h.groupBuy.name + '|' + h.name; }
     function isHostPending(h) { return !!pendingHostKeys[hostKey(h)]; }
     function markHostPending(h) { pendingHostKeys[hostKey(h)] = true; }
